@@ -2,6 +2,7 @@
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.exceptions;
 using productionCalculatorLib.components.nodes.interfaces;
+using productionCalculatorLib.components.products;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 

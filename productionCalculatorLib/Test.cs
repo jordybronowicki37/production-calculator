@@ -1,5 +1,7 @@
 ﻿using productionCalculatorLib.components;
 using productionCalculatorLib.components.nodes.nodeTypes;
+using productionCalculatorLib.components.products;
+using productionCalculatorLib.components.worksheet;
 
 namespace productionCalculatorLib;
 

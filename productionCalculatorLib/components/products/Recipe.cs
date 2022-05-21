@@ -1,4 +1,4 @@
-﻿namespace productionCalculatorLib.components;
+﻿namespace productionCalculatorLib.components.products;
 
 public class Recipe
 {

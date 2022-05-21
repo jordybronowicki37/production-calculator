@@ -1,4 +1,6 @@
-﻿namespace productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.products;
+
+namespace productionCalculatorLib.components.nodes.interfaces;
 
 public interface IHasProduct
 {

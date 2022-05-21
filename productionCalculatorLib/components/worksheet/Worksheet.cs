@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using productionCalculatorLib.components.nodes.interfaces;
 
-namespace productionCalculatorLib.components;
+namespace productionCalculatorLib.components.worksheet;
 
 public class Worksheet
 {
