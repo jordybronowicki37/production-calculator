@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using productionCalculatorLib.components.nodes.interfaces;
 
 namespace productionCalculatorLib.components;
 
@@ -6,11 +7,11 @@ public class Worksheet
 {
     public string Name { get; set; } = "";
     
-    private readonly List<Node> _nodes = new();
+    private readonly List<INode> _nodes = new();
 
-    public IList<Node> Nodes => new ReadOnlyCollection<Node>(_nodes);
+    public IList<INode> Nodes => new ReadOnlyCollection<INode>(_nodes);
 
-    public void AddNode(Node node)
+    public void AddNode(INode node)
     {
         if (!_nodes.Contains(node))
         {
@@ -18,7 +19,7 @@ public class Worksheet
         }
     }
 
-    public void RemoveNode(Node node)
+    public void RemoveNode(INode node)
     {
         _nodes.Remove(node);
         foreach (var n in _nodes)
