@@ -5,15 +5,17 @@ using productionCalculatorLib.components.nodes.interfaces;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 
-public class EndNode: INodeIn
+public class EndNode: INodeIn, IHasProduct
 {
     public NodeTypes NodeType => NodeTypes.End;
     private readonly List<INode> _inputNodes = new();
-    private ThroughPut ThroughPut { get; set; }
-    
-    public EndNode(ThroughPut throughPut)
+    public Product Product { get; set; }
+    public int Amount { get; set; }
+
+    public EndNode(Product product, int amount)
     {
-        ThroughPut = throughPut;
+        Product = product;
+        Amount = amount;
     }
 
     public IList<INode> InputNodes => new ReadOnlyCollection<INode>(_inputNodes);

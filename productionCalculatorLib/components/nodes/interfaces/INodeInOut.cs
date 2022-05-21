@@ -2,5 +2,5 @@
 
 public interface INodeInOut: INodeIn, INodeOut
 {
-    Recipe Recipe { get; set; }
+    
 }

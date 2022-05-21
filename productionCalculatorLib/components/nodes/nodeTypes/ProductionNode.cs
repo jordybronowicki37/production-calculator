@@ -4,11 +4,12 @@ using productionCalculatorLib.components.nodes.interfaces;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 
-public class ProductionNode: INodeInOut
+public class ProductionNode: INodeInOut, IHasRecipe
 {
     public NodeTypes NodeType => NodeTypes.Production;
 
     public Recipe Recipe { get; set; }
+    public int ProductionAmount { get; set; } = 0;
     
     public ProductionNode(Recipe recipe)
     {
