@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data;
 
@@ -15,10 +16,22 @@ public class WorksheetController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet]
+    public IActionResult GetAll()
+    {
+        return Ok(new DtoWorksheetSmall[] {new (StaticValues.Get().Worksheet)});
+    }
+
     [HttpGet("{id:int}")]
     public IActionResult Get(int id)
     {
-        _logger.Log(LogLevel.Information, "Worksheet gotten");
         return Ok(new DtoWorksheet(StaticValues.Get().Worksheet));
+    }
+
+    [HttpPost]
+    public IActionResult CreateNew()
+    {
+        var w = new Worksheet();
+        return Ok(new DtoWorksheet(w));
     }
 }
