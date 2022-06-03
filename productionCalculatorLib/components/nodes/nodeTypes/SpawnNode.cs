@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -7,8 +6,6 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class SpawnNode: INodeOut, IHasProduct
 {
-    public NodeTypes NodeType => NodeTypes.Spawn;
-
     private readonly List<INode> _outputNodes = new();
     public Product Product { get; set; }
     public int Amount { get; set; }

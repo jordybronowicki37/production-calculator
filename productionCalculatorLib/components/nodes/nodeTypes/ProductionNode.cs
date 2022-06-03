@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -7,8 +6,6 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class ProductionNode: INodeInOut, IHasRecipe
 {
-    public NodeTypes NodeType => NodeTypes.Production;
-
     public Recipe Recipe { get; set; }
     public int ProductionAmount { get; set; } = 0;
     

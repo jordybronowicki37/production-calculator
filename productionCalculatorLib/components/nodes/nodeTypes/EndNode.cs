@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.exceptions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
@@ -8,7 +7,6 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class EndNode: INodeIn, IHasProduct
 {
-    public NodeTypes NodeType => NodeTypes.End;
     private readonly List<INode> _inputNodes = new();
     public Product Product { get; set; }
     public int Amount { get; set; }
