@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SiteReact.Data;
 
 namespace SiteReact.Controllers;
 
@@ -16,8 +17,7 @@ public class ProductController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok();
+        _logger.Log(LogLevel.Information, "All products gotten");
+        return Ok(StaticValues.Get().Products);
     }
-    
-    
 }
