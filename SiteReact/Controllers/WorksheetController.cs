@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data;
 
 namespace SiteReact.Controllers;
@@ -18,6 +19,6 @@ public class WorksheetController : ControllerBase
     public IActionResult Get(int id)
     {
         _logger.Log(LogLevel.Information, "Worksheet gotten");
-        return Ok(StaticValues.Get().Worksheet);
+        return Ok(new DtoWorksheet(StaticValues.Get().Worksheet));
     }
 }
