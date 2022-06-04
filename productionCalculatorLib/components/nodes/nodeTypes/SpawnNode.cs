@@ -10,10 +10,9 @@ public class SpawnNode: INodeOut, IHasProduct
     public Product Product { get; set; }
     public float Amount { get; set; }
 
-    public SpawnNode(Product product, float amount)
+    public SpawnNode(Product product)
     {
         Product = product;
-        Amount = amount;
     }
 
     public IList<INode> OutputNodes => new ReadOnlyCollection<INode>(_outputNodes);

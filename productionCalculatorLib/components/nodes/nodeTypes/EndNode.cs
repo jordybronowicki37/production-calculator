@@ -11,10 +11,9 @@ public class EndNode: INodeIn, IHasProduct
     public Product Product { get; set; }
     public float Amount { get; set; }
 
-    public EndNode(Product product, float amount)
+    public EndNode(Product product)
     {
         Product = product;
-        Amount = amount;
     }
 
     public IList<INode> InputNodes => new ReadOnlyCollection<INode>(_inputNodes);
