@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using productionCalculatorLib.components.products;
 using SiteReact.Controllers.dto.recipes;
-using SiteReact.Controllers.dto.throughputs;
 using SiteReact.Data;
 
 namespace SiteReact.Controllers;
@@ -17,44 +16,31 @@ public class RecipeController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public IActionResult GetAll()
+    [HttpGet("worksheet/{worksheetId:int}")]
+    public IActionResult GetAll(int worksheetId)
     {
-        return Ok(StaticValues.Get().Recipes);
+        return Ok(StaticValues.Get().Worksheet[worksheetId].Recipes);
     }
 
-    [HttpPost]
-    public IActionResult Create(DtoRecipe dto)
+    [HttpPost("worksheet/{worksheetId:int}")]
+    public IActionResult Create(DtoRecipe dto, int worksheetId)
     {
-        var r = new Recipe(dto.Name);
+        var worksheet = StaticValues.Get().Worksheet[worksheetId];
+        var r = worksheet.GenerateRecipe(dto.Name);
         
         dto.InputThroughPuts.ForEach(t =>
-            r.InputThroughPuts.Add(new ThroughPut(SearchProduct(t.Product.Name), t.Amount)));
+            r.InputThroughPuts.Add(new ThroughPut(worksheet.GetOrGenerateProduct(t.Product.Name), t.Amount)));
         
         dto.OutputThroughPuts.ForEach(t =>
-            r.OutputThroughPuts.Add(new ThroughPut(SearchProduct(t.Product.Name), t.Amount)));
+            r.OutputThroughPuts.Add(new ThroughPut(worksheet.GetOrGenerateProduct(t.Product.Name), t.Amount)));
 
-        StaticValues.Get().Recipes.Add(r);
         return Ok();
     }
     
-    [HttpDelete("{id:int}")]
-    public IActionResult Remove(int id)
+    [HttpDelete("{id:int}/worksheet/{worksheetId:int}")]
+    public IActionResult Remove(int id, int worksheetId)
     {
-        StaticValues.Get().Recipes.RemoveAt(id);
+        StaticValues.Get().Worksheet[worksheetId].Recipes.RemoveAt(id);
         return NoContent();
-    }
-
-    private Product SearchProduct(string name)
-    {
-        var products = StaticValues.Get().Products;
-        if (products.Any(p => p.Name == name))
-        {
-            return products.First(p => p.Name == name);
-        }
-
-        var p = new Product(name);
-        products.Add(p);
-        return p;
     }
 }

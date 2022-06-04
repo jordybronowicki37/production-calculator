@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using productionCalculatorLib.components.products;
 using SiteReact.Controllers.dto.products;
 using SiteReact.Data;
 
@@ -16,24 +15,23 @@ public class ProductController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public IActionResult GetAll()
+    [HttpGet("worksheet/{worksheetId:int}")]
+    public IActionResult GetAll(int workid)
     {
-        return Ok(StaticValues.Get().Products);
+        return Ok(StaticValues.Get().Worksheet[workid].Products);
     }
 
-    [HttpPost]
-    public IActionResult Create(DtoProduct dto)
+    [HttpPost("worksheet/{worksheetId:int}")]
+    public IActionResult Create(DtoProduct dto, int workid)
     {
-        var p = new Product(dto.Name);
-        StaticValues.Get().Products.Add(p);
+        var p = StaticValues.Get().Worksheet[workid].GetOrGenerateProduct(dto.Name);
         return Ok(p);
     }
     
-    [HttpPatch("{id:int}")]
-    public IActionResult Create(int id, DtoProduct dto)
+    [HttpPatch("{id:int}/worksheet/{worksheetId:int}")]
+    public IActionResult Create(int id, int workid, DtoProduct dto)
     {
-        var p = StaticValues.Get().Products[id];
+        var p = StaticValues.Get().Worksheet[workid].Products[id];
         p.Name = dto.Name;
         return Ok(p);
     }
