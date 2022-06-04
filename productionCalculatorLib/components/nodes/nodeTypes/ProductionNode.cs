@@ -7,7 +7,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 public class ProductionNode: INodeInOut, IHasRecipe
 {
     public Recipe Recipe { get; set; }
-    public int ProductionAmount { get; set; } = 0;
+    public float ProductionAmount { get; set; } = 0;
     
     public ProductionNode(Recipe recipe)
     {

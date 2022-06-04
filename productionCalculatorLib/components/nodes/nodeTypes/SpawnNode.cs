@@ -8,9 +8,9 @@ public class SpawnNode: INodeOut, IHasProduct
 {
     private readonly List<INode> _outputNodes = new();
     public Product Product { get; set; }
-    public int Amount { get; set; }
+    public float Amount { get; set; }
 
-    public SpawnNode(Product product, int amount)
+    public SpawnNode(Product product, float amount)
     {
         Product = product;
         Amount = amount;

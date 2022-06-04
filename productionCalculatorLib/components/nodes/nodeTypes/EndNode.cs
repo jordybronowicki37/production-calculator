@@ -9,9 +9,9 @@ public class EndNode: INodeIn, IHasProduct
 {
     private readonly List<INode> _inputNodes = new();
     public Product Product { get; set; }
-    public int Amount { get; set; }
+    public float Amount { get; set; }
 
-    public EndNode(Product product, int amount)
+    public EndNode(Product product, float amount)
     {
         Product = product;
         Amount = amount;
