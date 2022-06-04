@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data;
@@ -25,7 +26,9 @@ public class WorksheetController : ControllerBase
     [HttpGet("{id:int}")]
     public IActionResult Get(int id)
     {
-        return Ok(new DtoWorksheet(StaticValues.Get().Worksheet[id]));
+        var w = StaticValues.Get().Worksheet[id];
+        CalculatorEnd.ReCalculateAmounts(w);
+        return Ok(new DtoWorksheet(w));
     }
 
     [HttpPost]
