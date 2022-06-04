@@ -9,7 +9,7 @@ public class DtoNodeProduction : NodeDto
     {
         var nodes = worksheet.Nodes;
         
-        Id = nodes.IndexOf(node);
+        Id = node.Id;
         Type = "Production";
         
         Amount = node.ProductionAmount;

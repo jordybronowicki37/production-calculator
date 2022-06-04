@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.nodeTypes;
+﻿using productionCalculatorLib.components.nodes.enums;
+using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 
@@ -33,17 +34,9 @@ public class StaticValues
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productIronOre, 30));
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 10));
         
-        var node1 = new SpawnNode(productIronOre);
-        worksheet.AddNode(node1);
-        
-        var node2 = new ProductionNode(recipeIronIngot);
-        worksheet.AddNode(node2);
-        node1.AddOutputNode(node2);
-
-        var node3 = new EndNode(productIronIngot);
-        node3.Amount = 30;
-        worksheet.AddNode(node3);
-        node2.AddOutputNode(node3);
+        var node1 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productIronOre).Build();
+        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode(node1 as INodeOut).Build();
+        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productIronOre).AddInputNode(node2 as INodeOut).Build();
     }
 
     private void generateDoubleSpawn()
@@ -63,20 +56,9 @@ public class StaticValues
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productCoal, 5));
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 10));
         
-        var node0 = new SpawnNode(productIronOre);
-        worksheet.AddNode(node0);
-        
-        var node1 = new SpawnNode(productCoal);
-        worksheet.AddNode(node1);
-        
-        var node2 = new ProductionNode(recipeIronIngot);
-        worksheet.AddNode(node2);
-        node0.AddOutputNode(node2);
-        node1.AddOutputNode(node2);
-
-        var node3 = new EndNode(productIronIngot);
-        node3.Amount = 30;
-        worksheet.AddNode(node3);
-        node2.AddOutputNode(node3);
+        var node0 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productIronOre).Build();
+        var node1 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productCoal).Build();
+        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode(node0 as INodeOut).AddInputNode(node1 as INodeOut).Build();
+        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productIronOre).AddInputNode(node2 as INodeOut).Build();
     }
 }

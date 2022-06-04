@@ -7,12 +7,14 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class EndNode: INodeIn, IHasProduct
 {
+    public int Id { get; }
     private readonly List<INode> _inputNodes = new();
     public Product Product { get; set; }
     public float Amount { get; set; }
 
-    public EndNode(Product product)
+    public EndNode(int id, Product product)
     {
+        Id = id;
         Product = product;
     }
 

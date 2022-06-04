@@ -9,7 +9,7 @@ public class DtoNodeSpawn : NodeDto
     {
         var nodes = worksheet.Nodes;
         
-        Id = nodes.IndexOf(node);
+        Id = node.Id;
         Type = "Spawn";
         
         Amount = node.Amount;

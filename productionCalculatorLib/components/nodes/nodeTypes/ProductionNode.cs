@@ -6,11 +6,13 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class ProductionNode: INodeInOut, IHasRecipe
 {
+    public int Id { get; }
     public Recipe Recipe { get; set; }
     public float ProductionAmount { get; set; } = 0;
     
-    public ProductionNode(Recipe recipe)
+    public ProductionNode(int id, Recipe recipe)
     {
+        Id = id;
         Recipe = recipe;
     }
 

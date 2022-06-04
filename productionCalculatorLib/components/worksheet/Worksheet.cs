@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using productionCalculatorLib.components.nodes;
+using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -7,7 +9,9 @@ namespace productionCalculatorLib.components.worksheet;
 public class Worksheet
 {
     public string Name { get; set; } = "";
-    
+    private int _nextNodeId;
+    public int NextNodeId => _nextNodeId++;
+
     private readonly List<INode> _nodes = new();
     public IList<INode> Nodes => new ReadOnlyCollection<INode>(_nodes);
     public void AddNode(INode node)
@@ -55,5 +59,8 @@ public class Worksheet
     {
     }
     
-    
+    public NodeBuilder GetNodeBuilder(NodeTypes type)
+    {
+        return new NodeBuilder(this, type);
+    }
 }

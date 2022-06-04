@@ -6,12 +6,14 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class SpawnNode: INodeOut, IHasProduct
 {
+    public int Id { get; }
     private readonly List<INode> _outputNodes = new();
     public Product Product { get; set; }
     public float Amount { get; set; }
 
-    public SpawnNode(Product product)
+    public SpawnNode(int id, Product product)
     {
+        Id = id;
         Product = product;
     }
 

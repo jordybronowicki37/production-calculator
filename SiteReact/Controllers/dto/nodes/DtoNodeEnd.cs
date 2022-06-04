@@ -9,7 +9,7 @@ public class DtoNodeEnd : NodeDto
     {
         var nodes = worksheet.Nodes;
         
-        Id = nodes.IndexOf(node);
+        Id = node.Id;
         Type = "End";
         
         Amount = node.Amount;
