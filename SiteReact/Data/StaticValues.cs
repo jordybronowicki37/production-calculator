@@ -13,11 +13,13 @@ public class StaticValues
     public IList<Product> Products { get; }
     public IList<Recipe> Recipes { get; }
     public IList<INode> Nodes { get; }
-    public Worksheet Worksheet { get; }
+    public IList<Worksheet> Worksheet { get; }
 
     private StaticValues()
     {
-        Worksheet = new Worksheet();
+        var worksheet = new Worksheet();
+        worksheet.Name = "Iron ingot smelting";
+        Worksheet = new List<Worksheet> {worksheet};
 
         var productIronOre = new Product("Iron ore");
         var productIronIngot = new Product("Iron ingot");
@@ -27,17 +29,17 @@ public class StaticValues
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 30));
         
         var node1 = new SpawnNode(productIronOre, 90);
-        Worksheet.AddNode(node1);
+        worksheet.AddNode(node1);
         
         var node2 = new ProductionNode(recipeIronIngot);
-        Worksheet.AddNode(node2);
+        worksheet.AddNode(node2);
         node1.AddOutputNode(node2);
 
         var node3 = new EndNode(productIronIngot, 30);
-        Worksheet.AddNode(node3);
+        worksheet.AddNode(node3);
         node2.AddOutputNode(node3);
 
-        Products = new[] {productIronOre, productIronIngot};
-        Recipes = new[] {recipeIronIngot};
+        Products = new List<Product>{productIronOre, productIronIngot};
+        Recipes = new List<Recipe>{recipeIronIngot};
     }
 }

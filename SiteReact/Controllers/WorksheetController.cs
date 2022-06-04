@@ -19,19 +19,28 @@ public class WorksheetController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(new DtoWorksheetSmall[] {new (StaticValues.Get().Worksheet)});
+        return Ok(StaticValues.Get().Worksheet.Select(w => new DtoWorksheetSmall(w)));
     }
 
     [HttpGet("{id:int}")]
     public IActionResult Get(int id)
     {
-        return Ok(new DtoWorksheet(StaticValues.Get().Worksheet));
+        return Ok(new DtoWorksheet(StaticValues.Get().Worksheet[id]));
     }
 
     [HttpPost]
-    public IActionResult CreateNew()
+    public IActionResult CreateNew(DtoWorksheetCreate dto)
     {
-        var w = new Worksheet();
+        var w = new Worksheet(){Name = dto.Name};
+        StaticValues.Get().Worksheet.Add(w);
         return Ok(new DtoWorksheet(w));
+    }
+
+    [HttpPatch("{id:int}")]
+    public IActionResult Edit(int id, DtoWorksheetCreate dto)
+    {
+        var w = StaticValues.Get().Worksheet[id];
+        w.Name = dto.Name;
+        return Ok();
     }
 }
