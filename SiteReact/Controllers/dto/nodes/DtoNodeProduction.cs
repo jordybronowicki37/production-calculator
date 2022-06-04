@@ -15,7 +15,7 @@ public class DtoNodeProduction : NodeDto
         Amount = node.ProductionAmount;
         Recipe = node.Recipe;
         
-        InputNodes = node.InputNodes.Select(n => nodes.IndexOf(n));
-        OutputNodes = node.OutputNodes.Select(n => nodes.IndexOf(n));
+        InputNodes = node.InputNodes.Select(n => n.Id);
+        OutputNodes = node.OutputNodes.Select(n => n.Id);
     }
 }

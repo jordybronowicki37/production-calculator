@@ -30,6 +30,7 @@ public class EndNode: INodeIn, IHasProduct
         {
             throw new MaxConnectionsReachedException("Only 1 input connection is allowed on end-node");
         }
+        if (!node.OutputNodes.Contains(this)) node.AddOutputNode(this);
     }
     
     public void RemoveConnectedNode(INode node)

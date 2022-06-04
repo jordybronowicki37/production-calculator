@@ -15,6 +15,6 @@ public class DtoNodeSpawn : NodeDto
         Amount = node.Amount;
         Product = node.Product;
         
-        OutputNodes = node.OutputNodes.Select(n => nodes.IndexOf(n));
+        OutputNodes = node.OutputNodes.Select(n => n.Id);
     }
 }

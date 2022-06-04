@@ -15,6 +15,6 @@ public class DtoNodeEnd : NodeDto
         Amount = node.Amount;
         Product = node.Product;
         
-        InputNodes = node.InputNodes.Select(n => nodes.IndexOf(n));
+        InputNodes = node.InputNodes.Select(n => n.Id);
     }
 }
