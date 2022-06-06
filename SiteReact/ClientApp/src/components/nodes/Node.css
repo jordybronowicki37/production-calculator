@@ -1,0 +1,16 @@
+.node-container {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: min-content;
+    height: min-content;
+}
+
+.node-top {
+    display: flex;
+    align-content: space-between;
+}
+
+.targets {
+    display: flex;
+    align-content: flex-end;
+}
