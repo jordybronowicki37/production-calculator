@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -17,32 +18,30 @@ public class ProductionNode: INodeInOut, IHasRecipe
     }
 
     // Nodes
-    private readonly List<INode> _inputNodes = new();
-    private readonly List<INode> _outputNodes = new();
+    private readonly List<Connection> _inputConnections = new();
+    private readonly List<Connection> _outputConnections = new();
 
-    public IList<INode> InputNodes => new ReadOnlyCollection<INode>(_inputNodes);
-    public IList<INode> OutputNodes => new ReadOnlyCollection<INode>(_outputNodes);
-
-    public void AddInputNode(INodeOut node)
+    public IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
+    public IList<Connection> OutputConnections => new ReadOnlyCollection<Connection>(_outputConnections);
+    
+    public void AddInputConnection(Connection connection)
     {
-        if (!_inputNodes.Contains(node))_inputNodes.Add(node);
-        if (!node.OutputNodes.Contains(this))node.AddOutputNode(this);
+        if (!_inputConnections.Contains(connection))_inputConnections.Add(connection);
     }
     
-    public void AddOutputNode(INodeIn node)
+    public void AddOutputConnection(Connection connection)
     {
-        if (!_outputNodes.Contains(node))_outputNodes.Add(node);
-        if (!node.InputNodes.Contains(this)) node.AddInputNode(this);
+        if (!_outputConnections.Contains(connection))_outputConnections.Add(connection);
     }
     
-    public void RemoveConnectedNode(INode node)
+    public void RemoveConnnection(Connection connection)
     {
-        _inputNodes.Remove(node);
-        _outputNodes.Remove(node);
+        _inputConnections.Remove(connection);
+        _outputConnections.Remove(connection);
     }
 
     public override string ToString()
     {
-        return $"Node{{Input: {_inputNodes}}}";
+        return $"Node{{Input: {_inputConnections}}}";
     }
 }

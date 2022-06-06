@@ -1,21 +1,18 @@
 ﻿using productionCalculatorLib.components.nodes.nodeTypes;
-using productionCalculatorLib.components.worksheet;
 
 namespace SiteReact.Controllers.dto.nodes;
 
 public class DtoNodeProduction : NodeDto
 {
-    public DtoNodeProduction(Worksheet worksheet, ProductionNode node)
+    public DtoNodeProduction(ProductionNode node)
     {
-        var nodes = worksheet.Nodes;
-        
         Id = node.Id;
         Type = "Production";
         
         Amount = node.ProductionAmount;
         Recipe = node.Recipe;
         
-        InputNodes = node.InputNodes.Select(n => n.Id);
-        OutputNodes = node.OutputNodes.Select(n => n.Id);
+        InputNodes = node.InputConnections.Select(n => new DtoConnection(n.NodeIn.Id, n));
+        OutputNodes = node.OutputConnections.Select(n => new DtoConnection(n.NodeOut.Id, n));
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.connections;
+
+namespace productionCalculatorLib.components.nodes.interfaces;
 
 public interface INodeIn: INode
 {
-    IList<INode> InputNodes { get; }
-    void AddInputNode(INodeOut node);
+    IList<Connection> InputConnections { get; }
+    void AddInputConnection(Connection connection);
 }

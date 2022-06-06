@@ -20,9 +20,9 @@ public class DtoWorksheet
     {
         return node switch
         {
-            SpawnNode n => new DtoNodeSpawn(worksheet, n),
-            ProductionNode n => new DtoNodeProduction(worksheet, n),
-            EndNode n => new DtoNodeEnd(worksheet, n),
+            SpawnNode n => new DtoNodeSpawn(n),
+            ProductionNode n => new DtoNodeProduction(n),
+            EndNode n => new DtoNodeEnd(n),
             _ => throw new InvalidOperationException()
         };
     }

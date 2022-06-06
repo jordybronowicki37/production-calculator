@@ -21,6 +21,7 @@ public class CalculatorEnd
     {
         _worksheet = worksheet;
         _endNode = worksheet.Nodes.First(e => e is EndNode) as EndNode ?? throw new LimitRuleError("No end node detected");
+        _endNode.Amount = 30;
     }
 
     private void Calculate(INode node)
@@ -42,9 +43,9 @@ public class CalculatorEnd
 
     private void CalculateProduction(ProductionNode node)
     {
-        foreach (var n in node.InputNodes)
+        foreach (var n in node.InputConnections)
         {
-            switch (n)
+            switch (n.NodeIn)
             {
                 case ProductionNode productionNode:
                     productionNode.ProductionAmount = 0;
@@ -80,14 +81,17 @@ public class CalculatorEnd
 
     private void CalculateAllInputs(EndNode node)
     {
-        foreach (var n in node.InputNodes)
+        foreach (var n in node.InputConnections)
         {
-            switch (n)
+            switch (n.NodeIn)
             {
                 case ProductionNode productionNode:
-                    foreach (var throughput in productionNode.Recipe.OutputThroughPuts.Where(throughput => throughput.Product.Name == node.Product.Name))
+                    foreach (var throughput in productionNode.Recipe.OutputThroughPuts)
                     {
-                        productionNode.ProductionAmount = node.Amount / throughput.Amount;
+                        if (throughput.Product.Name == node.Product.Name)
+                        {
+                            productionNode.ProductionAmount = node.Amount / throughput.Amount;
+                        }
                     }
                     Calculate(productionNode);
                     break;

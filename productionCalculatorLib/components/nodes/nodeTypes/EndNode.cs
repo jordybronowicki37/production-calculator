@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.nodes.exceptions;
+using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -8,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 public class EndNode: INodeIn, IHasProduct
 {
     public int Id { get; }
-    private readonly List<INode> _inputNodes = new();
+    private readonly List<Connection> _inputConnections = new();
     public Product Product { get; set; }
     public float Amount { get; set; }
 
@@ -18,23 +18,16 @@ public class EndNode: INodeIn, IHasProduct
         Product = product;
     }
 
-    public IList<INode> InputNodes => new ReadOnlyCollection<INode>(_inputNodes);
+    public IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
     
-    public void AddInputNode(INodeOut node)
+    public void AddInputConnection(Connection connection)
     {
-        if (_inputNodes.Count == 0)
-        {
-            _inputNodes.Add(node);
-        }
-        else
-        {
-            throw new MaxConnectionsReachedException("Only 1 input connection is allowed on end-node");
-        }
-        if (!node.OutputNodes.Contains(this)) node.AddOutputNode(this);
+        _inputConnections.Add(connection);
+        // if (!node.OutputNodes.Contains(this)) node.AddOutputConnection(this);
     }
     
-    public void RemoveConnectedNode(INode node)
+    public void RemoveConnnection(Connection connection)
     {
-        _inputNodes.Remove(node);
+        // _inputConnections.Remove(node);
     }
 }

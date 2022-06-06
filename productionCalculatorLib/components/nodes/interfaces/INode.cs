@@ -1,7 +1,9 @@
-﻿namespace productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.connections;
+
+namespace productionCalculatorLib.components.nodes.interfaces;
 
 public interface INode
 {
     int Id { get; }
-    void RemoveConnectedNode(INode node);
+    void RemoveConnnection(Connection connection);
 }

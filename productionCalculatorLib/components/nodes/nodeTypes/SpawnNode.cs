@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -7,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 public class SpawnNode: INodeOut, IHasProduct
 {
     public int Id { get; }
-    private readonly List<INode> _outputNodes = new();
+    private readonly List<Connection> _outputConnections = new();
     public Product Product { get; set; }
     public float Amount { get; set; }
 
@@ -17,16 +18,15 @@ public class SpawnNode: INodeOut, IHasProduct
         Product = product;
     }
 
-    public IList<INode> OutputNodes => new ReadOnlyCollection<INode>(_outputNodes);
+    public IList<Connection> OutputConnections => new ReadOnlyCollection<Connection>(_outputConnections);
     
-    public void AddOutputNode(INodeIn node)
+    public void AddOutputConnection(Connection connection)
     {
-        if (!_outputNodes.Contains(node))_outputNodes.Add(node);
-        if (!node.InputNodes.Contains(this)) node.AddInputNode(this);
+        if (!_outputConnections.Contains(connection))_outputConnections.Add(connection);
     }
     
-    public void RemoveConnectedNode(INode node)
+    public void RemoveConnnection(Connection connection)
     {
-        _outputNodes.Remove(node);
+        _outputConnections.Remove(connection);
     }
 }

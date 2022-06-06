@@ -24,10 +24,7 @@ public class Worksheet
     public void RemoveNode(INode node)
     {
         _nodes.Remove(node);
-        foreach (var n in _nodes)
-        {
-            n.RemoveConnectedNode(node);
-        }
+        // TODO remove connections
     }
     
     private readonly List<Product> _products = new();
