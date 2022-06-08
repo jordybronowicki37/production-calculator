@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.nodeTypes;
+﻿using productionCalculatorLib.components.nodes.enums;
+using productionCalculatorLib.components.nodes.nodeTypes;
 
 namespace SiteReact.Controllers.dto.nodes;
 
@@ -7,7 +8,7 @@ public class DtoNodeProduction : NodeDto
     public DtoNodeProduction(ProductionNode node)
     {
         Id = node.Id;
-        Type = "Production";
+        Type = NodeTypes.Production.ToString();;
         
         Amount = node.ProductionAmount;
         Recipe = node.Recipe;
