@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.connections;
+﻿using productionCalculatorLib.components.calculator.limitors;
+using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
@@ -15,6 +16,7 @@ public class NodeBuilder
     private Recipe _recipe;
     private List<ConnectionPlaceholder> _inputNodes = new();
     private List<ConnectionPlaceholder> _outputNodes = new();
+    private List<LimitProduction> _limits = new();
 
     public NodeBuilder(Worksheet worksheet, NodeTypes type)
     {
@@ -46,6 +48,12 @@ public class NodeBuilder
         return this;
     }
 
+    public NodeBuilder AddLimit(LimitProduction limit)
+    {
+        _limits.Add(limit);
+        return this;
+    }
+
     public INode Build()
     {
         switch (_type)
@@ -53,17 +61,20 @@ public class NodeBuilder
             case NodeTypes.Spawn:
                 var spawnNode = new SpawnNode(_worksheet.NextNodeId, _product);
                 _outputNodes.ForEach(o => CreateOutputConnection(spawnNode, o));
+                _limits.ForEach(spawnNode.AddProductionLimit);
                 _worksheet.AddNode(spawnNode);
                 return spawnNode;
             case NodeTypes.Production:
                 var productionNode = new ProductionNode(_worksheet.NextNodeId, _recipe);
                 _inputNodes.ForEach(i => CreateInputConnection(productionNode, i));
                 _outputNodes.ForEach(o => CreateOutputConnection(productionNode, o));
+                _limits.ForEach(productionNode.AddProductionLimit);
                 _worksheet.AddNode(productionNode);
                 return productionNode;
             case NodeTypes.End:
                 var endNode = new EndNode(_worksheet.NextNodeId, _product);
                 _inputNodes.ForEach(i => CreateInputConnection(endNode, i));
+                _limits.ForEach(endNode.AddProductionLimit);
                 _worksheet.AddNode(endNode);
                 return endNode;
             default:

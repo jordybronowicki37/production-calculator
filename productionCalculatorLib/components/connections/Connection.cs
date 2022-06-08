@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.calculator.limitors;
+using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
 namespace productionCalculatorLib.components.connections;
@@ -15,6 +16,16 @@ public class Connection
         NodeIn = nodeIn;
         NodeOut = nodeOut;
         Product = product;
+    }
+    
+    public List<LimitConnection> ConnectionLimits { get; }
+    public void AddConnectionLimit(LimitConnection limit)
+    {
+        if (!ConnectionLimits.Contains(limit)) ConnectionLimits.Add(limit);
+    }
+    public void RemoveConnectionLimit(LimitConnection limit)
+    {
+        ConnectionLimits.Remove(limit);
     }
 
     protected bool Equals(Connection other)
