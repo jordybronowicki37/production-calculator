@@ -1,6 +1,4 @@
 .node-container {
-    border: 1px solid black;
-    border-radius: 5px;
     width: min-content;
     height: min-content;
 }
@@ -13,4 +11,12 @@
 .targets {
     display: flex;
     align-content: flex-end;
+    height: fit-content;
+    padding: 0 2px;
+    margin: 2px;
+    border-radius: 3px;
+    background-color: #bbbbbb;
+}
+.targets:hover {
+    background-color: #a1a1a1;
 }
