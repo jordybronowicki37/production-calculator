@@ -27,19 +27,24 @@
     background-color: #a1a1a1;
 }
 
-.node-content.table {
+.node-table {
     display: grid;
     grid-template-columns: auto auto;
     margin: 0;
 }
 
-.node-content.table>* {
+.node-table>* {
     border-top: 1px solid black;
     border-left: 1px solid black;
     padding: 1px 2px;
     white-space: nowrap;
 }
 
-.node-content.table:nth-child(2n) {
+.node-table>:nth-child(2n+1) {
     border-left: unset;
+}
+
+.node-list>* {
+    display: flex;
+    justify-content: space-between;
 }

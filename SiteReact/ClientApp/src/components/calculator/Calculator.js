@@ -49,16 +49,23 @@ export class Calculator extends Component {
   onConnect = edge => this.setEdges(addEdge(edge, this.state.edges));
   
   fetchWorksheet() {
-    fetch("https://localhost:7291/worksheet/0").then(response => {
+    fetch("https://localhost:7291/worksheet/1").then(response => {
       response.json().then(worksheet => {
         console.log(worksheet);
         
         let nodes = worksheet.nodes.map((node, index) => {
-          let innerContent = ({
-            "Spawn":<NodeSpawn data={node}/>,
-            "Production":<NodeProduction data={node}/>,
-            "End":<NodeEnd data={node}/>
-          })[node.type];
+          let innerContent;
+          switch (node.type) {
+            case "Spawn":
+              innerContent = <NodeSpawn data={node}/>
+              break;
+            case "Production":
+              innerContent = <NodeProduction data={node}/>
+              break;
+            case "End":
+              innerContent = <NodeEnd data={node}/>
+              break;
+          }
           
           let nodeType = ({
             "Spawn":"input",

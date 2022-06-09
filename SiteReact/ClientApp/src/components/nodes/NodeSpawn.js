@@ -17,7 +17,7 @@ export class NodeSpawn extends Node {
             <div>c</div>
           </div>
         </div>
-        <div className="node-content table">
+        <div className="node-content node-table">
           <div>Product</div>
           <div>{super.product()}</div>
           <div>Amount</div>
