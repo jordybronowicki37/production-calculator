@@ -1,11 +1,18 @@
-.flowChart {
+.flow-chart {
     width: 100%;
     height: 60vh;
     border: 1px solid lightgray;
 }
 
-.testNodes>* {
+.test-nodes {
+    display: flex;
+}
+
+.test-nodes>* {
     border: 1px solid black;
     border-radius: 5px;
     margin-top: 8px;
+    margin-right: 8px;
+    height: min-content;
+    cursor: grab;
 }
