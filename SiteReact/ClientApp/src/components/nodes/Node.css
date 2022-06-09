@@ -5,18 +5,41 @@
 
 .node-top {
     display: flex;
-    align-content: space-between;
+    justify-content: space-between;
 }
 
-.targets {
+.node-top>h3 {
+    font-size: medium;
+    margin: 2px;
+}
+
+.node-top>.targets {
     display: flex;
     align-content: flex-end;
     height: fit-content;
     padding: 0 2px;
     margin: 2px;
     border-radius: 3px;
+    font-size: x-small;
     background-color: #bbbbbb;
 }
-.targets:hover {
+.node-top>.targets:hover {
     background-color: #a1a1a1;
+}
+
+.node-content.table {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin: 0;
+}
+
+.node-content.table>* {
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    padding: 1px 2px;
+    white-space: nowrap;
+}
+
+.node-content.table:nth-child(2n) {
+    border-left: unset;
 }

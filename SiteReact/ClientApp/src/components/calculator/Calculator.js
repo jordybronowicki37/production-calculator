@@ -55,9 +55,9 @@ export class Calculator extends Component {
         
         let nodes = worksheet.nodes.map((node, index) => {
           let innerContent = ({
-            "Spawn":<NodeSpawn></NodeSpawn>,
-            "Production":<NodeProduction/>,
-            "End":<NodeEnd/>
+            "Spawn":<NodeSpawn data={node}/>,
+            "Production":<NodeProduction data={node}/>,
+            "End":<NodeEnd data={node}/>
           })[node.type];
           
           let nodeType = ({
@@ -69,7 +69,7 @@ export class Calculator extends Component {
           return {
             id: node.id.toString(),
             type: nodeType,
-            style: {width:"min-content", padding:0},
+            style: {width:"min-content", padding:0, textAlign:"initial"},
             data: { label: innerContent },
             position: { x: 300, y: index*150 },
           };

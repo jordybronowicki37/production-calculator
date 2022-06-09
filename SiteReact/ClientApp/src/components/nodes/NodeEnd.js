@@ -1,8 +1,11 @@
 import {Node} from "./Node";
-import './Node.css';
 import './NodeEnd.css';
 
 export class NodeEnd extends Node {
+  constructor(props) {
+    super(props);
+  }
+  
   render () {
     return (
       <div className="node-container">
@@ -14,8 +17,11 @@ export class NodeEnd extends Node {
             <div>c</div>
           </div>
         </div>
-        <div className="node-content">
-
+        <div className="node-content table">
+          <div>Product</div>
+          <div>{super.product()}</div>
+          <div>Amount</div>
+          <div>{super.amount()}</div>
         </div>
       </div>
     );
