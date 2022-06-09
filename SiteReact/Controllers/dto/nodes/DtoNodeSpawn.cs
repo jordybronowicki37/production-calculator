@@ -13,6 +13,6 @@ public class DtoNodeSpawn : NodeDto
         Amount = node.Amount;
         Product = node.Product;
         
-        OutputNodes = node.OutputConnections.Select(n => new DtoConnection(n.NodeOut.Id, n));
+        OutputNodes = node.OutputConnections.Select(n => new DtoConnectionSingle(n.NodeOut.Id, n));
     }
 }

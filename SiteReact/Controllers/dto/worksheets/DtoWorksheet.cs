@@ -9,11 +9,32 @@ public class DtoWorksheet
 {
     public string Name { get; }
     public IEnumerable<NodeDto> Nodes { get; }
+    public List<DtoConnectionDouble> Connections { get; } = new List<DtoConnectionDouble>();
 
     public DtoWorksheet(Worksheet worksheet)
     {
         Name = worksheet.Name;
         Nodes = worksheet.Nodes.Select(n => _generateNodeDTO(worksheet, n));
+        
+        foreach (var node in worksheet.Nodes)
+        {
+            if (node is INodeIn nodeIn)
+            {
+                foreach (var inConnection in nodeIn.InputConnections)
+                {
+                    var dto = new DtoConnectionDouble(inConnection);
+                    if (!Connections.Contains(dto)) Connections.Add(dto);
+                }
+            }
+            if (node is INodeOut nodeOut)
+            {
+                foreach (var outConnection in nodeOut.OutputConnections)
+                {
+                    var dto = new DtoConnectionDouble(outConnection);
+                    if (!Connections.Contains(dto)) Connections.Add(dto);
+                }
+            }
+        }
     }
 
     private static NodeDto _generateNodeDTO(Worksheet worksheet, INode node)

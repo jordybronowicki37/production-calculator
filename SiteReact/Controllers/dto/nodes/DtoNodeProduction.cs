@@ -13,7 +13,7 @@ public class DtoNodeProduction : NodeDto
         Amount = node.ProductionAmount;
         Recipe = node.Recipe;
         
-        InputNodes = node.InputConnections.Select(n => new DtoConnection(n.NodeIn.Id, n));
-        OutputNodes = node.OutputConnections.Select(n => new DtoConnection(n.NodeOut.Id, n));
+        InputNodes = node.InputConnections.Select(n => new DtoConnectionSingle(n.NodeIn.Id, n));
+        OutputNodes = node.OutputConnections.Select(n => new DtoConnectionSingle(n.NodeOut.Id, n));
     }
 }

@@ -13,6 +13,6 @@ public class DtoNodeEnd : NodeDto
         Amount = node.Amount;
         Product = node.Product;
         
-        InputNodes = node.InputConnections.Select(n => new DtoConnection(n.NodeIn.Id, n));
+        InputNodes = node.InputConnections.Select(n => new DtoConnectionSingle(n.NodeIn.Id, n));
     }
 }

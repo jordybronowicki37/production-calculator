@@ -11,6 +11,6 @@ public class NodeDto
     public Recipe? Recipe { get; set; }
     public Product? Product { get; set; }
     
-    public IEnumerable<DtoConnection>? InputNodes { get; set; }
-    public IEnumerable<DtoConnection>? OutputNodes { get; set; }
+    public IEnumerable<DtoConnectionSingle>? InputNodes { get; set; }
+    public IEnumerable<DtoConnectionSingle>? OutputNodes { get; set; }
 }
