@@ -14,6 +14,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import "./Calculator.css";
 import {ProductManager} from "../products/ProductManager";
+import {RecipeManager} from "../recipes/RecipeManager";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}};
@@ -58,7 +59,12 @@ export class Calculator extends Component {
 
           <div className="attribute-manager">
             <div className="product-manager">
+              <h2>Products</h2>
               <ProductManager></ProductManager>
+            </div>
+            <div className="recipe-manager">
+              <h2>Recipes</h2>
+              <RecipeManager></RecipeManager>
             </div>
           </div>
         </div>
