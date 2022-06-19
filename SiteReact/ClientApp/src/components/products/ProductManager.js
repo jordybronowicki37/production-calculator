@@ -1,5 +1,4 @@
 ﻿import {Component} from "react";
-import {ProductList} from "./ProductList";
 import "./ProductManager.css";
 
 export class ProductManager extends Component {
@@ -7,7 +6,6 @@ export class ProductManager extends Component {
     super(props);
     this.state = {
       products: [],
-      newProductName:"",
     };
     
     this.fetchAll();
@@ -17,12 +15,13 @@ export class ProductManager extends Component {
     return (
       <div>
         <form className="product-creator" onSubmit={e => this.createNewProduct(e)}>
-          <input name="product" type="text" autoComplete="off" placeholder="Product name" onInput={e => this.setState({newProductName: e.target.value})}/>
+          <input name="product" type="text" autoComplete="off" placeholder="Product name"/>
           <button type="submit">Add</button>
         </form>
-        <div className="products">
-          {ProductList(this.state.products)}
-        </div>
+
+        <ul className="products">
+          {this.state.products.map(product => (<li key={product.name}>{product.name}</li>))}
+        </ul>
       </div>
     );
   }
