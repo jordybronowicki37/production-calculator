@@ -16,22 +16,22 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("worksheet/{worksheetId:int}")]
-    public IActionResult GetAll(int workid)
+    public IActionResult GetAll(int worksheetId)
     {
-        return Ok(StaticValues.Get().Worksheet[workid].Products);
+        return Ok(StaticValues.Get().Worksheet[worksheetId].Products);
     }
 
     [HttpPost("worksheet/{worksheetId:int}")]
-    public IActionResult Create(DtoProduct dto, int workid)
+    public IActionResult Create(DtoProduct dto, int worksheetId)
     {
-        var p = StaticValues.Get().Worksheet[workid].GetOrGenerateProduct(dto.Name);
+        var p = StaticValues.Get().Worksheet[worksheetId].GetOrGenerateProduct(dto.Name);
         return Ok(p);
     }
     
     [HttpPatch("{id:int}/worksheet/{worksheetId:int}")]
-    public IActionResult Create(int id, int workid, DtoProduct dto)
+    public IActionResult Create(int id, int worksheetId, DtoProduct dto)
     {
-        var p = StaticValues.Get().Worksheet[workid].Products[id];
+        var p = StaticValues.Get().Worksheet[worksheetId].Products[id];
         p.Name = dto.Name;
         return Ok(p);
     }
