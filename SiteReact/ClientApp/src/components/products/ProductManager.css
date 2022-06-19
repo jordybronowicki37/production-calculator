@@ -1,0 +1,7 @@
+﻿.product-creator {
+    display: flex;
+}
+
+.product-creator>input {
+    flex-grow: 2;
+}

@@ -1,5 +1,12 @@
+.flow-chart-container {
+    display: flex;
+}
+
+.flow-chart-container>:first-child {
+    flex-grow: 2;
+}
+
 .flow-chart {
-    width: 100%;
     height: 60vh;
     border: 1px solid lightgray;
 }

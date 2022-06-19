@@ -13,6 +13,7 @@ import ReactFlow, {
   ReactFlowProvider
 } from 'react-flow-renderer';
 import "./Calculator.css";
+import {ProductManager} from "../products/ProductManager";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}};
@@ -53,15 +54,19 @@ export class Calculator extends Component {
                 <Background/>
               </ReactFlow>
             </div>
-            <div className="test-nodes">
-              <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction/></div>
-              <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn/></div>
-              <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd/></div>
-            </div>
           </ReactFlowProvider>
+
+          <div className="attribute-manager">
+            <div className="product-manager">
+              <ProductManager></ProductManager>
+            </div>
+          </div>
         </div>
-        <div className="attribute-manager">
-          
+        
+        <div className="test-nodes">
+          <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction/></div>
+          <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn/></div>
+          <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd/></div>
         </div>
       </div>
     );
@@ -128,7 +133,7 @@ export class Calculator extends Component {
   }
   
   fetchWorksheet() {
-    fetch("https://localhost:7291/worksheet/1").then(response => {
+    fetch("worksheet/1").then(response => {
       response.json().then(worksheet => {
         console.log(worksheet);
         
