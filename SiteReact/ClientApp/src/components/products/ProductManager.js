@@ -16,11 +16,15 @@ export class ProductManager extends Component {
       <div>
         <form className="product-creator" onSubmit={e => this.createNewProduct(e)}>
           <input name="product" type="text" autoComplete="off" placeholder="Product name"/>
-          <button type="submit">Add</button>
+          <button type="submit"><box-icon name='add-to-queue' type='solid' color='#96f378'></box-icon></button>
         </form>
 
         <ul className="products">
-          {this.state.products.map(product => (<li key={product.name}>{product.name}</li>))}
+          {this.state.products.map(product => (
+            <li key={product.name}>
+              <div>{product.name}</div>
+              <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(product.name)}><box-icon type='solid' name='minus-circle' color="#ff8080"></box-icon></button>
+            </li>))}
         </ul>
       </div>
     );
@@ -40,6 +44,14 @@ export class ProductManager extends Component {
         method: "post",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({name: name})
-      }).then(r => this.fetchAll());
-   }
+      }).then(r => {
+        e.target[0].value = "";
+        this.fetchAll();
+      }
+    );
+  }
+  
+  removeProduct(id) {
+    fetch(`product/${id}/worksheet/1`, {method: "delete"}).then(r => this.fetchAll());
+  }
 }

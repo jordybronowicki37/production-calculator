@@ -17,7 +17,7 @@ import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
 
 export class Calculator extends Component {
-  defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}};
+  defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
   defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial"};
   tempId = 0;
   

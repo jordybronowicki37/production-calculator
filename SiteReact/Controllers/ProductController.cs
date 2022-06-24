@@ -28,11 +28,32 @@ public class ProductController : ControllerBase
         return Ok(p);
     }
     
-    [HttpPatch("{id:int}/worksheet/{worksheetId:int}")]
-    public IActionResult Create(int id, int worksheetId, DtoProduct dto)
+    [HttpPatch("{name}/worksheet/{worksheetId:int}")]
+    public IActionResult Update(string name, int worksheetId, DtoProduct dto)
     {
-        var p = StaticValues.Get().Worksheet[worksheetId].Products[id];
-        p.Name = dto.Name;
-        return Ok(p);
+        try
+        {
+            var p = StaticValues.Get().Worksheet[worksheetId].Products.First(p => p.Name == name);
+            p.Name = dto.Name;
+            return Ok(p);
+        }
+        catch (InvalidOperationException)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpDelete("{name}/worksheet/{worksheetId:int}")]
+    public IActionResult Remove(string name, int worksheetId)
+    {
+        try
+        {
+            StaticValues.Get().Worksheet[worksheetId].RemoveProduct(name);
+            return NoContent();
+        }
+        catch (InvalidOperationException)
+        {
+            return NotFound();
+        }
     }
 }

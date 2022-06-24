@@ -40,10 +40,14 @@ public class Worksheet
         _products.Add(p);
         return p;
     }
+    public void RemoveProduct(string name)
+    {
+        var product = _products.First(p => p.Name == name);
+        _products.Remove(product);
+    }
 
     private readonly List<Recipe> _recipes = new();
     public IList<Recipe> Recipes => new ReadOnlyCollection<Recipe>(_recipes);
-
     public Recipe GenerateRecipe(string name)
     {
         if (_recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");
