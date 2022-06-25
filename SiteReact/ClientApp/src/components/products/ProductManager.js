@@ -6,8 +6,8 @@ export class ProductManager extends Component {
     super(props);
     this.state = {
       products: [],
+      worksheetId: props.worksheetId,
     };
-    
     this.fetchAll();
   }
   
@@ -31,7 +31,7 @@ export class ProductManager extends Component {
   }
   
   fetchAll() {
-    fetch("product/worksheet/1").then(response => response.json()).then(products => {
+    fetch(`product/worksheet/${this.state.worksheetId}`).then(response => response.json()).then(products => {
       this.setState({products: products});
     });
   }
@@ -40,7 +40,7 @@ export class ProductManager extends Component {
     e.preventDefault()
     let name = e.target[0].value;
     
-    fetch("product/worksheet/1", {
+    fetch(`product/worksheet/${this.state.worksheetId}`, {
         method: "post",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({name: name})
@@ -52,6 +52,6 @@ export class ProductManager extends Component {
   }
   
   removeProduct(id) {
-    fetch(`product/${id}/worksheet/1`, {method: "delete"}).then(r => this.fetchAll());
+    fetch(`product/${id}/worksheet/${this.state.worksheetId}`, {method: "delete"}).then(r => this.fetchAll());
   }
 }

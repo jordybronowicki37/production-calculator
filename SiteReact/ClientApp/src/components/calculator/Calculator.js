@@ -27,15 +27,18 @@ export class Calculator extends Component {
       nodes: [],
       edges: [],
       flowInstance: null,
-      wrapperInstance: null
+      wrapperInstance: null,
+      worksheetId: "1",
+      worksheetTitle: "",
     }
-    this.fetchWorksheet()
+    this.fetchWorksheet();
   }
 
   render() {
     return (
       <div>
         <h1>Calculator</h1>
+        <div>Worksheet: {this.state.worksheetTitle}</div>
         <div className="flow-chart-container">
           <ReactFlowProvider>
             <div ref={this.setReactFlowWrapper}>
@@ -60,11 +63,11 @@ export class Calculator extends Component {
           <div className="attribute-manager">
             <div className="product-manager">
               <h2>Products</h2>
-              <ProductManager></ProductManager>
+              <ProductManager worksheetId={this.state.worksheetId}></ProductManager>
             </div>
             <div className="recipe-manager">
               <h2>Recipes</h2>
-              <RecipeManager></RecipeManager>
+              <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
             </div>
           </div>
         </div>
@@ -139,7 +142,7 @@ export class Calculator extends Component {
   }
   
   fetchWorksheet() {
-    fetch("worksheet/1").then(response => {
+    fetch(`worksheet/${this.state.worksheetId}`).then(response => {
       response.json().then(worksheet => {
         console.log(worksheet);
         
@@ -182,7 +185,8 @@ export class Calculator extends Component {
         
         this.setState({
           nodes: nodes,
-          edges: edges
+          edges: edges,
+          worksheetTitle: worksheet.name,
         })
       })
     })

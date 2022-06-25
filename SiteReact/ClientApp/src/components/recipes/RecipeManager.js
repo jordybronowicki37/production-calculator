@@ -6,8 +6,8 @@ export class RecipeManager extends Component {
     super(props);
     this.state = {
       recipes: [],
+      worksheetId: props.worksheetId,
     };
-
     this.fetchAll();
   }
 
@@ -26,7 +26,7 @@ export class RecipeManager extends Component {
   }
 
   fetchAll() {
-    fetch("recipe/worksheet/1").then(response => response.json()).then(recipes => {
+    fetch(`recipe/worksheet/${this.state.worksheetId}`).then(response => response.json()).then(recipes => {
       this.setState({recipes: recipes});
     });
   }
