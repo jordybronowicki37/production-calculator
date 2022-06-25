@@ -1,7 +1,10 @@
 ﻿import {Component} from "react";
 import "./ProductManager.css";
+import Store from "../../dataStore/DataStore";
 
 export class ProductManager extends Component {
+  unsubscribe;
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -9,6 +12,7 @@ export class ProductManager extends Component {
       worksheetId: props.worksheetId,
     };
     this.fetchAll();
+    this.unsubscribe = Store.subscribe(() => this.setState({products: Store.getState().product}));
   }
   
   render() {
@@ -16,7 +20,7 @@ export class ProductManager extends Component {
       <div>
         <form className="product-creator" onSubmit={e => this.createNewProduct(e)}>
           <input name="product" type="text" autoComplete="off" placeholder="Product name"/>
-          <button type="submit"><box-icon name='add-to-queue' type='solid' color='#96f378'></box-icon></button>
+          <button type="submit" title="Add product"><box-icon name='add-to-queue' type='solid' color='#96f378'></box-icon></button>
         </form>
 
         <ul className="products">
@@ -32,7 +36,7 @@ export class ProductManager extends Component {
   
   fetchAll() {
     fetch(`product/worksheet/${this.state.worksheetId}`).then(response => response.json()).then(products => {
-      this.setState({products: products});
+      Store.dispatch({type: "product/set", payload:products});
     });
   }
   
@@ -53,5 +57,9 @@ export class ProductManager extends Component {
   
   removeProduct(id) {
     fetch(`product/${id}/worksheet/${this.state.worksheetId}`, {method: "delete"}).then(r => this.fetchAll());
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 }

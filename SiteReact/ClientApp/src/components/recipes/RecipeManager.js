@@ -1,7 +1,10 @@
 ﻿import {Component} from "react";
 import "./RecipeManager.css";
+import Store from "../../dataStore/DataStore";
 
 export class RecipeManager extends Component {
+  unsubscribe;
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -9,6 +12,7 @@ export class RecipeManager extends Component {
       worksheetId: props.worksheetId,
     };
     this.fetchAll();
+    this.unsubscribe = Store.subscribe(() => this.setState({recipes: Store.getState().recipe}));
   }
 
   render() {
@@ -27,7 +31,11 @@ export class RecipeManager extends Component {
 
   fetchAll() {
     fetch(`recipe/worksheet/${this.state.worksheetId}`).then(response => response.json()).then(recipes => {
-      this.setState({recipes: recipes});
+      Store.dispatch({type: "recipe/set", payload: recipes});
     });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 }
