@@ -10,19 +10,20 @@ export class NodeProduction extends Node {
     let generateProductList = (list) => {
       return (
         <div className="node-list">
-          {list.map((value, index) => {
-            return (
-              <div key={index}>
-                <div style={{marginRight: 3+"px"}}>{value.product}: </div>
-                <div>{value.amount}</div>
-              </div>
-            );
-          })}
+          {list.map((value, index) => 
+            <div key={index}>
+              <div className="recipeProduct">{value.product}: </div>
+              <div>{value.amount}</div>
+            </div>)}
         </div>
       );
     };
     
-    let recipeField = <div>{super.recipe()}</div>;
+    let recipeField = <div>
+      <select value={super.recipe()} onChange={e => this.RecipeChanged(e.target.value)}>
+        <option value="" disabled hidden></option>
+        {super.recipes().map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
+      </select></div>;
     let amountField = <div>{super.amount()}</div>;
     let productInList = generateProductList(super.requiredInProducts());
     let productOutList = generateProductList(super.requiredOutProducts());
@@ -65,5 +66,10 @@ export class NodeProduction extends Node {
         </div>
       </div>
     );
+  }
+
+  RecipeChanged(name) {
+    console.log(name)
+    // TODO load actual value
   }
 }

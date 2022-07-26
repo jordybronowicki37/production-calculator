@@ -12,6 +12,7 @@ export class NodeEnd extends Node {
     if (!super.previewMode()) {
       productField =
         <select value={super.product()} onChange={e => this.productChanged(e.target.value)}>
+          <option value="" disabled hidden></option>
           {super.products().map(v => (
             <option key={v.name} value={v.name}>{v.name}</option>))}
         </select>
