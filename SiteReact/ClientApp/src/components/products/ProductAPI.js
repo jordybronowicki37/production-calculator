@@ -12,10 +12,10 @@ export const postNewProduct = async function(worksheetId, productName) {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({name: productName})
   });
-  await this.fetchAllProducts(worksheetId);
+  await fetchAllProducts(worksheetId);
 }
 
 export const deleteProduct = async function(worksheetId, productId) {
   await fetch(`product/${productId}/worksheet/${worksheetId}`, {method: "delete"});
-  await this.fetchAllProducts(worksheetId);
+  await fetchAllProducts(worksheetId);
 }
