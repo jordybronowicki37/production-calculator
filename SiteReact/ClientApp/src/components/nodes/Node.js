@@ -14,10 +14,14 @@ export class Node extends Component {
     let data = props.data
     if (!data) data = {};
     
+    let previewMode = false;
+    if (props.previewMode === true) previewMode = true;
+    
     this.state = {
       data: data,
       products: Store.getState().product,
       recipes: Store.getState().recipe,
+      previewMode,
     };
     
     this.unsubscribe = Store.subscribe(() => {
@@ -28,39 +32,37 @@ export class Node extends Component {
     });
   }
   
+  previewMode() {return this.state.previewMode;}
+  
   product() {
-    if (this.state.data.hasOwnProperty("product")) return this.state.data.product.name
-    return "Geen";
+    if (this.state.data.hasOwnProperty("product")) return this.state.data.product.name;
+    return "";
   }
   
-  products() {
-    return this.state.products;
-  }
+  products() {return this.state.products;}
   
   recipe() {
-    if (this.state.data.hasOwnProperty("recipe")) return this.state.data.recipe.name
-    return "Geen";
+    if (this.state.data.hasOwnProperty("recipe")) return this.state.data.recipe.name;
+    return "";
   }
   
-  recipes() {
-    return this.state.recipes
-  }
+  recipes() {return this.state.recipes;}
   
   amount() {
-    if (this.state.data.hasOwnProperty("amount")) return this.state.data.amount
+    if (this.state.data.hasOwnProperty("amount")) return this.state.data.amount;
     return 0;
   }
   
   requiredInProducts() {
     let d = this.state.data;
     if (!(d.hasOwnProperty("recipe") && d.hasOwnProperty("amount"))) return [];
-    return d.recipe.inputThroughPuts.map(value => this.generateThroughputObj(value, d, this.actualInProducts()))
+    return d.recipe.inputThroughPuts.map(value => this.generateThroughputObj(value, d, this.actualInProducts()));
   }
   
   requiredOutProducts() {
     let d = this.state.data;
     if (!(d.hasOwnProperty("recipe") && d.hasOwnProperty("amount"))) return [];
-    return d.recipe.outputThroughPuts.map(value => this.generateThroughputObj(value, d, this.actualOutProducts()))
+    return d.recipe.outputThroughPuts.map(value => this.generateThroughputObj(value, d, this.actualOutProducts()));
   }
   
   generateThroughputObj(throughput, node, actualProducts) {
@@ -74,12 +76,12 @@ export class Node extends Component {
       product: product,
       amount: totalRequired,
       amountAcquired: acquired
-    }
+    };
   }
   
   actualInProducts() {
     let d = this.state.data;
-    let products = {}
+    let products = {};
     if (d.hasOwnProperty("inputNodes")) {
       for (const connection of d.inputNodes) {
         if (products.hasOwnProperty(connection.product)) {
@@ -94,7 +96,7 @@ export class Node extends Component {
   
   actualOutProducts() {
     let d = this.state.data;
-    let products = {}
+    let products = {};
     if (d.hasOwnProperty("outputNodes")) {
       for (const connection of d.outputNodes) {
         if (products.hasOwnProperty(connection.product)) {

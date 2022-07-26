@@ -49,6 +49,11 @@
     justify-content: space-between;
 }
 
+.previewField {
+    color: lightgray;
+    font-style: italic;
+}
+
 /* TODO remove */
 .node-top>.targets {
     display: none;

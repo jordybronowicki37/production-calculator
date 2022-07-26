@@ -22,6 +22,24 @@ export class NodeProduction extends Node {
       );
     };
     
+    let recipeField = <div>{super.recipe()}</div>;
+    let amountField = <div>{super.amount()}</div>;
+    let productInList = generateProductList(super.requiredInProducts());
+    let productOutList = generateProductList(super.requiredOutProducts());
+    
+    if (super.previewMode()) {
+      recipeField = <div className="previewField">name</div>;
+      amountField = <div className="previewField">0</div>;
+      productInList = <div className="node-list"><div>
+          <div className="previewField">name</div>
+          <div className="previewField">0</div>
+        </div></div>;
+      productOutList = <div className="node-list"><div>
+          <div className="previewField">name</div>
+          <div className="previewField">0</div>
+        </div></div>;
+    }
+    
     return (
       <div className="node-container">
         <div className="node-top">
@@ -34,15 +52,15 @@ export class NodeProduction extends Node {
         </div>
         <div className="node-content node-product-table">
           <div>Recipe: </div>
-          <div style={{borderLeft: "unset"}}>{super.recipe()}</div>
+          {recipeField}
           <div>Amount: </div>
-          <div style={{borderLeft: "unset"}}>{super.amount()}</div>
+          {amountField}
           
           <div className="node-table">
             <div>Required in</div>
             <div>Required out</div>
-            {generateProductList(super.requiredInProducts())}
-            {generateProductList(super.requiredOutProducts())}
+            {productInList}
+            {productOutList}
           </div>
         </div>
       </div>

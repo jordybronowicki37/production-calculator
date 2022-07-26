@@ -70,9 +70,9 @@ export class Calculator extends Component {
         </div>
         
         <div className="test-nodes">
-          <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction/></div>
-          <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn/></div>
-          <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd/></div>
+          <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction previewMode/></div>
+          <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn previewMode/></div>
+          <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd previewMode/></div>
         </div>
       </div>
     );

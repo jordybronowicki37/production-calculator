@@ -7,6 +7,16 @@ export class NodeEnd extends Node {
   }
   
   render () {
+    let productField = <div className="previewField">name</div>;
+
+    if (!super.previewMode()) {
+      productField =
+        <select value={super.product()} onChange={e => this.productChanged(e.target.value)}>
+          {super.products().map(v => (
+            <option key={v.name} value={v.name}>{v.name}</option>))}
+        </select>
+    }
+    
     return (
       <div className="node-container">
         <div className="node-top">
@@ -19,12 +29,9 @@ export class NodeEnd extends Node {
         </div>
         <div className="node-content node-table">
           <div>Product</div>
-          <select value={super.product()} onChange={e => this.productChanged(e.target.value)}>
-            {super.products().map(v => (
-              <option key={v.name} value={v.name}>{v.name}</option>))}
-          </select>
+          {productField}
           <div>Amount</div>
-          <div>{super.amount()}</div>
+          <div className={super.previewMode()?"previewField":""}>{super.amount()}</div>
         </div>
       </div>
     );
