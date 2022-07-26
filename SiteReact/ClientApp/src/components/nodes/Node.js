@@ -1,18 +1,31 @@
 import React, { Component } from 'react';
 import './Node.css';
+import Store from "../../dataStore/DataStore";
 
 /**
  * Handles connection management and basic data values for all nodes.
  * Nodes that extend this must have render methods
  */
 export class Node extends Component {
+  unsubscribe;
+  
   constructor(props) {
     super(props);
     let data = props.data
     if (!data) data = {};
+    
     this.state = {
       data: data,
+      products: Store.getState().product,
+      recipes: Store.getState().recipe,
     };
+    
+    this.unsubscribe = Store.subscribe(() => {
+      this.setState({
+        products: Store.getState().product,
+        recipes: Store.getState().recipe
+      });
+    });
   }
   
   product() {
@@ -20,9 +33,17 @@ export class Node extends Component {
     return "Geen";
   }
   
+  products() {
+    return this.state.products;
+  }
+  
   recipe() {
     if (this.state.data.hasOwnProperty("recipe")) return this.state.data.recipe.name
     return "Geen";
+  }
+  
+  recipes() {
+    return this.state.recipes
   }
   
   amount() {
@@ -84,5 +105,9 @@ export class Node extends Component {
       }
     }
     return products;
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 }

@@ -19,11 +19,19 @@ export class NodeEnd extends Node {
         </div>
         <div className="node-content node-table">
           <div>Product</div>
-          <div>{super.product()}</div>
+          <select value={super.product()} onChange={e => this.productChanged(e.target.value)}>
+            {super.products().map(v => (
+              <option key={v.name} value={v.name}>{v.name}</option>))}
+          </select>
           <div>Amount</div>
           <div>{super.amount()}</div>
         </div>
       </div>
     );
+  }
+
+  productChanged(name) {
+    console.log(name)
+    // TODO change actual value
   }
 }
