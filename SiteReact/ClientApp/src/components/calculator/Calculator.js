@@ -1,20 +1,15 @@
+import "./Calculator.css";
 import {Component} from "react";
 import {NodeProduction} from "../nodes/NodeProduction";
 import {NodeSpawn} from "../nodes/NodeSpawn";
 import {NodeEnd} from "../nodes/NodeEnd";
-import ReactFlow, {
-  MiniMap,
-  Controls,
-  applyEdgeChanges,
-  applyNodeChanges,
-  addEdge,
-  Background,
-  MarkerType,
-  ReactFlowProvider
-} from 'react-flow-renderer';
-import "./Calculator.css";
+import ReactFlow, {MiniMap, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Background, MarkerType, 
+  ReactFlowProvider} from 'react-flow-renderer';
 import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
+import Store from "../../dataStore/DataStore";
+import {fetchAllProducts} from "../products/ProductAPI";
+import {fetchAllRecipes} from "../recipes/RecipeAPI";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -32,6 +27,8 @@ export class Calculator extends Component {
       worksheetTitle: "",
     }
     this.fetchWorksheet();
+    fetchAllProducts(this.state.worksheetId);
+    fetchAllRecipes(this.state.worksheetId);
   }
 
   render() {

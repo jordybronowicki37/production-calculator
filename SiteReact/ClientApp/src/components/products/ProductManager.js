@@ -1,6 +1,7 @@
 ﻿import {Component} from "react";
 import "./ProductManager.css";
 import Store from "../../dataStore/DataStore";
+import {postNewProduct, deleteProduct} from "./ProductAPI";
 
 export class ProductManager extends Component {
   unsubscribe;
@@ -11,7 +12,6 @@ export class ProductManager extends Component {
       products: [],
       worksheetId: props.worksheetId,
     };
-    this.fetchAll();
     this.unsubscribe = Store.subscribe(() => this.setState({products: Store.getState().product}));
   }
   
@@ -27,36 +27,23 @@ export class ProductManager extends Component {
           {this.state.products.map(product => (
             <li key={product.name}>
               <div>{product.name}</div>
-              <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(product.name)}><box-icon type='solid' name='minus-circle' color="#ff8080"></box-icon></button>
+              <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(e, product.name)}><box-icon type='solid' name='minus-circle' color="#ff8080"></box-icon></button>
             </li>))}
         </ul>
       </div>
     );
   }
   
-  fetchAll() {
-    fetch(`product/worksheet/${this.state.worksheetId}`).then(response => response.json()).then(products => {
-      Store.dispatch({type: "product/set", payload:products});
-    });
-  }
-  
   createNewProduct(e) {
     e.preventDefault()
     let name = e.target[0].value;
-    
-    fetch(`product/worksheet/${this.state.worksheetId}`, {
-        method: "post",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({name: name})
-      }).then(r => {
-        e.target[0].value = "";
-        this.fetchAll();
-      }
-    );
+    e.target[0].value = "";
+    postNewProduct(this.state.worksheetId, name);
   }
   
-  removeProduct(id) {
-    fetch(`product/${id}/worksheet/${this.state.worksheetId}`, {method: "delete"}).then(r => this.fetchAll());
+  removeProduct(e, name) {
+    e.preventDefault();
+    deleteProduct(this.state.worksheetId, name)
   }
   
   componentWillUnmount() {

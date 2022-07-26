@@ -11,7 +11,6 @@ export class RecipeManager extends Component {
       recipes: [],
       worksheetId: props.worksheetId,
     };
-    this.fetchAll();
     this.unsubscribe = Store.subscribe(() => this.setState({recipes: Store.getState().recipe}));
   }
 
@@ -27,12 +26,6 @@ export class RecipeManager extends Component {
         </ul>
       </div>
     );
-  }
-
-  fetchAll() {
-    fetch(`recipe/worksheet/${this.state.worksheetId}`).then(response => response.json()).then(recipes => {
-      Store.dispatch({type: "recipe/set", payload: recipes});
-    });
   }
 
   componentWillUnmount() {

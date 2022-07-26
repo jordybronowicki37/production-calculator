@@ -1,12 +1,11 @@
 import {combineReducers, configureStore, createReducer} from "@reduxjs/toolkit";
 
 const productReducer = createReducer([], {
-  "product/set": (state, action) => action.payload,
-  "product/add": (state, action) => [...action.payload],
-  "product/remove": (state, action) => [...action.payload],
+  "product/set": (state, action) => [...action.payload],
 });
+
 const recipeReducer = createReducer([], {
-  "recipe/set": (state, action) => action.payload,
+  "recipe/set": (state, action) => [...action.payload],
 });
 
 const rootReducer = combineReducers({
