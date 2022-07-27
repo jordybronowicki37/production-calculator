@@ -27,6 +27,12 @@ export class NodeProduction extends Node {
     let amountField = <div>{super.amount()}</div>;
     let productInList = generateProductList(super.requiredInProducts());
     let productOutList = generateProductList(super.requiredOutProducts());
+    let targets =
+      <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
+        <div>a</div>
+        <div>b</div>
+        <div>c</div>
+      </div>;
     
     if (super.previewMode()) {
       recipeField = <div className="previewField">name</div>;
@@ -39,17 +45,14 @@ export class NodeProduction extends Node {
           <div className="previewField">name</div>
           <div className="previewField">0</div>
         </div></div>;
+      targets = <div></div>;
     }
     
     return (
       <div className="node-container">
         <div className="node-top">
           <h3>Production</h3>
-          <div className="targets">
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-          </div>
+          {targets}
         </div>
         <div className="node-content node-product-table">
           <div>Recipe: </div>
@@ -63,6 +66,10 @@ export class NodeProduction extends Node {
             {productInList}
             {productOutList}
           </div>
+        </div>
+        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
+          test
+          <button onClick={e => this.setState({targetEditorOpen: false})}>x</button>
         </div>
       </div>
     );

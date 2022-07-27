@@ -22,6 +22,7 @@ export class Node extends Component {
       products: Store.getState().product,
       recipes: Store.getState().recipe,
       previewMode,
+      targetEditorOpen: false,
     };
     
     this.unsubscribe = Store.subscribe(() => {

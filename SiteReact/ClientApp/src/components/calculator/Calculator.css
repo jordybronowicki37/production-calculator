@@ -23,6 +23,7 @@
     margin-right: 8px;
     height: min-content;
     cursor: grab;
+    overflow: hidden;
 }
 
 .attribute-manager {

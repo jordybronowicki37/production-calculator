@@ -1,6 +1,7 @@
 .node-container {
     width: min-content;
     height: min-content;
+    position: relative;
 }
 
 .node-top {
@@ -54,7 +55,14 @@
     font-style: italic;
 }
 
-/* TODO remove */
 .node-top>.targets {
-    display: none;
+    cursor: pointer;
+}
+
+.targetEditor {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    background-color: white;
 }
