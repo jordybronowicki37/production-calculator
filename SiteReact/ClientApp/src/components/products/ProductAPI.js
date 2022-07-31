@@ -7,6 +7,8 @@ export const fetchAllProducts = async function(worksheetId) {
 }
 
 export const postNewProduct = async function(worksheetId, productName) {
+  productName = productName.trim();
+  if (productName === "") return;
   await fetch(`product/worksheet/${worksheetId}`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
