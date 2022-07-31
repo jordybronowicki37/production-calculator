@@ -111,23 +111,7 @@ export class Calculator extends Component {
   };
   
   addNewNode(nodetype, position) {
-    let body;
-    let type = "default";
-    switch (nodetype) {
-      case "Spawn":
-        body = <NodeSpawn/>;
-        type = "input";
-        break;
-      case "Production":
-        body = <NodeProduction/>;
-        type = "default";
-        break;
-      case "End":
-        body = <NodeEnd/>;
-        type = "output";
-        break;
-    }
-    
+    const {body, type} = createNodeBody(nodetype, undefined);
     const newNode = {
       id: "temp"+this.tempId++,
       type,
@@ -144,23 +128,7 @@ export class Calculator extends Component {
         console.log(worksheet);
         
         let nodes = worksheet.nodes.map((node, index) => {
-          let body;
-          let type = "default";
-          switch (node.type) {
-            case "Spawn":
-              body = <NodeSpawn data={node}/>;
-              type = "input";
-              break;
-            case "Production":
-              body = <NodeProduction data={node}/>
-              type = "default"
-              break;
-            case "End":
-              body = <NodeEnd data={node}/>
-              type = "output"
-              break;
-          }
-
+          const {body, type} = createNodeBody(node.type, node);
           return {
             id: node.id.toString(),
             type,
@@ -188,4 +156,26 @@ export class Calculator extends Component {
       })
     })
   }
+}
+
+function createNodeBody(nodeType, data) {
+  let body, type;
+  switch (nodeType) {
+    case "Spawn":
+      body = <NodeSpawn data={data}/>;
+      type = "input";
+      break;
+    case "Production":
+      body = <NodeProduction data={data}/>;
+      type = "default";
+      break;
+    case "End":
+      body = <NodeEnd data={data}/>;
+      type = "output";
+      break;
+    default:
+      body = <div></div>;
+      type = "default";
+  }
+  return {body, type};
 }
