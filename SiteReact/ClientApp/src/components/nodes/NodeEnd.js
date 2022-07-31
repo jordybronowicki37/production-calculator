@@ -22,6 +22,7 @@ export class NodeEnd extends Node {
           <div>a</div>
           <div>b</div>
           <div>c</div>
+          <i className='bx bx-target-lock bx-rotate-90'></i>
         </div>;
     }
     

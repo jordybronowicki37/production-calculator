@@ -21,7 +21,9 @@ export class RecipeManager extends Component {
           {this.state.recipes.map(recipe => (
             <li key={recipe.name}>
               <div>{recipe.name}</div>
-              <button className="recipe-remove-button" title="Remove recipe"><box-icon type='solid' name='minus-circle' color="#ff8080"></box-icon></button>
+              <button className="recipe-remove-button" title="Remove recipe">
+                <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
+              </button>
             </li>))}
         </ul>
       </div>

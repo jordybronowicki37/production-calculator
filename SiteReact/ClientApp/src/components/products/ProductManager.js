@@ -20,14 +20,18 @@ export class ProductManager extends Component {
       <div>
         <form className="product-creator" onSubmit={e => this.createNewProduct(e)}>
           <input name="product" type="text" autoComplete="off" placeholder="Product name"/>
-          <button type="submit" title="Add product"><box-icon name='add-to-queue' type='solid' color='#96f378'></box-icon></button>
+          <button type="submit" title="Add product">
+            <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
+          </button>
         </form>
 
         <ul className="products">
           {this.state.products.map(product => (
             <li key={product.name}>
               <div>{product.name}</div>
-              <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(e, product.name)}><box-icon type='solid' name='minus-circle' color="#ff8080"></box-icon></button>
+              <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(e, product.name)}>
+                <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
+              </button>
             </li>))}
         </ul>
       </div>
