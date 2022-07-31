@@ -15,7 +15,7 @@ export default class App extends Component {
       <Layout>
         <Route exact path='/' component={Home}/>
         <Route path='/worksheets' component={WorksheetOverview}/>
-        <Route path='/calculator' component={Calculator}/>
+        <Route path='/calculator/:id' component={Calculator}/>
       </Layout>
     );
   }

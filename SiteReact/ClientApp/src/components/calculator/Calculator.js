@@ -23,7 +23,7 @@ export class Calculator extends Component {
       edges: [],
       flowInstance: null,
       wrapperInstance: null,
-      worksheetId: "1",
+      worksheetId: props.match.params.id,
       worksheetTitle: "",
     }
     this.fetchWorksheet();
