@@ -10,6 +10,7 @@ import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
 import {fetchAllProducts} from "../products/ProductAPI";
 import {fetchAllRecipes} from "../recipes/RecipeAPI";
+import {fetchWorksheet} from "../worksheets/WorksheetAPI";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -26,7 +27,7 @@ export class Calculator extends Component {
       worksheetId: props.match.params.id,
       worksheetTitle: "",
     }
-    this.fetchWorksheet();
+    this.loadWorksheet();
     fetchAllProducts(this.state.worksheetId);
     fetchAllRecipes(this.state.worksheetId);
   }
@@ -122,38 +123,35 @@ export class Calculator extends Component {
     this.setNodes(this.state.nodes.concat(newNode));
   }
   
-  fetchWorksheet() {
-    fetch(`worksheet/${this.state.worksheetId}`).then(response => {
-      response.json().then(worksheet => {
-        console.log(worksheet);
-        
-        let nodes = worksheet.nodes.map((node, index) => {
-          const {body, type} = createNodeBody(node.type, node);
-          return {
-            id: node.id.toString(),
-            type,
-            style: this.defaultNodeStyle,
-            data: { label: body },
-            position: { x: 300, y: index*150 },
-          };
-        });
-        
-        let edges = worksheet.connections.map(edge => {
-          let id1 = edge.inputNodeId.toString();
-          let id2 = edge.outputNodeId.toString();
-          return {
-            id: `${id1}-${id2}`, 
-            source: id1, 
-            target: id2
-          }
-        })
-        
-        this.setState({
-          nodes: nodes,
-          edges: edges,
-          worksheetTitle: worksheet.name,
-        })
-      })
+  async loadWorksheet() {
+    let worksheet = await fetchWorksheet(this.state.worksheetId);
+    console.log(worksheet);
+    
+    let nodes = worksheet.nodes.map((node, index) => {
+      const {body, type} = createNodeBody(node.type, node);
+      return {
+        id: node.id.toString(),
+        type,
+        style: this.defaultNodeStyle,
+        data: { label: body },
+        position: { x: 300, y: index*150 },
+      };
+    });
+    
+    let edges = worksheet.connections.map(edge => {
+      let id1 = edge.inputNodeId.toString();
+      let id2 = edge.outputNodeId.toString();
+      return {
+        id: `${id1}-${id2}`, 
+        source: id1, 
+        target: id2
+      }
+    })
+    
+    this.setState({
+      nodes: nodes,
+      edges: edges,
+      worksheetTitle: worksheet.name,
     })
   }
 }
