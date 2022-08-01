@@ -8,14 +8,13 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class SpawnNode: INodeOut, IHasProduct
 {
-    public int Id { get; }
+    public long Id { get; } = IdGenerators.NodeId;
     private readonly List<Connection> _outputConnections = new();
     public Product Product { get; set; }
     public float Amount { get; set; }
 
-    public SpawnNode(int id, Product product)
+    public SpawnNode(Product product)
     {
-        Id = id;
         Product = product;
     }
 

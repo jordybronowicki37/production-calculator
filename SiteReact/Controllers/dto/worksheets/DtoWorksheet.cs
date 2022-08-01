@@ -7,12 +7,14 @@ namespace SiteReact.Controllers.dto.worksheets;
 
 public class DtoWorksheet
 {
+    public long Id { get; }
     public string Name { get; }
     public IEnumerable<NodeDto> Nodes { get; }
     public List<DtoConnectionDouble> Connections { get; } = new List<DtoConnectionDouble>();
 
     public DtoWorksheet(Worksheet worksheet)
     {
+        Id = worksheet.Id;
         Name = worksheet.Name;
         Nodes = worksheet.Nodes.Select(n => _generateNodeDTO(worksheet, n));
         

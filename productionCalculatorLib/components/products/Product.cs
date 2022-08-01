@@ -2,6 +2,7 @@
 
 public class Product
 {
+    public long Id { get; } = IdGenerators.ProductId;
     public string Name { get; set; }
 
     public Product(string name)

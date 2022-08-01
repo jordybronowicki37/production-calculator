@@ -4,13 +4,15 @@ namespace SiteReact.Controllers.dto.nodes;
 
 public class DtoConnectionDouble
 {
-    public int InputNodeId { get; }
-    public int OutputNodeId { get; }
+    public long Id { get; }
+    public long InputNodeId { get; }
+    public long OutputNodeId { get; }
     public string Product { get; }
     public float Amount { get; }
 
     public DtoConnectionDouble(Connection connection)
     {
+        Id = connection.Id;
         InputNodeId = connection.NodeIn.Id;
         OutputNodeId = connection.NodeOut.Id;
         Product = connection.Product.Name;

@@ -59,20 +59,20 @@ public class NodeBuilder
         switch (_type)
         {
             case NodeTypes.Spawn:
-                var spawnNode = new SpawnNode(_worksheet.NextNodeId, _product);
+                var spawnNode = new SpawnNode(_product);
                 _outputNodes.ForEach(o => CreateOutputConnection(spawnNode, o));
                 _limits.ForEach(spawnNode.AddProductionLimit);
                 _worksheet.AddNode(spawnNode);
                 return spawnNode;
             case NodeTypes.Production:
-                var productionNode = new ProductionNode(_worksheet.NextNodeId, _recipe);
+                var productionNode = new ProductionNode(_recipe);
                 _inputNodes.ForEach(i => CreateInputConnection(productionNode, i));
                 _outputNodes.ForEach(o => CreateOutputConnection(productionNode, o));
                 _limits.ForEach(productionNode.AddProductionLimit);
                 _worksheet.AddNode(productionNode);
                 return productionNode;
             case NodeTypes.End:
-                var endNode = new EndNode(_worksheet.NextNodeId, _product);
+                var endNode = new EndNode(_product);
                 _inputNodes.ForEach(i => CreateInputConnection(endNode, i));
                 _limits.ForEach(endNode.AddProductionLimit);
                 _worksheet.AddNode(endNode);

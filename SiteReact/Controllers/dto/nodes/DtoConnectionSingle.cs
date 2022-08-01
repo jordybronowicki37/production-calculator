@@ -4,12 +4,14 @@ namespace SiteReact.Controllers.dto.nodes;
 
 public class DtoConnectionSingle
 {
-    public int OtherNodeId { get; }
+    public long Id { get; }
+    public long OtherNodeId { get; }
     public string Product { get; }
     public float Amount { get; }
 
-    public DtoConnectionSingle(int otherNodeId, Connection connection)
+    public DtoConnectionSingle(long otherNodeId, Connection connection)
     {
+        Id = connection.Id;
         OtherNodeId = otherNodeId;
         Product = connection.Product.Name;
         Amount = connection.Amount;

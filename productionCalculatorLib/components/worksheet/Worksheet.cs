@@ -8,9 +8,8 @@ namespace productionCalculatorLib.components.worksheet;
 
 public class Worksheet
 {
+    public long Id { get; } = IdGenerators.WorksheetId;
     public string Name { get; set; } = "";
-    private int _nextNodeId;
-    public int NextNodeId => _nextNodeId++;
 
     private readonly List<INode> _nodes = new();
     public IList<INode> Nodes => new ReadOnlyCollection<INode>(_nodes);

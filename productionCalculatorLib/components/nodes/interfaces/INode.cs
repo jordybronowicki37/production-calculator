@@ -5,7 +5,7 @@ namespace productionCalculatorLib.components.nodes.interfaces;
 
 public interface INode
 {
-    int Id { get; }
+    long Id { get; }
     void RemoveConnnection(Connection connection);
     List<LimitProduction> ProductionLimits { get; }
     void AddProductionLimit(LimitProduction limit);

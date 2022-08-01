@@ -8,14 +8,13 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class EndNode: INodeIn, IHasProduct
 {
-    public int Id { get; }
+    public long Id { get; } = IdGenerators.NodeId;
     private readonly List<Connection> _inputConnections = new();
     public Product Product { get; set; }
     public float Amount { get; set; }
 
-    public EndNode(int id, Product product)
+    public EndNode(Product product)
     {
-        Id = id;
         Product = product;
     }
 

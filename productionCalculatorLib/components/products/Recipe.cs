@@ -2,6 +2,7 @@
 
 public class Recipe
 {
+    public long Id { get; } = IdGenerators.RecipeId;
     public string Name { get; }
 
     public List<ThroughPut> InputThroughPuts { get; } = new();
