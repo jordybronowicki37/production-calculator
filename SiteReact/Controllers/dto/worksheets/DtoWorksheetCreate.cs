@@ -2,5 +2,5 @@
 
 public class DtoWorksheetCreate
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 }

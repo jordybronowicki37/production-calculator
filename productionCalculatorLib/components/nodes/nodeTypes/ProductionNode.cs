@@ -10,7 +10,7 @@ public class ProductionNode: INodeInOut, IHasRecipe
 {
     public long Id { get; } = IdGenerators.NodeId;
     public Recipe Recipe { get; set; }
-    public float ProductionAmount { get; set; } = 0;
+    public float ProductionAmount { get; set; }
     
     public ProductionNode(Recipe recipe)
     {
@@ -35,7 +35,7 @@ public class ProductionNode: INodeInOut, IHasRecipe
         _outputConnections.Remove(connection);
     }
 
-    public List<LimitProduction> ProductionLimits { get; }
+    public List<LimitProduction> ProductionLimits { get; } = new();
     public void AddProductionLimit(LimitProduction limit)
     {
         if (!ProductionLimits.Contains(limit)) ProductionLimits.Add(limit);

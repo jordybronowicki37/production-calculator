@@ -5,7 +5,7 @@ namespace SiteReact.Controllers.dto.nodes;
 public class NodeDto
 {
     public long Id { get; set; }
-    public string Type { get; set; }
+    public string Type { get; set; } = "";
     
     public float Amount { get; set; }
     public Recipe? Recipe { get; set; }

@@ -28,7 +28,7 @@ public class SpawnNode: INodeOut, IHasProduct
         _outputConnections.Remove(connection);
     }
     
-    public List<LimitProduction> ProductionLimits { get; }
+    public List<LimitProduction> ProductionLimits { get; } = new();
     public void AddProductionLimit(LimitProduction limit)
     {
         if (!ProductionLimits.Contains(limit)) ProductionLimits.Add(limit);

@@ -10,13 +10,13 @@ namespace productionCalculatorLib.components.nodes;
 
 public class NodeBuilder
 {
-    private NodeTypes _type;
-    private Worksheet _worksheet;
-    private Product _product;
-    private Recipe _recipe;
-    private List<ConnectionPlaceholder> _inputNodes = new();
-    private List<ConnectionPlaceholder> _outputNodes = new();
-    private List<LimitProduction> _limits = new();
+    private readonly NodeTypes _type;
+    private readonly Worksheet _worksheet;
+    private Product? _product;
+    private Recipe? _recipe;
+    private readonly List<ConnectionPlaceholder> _inputNodes = new();
+    private readonly List<ConnectionPlaceholder> _outputNodes = new();
+    private readonly List<LimitProduction> _limits = new();
 
     public NodeBuilder(Worksheet worksheet, NodeTypes type)
     {

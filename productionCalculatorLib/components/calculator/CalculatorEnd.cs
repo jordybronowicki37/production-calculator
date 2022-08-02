@@ -88,7 +88,7 @@ public class CalculatorEnd
                 case ProductionNode productionNode:
                     foreach (var throughput in productionNode.Recipe.OutputThroughPuts)
                     {
-                        if (throughput.Product.Name == node.Product.Name)
+                        if (throughput.Product.Name == node?.Product.Name)
                         {
                             productionNode.ProductionAmount = node.Amount / throughput.Amount;
                         }

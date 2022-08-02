@@ -16,11 +16,11 @@ public class StaticValues
     {
         Worksheet = new List<Worksheet>();
         
-        generateSimpleOneWay();
-        generateDoubleSpawn();
+        GenerateSimpleOneWay();
+        GenerateDoubleSpawn();
     }
 
-    private void generateSimpleOneWay()
+    private void GenerateSimpleOneWay()
     {
         var worksheet = new Worksheet
         {
@@ -36,11 +36,11 @@ public class StaticValues
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 10));
         
         var node1 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productIronOre).Build();
-        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode(node1 as INodeOut, productIronOre).Build();
-        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productIronIngot).AddInputNode(node2 as INodeOut, productIronIngot).Build();
+        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode((node1 as INodeOut)!, productIronOre).Build();
+        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productIronIngot).AddInputNode((node2 as INodeOut)!, productIronIngot).Build();
     }
 
-    private void generateDoubleSpawn()
+    private void GenerateDoubleSpawn()
     {
         var worksheet = new Worksheet
         {
@@ -59,8 +59,8 @@ public class StaticValues
         
         var node0 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productIronOre).Build();
         var node1 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productCoal).Build();
-        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode(node0 as INodeOut, productIronOre).AddInputNode(node1 as INodeOut, productCoal).Build();
-        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productSteelIngot).AddInputNode(node2 as INodeOut, productSteelIngot).Build() as EndNode;
-        node3.Amount = 30;
+        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode((node0 as INodeOut)!, productIronOre).AddInputNode((node1 as INodeOut)!, productCoal).Build();
+        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productSteelIngot).AddInputNode((node2 as INodeOut)!, productSteelIngot).Build() as EndNode;
+        node3!.Amount = 30;
     }
 }

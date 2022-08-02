@@ -2,5 +2,5 @@
 
 public class DtoProduct
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
 }

@@ -7,8 +7,8 @@ namespace productionCalculatorLib.components.connections;
 public class Connection
 {
     public long Id { get; } = IdGenerators.ConnectionId;
-    public INodeOut NodeIn { get; set; }
-    public INodeIn NodeOut { get; set; }
+    public INodeOut NodeIn { get; }
+    public INodeIn NodeOut { get; }
     public Product Product { get; set; }
     public float Amount { get; set; }
 
@@ -18,8 +18,8 @@ public class Connection
         NodeOut = nodeOut;
         Product = product;
     }
-    
-    public List<LimitConnection> ConnectionLimits { get; }
+
+    public List<LimitConnection> ConnectionLimits { get; } = new();
     public void AddConnectionLimit(LimitConnection limit)
     {
         if (!ConnectionLimits.Contains(limit)) ConnectionLimits.Add(limit);
@@ -38,7 +38,7 @@ public class Connection
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
+        if (obj.GetType() != GetType()) return false;
         return Equals((Connection) obj);
     }
 
