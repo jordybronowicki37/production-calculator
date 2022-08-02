@@ -10,8 +10,10 @@ public class EndNode: INodeIn, IHasProduct
 {
     public long Id { get; } = IdGenerators.NodeId;
     private readonly List<Connection> _inputConnections = new();
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
     public float Amount { get; set; }
+    
+    public EndNode() {}
 
     public EndNode(Product product)
     {

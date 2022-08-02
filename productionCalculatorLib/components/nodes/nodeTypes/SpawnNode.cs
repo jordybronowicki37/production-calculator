@@ -10,8 +10,10 @@ public class SpawnNode: INodeOut, IHasProduct
 {
     public long Id { get; } = IdGenerators.NodeId;
     private readonly List<Connection> _outputConnections = new();
-    public Product Product { get; set; }
+    public Product Product { get; set; } = null!;
     public float Amount { get; set; }
+    
+    public SpawnNode() {}
 
     public SpawnNode(Product product)
     {
