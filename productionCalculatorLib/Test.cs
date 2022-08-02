@@ -1,5 +1,4 @@
-﻿using productionCalculatorLib.components.nodes.enums;
-using productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 
@@ -18,9 +17,9 @@ public class Test
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productIronOre, 90));
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 30));
 
-        var node1 = worksheet.GetNodeBuilder(NodeTypes.Spawn).SetProduct(productIronOre).Build();
-        var node2 = worksheet.GetNodeBuilder(NodeTypes.Production).SetRecipe(recipeIronIngot).AddInputNode((node1 as INodeOut)!, productIronOre).Build();
-        var node3 = worksheet.GetNodeBuilder(NodeTypes.End).SetProduct(productIronOre).AddInputNode((node2 as INodeOut)!, productIronIngot).Build();
+        var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).AddInputNode(node1, productIronOre).Build();
+        var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronOre).AddInputNode(node2, productIronIngot).Build();
 
         Console.WriteLine(node2);
     }

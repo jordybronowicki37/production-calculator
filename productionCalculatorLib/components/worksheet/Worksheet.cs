@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using productionCalculatorLib.components.nodes;
-using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -59,8 +58,8 @@ public class Worksheet
     {
     }
     
-    public NodeBuilder GetNodeBuilder(NodeTypes type)
+    public NodeBuilder<TNodeType> GetNodeBuilder<TNodeType>() where TNodeType : INode, new()
     {
-        return new NodeBuilder(this, type);
+        return new NodeBuilder<TNodeType>(this);
     }
 }

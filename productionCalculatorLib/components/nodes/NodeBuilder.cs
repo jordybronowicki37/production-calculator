@@ -1,115 +1,107 @@
 ﻿using productionCalculatorLib.components.calculator.limitors;
 using productionCalculatorLib.components.connections;
-using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
-using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 
 namespace productionCalculatorLib.components.nodes;
 
-public class NodeBuilder
+public class NodeBuilder<TNodeType> where TNodeType : INode, new()
 {
-    private readonly NodeTypes _type;
     private readonly Worksheet _worksheet;
     private Product? _product;
     private Recipe? _recipe;
-    private readonly List<ConnectionPlaceholder> _inputNodes = new();
-    private readonly List<ConnectionPlaceholder> _outputNodes = new();
+    private readonly List<ConnectionPlaceholder<INodeOut>> _inputNodes = new();
+    private readonly List<ConnectionPlaceholder<INodeIn>> _outputNodes = new();
     private readonly List<LimitProduction> _limits = new();
 
-    public NodeBuilder(Worksheet worksheet, NodeTypes type)
+    public NodeBuilder(Worksheet worksheet)
     {
         _worksheet = worksheet;
-        _type = type;
     }
 
-    public NodeBuilder SetProduct(Product product)
+    public NodeBuilder<TNodeType> SetProduct(Product product)
     {
         _product = product;
         return this;
     }
 
-    public NodeBuilder SetRecipe(Recipe recipe)
+    public NodeBuilder<TNodeType> SetRecipe(Recipe recipe)
     {
         _recipe = recipe;
         return this;
     }
 
-    public NodeBuilder AddInputNode(INodeOut node, Product product)
+    public NodeBuilder<TNodeType> AddInputNode(INodeOut node, Product product)
     {
-        _inputNodes.Add(new ConnectionPlaceholder(node, product));
+        _inputNodes.Add(new ConnectionPlaceholder<INodeOut>(node, product));
         return this;
     }
 
-    public NodeBuilder AddOutputNode(INodeIn node, Product product)
+    public NodeBuilder<TNodeType> AddOutputNode(INodeIn node, Product product)
     {
-        _outputNodes.Add(new ConnectionPlaceholder(node, product));
+        _outputNodes.Add(new ConnectionPlaceholder<INodeIn>(node, product));
         return this;
     }
 
-    public NodeBuilder AddLimit(LimitProduction limit)
+    public NodeBuilder<TNodeType> AddLimit(LimitProduction limit)
     {
         _limits.Add(limit);
         return this;
     }
 
-    public INode Build()
+    public TNodeType Build()
     {
-        switch (_type)
+        TNodeType newNode = new();
+        
+        if (newNode is IHasProduct nodeProduct)
         {
-            case NodeTypes.Spawn:
-                var spawnNode = new SpawnNode(_product);
-                _outputNodes.ForEach(o => CreateOutputConnection(spawnNode, o));
-                _limits.ForEach(spawnNode.AddProductionLimit);
-                _worksheet.AddNode(spawnNode);
-                return spawnNode;
-            case NodeTypes.Production:
-                var productionNode = new ProductionNode(_recipe);
-                _inputNodes.ForEach(i => CreateInputConnection(productionNode, i));
-                _outputNodes.ForEach(o => CreateOutputConnection(productionNode, o));
-                _limits.ForEach(productionNode.AddProductionLimit);
-                _worksheet.AddNode(productionNode);
-                return productionNode;
-            case NodeTypes.End:
-                var endNode = new EndNode(_product);
-                _inputNodes.ForEach(i => CreateInputConnection(endNode, i));
-                _limits.ForEach(endNode.AddProductionLimit);
-                _worksheet.AddNode(endNode);
-                return endNode;
-            default:
-                throw new ArgumentOutOfRangeException();
+            nodeProduct.Product = _product ?? throw new InvalidOperationException("No product set");
         }
+        
+        if (newNode is IHasRecipe nodeRecipe)
+        {
+            nodeRecipe.Recipe = _recipe ?? throw new InvalidOperationException("No recipe set");
+        }
+        
+        if (newNode is INodeIn nodeIn)
+        {
+            _inputNodes.ForEach(connectionPlaceholder =>
+            {
+                var otherNode = connectionPlaceholder.OtherNode;
+                var connection = new Connection(otherNode, nodeIn, connectionPlaceholder.Product);
+                if (nodeIn.InputConnections.Contains(connection) ||
+                    otherNode.OutputConnections.Contains(connection)) return;
+                nodeIn.AddInputConnection(connection);
+                otherNode.AddOutputConnection(connection);
+            });
+        }
+
+        if (newNode is INodeOut nodeOut)
+        {
+            _outputNodes.ForEach(connectionPlaceholder =>
+            {
+                var otherNode = connectionPlaceholder.OtherNode;
+                var connection = new Connection(nodeOut, otherNode, connectionPlaceholder.Product);
+                if (nodeOut.OutputConnections.Contains(connection) ||
+                    otherNode.InputConnections.Contains(connection)) return;
+                nodeOut.AddOutputConnection(connection);
+                otherNode.AddInputConnection(connection);
+            });
+        }
+        
+        _limits.ForEach(v => newNode.AddProductionLimit(v));
+
+        _worksheet.AddNode(newNode);
+        return newNode;
     }
 
-    private void CreateInputConnection(INodeIn nodeIn, ConnectionPlaceholder c)
+    private struct ConnectionPlaceholder<T>
     {
-        if (c.OtherNode is not INodeOut otherNode) return;
-        var connection = new Connection(otherNode, nodeIn, c.Product);
-        if (!nodeIn.InputConnections.Contains(connection) && !otherNode.OutputConnections.Contains(connection))
-        {
-            nodeIn.AddInputConnection(connection);
-            otherNode.AddOutputConnection(connection);
-        }
-    }
+        public readonly T OtherNode;
+        public readonly Product Product;
 
-    private void CreateOutputConnection(INodeOut nodeOut, ConnectionPlaceholder c)
-    {
-        if (c.OtherNode is not INodeIn otherNode) return;
-        var connection = new Connection(nodeOut, otherNode, c.Product);
-        if (!nodeOut.OutputConnections.Contains(connection) && !otherNode.InputConnections.Contains(connection))
-        {
-            nodeOut.AddOutputConnection(connection);
-            otherNode.AddInputConnection(connection);
-        }
-    }
-
-    private struct ConnectionPlaceholder
-    {
-        public INode OtherNode;
-        public Product Product;
-
-        public ConnectionPlaceholder(INode otherNode, Product product)
+        public ConnectionPlaceholder(T otherNode, Product product)
         {
             OtherNode = otherNode;
             Product = product;
