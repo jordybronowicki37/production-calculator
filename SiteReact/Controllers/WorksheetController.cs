@@ -27,7 +27,7 @@ public class WorksheetController : ControllerBase
     public IActionResult Get(int id)
     {
         var w = StaticValues.Get().Worksheet[id];
-        CalculatorEnd.ReCalculateAmounts(w);
+        CalculatorLimit.ReCalculateAmounts(w);
         return Ok(new DtoWorksheet(w));
     }
 
