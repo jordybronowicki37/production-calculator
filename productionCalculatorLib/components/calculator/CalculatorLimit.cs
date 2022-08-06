@@ -20,22 +20,32 @@ public class CalculatorLimit
     public static void ReCalculateAmounts(Worksheet worksheet)
     {
         var w = new CalculatorLimit(worksheet);
-        w.CheckLimits();
+        if (!w.CheckLimits())
+        {
+            worksheet.CalculationSucceeded = false;
+            worksheet.CalculationError = "Worksheet must have at least 1 'ExactAmount' limit";
+            return;
+        }
+        
         w.ResetAmounts();
         while (w._amountOfTimesCalculated < 20)
         {
             w.Calculate();
-            if (w.CheckResult()) return;
+            if (w.CheckResult())
+            {
+                worksheet.CalculationSucceeded = true;
+                worksheet.CalculationError = "";
+                return;
+            }
             w._amountOfTimesCalculated++;
         }
     }
 
-    private void CheckLimits()
+    private bool CheckLimits()
     {
-        if (!_worksheet.Nodes.Any(node => 
-                node.ProductionLimits.Any(limit => 
-                    limit.Type == LimitProductionTypes.ExactAmount)))
-            throw new ArgumentException("Worksheet must have at least 1 'ExactAmount' limit");
+        return _worksheet.Nodes.Any(node =>
+            node.ProductionLimits.Any(limit =>
+                limit.Type == LimitProductionTypes.ExactAmount));
     }
     
     private void ResetAmounts()

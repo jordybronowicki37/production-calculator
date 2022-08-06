@@ -10,6 +10,9 @@ public class Worksheet
     public long Id { get; } = IdGenerators.WorksheetId;
     public string Name { get; set; } = "";
 
+    public bool CalculationSucceeded { get; set; }
+    public string CalculationError { get; set; }
+
     private readonly List<INode> _nodes = new();
     public IList<INode> Nodes => new ReadOnlyCollection<INode>(_nodes);
     public void AddNode(INode node)

@@ -9,6 +9,10 @@ public class DtoWorksheet
 {
     public long Id { get; }
     public string Name { get; }
+    
+    public bool CalculationSucceeded { get; }
+    public string CalculationError { get; }
+    
     public IEnumerable<NodeDto> Nodes { get; }
     public List<DtoConnectionDouble> Connections { get; } = new List<DtoConnectionDouble>();
 
@@ -16,6 +20,8 @@ public class DtoWorksheet
     {
         Id = worksheet.Id;
         Name = worksheet.Name;
+        CalculationSucceeded = worksheet.CalculationSucceeded;
+        CalculationError = worksheet.CalculationError;
         Nodes = worksheet.Nodes.Select(n => _generateNodeDTO(worksheet, n));
         
         foreach (var node in worksheet.Nodes)
