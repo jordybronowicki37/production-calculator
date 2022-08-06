@@ -2,7 +2,7 @@
 
 namespace productionCalculatorLib.components.nodes.interfaces;
 
-public interface IHasRecipe
+public interface IHasRecipe: INode
 {
     Recipe Recipe { get; set; }
     float ProductionAmount { get; set; }

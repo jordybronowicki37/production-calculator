@@ -2,7 +2,7 @@
 
 namespace productionCalculatorLib.components.nodes.interfaces;
 
-public interface IHasProduct
+public interface IHasProduct: INode
 {
     Product Product { get; set; }
     float Amount { get; set; }
