@@ -36,6 +36,7 @@ public class CalculatorLimit
         {
             if (node is IHasProduct productNode) productNode.Amount = 0;
             if (node is IHasRecipe recipeNode) recipeNode.ProductionAmount = 0;
+            if (node is INodeIn inNode) foreach (var connection in inNode.InputConnections) connection.Amount = 0;
         }
     }
     
