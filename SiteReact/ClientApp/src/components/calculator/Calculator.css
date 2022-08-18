@@ -1,5 +1,6 @@
 .flow-chart-container {
     display: flex;
+    min-height: 70vh;
 }
 
 .flow-chart-container>:first-child {
