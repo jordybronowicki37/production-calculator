@@ -5,7 +5,7 @@ using SiteReact.Data;
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("worksheet/{worksheetId:int}/[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
@@ -15,20 +15,20 @@ public class ProductController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("worksheet/{worksheetId:int}")]
+    [HttpGet]
     public IActionResult GetAll(int worksheetId)
     {
         return Ok(StaticValues.Get().Worksheet[worksheetId].Products);
     }
 
-    [HttpPost("worksheet/{worksheetId:int}")]
+    [HttpPost]
     public IActionResult Create(DtoProduct dto, int worksheetId)
     {
         var p = StaticValues.Get().Worksheet[worksheetId].GetOrGenerateProduct(dto.Name);
         return Ok(p);
     }
     
-    [HttpPatch("{name}/worksheet/{worksheetId:int}")]
+    [HttpPatch("{name}")]
     public IActionResult Update(string name, int worksheetId, DtoProduct dto)
     {
         try
@@ -43,7 +43,7 @@ public class ProductController : ControllerBase
         }
     }
     
-    [HttpDelete("{name}/worksheet/{worksheetId:int}")]
+    [HttpDelete("{name}")]
     public IActionResult Remove(string name, int worksheetId)
     {
         try

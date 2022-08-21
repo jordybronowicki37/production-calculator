@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using productionCalculatorLib.components.nodes.interfaces;
+using productionCalculatorLib.components.nodes.nodeTypes;
+using SiteReact.Controllers.dto.nodes;
+using SiteReact.Data;
 
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("worksheet/{worksheetId:int}/[controller]")]
 public class NodeController : ControllerBase
 {
     private readonly ILogger<NodeController> _logger;
@@ -13,19 +17,71 @@ public class NodeController : ControllerBase
         _logger = logger;
     }
     
-    [HttpPost("worksheet/{worksheetId:int}")]
-    public IActionResult AddNode(int worksheetId)
+    [HttpPost]
+    public IActionResult AddNode(int worksheetId, DtoNodeCreate dto)
     {
-        return Ok();
+        var w = StaticValues.Get().Worksheet[worksheetId];
+        if (!Enum.TryParse(dto.Type, out ENodeTypes type)) return BadRequest();
+        INode node;
+        
+        switch (type)
+        {
+            case ENodeTypes.Spawn:
+                node = w.GetNodeBuilder<SpawnNode>().Build();
+                break;
+            case ENodeTypes.Production:
+                node = w.GetNodeBuilder<ProductionNode>().Build();
+                break;
+            case ENodeTypes.End:
+                node = w.GetNodeBuilder<EndNode>().Build();
+                break;
+            default:
+                return BadRequest();
+        }
+
+        return Ok(NodeDto.GenerateNode(node));
     }
     
-    [HttpPatch("{nodeId:int}/worksheet/{worksheetId:int}")]
-    public IActionResult EditNode(int nodeId, int worksheetId)
+    [HttpPatch("{nodeId:int}/product")]
+    public IActionResult EditNodeProduct(int nodeId, int worksheetId, DtoNodeSetProduct dto)
     {
-        return Ok();
+        var w = StaticValues.Get().Worksheet[worksheetId];
+        
+        var node = w.Nodes.First(n => n.Id == nodeId);
+        if (node is not IHasProduct productNode) return BadRequest();
+
+        var product = w.GetProduct(dto.Product);
+        if (product == null) return BadRequest();
+        productNode.Product = product;
+
+        if (node is INodeOut nodeOut)
+        {
+            foreach (var connection in nodeOut.OutputConnections) connection.Product = product;
+        }
+        if (node is INodeIn nodeIn)
+        {
+            foreach (var connection in nodeIn.InputConnections) connection.Product = product;
+        }
+        
+        return Ok(NodeDto.GenerateNode(productNode));
     }
     
-    [HttpDelete("{nodeId:int}/worksheet/{worksheetId:int}")]
+    [HttpPatch("{nodeId:int}/recipe")]
+    public IActionResult EditNodeRecipe(int nodeId, int worksheetId, DtoNodeSetRecipe dto)
+    {
+        var w = StaticValues.Get().Worksheet[worksheetId];
+        
+        var node = w.Nodes.First(n => n.Id == nodeId);
+        if (node is not IHasRecipe recipeNode) return BadRequest();
+        
+        var recipe = w.GetRecipe(dto.Recipe);
+        if (recipe == null) return BadRequest();
+        recipeNode.Recipe = recipe;
+        
+        return Ok(NodeDto.GenerateNode(recipeNode));
+    }
+    
+    [HttpDelete("{nodeId:int}")]
     public IActionResult DeleteNode(int nodeId, int worksheetId)
     {
         return Ok();
