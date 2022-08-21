@@ -22,24 +22,28 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
 
     public NodeBuilder<TNodeType> SetProduct(Product product)
     {
+        if (!typeof(TNodeType).GetInterfaces().Contains(typeof(IHasProduct))) throw new ArgumentException("This node type does not support products");
         _product = product;
         return this;
     }
 
     public NodeBuilder<TNodeType> SetRecipe(Recipe recipe)
     {
+        if (!typeof(TNodeType).GetInterfaces().Contains(typeof(IHasRecipe))) throw new ArgumentException("This node type does not support recipes");
         _recipe = recipe;
         return this;
     }
 
     public NodeBuilder<TNodeType> AddInputNode(INodeOut node, Product product)
     {
+        if (!typeof(TNodeType).GetInterfaces().Contains(typeof(INodeIn))) throw new ArgumentException("This node type does not support inputs");
         _inputNodes.Add(new ConnectionPlaceholder<INodeOut>(node, product));
         return this;
     }
 
     public NodeBuilder<TNodeType> AddOutputNode(INodeIn node, Product product)
     {
+        if (!typeof(TNodeType).GetInterfaces().Contains(typeof(INodeOut))) throw new ArgumentException("This node type does not support outputs");
         _outputNodes.Add(new ConnectionPlaceholder<INodeIn>(node, product));
         return this;
     }
