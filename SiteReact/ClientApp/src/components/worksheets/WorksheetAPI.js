@@ -13,6 +13,7 @@ export const fetchWorksheet = async function(worksheetId) {
   if (!response.ok) throw new Error();
   let json = await response.json();
   Store.dispatch({type:"worksheet/set", payload:json});
+  Store.dispatch({type:"nodes/set", payload:json.nodes});
   return json;
 }
 
