@@ -1,5 +1,4 @@
 ﻿using productionCalculatorLib.components.nodes.interfaces;
-using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.nodes;
 
@@ -14,7 +13,7 @@ public class DtoWorksheet
     public string CalculationError { get; }
     
     public IEnumerable<NodeDto> Nodes { get; }
-    public List<DtoConnectionDouble> Connections { get; } = new List<DtoConnectionDouble>();
+    public List<DtoConnectionDouble> Connections { get; } = new();
 
     public DtoWorksheet(Worksheet worksheet)
     {
@@ -22,7 +21,7 @@ public class DtoWorksheet
         Name = worksheet.Name;
         CalculationSucceeded = worksheet.CalculationSucceeded;
         CalculationError = worksheet.CalculationError;
-        Nodes = worksheet.Nodes.Select(n => _generateNodeDTO(worksheet, n));
+        Nodes = worksheet.Nodes.Select(n => NodeDto.GenerateNode(n));
         
         foreach (var node in worksheet.Nodes)
         {
@@ -43,16 +42,5 @@ public class DtoWorksheet
                 }
             }
         }
-    }
-
-    private static NodeDto _generateNodeDTO(Worksheet worksheet, INode node)
-    {
-        return node switch
-        {
-            SpawnNode n => new DtoNodeSpawn(n),
-            ProductionNode n => new DtoNodeProduction(n),
-            EndNode n => new DtoNodeEnd(n),
-            _ => throw new InvalidOperationException()
-        };
     }
 }
