@@ -1,7 +1,8 @@
 import Store from "../../dataStore/DataStore";
 
 export const fetchAllProducts = async function(worksheetId) {
-  let response = await fetch(`product/worksheet/${worksheetId}`);
+  let response = await fetch(`worksheet/${worksheetId}/product`);
+  if (!response.ok) throw new Error();
   let data = await response.json();
   Store.dispatch({type:"product/set", payload:data});
 }
@@ -9,15 +10,17 @@ export const fetchAllProducts = async function(worksheetId) {
 export const postNewProduct = async function(worksheetId, productName) {
   productName = productName.trim();
   if (productName === "") return;
-  await fetch(`product/worksheet/${worksheetId}`, {
+  let response = await fetch(`worksheet/${worksheetId}/product`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({name: productName})
   });
+  if (!response.ok) throw new Error();
   await fetchAllProducts(worksheetId);
 }
 
 export const deleteProduct = async function(worksheetId, productId) {
-  await fetch(`product/${productId}/worksheet/${worksheetId}`, {method: "delete"});
+  let response = await fetch(`worksheet/${worksheetId}/product/${productId}`, {method: "delete"});
+  if (!response.ok) throw new Error();
   await fetchAllProducts(worksheetId);
 }
