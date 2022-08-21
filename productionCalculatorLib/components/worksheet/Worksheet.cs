@@ -32,14 +32,16 @@ public class Worksheet
     public IList<Product> Products => new ReadOnlyCollection<Product>(_products);
     public Product GetOrGenerateProduct(string name)
     {
-        if (_products.Any(p => p.Name == name))
-        {
-            return _products.First(p => p.Name == name);
-        }
+        var existingProduct = GetProduct(name);
+        if (existingProduct != null) return existingProduct;
 
         var p = new Product(name);
         _products.Add(p);
         return p;
+    }
+    public Product? GetProduct(string name)
+    {
+        return _products.Find(r => r.Name == name);
     }
     public void RemoveProduct(string name)
     {
@@ -55,6 +57,10 @@ public class Worksheet
         var r = new Recipe(name);
         _recipes.Add(r);
         return r;
+    }
+    public Recipe? GetRecipe(string name)
+    {
+        return _recipes.Find(r => r.Name == name);
     }
 
     public Worksheet()
