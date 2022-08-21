@@ -23,9 +23,17 @@ const nodeReducer = createReducer([], {
     state[index] = action.payload;
     return state;
   },
-  "node/add": (state, action) => {
-    return [...state, action.payload];
+  "node/add": (state, action) => [...state, action.payload],
+});
+
+const connectionReducer = createReducer([], {
+  "connections/set": (state, action) => [...action.payload],
+  "connection/set": (state, action) => {
+    let index = state.findIndex(v => v.id = action.payload.id);
+    state[index] = action.payload;
+    return state;
   },
+  "connection/add": (state, action) => [...state, action.payload],
 });
 
 const rootReducer = combineReducers({
@@ -34,6 +42,7 @@ const rootReducer = combineReducers({
   worksheets: worksheetsReducer,
   worksheet: worksheetReducer,
   node: nodeReducer,
+  connection: connectionReducer,
 });
 
 const Store = configureStore({reducer: rootReducer});
