@@ -21,20 +21,35 @@ public class NodeController : ControllerBase
     public IActionResult AddNode(int worksheetId, DtoNodeCreate dto)
     {
         var w = StaticValues.Get().Worksheet[worksheetId];
-        if (!Enum.TryParse(dto.Type, out ENodeTypes type)) return BadRequest();
+        if (!Enum.TryParse(dto.Type, out ENodeTypes type)) return BadRequest("Could not parse type");
         INode node;
         
         switch (type)
         {
             case ENodeTypes.Spawn:
-                node = w.GetNodeBuilder<SpawnNode>().Build();
+            {
+                if (dto.Product == null) return BadRequest("Product field was empty");
+                var product = w.GetProduct(dto.Product);
+                if (product == null) return NotFound("Product not found");
+                node = w.GetNodeBuilder<SpawnNode>().SetProduct(product).Build();
                 break;
+            }
             case ENodeTypes.Production:
-                node = w.GetNodeBuilder<ProductionNode>().Build();
+            {
+                if (dto.Recipe == null) return BadRequest("Recipe field was empty");
+                var recipe = w.GetRecipe(dto.Recipe);
+                if (recipe == null) return NotFound("Recipe not found");
+                node = w.GetNodeBuilder<ProductionNode>().SetRecipe(recipe).Build();
                 break;
+            }
             case ENodeTypes.End:
-                node = w.GetNodeBuilder<EndNode>().Build();
+            {
+                if (dto.Product == null) return BadRequest("Product field was empty");
+                var product = w.GetProduct(dto.Product);
+                if (product == null) return NotFound("Product not found");
+                node = w.GetNodeBuilder<EndNode>().SetProduct(product).Build();
                 break;
+            }
             default:
                 return BadRequest();
         }
