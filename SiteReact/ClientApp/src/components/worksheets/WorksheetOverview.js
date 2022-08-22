@@ -24,7 +24,7 @@ export class WorksheetOverview extends Component {
       <div>
         <h1>Worksheet overview</h1>
         <div>
-          {this.state.worksheets.map((v, i) => <div className="worksheetItem"><WorksheetItem key={v.name} data={v} id={i}></WorksheetItem></div>)}
+          {this.state.worksheets.map((v, i) => <div key={v.name} className="worksheetItem"><WorksheetItem data={v} id={i}></WorksheetItem></div>)}
         </div>
       </div>
     );
