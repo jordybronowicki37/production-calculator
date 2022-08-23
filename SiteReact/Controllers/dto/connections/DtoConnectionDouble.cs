@@ -1,6 +1,6 @@
 ﻿using productionCalculatorLib.components.connections;
 
-namespace SiteReact.Controllers.dto.nodes;
+namespace SiteReact.Controllers.dto.connections;
 
 public class DtoConnectionDouble
 {
