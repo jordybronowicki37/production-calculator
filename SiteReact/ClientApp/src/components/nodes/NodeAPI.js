@@ -1,13 +1,22 @@
 ﻿import Store from "../../dataStore/DataStore";
 
-export const nodeCreate = async function(worksheetId, type) {
+export const nodeCreateProduct = async function(worksheetId, type, position, product) {
+  return await nodeCreate(worksheetId, position, JSON.stringify({type, product}));
+}
+
+export const nodeCreateRecipe = async function(worksheetId, type, position, recipe) {
+  return await nodeCreate(worksheetId, position, JSON.stringify({type, recipe}));
+}
+
+async function nodeCreate(worksheetId, position, body) {
   let response = await fetch(`worksheet/${worksheetId}/node`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({type})
+    body,
   });
   if (!response.ok) throw new Error();
   let json = await response.json();
+  json.position = position;
   Store.dispatch({type:"node/add", payload:json});
   return json;
 }

@@ -12,6 +12,13 @@ export const fetchWorksheet = async function(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}`);
   if (!response.ok) throw new Error();
   let json = await response.json();
+  
+  // TODO remove when position is saved on back-end
+  json.nodes.map((value, index) => {
+    value.position = {x: 200, y: index*150};
+    return value;
+  });
+  
   Store.dispatch({type:"worksheet/set", payload:json});
   Store.dispatch({type:"nodes/set", payload:json.nodes});
   Store.dispatch({type:"connections/set", payload:json.connections});

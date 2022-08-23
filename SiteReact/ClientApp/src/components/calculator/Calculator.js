@@ -3,7 +3,7 @@ import {Component} from "react";
 import {NodeProduction} from "../nodes/NodeProduction";
 import {NodeSpawn} from "../nodes/NodeSpawn";
 import {NodeEnd} from "../nodes/NodeEnd";
-import ReactFlow, {MiniMap, Controls, applyEdgeChanges, applyNodeChanges, addEdge, Background, MarkerType, 
+import ReactFlow, {MiniMap, Controls, Background, MarkerType, 
   ReactFlowProvider} from 'react-flow-renderer';
 import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
@@ -11,39 +11,61 @@ import Store from "../../dataStore/DataStore";
 import {fetchAllProducts} from "../products/ProductAPI";
 import {fetchAllRecipes} from "../recipes/RecipeAPI";
 import {fetchWorksheet} from "../worksheets/WorksheetAPI";
+import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
   defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial"};
-  tempId = 0;
+  unsubscribe;
   
   constructor(props) {
     super(props);
     this.state = {
-      nodes: [],
-      edges: [],
       flowInstance: null,
       wrapperInstance: null,
       worksheetId: props.match.params.id,
-      worksheetTitle: "",
     }
-    this.loadWorksheet();
+    fetchWorksheet(this.state.worksheetId);
     fetchAllProducts(this.state.worksheetId);
     fetchAllRecipes(this.state.worksheetId);
+    
+    this.unsubscribe = Store.subscribe(() => this.forceUpdate());
   }
 
   render() {
+    let state = Store.getState();
+    let title = state.worksheet ? state.worksheet.name : "";
+    let nodes = state.node.map(node => {
+      const {body, type} = createNodeBody(node.type, node);
+      return {
+        id: node.id.toString(),
+        type,
+        style: this.defaultNodeStyle,
+        data: { label: body },
+        position: node.position,
+      };
+    });
+    let edges = state.connection.map(edge => {
+      let id1 = edge.inputNodeId.toString();
+      let id2 = edge.outputNodeId.toString();
+      return {
+        id: `${id1}-${id2}`,
+        source: id1,
+        target: id2
+      };
+    });
+    
     return (
       <div>
         <h1>Calculator</h1>
-        <div>Worksheet: {this.state.worksheetTitle}</div>
+        <div>Worksheet: {title}</div>
         <div className="flow-chart-container">
           <ReactFlowProvider>
             <div ref={this.setReactFlowWrapper}>
               <ReactFlow 
                 className="flow-chart"
-                nodes={this.state.nodes}
-                edges={this.state.edges}
+                nodes={nodes}
+                edges={edges}
                 onNodesChange={this.onNodesChange}
                 onEdgesChange={this.onEdgesChange}
                 onConnect={this.onConnect}
@@ -79,14 +101,47 @@ export class Calculator extends Component {
     );
   }
 
-  setNodes = nodes => this.setState({nodes: nodes});
-  setEdges = edges => this.setState({edges:edges});
   setReactFlowInstance = instance => this.setState({flowInstance: instance});
   setReactFlowWrapper = instance => this.setState({wrapperInstance: instance});
   
-  onNodesChange = (changes) => this.setNodes(applyNodeChanges(changes, this.state.nodes));
-  onEdgesChange = (changes) => this.setEdges(applyEdgeChanges(changes, this.state.edges));
-  onConnect = edge => this.setEdges(addEdge(edge, this.state.edges));
+  onNodesChange = (changes) => {
+    changes.forEach(change => {
+      switch (change.type) {
+        case "position":
+          if (change.dragging) {
+            Store.dispatch({type:"node/change/position", payload: {position:change.position, id:change.id}});
+          } else {
+            let position = Store.getState().node.find(value => value.id == change.id).position;
+            // TODO update end position on back-end
+          }
+          break;
+        case "dimensions":
+        case "select":
+        case "remove":
+        case "add":
+        case "reset":
+        default:
+          console.log(`Non implemented node change: ${change.type}`);
+          console.log(change);
+      }
+    })
+  };
+  onEdgesChange = (changes) => {
+    changes.forEach(change => {
+      switch (change.type) {
+        case "select":
+        case "remove":
+        case "add":
+        case "reset":
+        default:
+          console.log(`Non implemented edge change: ${change.type}`);
+          console.log(changes);
+      }
+    })
+  };
+  onConnect = edge => {
+    console.log(edge);
+  };
   
   onDragStart = (event, nodetype) => {
     event.dataTransfer.setData('application/reactflow', nodetype);
@@ -99,60 +154,31 @@ export class Calculator extends Component {
   onDrop = (event) => {
     event.preventDefault();
     const reactFlowBounds = this.state.wrapperInstance.getBoundingClientRect();
-    const type = event.dataTransfer.getData('application/reactflow');
+    const nodetype = event.dataTransfer.getData('application/reactflow');
 
     // check if the dropped element is valid
-    if (typeof type === 'undefined' || !type) return;
+    if (typeof nodetype === 'undefined' || !nodetype) return;
 
     const position = this.state.flowInstance.project({
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
-    this.addNewNode(type, position)
+    
+    switch (nodetype) {
+      case "Spawn":
+      case "End":
+        let product = Store.getState().product[0];
+        nodeCreateProduct(this.state.worksheetId, nodetype, position, product.name);
+        break;
+      case "Production":
+        let recipe = Store.getState().recipe[0];
+        nodeCreateRecipe(this.state.worksheetId, nodetype, position, recipe.name);
+        break;
+    }
   };
   
-  addNewNode(nodetype, position) {
-    const {body, type} = createNodeBody(nodetype, undefined);
-    const newNode = {
-      id: "temp"+this.tempId++,
-      type,
-      position,
-      style: this.defaultNodeStyle,
-      data: { label: body },
-    }
-    this.setNodes(this.state.nodes.concat(newNode));
-  }
-  
-  async loadWorksheet() {
-    let worksheet = await fetchWorksheet(this.state.worksheetId);
-    console.log(worksheet);
-    
-    let nodes = worksheet.nodes.map((node, index) => {
-      const {body, type} = createNodeBody(node.type, node);
-      return {
-        id: node.id.toString(),
-        type,
-        style: this.defaultNodeStyle,
-        data: { label: body },
-        position: { x: 300, y: index*150 },
-      };
-    });
-    
-    let edges = worksheet.connections.map(edge => {
-      let id1 = edge.inputNodeId.toString();
-      let id2 = edge.outputNodeId.toString();
-      return {
-        id: `${id1}-${id2}`, 
-        source: id1, 
-        target: id2
-      }
-    })
-    
-    this.setState({
-      nodes: nodes,
-      edges: edges,
-      worksheetTitle: worksheet.name,
-    })
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 }
 
