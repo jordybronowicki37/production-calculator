@@ -44,7 +44,7 @@ export class Calculator extends Component {
       let id1 = edge.inputNodeId.toString();
       let id2 = edge.outputNodeId.toString();
       return {
-        id: `${id1}-${id2}`,
+        id: edge.id,
         source: id1,
         target: id2
       };
