@@ -8,8 +8,6 @@ import ReactFlow, {MiniMap, Controls, Background, MarkerType,
 import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
-import {fetchAllProducts} from "../products/ProductAPI";
-import {fetchAllRecipes} from "../recipes/RecipeAPI";
 import {fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
 
@@ -26,9 +24,6 @@ export class Calculator extends Component {
       worksheetId: props.match.params.id,
     }
     fetchWorksheet(this.state.worksheetId);
-    fetchAllProducts(this.state.worksheetId);
-    fetchAllRecipes(this.state.worksheetId);
-    
     this.unsubscribe = Store.subscribe(() => this.forceUpdate());
   }
 

@@ -22,6 +22,8 @@ export const fetchWorksheet = async function(worksheetId) {
   Store.dispatch({type:"worksheet/set", payload:json});
   Store.dispatch({type:"nodes/set", payload:json.nodes});
   Store.dispatch({type:"connections/set", payload:json.connections});
+  Store.dispatch({type:"product/set", payload:json.products});
+  Store.dispatch({type:"recipe/set", payload:json.recipes});
   return json;
 }
 
