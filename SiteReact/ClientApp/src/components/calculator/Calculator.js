@@ -30,7 +30,7 @@ export class Calculator extends Component {
   render() {
     let state = Store.getState();
     let title = state.worksheet ? state.worksheet.name : "";
-    let nodes = state.node.map(node => {
+    let nodes = state.nodes.map(node => {
       const {body, type} = createNodeBody(node.type, node);
       return {
         id: node.id.toString(),
@@ -40,7 +40,7 @@ export class Calculator extends Component {
         position: node.position,
       };
     });
-    let edges = state.connection.map(edge => {
+    let edges = state.connections.map(edge => {
       let id1 = edge.inputNodeId.toString();
       let id2 = edge.outputNodeId.toString();
       return {
@@ -106,7 +106,7 @@ export class Calculator extends Component {
           if (change.dragging) {
             Store.dispatch({type:"node/change/position", payload: {position:change.position, id:change.id}});
           } else {
-            let position = Store.getState().node.find(value => value.id == change.id).position;
+            let position = Store.getState().nodes.find(value => value.id == change.id).position;
             // TODO update end position on back-end
           }
           break;
@@ -162,11 +162,11 @@ export class Calculator extends Component {
     switch (nodetype) {
       case "Spawn":
       case "End":
-        let product = Store.getState().product[0];
+        let product = Store.getState().products[0];
         nodeCreateProduct(this.state.worksheetId, nodetype, position, product.name);
         break;
       case "Production":
-        let recipe = Store.getState().recipe[0];
+        let recipe = Store.getState().recipes[0];
         nodeCreateRecipe(this.state.worksheetId, nodetype, position, recipe.name);
         break;
     }

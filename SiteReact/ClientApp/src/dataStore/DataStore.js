@@ -1,11 +1,11 @@
 import {combineReducers, configureStore, createReducer} from "@reduxjs/toolkit";
 
 const productReducer = createReducer([], {
-  "product/set": (state, action) => [...action.payload],
+  "products/set": (state, action) => [...action.payload],
 });
 
 const recipeReducer = createReducer([], {
-  "recipe/set": (state, action) => [...action.payload],
+  "recipes/set": (state, action) => [...action.payload],
 });
 
 const worksheetsReducer = createReducer([], {
@@ -42,12 +42,12 @@ const connectionReducer = createReducer([], {
 });
 
 const rootReducer = combineReducers({
-  product: productReducer,
-  recipe: recipeReducer,
+  products: productReducer,
+  recipes: recipeReducer,
   worksheets: worksheetsReducer,
   worksheet: worksheetReducer,
-  node: nodeReducer,
-  connection: connectionReducer,
+  nodes: nodeReducer,
+  connections: connectionReducer,
 });
 
 const Store = configureStore({reducer: rootReducer});

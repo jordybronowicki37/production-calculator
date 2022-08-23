@@ -19,16 +19,16 @@ export class Node extends Component {
     
     this.state = {
       data: data,
-      products: Store.getState().product,
-      recipes: Store.getState().recipe,
+      products: Store.getState().products,
+      recipes: Store.getState().recipes,
       previewMode,
       targetEditorOpen: false,
     };
     
     this.unsubscribe = Store.subscribe(() => {
       this.setState({
-        products: Store.getState().product,
-        recipes: Store.getState().recipe
+        products: Store.getState().products,
+        recipes: Store.getState().recipes
       });
     });
   }

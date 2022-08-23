@@ -12,7 +12,7 @@ export class ProductManager extends Component {
       products: [],
       worksheetId: props.worksheetId,
     };
-    this.unsubscribe = Store.subscribe(() => this.setState({products: Store.getState().product}));
+    this.unsubscribe = Store.subscribe(() => this.setState({products: Store.getState().products}));
   }
   
   render() {

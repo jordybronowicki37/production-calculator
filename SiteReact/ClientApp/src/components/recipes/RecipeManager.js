@@ -11,7 +11,7 @@ export class RecipeManager extends Component {
       recipes: [],
       worksheetId: props.worksheetId,
     };
-    this.unsubscribe = Store.subscribe(() => this.setState({recipes: Store.getState().recipe}));
+    this.unsubscribe = Store.subscribe(() => this.setState({recipes: Store.getState().recipes}));
   }
 
   render() {

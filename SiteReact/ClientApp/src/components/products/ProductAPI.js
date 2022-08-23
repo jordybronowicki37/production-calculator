@@ -4,7 +4,7 @@ export const fetchAllProducts = async function(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}/product`);
   if (!response.ok) throw new Error();
   let data = await response.json();
-  Store.dispatch({type:"product/set", payload:data});
+  Store.dispatch({type:"products/set", payload:data});
 }
 
 export const postNewProduct = async function(worksheetId, productName) {
