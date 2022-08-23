@@ -10,6 +10,7 @@ import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
 import {fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
+import {connectionCreate} from "../connections/ConnectionAPI";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -135,7 +136,24 @@ export class Calculator extends Component {
     })
   };
   onConnect = edge => {
-    console.log(edge);
+    let state = Store.getState().nodes;
+    let source = state.find(n => n.id == edge.source);
+    let target = state.find(n => n.id == edge.target);
+    let product;
+    
+    if (source.product != null) {
+      product = source.product;
+    } else if (target.product != null) {
+      product = target.product;
+    } else if (source.recipe != null && source.recipe.outputThroughPuts.length > 0) {
+      product = source.recipe.outputThroughPuts[0];
+    } else if (target.recipe != null && target.recipe.inputThroughPuts.length > 0) {
+      product = target.recipe.inputThroughPuts[0];
+    } else {
+      product = state.products[0];
+    }
+    
+    connectionCreate(this.state.worksheetId, edge.source, edge.target, product.name)
   };
   
   onDragStart = (event, nodetype) => {

@@ -5,8 +5,8 @@ export const connectionCreate = async function(worksheetId, nodeInId, nodeOutId,
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
-      nodeInId, 
-      nodeOutId, 
+      inputNodeId:nodeInId, 
+      outputNodeId:nodeOutId, 
       product,
     })
   });

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
+using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.nodes;
 using SiteReact.Data;
 
@@ -100,5 +102,26 @@ public class NodeController : ControllerBase
     public IActionResult DeleteNode(int nodeId, int worksheetId)
     {
         return Ok();
+    }
+
+    [HttpPost("connection")]
+    public IActionResult AddNode(int worksheetId, DtoConnectionCreate dto)
+    {
+        var w = StaticValues.Get().Worksheet[worksheetId];
+        
+        var node1 = w.Nodes.First(n => n.Id == dto.InputNodeId);
+        if (node1 is not INodeOut source) return BadRequest();
+        
+        var node2 = w.Nodes.First(n => n.Id == dto.OutputNodeId);
+        if (node2 is not INodeIn target) return BadRequest();
+        
+        var product = w.GetProduct(dto.Product);
+        if (product == null) return BadRequest();
+
+        var connection = new Connection(source, target, product);
+        source.AddOutputConnection(connection);
+        target.AddInputConnection(connection);
+        
+        return Ok(new DtoConnectionDouble(connection));
     }
 }
