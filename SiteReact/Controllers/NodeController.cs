@@ -59,7 +59,7 @@ public class NodeController : ControllerBase
         return Ok(NodeDto.GenerateNode(node));
     }
     
-    [HttpPatch("{nodeId:int}/product")]
+    [HttpPut("{nodeId:int}/product")]
     public IActionResult EditNodeProduct(int nodeId, int worksheetId, DtoNodeSetProduct dto)
     {
         var w = StaticValues.Get().Worksheet[worksheetId];
@@ -84,7 +84,7 @@ public class NodeController : ControllerBase
         return Ok(NodeDto.GenerateNode(productNode));
     }
     
-    [HttpPatch("{nodeId:int}/recipe")]
+    [HttpPut("{nodeId:int}/recipe")]
     public IActionResult EditNodeRecipe(int nodeId, int worksheetId, DtoNodeSetRecipe dto)
     {
         var w = StaticValues.Get().Worksheet[worksheetId];
