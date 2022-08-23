@@ -1,5 +1,7 @@
 import {Node} from "./Node";
 import './NodeProduction.css';
+import {nodeEditRecipe} from "./NodeAPI";
+import Store from "../../dataStore/DataStore";
 
 export class NodeProduction extends Node {
   constructor(props) {
@@ -77,7 +79,6 @@ export class NodeProduction extends Node {
   }
 
   RecipeChanged(name) {
-    console.log(name)
-    // TODO load actual value
+    nodeEditRecipe(Store.getState().worksheet.id, this.state.data.id, name);
   }
 }

@@ -23,25 +23,25 @@ async function nodeCreate(worksheetId, position, body) {
 
 export const nodeEditProduct = async function(worksheetId, nodeId, product) {
   let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/product`, {
-    method: "patch",
+    method: "put",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({product})
   });
   if (!response.ok) throw new Error();
   let json = await response.json();
-  Store.dispatch({type:"node/set", payload:json});
+  Store.dispatch({type:"node/change/product", payload: {id:json.id, product:json.product}});
   return json;
 }
 
 export const nodeEditRecipe = async function(worksheetId, nodeId, recipe) {
   let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/recipe`, {
-    method: "patch",
+    method: "put",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({recipe})
   });
   if (!response.ok) throw new Error();
   let json = await response.json();
-  Store.dispatch({type:"node/set", payload:json});
+  Store.dispatch({type:"node/change/recipe", payload: {id:json.id, recipe:json.recipe}});
   return json;
 }
 

@@ -26,9 +26,14 @@ export class Node extends Component {
     };
     
     this.unsubscribe = Store.subscribe(() => {
+      const {nodes, products, recipes} = Store.getState();
+      let data = nodes.find(n => n.id == this.state.data.id)
+      if (!data) data = {};
+      
       this.setState({
-        products: Store.getState().products,
-        recipes: Store.getState().recipes
+        products: products,
+        recipes: recipes,
+        data,
       });
     });
   }

@@ -1,5 +1,7 @@
 import {Node} from "./Node";
 import './NodeEnd.css';
+import {nodeEditProduct} from "./NodeAPI";
+import Store from "../../dataStore/DataStore";
 
 export class NodeEnd extends Node {
   constructor(props) {
@@ -47,7 +49,6 @@ export class NodeEnd extends Node {
   }
 
   productChanged(name) {
-    console.log(name)
-    // TODO change actual value
+    nodeEditProduct(Store.getState().worksheet.id, this.state.data.id, name);
   }
 }

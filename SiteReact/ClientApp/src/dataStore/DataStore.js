@@ -29,6 +29,16 @@ const nodeReducer = createReducer([], {
     node.position = action.payload.position;
     return state;
   },
+  "node/change/product": (state, action) => {
+    let node = state.find(value => value.id == action.payload.id);
+    node.product = action.payload.product;
+    return state;
+  },
+  "node/change/recipe": (state, action) => {
+    let node = state.find(value => value.id == action.payload.id);
+    node.recipe = action.payload.recipe;
+    return state;
+  },
 });
 
 const connectionReducer = createReducer([], {
