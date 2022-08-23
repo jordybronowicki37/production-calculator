@@ -31,16 +31,10 @@ public class ProductController : ControllerBase
     [HttpPatch("{name}")]
     public IActionResult Update(string name, int worksheetId, DtoProduct dto)
     {
-        try
-        {
-            var p = StaticValues.Get().Worksheet[worksheetId].Products.First(p => p.Name == name);
-            p.Name = dto.Name;
-            return Ok(p);
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var p = StaticValues.Get().Worksheet[worksheetId].Products.FirstOrDefault(p => p.Name == name);
+        if (p == null) return NotFound("Product is not found");
+        p.Name = dto.Name;
+        return Ok(p);
     }
     
     [HttpDelete("{name}")]

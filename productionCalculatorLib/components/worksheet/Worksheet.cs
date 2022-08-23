@@ -41,11 +41,11 @@ public class Worksheet
     }
     public Product? GetProduct(string name)
     {
-        return _products.Find(r => r.Name == name);
+        return _products.FirstOrDefault(r => r.Name == name);
     }
     public void RemoveProduct(string name)
     {
-        var product = _products.First(p => p.Name == name);
+        var product = _products.FirstOrDefault(p => p.Name == name);
         _products.Remove(product);
     }
 
@@ -60,7 +60,7 @@ public class Worksheet
     }
     public Recipe? GetRecipe(string name)
     {
-        return _recipes.Find(r => r.Name == name);
+        return _recipes.FirstOrDefault(r => r.Name == name);
     }
 
     public Worksheet()

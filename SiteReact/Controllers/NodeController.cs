@@ -64,11 +64,12 @@ public class NodeController : ControllerBase
     {
         var w = StaticValues.Get().Worksheet[worksheetId];
         
-        var node = w.Nodes.First(n => n.Id == nodeId);
-        if (node is not IHasProduct productNode) return BadRequest();
+        var node = w.Nodes.FirstOrDefault(n => n.Id == nodeId);
+        if (node == null) return NotFound("Node is not found");
+        if (node is not IHasProduct productNode) return BadRequest("Node does not support products");
 
         var product = w.GetProduct(dto.Product);
-        if (product == null) return BadRequest();
+        if (product == null) return NotFound("Product not found");
         productNode.Product = product;
 
         if (node is INodeOut nodeOut)
@@ -88,11 +89,12 @@ public class NodeController : ControllerBase
     {
         var w = StaticValues.Get().Worksheet[worksheetId];
         
-        var node = w.Nodes.First(n => n.Id == nodeId);
-        if (node is not IHasRecipe recipeNode) return BadRequest();
+        var node = w.Nodes.FirstOrDefault(n => n.Id == nodeId);
+        if (node == null) return NotFound("Node is not found");
+        if (node is not IHasRecipe recipeNode) return BadRequest("Node does not support recipes");
         
         var recipe = w.GetRecipe(dto.Recipe);
-        if (recipe == null) return BadRequest();
+        if (recipe == null) return NotFound("Product not found");
         recipeNode.Recipe = recipe;
         
         return Ok(NodeDto.GenerateNode(recipeNode));
@@ -109,11 +111,13 @@ public class NodeController : ControllerBase
     {
         var w = StaticValues.Get().Worksheet[worksheetId];
         
-        var node1 = w.Nodes.First(n => n.Id == dto.InputNodeId);
-        if (node1 is not INodeOut source) return BadRequest();
+        var node1 = w.Nodes.FirstOrDefault(n => n.Id == dto.InputNodeId);
+        if (node1 == null) return NotFound("Node is not found");
+        if (node1 is not INodeOut source) return BadRequest("Source node is not an output");
         
-        var node2 = w.Nodes.First(n => n.Id == dto.OutputNodeId);
-        if (node2 is not INodeIn target) return BadRequest();
+        var node2 = w.Nodes.FirstOrDefault(n => n.Id == dto.OutputNodeId);
+        if (node2 == null) return NotFound("Node is not found");
+        if (node2 is not INodeIn target) return BadRequest("Target node is not an input");
         
         var product = w.GetProduct(dto.Product);
         if (product == null) return BadRequest();
