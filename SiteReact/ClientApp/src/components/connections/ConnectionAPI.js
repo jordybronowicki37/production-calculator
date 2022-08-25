@@ -12,6 +12,6 @@ export const connectionCreate = async function(worksheetId, nodeInId, nodeOutId,
   });
   if (!response.ok) throw new Error();
   let json = await response.json();
-  Store.dispatch({type:"connections/add", payload:json});
+  Store.dispatch({type:"connection/add", payload:json});
   return json;
 }
