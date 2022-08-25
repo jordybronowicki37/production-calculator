@@ -23,8 +23,9 @@ export class Calculator extends Component {
       flowInstance: null,
       wrapperInstance: null,
       worksheetId: props.match.params.id,
+      worksheetLoading: true,
     }
-    fetchWorksheet(this.state.worksheetId);
+    fetchWorksheet(this.state.worksheetId).then(r => this.setState({worksheetLoading:false}));
     this.unsubscribe = Store.subscribe(() => this.forceUpdate());
   }
 
@@ -52,46 +53,52 @@ export class Calculator extends Component {
     });
     
     return (
-      <div>
-        <h1>Calculator</h1>
-        <div>Worksheet: {title}</div>
-        <div className="flow-chart-container">
-          <ReactFlowProvider>
-            <div ref={this.setReactFlowWrapper}>
-              <ReactFlow 
-                className="flow-chart"
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={this.onNodesChange}
-                onEdgesChange={this.onEdgesChange}
-                onConnect={this.onConnect}
-                onDragOver={this.onDragOver}
-                onInit={this.setReactFlowInstance}
-                onDrop={this.onDrop}
-                defaultEdgeOptions={this.defaultEdgeOptions}>
-                <MiniMap/>
-                <Controls/>
-                <Background/>
-              </ReactFlow>
-            </div>
-          </ReactFlowProvider>
+      <div className="calculator-screen-manager">
+        <div hidden={!this.state.worksheetLoading} className="loading-screen">
+          <div>Loading</div>
+          <div><div className='bx bx-loader-alt bx-spin'></div></div>
+        </div>
+        <div className="calculator-screen">
+          <h1>Calculator</h1>
+          <div>Worksheet: {title}</div>
+          <div className="flow-chart-container">
+            <ReactFlowProvider>
+              <div ref={this.setReactFlowWrapper}>
+                <ReactFlow
+                  className="flow-chart"
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={this.onNodesChange}
+                  onEdgesChange={this.onEdgesChange}
+                  onConnect={this.onConnect}
+                  onDragOver={this.onDragOver}
+                  onInit={this.setReactFlowInstance}
+                  onDrop={this.onDrop}
+                  defaultEdgeOptions={this.defaultEdgeOptions}>
+                  <MiniMap/>
+                  <Controls/>
+                  <Background/>
+                </ReactFlow>
+              </div>
+            </ReactFlowProvider>
 
-          <div className="attribute-manager">
-            <div className="product-manager">
-              <h2>Products</h2>
-              <ProductManager worksheetId={this.state.worksheetId}></ProductManager>
-            </div>
-            <div className="recipe-manager">
-              <h2>Recipes</h2>
-              <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
+            <div className="attribute-manager">
+              <div className="product-manager">
+                <h2>Products</h2>
+                <ProductManager worksheetId={this.state.worksheetId}></ProductManager>
+              </div>
+              <div className="recipe-manager">
+                <h2>Recipes</h2>
+                <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div className="test-nodes">
-          <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction previewMode/></div>
-          <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn previewMode/></div>
-          <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd previewMode/></div>
+
+          <div className="test-nodes">
+            <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction previewMode/></div>
+            <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn previewMode/></div>
+            <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd previewMode/></div>
+          </div>
         </div>
       </div>
     );
