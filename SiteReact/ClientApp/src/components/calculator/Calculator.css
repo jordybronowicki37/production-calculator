@@ -7,10 +7,44 @@
     flex-grow: 2;
 }
 
+.flow-chart-wrapper {
+    position: relative;
+}
+
 .flow-chart {
     height: 60vh;
     border: 1px solid lightgray;
     border-radius: 5px;
+}
+
+.calculator-states {
+    position: absolute;
+    right: 0;
+    padding: 8px;
+    z-index: 10;
+    display: flex;
+    flex-direction: row;
+}
+
+.calculator-states>* {
+    border: 1px solid black;
+    border-radius: 7px;
+    background-color: white;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.calculator-states-icon {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
+
+.calculator-states-label {
+    font-size: x-small;
+    place-self: center;
+    border-radius: 5px;
+    padding: 1px;
 }
 
 .test-nodes {

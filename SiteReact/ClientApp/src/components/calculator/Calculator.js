@@ -63,7 +63,16 @@ export class Calculator extends Component {
           <div>Worksheet: {title}</div>
           <div className="flow-chart-container">
             <ReactFlowProvider>
-              <div ref={this.setReactFlowWrapper}>
+              <div className="flow-chart-wrapper" ref={this.setReactFlowWrapper}>
+                <div className="calculator-states">
+                  <div hidden={true} className="calculator-states-label">Dit is een test bericht</div>
+                  <div className="calculator-states-icon">
+                    <div hidden={false} title="Calculation success" className='bx bx-check'></div>
+                    <div hidden={true} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></div>
+                    <div hidden={true} title="Calculation had error's" className='bx bx-error' style={{color:"#F1B22C"}}></div>
+                    <div hidden={true} title="Calculating..." className='bx bx-loader-alt bx-spin'></div>
+                  </div>
+                </div>
                 <ReactFlow
                   className="flow-chart"
                   nodes={nodes}
@@ -124,8 +133,8 @@ export class Calculator extends Component {
         case "add":
         case "reset":
         default:
-          console.log(`Non implemented node change: ${change.type}`);
-          console.log(change);
+          // console.log(`Non implemented node change: ${change.type}`);
+          // console.log(change);
       }
     })
   };
@@ -137,8 +146,8 @@ export class Calculator extends Component {
         case "add":
         case "reset":
         default:
-          console.log(`Non implemented edge change: ${change.type}`);
-          console.log(changes);
+          // console.log(`Non implemented edge change: ${change.type}`);
+          // console.log(changes);
       }
     })
   };
