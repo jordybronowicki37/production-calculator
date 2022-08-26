@@ -49,6 +49,7 @@ const connectionReducer = createReducer([], {
     return state;
   },
   "connection/add": (state, action) => [...state, action.payload],
+  "connection/remove": (state, action) => state.filter(v => v.id != action.payload),
 });
 
 const rootReducer = combineReducers({

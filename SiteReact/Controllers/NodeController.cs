@@ -128,4 +128,18 @@ public class NodeController : ControllerBase
         
         return Ok(new DtoConnectionDouble(connection));
     }
+
+    [HttpDelete("connection/{connectionId:int}")]
+    public IActionResult RemoveNode(int worksheetId, int connectionId)
+    {
+        var w = StaticValues.Get().Worksheet[worksheetId];
+        
+        foreach (var node in w.Nodes)
+        {
+            if (node is INodeOut nodeOut) nodeOut.RemoveConnnection(connectionId);
+            if (node is INodeIn nodeIn) nodeIn.RemoveConnnection(connectionId);
+        }
+
+        return NoContent();
+    }
 }

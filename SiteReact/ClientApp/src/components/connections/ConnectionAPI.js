@@ -15,3 +15,10 @@ export const connectionCreate = async function(worksheetId, nodeInId, nodeOutId,
   Store.dispatch({type:"connection/add", payload:json});
   return json;
 }
+
+export const connectionDelete = async function(worksheetId, connectionId) {
+  let response = await fetch(`worksheet/${worksheetId}/node/connection/${connectionId}`, {method: "delete"});
+  if (!response.ok) throw new Error();
+  Store.dispatch({type:"connection/remove", payload:connectionId});
+  return response;
+}

@@ -10,7 +10,7 @@ import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
 import {fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
-import {connectionCreate} from "../connections/ConnectionAPI";
+import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -141,8 +141,10 @@ export class Calculator extends Component {
   onEdgesChange = (changes) => {
     changes.forEach(change => {
       switch (change.type) {
-        case "select":
         case "remove":
+          connectionDelete(this.state.worksheetId, change.id);
+          break;
+        case "select":
         case "add":
         case "reset":
         default:
