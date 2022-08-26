@@ -31,10 +31,19 @@ public class ProductionNode: INodeInOut, IHasRecipe
     {
         if (!_outputConnections.Contains(connection))_outputConnections.Add(connection);
     }
-    public void RemoveConnnection(Connection connection)
+    public void RemoveConnnection(long connectionId)
     {
-        _inputConnections.Remove(connection);
-        _outputConnections.Remove(connection);
+        {
+            var connection = _inputConnections.Find(c => c.Id == connectionId);
+            if (connection == null) return;
+            _inputConnections.Remove(connection);
+        }
+        {
+            var connection = _outputConnections.Find(c => c.Id == connectionId);
+            if (connection == null) return;
+            _outputConnections.Remove(connection);
+            
+        }
     }
 
     public List<LimitProduction> ProductionLimits { get; } = new();

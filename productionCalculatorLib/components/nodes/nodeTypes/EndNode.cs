@@ -25,8 +25,10 @@ public class EndNode: INodeIn, IHasProduct
     {
         if (!_inputConnections.Contains(connection)) _inputConnections.Add(connection);
     }
-    public void RemoveConnnection(Connection connection)
+    public void RemoveConnnection(long connectionId)
     {
+        var connection = _inputConnections.Find(c => c.Id == connectionId);
+        if (connection == null) return;
         _inputConnections.Remove(connection);
     }
 

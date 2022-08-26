@@ -25,8 +25,10 @@ public class SpawnNode: INodeOut, IHasProduct
     {
         if (!_outputConnections.Contains(connection))_outputConnections.Add(connection);
     }
-    public void RemoveConnnection(Connection connection)
+    public void RemoveConnnection(long connectionId)
     {
+        var connection = _outputConnections.Find(c => c.Id == connectionId);
+        if (connection == null) return;
         _outputConnections.Remove(connection);
     }
     
