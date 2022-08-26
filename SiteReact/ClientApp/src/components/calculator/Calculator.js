@@ -8,7 +8,7 @@ import ReactFlow, {MiniMap, Controls, Background, MarkerType,
 import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
-import {fetchWorksheet} from "../worksheets/WorksheetAPI";
+import {calculate, fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
 import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
 
@@ -24,6 +24,10 @@ export class Calculator extends Component {
       wrapperInstance: null,
       worksheetId: props.match.params.id,
       worksheetLoading: true,
+      calculatorStateSuccess:true,
+      calculatorStateLoading:false,
+      calculatorStateWarning:false,
+      calculatorStateError:false,
     }
     fetchWorksheet(this.state.worksheetId).then(r => this.setState({worksheetLoading:false}));
     this.unsubscribe = Store.subscribe(() => this.forceUpdate());
@@ -66,11 +70,11 @@ export class Calculator extends Component {
               <div className="flow-chart-wrapper" ref={this.setReactFlowWrapper}>
                 <div className="calculator-states">
                   <div hidden={true} className="calculator-states-label">Dit is een test bericht</div>
-                  <div className="calculator-states-icon">
-                    <div hidden={false} title="Calculation success" className='bx bx-check'></div>
-                    <div hidden={true} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></div>
-                    <div hidden={true} title="Calculation had error's" className='bx bx-error' style={{color:"#F1B22C"}}></div>
-                    <div hidden={true} title="Calculating..." className='bx bx-loader-alt bx-spin'></div>
+                  <div className="calculator-states-icon" onClick={() => this.calculateWorksheet()}>
+                    <div hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></div>
+                    <div hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></div>
+                    <div hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error' style={{color:"#F1B22C"}}></div>
+                    <div hidden={!this.state.calculatorStateLoading} title="Calculating..." className='bx bx-loader-alt bx-spin'></div>
                   </div>
                 </div>
                 <ReactFlow
@@ -207,6 +211,47 @@ export class Calculator extends Component {
         break;
     }
   };
+  
+  calculateWorksheet() {
+    this.setCalculatorState("loading");
+    calculate(this.state.worksheetId).then(r => {
+      if (r.calculationSucceeded) {
+        this.setCalculatorState("success");
+      } else {
+        this.setCalculatorState("warning");
+      }
+    }).catch(r => {
+      this.setCalculatorState("error");
+    });
+  }
+  
+  setCalculatorState(state) {
+    let options = {
+      calculatorStateSuccess:false,
+      calculatorStateLoading:false,
+      calculatorStateWarning:false,
+      calculatorStateError:false,
+    }
+    
+    switch (state) {
+      case "success":
+        options.calculatorStateSuccess = true;
+        break;
+      case "loading":
+        options.calculatorStateLoading = true;
+        break;
+      case "warning":
+        options.calculatorStateWarning = true;
+        break;
+      case "error":
+        options.calculatorStateError = true;
+        break;
+      default:
+        return;
+    }
+    
+    this.setState(options);
+  }
   
   componentWillUnmount() {
     this.unsubscribe();

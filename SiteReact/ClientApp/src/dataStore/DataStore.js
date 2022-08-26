@@ -18,6 +18,12 @@ const worksheetReducer = createReducer(null, {
 
 const nodeReducer = createReducer([], {
   "nodes/set": (state, action) => [...action.payload],
+  "nodes/update": (state, action) => {
+    return [...action.payload].map((v, i) => {
+      v.position = state[i].position;
+      return v;
+    });
+  },
   "node/set": (state, action) => {
     let index = state.findIndex(v => v.id = action.payload.id);
     state[index] = action.payload;

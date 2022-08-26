@@ -27,7 +27,6 @@ public class WorksheetController : ControllerBase
     public IActionResult Get(int id)
     {
         var w = StaticValues.Get().Worksheet[id];
-        CalculatorLimit.ReCalculateAmounts(w);
         return Ok(new DtoWorksheet(w));
     }
 
@@ -45,5 +44,13 @@ public class WorksheetController : ControllerBase
         var w = StaticValues.Get().Worksheet[id];
         w.Name = dto.Name;
         return Ok();
+    }
+    
+    [HttpPost("{id:int}/calculate")]
+    public IActionResult Calculate(int id)
+    {
+        var w = StaticValues.Get().Worksheet[id];
+        CalculatorLimit.ReCalculateAmounts(w);
+        return Ok(new DtoWorksheet(w));
     }
 }
