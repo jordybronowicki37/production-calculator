@@ -25,17 +25,17 @@ const nodeReducer = createReducer([], {
   },
   "node/add": (state, action) => [...state, action.payload],
   "node/change/position": (state, action) => {
-    let node = state.find(value => value.id == action.payload.id);
+    let node = state.find(value => value.id === action.payload.id);
     node.position = action.payload.position;
     return state;
   },
   "node/change/product": (state, action) => {
-    let node = state.find(value => value.id == action.payload.id);
+    let node = state.find(value => value.id === action.payload.id);
     node.product = action.payload.product;
     return state;
   },
   "node/change/recipe": (state, action) => {
-    let node = state.find(value => value.id == action.payload.id);
+    let node = state.find(value => value.id === action.payload.id);
     node.recipe = action.payload.recipe;
     return state;
   },
@@ -49,7 +49,7 @@ const connectionReducer = createReducer([], {
     return state;
   },
   "connection/add": (state, action) => [...state, action.payload],
-  "connection/remove": (state, action) => state.filter(v => v.id != action.payload),
+  "connection/remove": (state, action) => state.filter(v => v.id !== action.payload),
 });
 
 const rootReducer = combineReducers({

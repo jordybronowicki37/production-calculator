@@ -121,9 +121,9 @@ export class Calculator extends Component {
       switch (change.type) {
         case "position":
           if (change.dragging) {
-            Store.dispatch({type:"node/change/position", payload: {position:change.position, id:change.id}});
+            Store.dispatch({type:"node/change/position", payload: {position:change.position, id:parseInt(change.id)}});
           } else {
-            let position = Store.getState().nodes.find(value => value.id == change.id).position;
+            let position = Store.getState().nodes.find(value => value.id === parseInt(change.id)).position;
             // TODO update end position on back-end
           }
           break;
@@ -155,8 +155,8 @@ export class Calculator extends Component {
   };
   onConnect = edge => {
     let state = Store.getState().nodes;
-    let source = state.find(n => n.id == edge.source);
-    let target = state.find(n => n.id == edge.target);
+    let source = state.find(n => n.id === parseInt(edge.source));
+    let target = state.find(n => n.id === parseInt(edge.target));
     let product;
     
     if (source.product != null) {

@@ -27,7 +27,7 @@ export class Node extends Component {
     
     this.unsubscribe = Store.subscribe(() => {
       const {nodes, products, recipes} = Store.getState();
-      let data = nodes.find(n => n.id == this.state.data.id)
+      let data = nodes.find(n => n.id === this.state.data.id)
       if (!data) data = {};
       
       this.setState({
