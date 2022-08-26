@@ -24,13 +24,17 @@ export class Calculator extends Component {
       wrapperInstance: null,
       worksheetId: props.match.params.id,
       worksheetLoading: true,
-      calculatorStateSuccess:true,
+      calculatorStateSuccess:false,
       calculatorStateLoading:false,
       calculatorStateWarning:false,
       calculatorStateError:false,
+      calculatorStateRefresh:true,
     }
     fetchWorksheet(this.state.worksheetId).then(r => this.setState({worksheetLoading:false}));
-    this.unsubscribe = Store.subscribe(() => this.forceUpdate());
+    this.unsubscribe = Store.subscribe(() => {
+      this.setCalculatorState("refresh");
+      this.forceUpdate();
+    });
   }
 
   render() {
@@ -60,7 +64,7 @@ export class Calculator extends Component {
       <div className="calculator-screen-manager">
         <div hidden={!this.state.worksheetLoading} className="loading-screen">
           <div>Loading</div>
-          <div><div className='bx bx-loader-alt bx-spin'></div></div>
+          <div><i className='bx bx-loader-alt bx-spin'></i></div>
         </div>
         <div className="calculator-screen">
           <h1>Calculator</h1>
@@ -71,10 +75,11 @@ export class Calculator extends Component {
                 <div className="calculator-states">
                   <div hidden={true} className="calculator-states-label">Dit is een test bericht</div>
                   <div className="calculator-states-icon" onClick={() => this.calculateWorksheet()}>
-                    <div hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></div>
-                    <div hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></div>
-                    <div hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error' style={{color:"#F1B22C"}}></div>
-                    <div hidden={!this.state.calculatorStateLoading} title="Calculating..." className='bx bx-loader-alt bx-spin'></div>
+                    <i hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></i>
+                    <i hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
+                    <i hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error' style={{color:"#F1B22C"}}></i>
+                    <i hidden={!this.state.calculatorStateLoading} title="Calculating..." className='bx bx-loader-alt bx-spin'></i>
+                    <i hidden={!this.state.calculatorStateRefresh} title="Recalculate" className='bx bx-refresh'></i>
                   </div>
                 </div>
                 <ReactFlow
@@ -231,6 +236,7 @@ export class Calculator extends Component {
       calculatorStateLoading:false,
       calculatorStateWarning:false,
       calculatorStateError:false,
+      calculatorStateRefresh:false,
     }
     
     switch (state) {
@@ -245,6 +251,9 @@ export class Calculator extends Component {
         break;
       case "error":
         options.calculatorStateError = true;
+        break;
+      case "refresh":
+        options.calculatorStateRefresh = true;
         break;
       default:
         return;
