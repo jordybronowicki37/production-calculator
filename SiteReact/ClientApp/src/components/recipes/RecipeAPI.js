@@ -6,3 +6,15 @@ export const fetchAllRecipes = async function(worksheetId) {
   let data = await response.json();
   Store.dispatch({type:"recipes/set", payload:data});
 }
+
+export const createRecipe = async function(worksheetId, body) {
+  let response = await fetch(`worksheet/${worksheetId}/recipe`, {
+    method: "post",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw new Error();
+  let json = await response.json();
+  Store.dispatch({type:"recipes/add", payload:json});
+  return json;
+}

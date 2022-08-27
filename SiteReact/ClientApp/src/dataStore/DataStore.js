@@ -2,10 +2,12 @@ import {combineReducers, configureStore, createReducer} from "@reduxjs/toolkit";
 
 const productReducer = createReducer([], {
   "products/set": (state, action) => [...action.payload],
+  "products/add": (state, action) => [...state, action.payload],
 });
 
 const recipeReducer = createReducer([], {
   "recipes/set": (state, action) => [...action.payload],
+  "recipes/add": (state, action) => [...state, action.payload],
 });
 
 const worksheetsReducer = createReducer([], {
