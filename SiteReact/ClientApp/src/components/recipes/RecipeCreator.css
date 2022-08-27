@@ -1,10 +1,4 @@
-﻿.recipe-creator-grid {
-    display: grid;
-    grid-template-columns: auto auto;
-    margin: 0;
-}
-
-.recipe-creator-header {
+﻿.recipe-creator-header {
     display: flex;
     justify-content: space-between;
 }
@@ -34,4 +28,11 @@
     border-radius: 7px;
     margin: 0.2rem 0.5rem;
     padding: 0 0.5rem;
+}
+
+.recipe-creator-separation-line {
+    width: 100%;
+    margin: 0.5rem 0;
+    align-self: center;
+    border-top: 1px solid darkgray;
 }

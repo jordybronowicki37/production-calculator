@@ -30,6 +30,7 @@ export class Calculator extends Component {
       calculatorStateWarning:false,
       calculatorStateError:false,
       calculatorStateRefresh:true,
+      popupRecipeCreatorOpen:false,
     }
     fetchWorksheet(this.state.worksheetId).then(r => this.setState({worksheetLoading:false}));
     this.unsubscribe = Store.subscribe(() => {
@@ -66,6 +67,14 @@ export class Calculator extends Component {
         <div hidden={!this.state.worksheetLoading} className="loading-screen">
           <div>Loading</div>
           <div><i className='bx bx-loader-alt bx-spin'></i></div>
+        </div>
+        <div hidden={!this.state.popupRecipeCreatorOpen} className="popup-container" onClick={() => this.setState({popupRecipeCreatorOpen:false})}>
+          <div onClick={e => e.stopPropagation()}>
+            <button type="button" className="popup-close-button" onClick={() => this.setState({popupRecipeCreatorOpen:false})}>
+              <i className='bx bx-x'></i>
+            </button>
+            <RecipeCreator></RecipeCreator>
+          </div>
         </div>
         <div className="calculator-screen">
           <h1>Calculator</h1>
@@ -108,7 +117,7 @@ export class Calculator extends Component {
               </div>
               <div className="recipe-manager">
                 <h2>Recipes</h2>
-                <RecipeCreator></RecipeCreator>
+                <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Create new</button>
                 <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
               </div>
             </div>

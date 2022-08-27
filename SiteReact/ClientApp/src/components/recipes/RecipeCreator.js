@@ -27,52 +27,54 @@ export class RecipeCreator extends Component {
   }
 
   render() {
-    return <div className="recipe-creator" style={{"border":"1px solid black"}}>
+    return <div className="recipe-creator">
+      <h3>Recipe creator</h3>
       <div>
         <input type="text" name="recipeName" placeholder="Recipe name" autoComplete="off" value={this.state.name} onChange={e => this.nameChanged(e.target.value)}/>
       </div>
-      <div className="recipe-creator-grid">
-        <div className="recipe-creator-header">
-          <div>Inputs</div>
-          <button className="add-throughput-button" type="button" title="Add input throughput" onClick={() => this.inputThroughPutAdd()}>
-            <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
-          </button>
-        </div>
-        <div className="recipe-creator-header">
-          <div>Outputs</div>
-          <button className="add-throughput-button" type="button" title="Add output throughput" onClick={() => this.outputThroughPutAdd()}>
-            <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
-          </button>
-        </div>
-        <div className="input-throughputs throughput-list">
-          {this.state.inputThroughPuts.map((value, index) =>
-            <div key={value.tempId}>
-              <select className="throughput-product-field" value={value.product} onChange={e => this.inputThroughPutProductChanged(index, e.target.value)}>
-                <option value="" disabled hidden></option>
-                {this.state.products.map(v => (
-                  <option key={v.name} value={v.name}>{v.name}</option>))}
-              </select>
-              <input className="throughput-amount-field" type="number" min="0" value={value.amount} onChange={e => this.inputThroughPutAmountChanged(index, e.target.value)}/>
-              <button className="remove-throughput-button" type="button" title="Remove throughput" onClick={e => this.inputThroughPutRemove(index)}>
-                <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
-              </button>
-            </div>)}
-        </div>
-        <div className="output-throughputs throughput-list">
-          {this.state.outputThroughPuts.map((value, index) =>
-            <div key={value.tempId}>
-              <select className="throughput-product-field" value={value.product} onChange={e => this.outputThroughPutProductChanged(index, e.target.value)}>
-                <option value="" disabled hidden></option>
-                {this.state.products.map(v => (
-                  <option key={v.name} value={v.name}>{v.name}</option>))}
-              </select>
-              <input className="throughput-amount-field" type="number" min="0" value={value.amount} onChange={e => this.outputThroughPutAmountChanged(index, e.target.value)}/>
-              <button className="remove-throughput-button" type="button" title="Remove throughput" onClick={e => this.outputThroughPutRemove(index)}>
-                <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
-              </button>
-            </div>)}
-        </div>
+      <div className="recipe-creator-separation-line"></div>
+      <div className="recipe-creator-header">
+        <div>Inputs</div>
+        <button className="add-throughput-button" type="button" title="Add input throughput" onClick={() => this.inputThroughPutAdd()}>
+          <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
+        </button>
       </div>
+      <div className="input-throughputs throughput-list">
+        {this.state.inputThroughPuts.map((value, index) =>
+          <div key={value.tempId}>
+            <select className="throughput-product-field" value={value.product} onChange={e => this.inputThroughPutProductChanged(index, e.target.value)}>
+              <option value="" disabled hidden></option>
+              {this.state.products.map(v => (
+                <option key={v.name} value={v.name}>{v.name}</option>))}
+            </select>
+            <input className="throughput-amount-field" type="number" min="0" value={value.amount} onChange={e => this.inputThroughPutAmountChanged(index, e.target.value)}/>
+            <button className="remove-throughput-button" type="button" title="Remove throughput" onClick={e => this.inputThroughPutRemove(index)}>
+              <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
+            </button>
+          </div>)}
+      </div>
+      <div className="recipe-creator-separation-line"></div>
+      <div className="recipe-creator-header">
+        <div>Outputs</div>
+        <button className="add-throughput-button" type="button" title="Add output throughput" onClick={() => this.outputThroughPutAdd()}>
+          <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
+        </button>
+      </div>
+      <div className="output-throughputs throughput-list">
+        {this.state.outputThroughPuts.map((value, index) =>
+          <div key={value.tempId}>
+            <select className="throughput-product-field" value={value.product} onChange={e => this.outputThroughPutProductChanged(index, e.target.value)}>
+              <option value="" disabled hidden></option>
+              {this.state.products.map(v => (
+                <option key={v.name} value={v.name}>{v.name}</option>))}
+            </select>
+            <input className="throughput-amount-field" type="number" min="0" value={value.amount} onChange={e => this.outputThroughPutAmountChanged(index, e.target.value)}/>
+            <button className="remove-throughput-button" type="button" title="Remove throughput" onClick={e => this.outputThroughPutRemove(index)}>
+              <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
+            </button>
+          </div>)}
+      </div>
+      <div className="recipe-creator-separation-line"></div>
       <button className="recipe-creator-submit" type="submit" onClick={e => this.createRecipe(e)}>Create</button>
     </div>
   }
@@ -129,5 +131,9 @@ export class RecipeCreator extends Component {
       outputThroughPuts: this.state.outputThroughPuts.map(v => {return {amount: parseInt(v.amount), product: {name: v.product}}}),
     };
     createRecipe(Store.getState().worksheet.id, dto)
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 }
