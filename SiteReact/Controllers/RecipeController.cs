@@ -27,14 +27,14 @@ public class RecipeController : ControllerBase
     {
         var worksheet = StaticValues.Get().Worksheet[worksheetId];
         var r = worksheet.GenerateRecipe(dto.Name);
-        
-        dto.InputThroughPuts.ForEach(t =>
-            r.InputThroughPuts.Add(new ThroughPut(worksheet.GetOrGenerateProduct(t.Product.Name), t.Amount)));
-        
-        dto.OutputThroughPuts.ForEach(t =>
-            r.OutputThroughPuts.Add(new ThroughPut(worksheet.GetOrGenerateProduct(t.Product.Name), t.Amount)));
 
-        return Ok();
+        foreach (var inputThroughPut in dto.InputThroughPuts)
+            r.InputThroughPuts.Add(new ThroughPut(worksheet.GetOrGenerateProduct(inputThroughPut.Product.Name), inputThroughPut.Amount));
+        
+        foreach (var outputThroughPut in dto.OutputThroughPuts)
+            r.OutputThroughPuts.Add(new ThroughPut(worksheet.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
+        
+        return Ok(r);
     }
     
     [HttpDelete("{id:int}")]
