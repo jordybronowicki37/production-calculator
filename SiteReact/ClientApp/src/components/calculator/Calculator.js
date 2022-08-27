@@ -11,6 +11,7 @@ import Store from "../../dataStore/DataStore";
 import {calculate, fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
 import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
+import {RecipeCreator} from "../recipes/RecipeCreator";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -107,6 +108,7 @@ export class Calculator extends Component {
               </div>
               <div className="recipe-manager">
                 <h2>Recipes</h2>
+                <RecipeCreator></RecipeCreator>
                 <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
               </div>
             </div>
