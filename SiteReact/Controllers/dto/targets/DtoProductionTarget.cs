@@ -4,12 +4,12 @@ namespace SiteReact.Controllers.dto.targets;
 
 public class DtoProductionTarget
 {
-    public float Amount;
-    public TargetProductionTypes Type;
+    public float Amount { get; }
+    public string Type { get; }
     
     public DtoProductionTarget(TargetProduction target)
     {
         Amount = target.Amount;
-        Type = target.Type;
+        Type = target.Type.ToString();
     }
 }
