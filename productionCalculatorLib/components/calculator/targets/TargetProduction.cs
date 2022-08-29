@@ -1,17 +1,17 @@
-﻿namespace productionCalculatorLib.components.calculator.limitors;
+﻿namespace productionCalculatorLib.components.calculator.targets;
 
-public class LimitConnection
+public class TargetProduction
 {
-    public LimitConnectionTypes Type { get; }
+    public TargetProductionTypes Type { get; }
     public float Amount { get; }
 
-    public LimitConnection(LimitConnectionTypes type, float amount)
+    public TargetProduction(TargetProductionTypes type, float amount)
     {
         Type = type;
         Amount = amount;
     }
 
-    protected bool Equals(LimitConnection other)
+    protected bool Equals(TargetProduction other)
     {
         return Type == other.Type;
     }
@@ -21,7 +21,7 @@ public class LimitConnection
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((LimitConnection) obj);
+        return Equals((TargetProduction) obj);
     }
 
     public override int GetHashCode()
@@ -29,12 +29,12 @@ public class LimitConnection
         return (int) Type;
     }
 
-    public static bool operator ==(LimitConnection? left, LimitConnection? right)
+    public static bool operator ==(TargetProduction? left, TargetProduction? right)
     {
         return Equals(left, right);
     }
 
-    public static bool operator !=(LimitConnection? left, LimitConnection? right)
+    public static bool operator !=(TargetProduction? left, TargetProduction? right)
     {
         return !Equals(left, right);
     }

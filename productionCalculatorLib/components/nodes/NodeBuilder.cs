@@ -1,4 +1,4 @@
-﻿using productionCalculatorLib.components.calculator.limitors;
+﻿using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
@@ -13,7 +13,7 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
     private Recipe? _recipe;
     private readonly List<ConnectionPlaceholder<INodeOut>> _inputNodes = new();
     private readonly List<ConnectionPlaceholder<INodeIn>> _outputNodes = new();
-    private readonly List<LimitProduction> _limits = new();
+    private readonly List<TargetProduction> _targets = new();
 
     public NodeBuilder(Worksheet worksheet)
     {
@@ -48,9 +48,9 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
         return this;
     }
 
-    public NodeBuilder<TNodeType> AddLimit(LimitProduction limit)
+    public NodeBuilder<TNodeType> AddTarget(TargetProduction target)
     {
-        _limits.Add(limit);
+        _targets.Add(target);
         return this;
     }
 
@@ -94,7 +94,7 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
             });
         }
         
-        _limits.ForEach(v => newNode.AddProductionLimit(v));
+        _targets.ForEach(v => newNode.AddProductionTarget(v));
 
         _worksheet.AddNode(newNode);
         return newNode;

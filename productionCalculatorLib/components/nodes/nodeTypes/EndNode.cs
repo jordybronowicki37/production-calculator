@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.calculator.limitors;
+using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
@@ -32,13 +32,13 @@ public class EndNode: INodeIn, IHasProduct
         _inputConnections.Remove(connection);
     }
 
-    public List<LimitProduction> ProductionLimits { get; } = new();
-    public void AddProductionLimit(LimitProduction limit)
+    public List<TargetProduction> ProductionTargets { get; } = new();
+    public void AddProductionTarget(TargetProduction target)
     {
-        if (!ProductionLimits.Contains(limit)) ProductionLimits.Add(limit);
+        if (!ProductionTargets.Contains(target)) ProductionTargets.Add(target);
     }
-    public void RemoveProductionLimit(LimitProduction limit)
+    public void RemoveProductionTarget(TargetProduction target)
     {
-        ProductionLimits.Remove(limit);
+        ProductionTargets.Remove(target);
     }
 }

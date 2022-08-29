@@ -1,4 +1,4 @@
-﻿using productionCalculatorLib.components.calculator.limitors;
+﻿using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 
@@ -19,14 +19,14 @@ public class Connection
         Product = product;
     }
 
-    public List<LimitConnection> ConnectionLimits { get; } = new();
-    public void AddConnectionLimit(LimitConnection limit)
+    public List<TargetConnection> ConnectionTargets { get; } = new();
+    public void AddConnectionTarget(TargetConnection target)
     {
-        if (!ConnectionLimits.Contains(limit)) ConnectionLimits.Add(limit);
+        if (!ConnectionTargets.Contains(target)) ConnectionTargets.Add(target);
     }
-    public void RemoveConnectionLimit(LimitConnection limit)
+    public void RemoveConnectionTarget(TargetConnection target)
     {
-        ConnectionLimits.Remove(limit);
+        ConnectionTargets.Remove(target);
     }
 
     protected bool Equals(Connection other)

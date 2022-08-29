@@ -1,4 +1,4 @@
-﻿using productionCalculatorLib.components.calculator.limitors;
+﻿using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
@@ -44,8 +44,8 @@ public class CalculatorLimit
     private bool CheckLimits()
     {
         return _worksheet.Nodes.Any(node =>
-            node.ProductionLimits.Any(limit =>
-                limit.Type == LimitProductionTypes.ExactAmount));
+            node.ProductionTargets.Any(target =>
+                target.Type == TargetProductionTypes.ExactAmount));
     }
     
     private void ResetAmounts()
@@ -112,12 +112,12 @@ public class CalculatorLimit
 
     private void CalculateProductAmounts(IHasProduct productNode)
     {
-        foreach (var limit in productNode.ProductionLimits)
+        foreach (var target in productNode.ProductionTargets)
         {
-            switch (limit.Type)
+            switch (target.Type)
             {
-                case LimitProductionTypes.ExactAmount:
-                    productNode.Amount = limit.Amount;
+                case TargetProductionTypes.ExactAmount:
+                    productNode.Amount = target.Amount;
                     break;
             }
         }
@@ -183,12 +183,12 @@ public class CalculatorLimit
     
     private void CalculateRecipeAmounts(IHasRecipe recipeNode)
     {
-        foreach (var limit in recipeNode.ProductionLimits)
+        foreach (var target in recipeNode.ProductionTargets)
         {
-            switch (limit.Type)
+            switch (target.Type)
             {
-                case LimitProductionTypes.ExactAmount:
-                    recipeNode.ProductionAmount = limit.Amount;
+                case TargetProductionTypes.ExactAmount:
+                    recipeNode.ProductionAmount = target.Amount;
                     break;
             }
         }
