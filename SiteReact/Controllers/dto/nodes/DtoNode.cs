@@ -2,6 +2,7 @@
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.products;
 using SiteReact.Controllers.dto.connections;
+using SiteReact.Controllers.dto.targets;
 
 namespace SiteReact.Controllers.dto.nodes;
 
@@ -16,6 +17,7 @@ public class NodeDto
     
     public IEnumerable<DtoConnectionSingle>? InputNodes { get; set; }
     public IEnumerable<DtoConnectionSingle>? OutputNodes { get; set; }
+    public IEnumerable<DtoProductionTarget>? Targets { get; set; }
 
     public static NodeDto GenerateNode(INode node)
     {

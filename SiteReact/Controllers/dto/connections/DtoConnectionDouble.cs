@@ -1,4 +1,5 @@
 ﻿using productionCalculatorLib.components.connections;
+using SiteReact.Controllers.dto.targets;
 
 namespace SiteReact.Controllers.dto.connections;
 
@@ -9,6 +10,7 @@ public class DtoConnectionDouble
     public long OutputNodeId { get; }
     public string Product { get; }
     public float Amount { get; }
+    public IEnumerable<DtoConnectionTarget> Targets;
 
     public DtoConnectionDouble(Connection connection)
     {
@@ -17,6 +19,7 @@ public class DtoConnectionDouble
         OutputNodeId = connection.NodeOut.Id;
         Product = connection.Product.Name;
         Amount = connection.Amount;
+        Targets = connection.ConnectionTargets.Select(t => new DtoConnectionTarget(t));
     }
 
     protected bool Equals(DtoConnectionDouble other)
