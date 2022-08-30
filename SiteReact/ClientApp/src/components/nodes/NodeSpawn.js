@@ -2,6 +2,7 @@ import {Node} from "./Node";
 import './NodeSpawn.css';
 import {nodeEditProduct} from "./NodeAPI";
 import Store from "../../dataStore/DataStore";
+import {TargetManager} from "../targets/TargetManager";
 
 export class NodeSpawn extends Node {
   constructor(props) {
@@ -11,6 +12,7 @@ export class NodeSpawn extends Node {
   render () {
     let productField = <div className="previewField">name</div>;
     let targets = <div></div>;
+    let targetEditor = <div></div>;
     
     if (!super.previewMode()) {
       productField =
@@ -25,6 +27,13 @@ export class NodeSpawn extends Node {
           <div>c</div>
           <i className='bx bx-target-lock bx-rotate-90'></i>
         </div>;
+      targetEditor = 
+        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
+          <button type="button" className="popup-close-button" onClick={() => this.setState({targetEditorOpen: false})}>
+            <i className='bx bx-x'></i>
+          </button>
+          <TargetManager nodeId={this.state.data.id} targets={this.state.data.targets}></TargetManager>
+        </div>
     }
     
     return (
@@ -39,10 +48,7 @@ export class NodeSpawn extends Node {
           <div>Amount</div>
           <div className={super.previewMode()?"previewField":""}>{super.amount()}</div>
         </div>
-        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
-          test
-          <button onClick={e => this.setState({targetEditorOpen: false})}>x</button>
-        </div>
+        {targetEditor}
       </div>
     );
   }

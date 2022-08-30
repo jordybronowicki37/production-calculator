@@ -2,6 +2,7 @@ import {Node} from "./Node";
 import './NodeProduction.css';
 import {nodeEditRecipe} from "./NodeAPI";
 import Store from "../../dataStore/DataStore";
+import {TargetManager} from "../targets/TargetManager";
 
 export class NodeProduction extends Node {
   constructor(props) {
@@ -21,21 +22,7 @@ export class NodeProduction extends Node {
       );
     };
     
-    let recipeField = <div>
-      <select value={super.recipe()} onChange={e => this.RecipeChanged(e.target.value)}>
-        <option value="" disabled hidden></option>
-        {super.recipes().map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
-      </select></div>;
-    let amountField = <div>{super.amount()}</div>;
-    let productInList = generateProductList(super.requiredInProducts());
-    let productOutList = generateProductList(super.requiredOutProducts());
-    let targets =
-      <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
-        <div>a</div>
-        <div>b</div>
-        <div>c</div>
-        <i className='bx bx-target-lock bx-rotate-90'></i>
-      </div>;
+    let recipeField, amountField, productInList, productOutList, targets, targetEditor;
     
     if (super.previewMode()) {
       recipeField = <div className="previewField">name</div>;
@@ -49,6 +36,30 @@ export class NodeProduction extends Node {
           <div className="previewField">0</div>
         </div></div>;
       targets = <div></div>;
+      targetEditor = <div></div>
+    } else {
+      recipeField = <div>
+        <select value={super.recipe()} onChange={e => this.RecipeChanged(e.target.value)}>
+          <option value="" disabled hidden></option>
+          {super.recipes().map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
+        </select></div>;
+      amountField = <div>{super.amount()}</div>;
+      productInList = generateProductList(super.requiredInProducts());
+      productOutList = generateProductList(super.requiredOutProducts());
+      targets =
+        <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
+          <div>a</div>
+          <div>b</div>
+          <div>c</div>
+          <i className='bx bx-target-lock bx-rotate-90'></i>
+        </div>;
+      targetEditor = 
+        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
+          <button type="button" className="popup-close-button" onClick={() => this.setState({targetEditorOpen: false})}>
+            <i className='bx bx-x'></i>
+          </button>
+          <TargetManager nodeId={this.state.data.id} targets={this.state.data.targets}></TargetManager>
+        </div>
     }
     
     return (
@@ -70,10 +81,7 @@ export class NodeProduction extends Node {
             {productOutList}
           </div>
         </div>
-        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
-          test
-          <button onClick={e => this.setState({targetEditorOpen: false})}>x</button>
-        </div>
+        {targetEditor}
       </div>
     );
   }

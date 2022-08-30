@@ -1,0 +1,110 @@
+﻿.target-editor {
+    padding: 0 2px;;
+}
+
+.target-editor-tabs {
+    display: flex;
+}
+
+.target-editor-tabs>div {
+    flex-grow: 2;
+}
+
+.target-editor-tabs>button {
+    all: unset;
+    border: 1px solid darkgray;
+    font-size: xx-small;
+}
+
+.target-editor-tabs>button:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+.target-editor-tabs>button:nth-child(3) {
+    border-radius: 0 5px 5px 0;
+}
+
+.target-editor-tabs>button:last-child {
+    margin-left: 5px;
+    padding: 0 2px;
+    border: none;
+}
+
+.target-editor-tabs>.selected {
+    background-color: #eeeeee;
+}
+
+.right-one {
+    transform: translateX(1px);
+}
+
+.left-one {
+    transform: translateX(-1px);
+}
+
+.target-editor-tab-content {
+    padding: 5px;
+}
+
+.target-editor-vis {
+    width: 100%;
+    position: relative;
+}
+
+.target-editor-vis-line {
+    width: 100%;
+    display: flex;
+    position: absolute;
+}
+
+.target-editor-vis-line>div {
+    flex-grow: 2;
+    transition: border-top-color ease 0.5s;
+}
+
+.target-editor-vis-line>.blue {
+    border-top: 2px solid deepskyblue;
+}
+
+.target-editor-vis-line>.gray {
+    border-top: 2px solid gray;
+}
+
+.target-editor-vis-icon {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    justify-content: space-evenly;
+}
+
+.target-editor-vis-icon>* {
+    transition: color ease 0.5s;
+}
+
+.target-editor-vis-icon>.gray {
+    color: gray;
+}
+
+.target-editor-vis-icon>.blue {
+    color: deepskyblue;
+}
+
+.target-editor-vis-icon>.red {
+    color: orangered;
+}
+
+.target-editor-vis-icon>.green {
+    color: lawngreen;
+}
+
+.target-editor-value {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.target-editor-amount-field {
+    width: 50%;
+    font-size: xx-small;
+}
