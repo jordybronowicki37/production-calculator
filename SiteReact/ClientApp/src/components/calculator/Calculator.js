@@ -87,7 +87,7 @@ export class Calculator extends Component {
                   <div className="calculator-states-icon" onClick={() => this.calculateWorksheet()}>
                     <i hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></i>
                     <i hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
-                    <i hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error' style={{color:"#F1B22C"}}></i>
+                    <i hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error-circle' style={{color:"#F1B22C"}}></i>
                     <i hidden={!this.state.calculatorStateLoading} title="Calculating..." className='bx bx-loader-alt bx-spin'></i>
                     <i hidden={!this.state.calculatorStateRefresh} title="Recalculate" className='bx bx-refresh'></i>
                   </div>
