@@ -22,7 +22,7 @@ export class NodeProduction extends Node {
       );
     };
     
-    let recipeField, amountField, productInList, productOutList, targets, targetEditor;
+    let recipeField, amountField, productInList, productOutList, targets, targetEditor, targetIcon;
     
     if (super.previewMode()) {
       recipeField = <div className="previewField">name</div>;
@@ -36,7 +36,8 @@ export class NodeProduction extends Node {
           <div className="previewField">0</div>
         </div></div>;
       targets = <div></div>;
-      targetEditor = <div></div>
+      targetEditor = <div></div>;
+      targetIcon = <div></div>;
     } else {
       recipeField = <div>
         <select value={super.recipe()} onChange={e => this.RecipeChanged(e.target.value)}>
@@ -46,11 +47,22 @@ export class NodeProduction extends Node {
       amountField = <div>{super.amount()}</div>;
       productInList = generateProductList(super.requiredInProducts());
       productOutList = generateProductList(super.requiredOutProducts());
+      if (this.state.data.targets.length !== 0) {
+        if (this.state.data.targets[0].type === "ExactValue") {
+          targetIcon = <div>
+            <i className='bx bx-arrow-to-right right-one'></i>
+            <i className='bx bx-arrow-to-left left-one'></i>
+          </div>;
+        } else {
+          targetIcon = <div>
+            <i className='bx bx-arrow-to-left right-one'></i>
+            <i className='bx bx-arrow-to-right left-one'></i>
+          </div>;
+        }
+      }
       targets =
         <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
-          <div>a</div>
-          <div>b</div>
-          <div>c</div>
+          {targetIcon}
           <i className='bx bx-target-lock bx-rotate-90'></i>
         </div>;
       targetEditor = 

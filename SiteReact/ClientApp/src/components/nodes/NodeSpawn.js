@@ -20,11 +20,23 @@ export class NodeSpawn extends Node {
           {super.products().map(v => (
             <option key={v.name} value={v.name}>{v.name}</option>))}
         </select>;
+      let targetIcon = <div></div>;
+      if (this.state.data.targets.length !== 0) {
+        if (this.state.data.targets[0].type === "ExactValue") {
+          targetIcon = <div>
+              <i className='bx bx-arrow-to-right right-one'></i>
+              <i className='bx bx-arrow-to-left left-one'></i>
+            </div>;
+        } else {
+          targetIcon = <div>
+              <i className='bx bx-arrow-to-left right-one'></i>
+              <i className='bx bx-arrow-to-right left-one'></i>
+            </div>;
+        }
+      }
       targets = 
         <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
-          <div>a</div>
-          <div>b</div>
-          <div>c</div>
+          {targetIcon}
           <i className='bx bx-target-lock bx-rotate-90'></i>
         </div>;
       targetEditor = 

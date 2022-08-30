@@ -63,6 +63,14 @@
     line-height: unset;
 }
 
+.right-one {
+    transform: translateX(1px);
+}
+
+.left-one {
+    transform: translateX(-1px);
+}
+
 .targetEditor {
     height: 100%;
     width: 100%;
