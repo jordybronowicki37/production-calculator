@@ -1,9 +1,59 @@
-﻿.worksheetItemContainer {
+﻿.worksheet-item-container {
     width: min-content;
     border: 1px solid black;
     border-radius: 7px;
+    overflow: hidden;
 }
 
-.worksheetItemTitle {
+.worksheet-item-container>* {
+    padding: 0.2rem 0.3rem;
+}
+
+.worksheet-item-top {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+    margin-bottom: 0.3rem;
+}
+
+.worksheet-item-title {
     white-space: nowrap;
+    color: unset;
+    text-decoration: none;
+}
+
+.worksheet-item-open-icon {
+    color: unset;
+}
+
+.worksheet-item-amounts {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.worksheet-item-amounts>*:nth-child(2n) {
+    padding: 0 0.5em;
+}
+
+.worksheet-item-io {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 0;
+}
+
+.worksheet-item-io>* {
+    border-top: 1px solid black;
+    padding: 0 3px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.worksheet-item-io>*:nth-child(2n) {
+    border-left: 1px solid black;
+}
+
+.worksheet-item-throughput {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 0.5em;
 }
