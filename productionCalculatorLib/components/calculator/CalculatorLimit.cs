@@ -135,101 +135,63 @@ public class CalculatorLimit
 
     private void CalculateProductAmounts(IHasProduct productNode)
     {
-        foreach (var target in productNode.ProductionTargets)
+        var hasExactTarget = productNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount) != null;
+        var connections = productNode switch
         {
-            switch (target.Type)
-            {
-                case TargetProductionTypes.ExactAmount:
-                    productNode.Amount = target.Amount;
-                    break;
-            }
-        }
+            SpawnNode spawnNode => FilterConnections(spawnNode.OutputConnections, spawnNode.Product).ToList(),
+            EndNode endNode => FilterConnections(endNode.InputConnections, endNode.Product).ToList(),
+            _ => throw new ArgumentOutOfRangeException(nameof(productNode))
+        };
         
-        switch (productNode)
+        if (!hasExactTarget) productNode.Amount = connections.Sum(v => v.Amount);
+        else DistributeConnections(connections, productNode.Amount);
+    }
+
+    private void DistributeConnections(ICollection<Connection> connections, float amount)
+    {
+        foreach (var connection in connections)
         {
-            case SpawnNode spawnNode:
-                DistributeProductsOut(spawnNode.OutputConnections, spawnNode.Product, spawnNode.Amount);
-                break;
-            case EndNode endNode:
-                DistributeProductsIn(endNode.InputConnections,  endNode.Product, endNode.Amount);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(productNode));
+            var newAmount = amount / connections.Count;
+            if (newAmount > connection.Amount) 
+                connection.Amount = newAmount;
         }
     }
 
-    private void DistributeProductsIn(IEnumerable<Connection> connections, Product product, float amount)
-    {
-        var connectionsFiltered = connections.Where(connection => connection.Product.Equals(product)).ToList();
-        foreach (var connection in connectionsFiltered)
-        {
-            var newAmount = amount / connectionsFiltered.Count;
-            if (newAmount > connection.Amount) connection.Amount = newAmount;
-            
-            switch (connection.NodeIn)
-            {
-                case IHasProduct productNode:
-                    productNode.Amount = connection.Amount;
-                    break;
-                case IHasRecipe recipeNode:
-                    var newRecipeAmount = connection.Amount / recipeNode.Recipe.OutputThroughPuts.Find(put => put.Product.Equals(product))!.Amount;
-                    if (newRecipeAmount > recipeNode.ProductionAmount) recipeNode.ProductionAmount = newRecipeAmount;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(connection.NodeIn));
-            }
-        }
-    }
-    
-    private void DistributeProductsOut(IEnumerable<Connection> connections, Product product, float amount)
-    {
-        var connectionsFiltered = connections.Where(connection => connection.Product.Equals(product)).ToList();
-        foreach (var connection in connectionsFiltered)
-        {
-            var newAmount = amount / connectionsFiltered.Count;
-            if (newAmount > connection.Amount) connection.Amount = newAmount;
-            
-            switch (connection.NodeOut)
-            {
-                case IHasProduct productNode:
-                    productNode.Amount = connection.Amount;
-                    break;
-                case IHasRecipe recipeNode:
-                    var newRecipeAmount = connection.Amount / recipeNode.Recipe.InputThroughPuts.Find(put => put.Product.Equals(product))!.Amount;
-                    if (newRecipeAmount > recipeNode.ProductionAmount) recipeNode.ProductionAmount = newRecipeAmount;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(connection.NodeOut));
-            }
-        }
-    }
-    
     private void CalculateRecipeAmounts(IHasRecipe recipeNode)
     {
-        foreach (var target in recipeNode.ProductionTargets)
-        {
-            switch (target.Type)
-            {
-                case TargetProductionTypes.ExactAmount:
-                    recipeNode.ProductionAmount = target.Amount;
-                    break;
-            }
-        }
-        
         switch (recipeNode)
         {
             case ProductionNode productionNode:
+                var hasExactTarget = productionNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount) != null;
+
                 foreach (var inputThroughPut in productionNode.Recipe.InputThroughPuts)
                 {
-                    DistributeProductsIn(productionNode.InputConnections, inputThroughPut.Product, inputThroughPut.Amount*productionNode.ProductionAmount);
+                    var connectionsFiltered = FilterConnections(productionNode.InputConnections, inputThroughPut.Product).ToList();
+                    if (!hasExactTarget)
+                    {
+                        var newAmount = connectionsFiltered.Sum(v => v.Amount) / inputThroughPut.Amount;
+                        if (productionNode.ProductionAmount < newAmount) productionNode.ProductionAmount = newAmount;
+                    }
+                    DistributeConnections(connectionsFiltered, inputThroughPut.Amount * productionNode.ProductionAmount);
                 }
                 foreach (var outputThroughPut in productionNode.Recipe.OutputThroughPuts)
                 {
-                    DistributeProductsOut(productionNode.OutputConnections, outputThroughPut.Product, outputThroughPut.Amount*productionNode.ProductionAmount);
+                    var connectionsFiltered = FilterConnections(productionNode.OutputConnections, outputThroughPut.Product).ToList();
+                    if (!hasExactTarget)
+                    {
+                        var newAmount = connectionsFiltered.Sum(v => v.Amount) / outputThroughPut.Amount;
+                        if (productionNode.ProductionAmount < newAmount) productionNode.ProductionAmount = newAmount;
+                    }
+                    DistributeConnections(connectionsFiltered, outputThroughPut.Amount*productionNode.ProductionAmount);
                 }
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(recipeNode));
         }
+    }
+
+    private static IEnumerable<Connection> FilterConnections(IEnumerable<Connection> connections, Product product)
+    {
+        return connections.Where(connection => connection.Product.Equals(product));
     }
 }
