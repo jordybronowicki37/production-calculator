@@ -22,7 +22,7 @@ export class NodeSpawn extends Node {
         </select>;
       let targetIcon = <div></div>;
       if (this.state.data.targets.length !== 0) {
-        if (this.state.data.targets[0].type === "ExactValue") {
+        if (this.state.data.targets[0].type === "ExactAmount") {
           targetIcon = <div>
               <i className='bx bx-arrow-to-right right-one'></i>
               <i className='bx bx-arrow-to-left left-one'></i>
