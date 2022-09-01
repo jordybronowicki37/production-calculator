@@ -42,6 +42,7 @@ export class Calculator extends Component {
   render() {
     let state = Store.getState();
     let title = state.worksheet ? state.worksheet.name : "";
+    let message = state.worksheet ? state.worksheet.calculationError : "";
     let nodes = state.nodes.map(node => {
       const {body, type} = createNodeBody(node.type, node);
       return {
@@ -83,7 +84,7 @@ export class Calculator extends Component {
             <ReactFlowProvider>
               <div className="flow-chart-wrapper" ref={this.setReactFlowWrapper}>
                 <div className="calculator-states">
-                  <div hidden={true} className="calculator-states-label">Dit is een test bericht</div>
+                  <div hidden={message===""} className="calculator-states-label">{message}</div>
                   <div className="calculator-states-icon" onClick={() => this.calculateWorksheet()}>
                     <i hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></i>
                     <i hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
