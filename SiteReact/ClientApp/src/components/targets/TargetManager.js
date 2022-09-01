@@ -1,5 +1,6 @@
 ﻿import "./TargetManager.css"
 import {Component} from "react";
+import {setTargets} from "./TargetAPI";
 
 export class TargetManager extends Component {
   constructor(props) {
@@ -153,11 +154,12 @@ export class TargetManager extends Component {
   saveTargets() {
     let targetList = [];
     
-    if (this.state.exactAmount > 0) targetList.push({type:"ExactAmount", amount:this.state.exactAmount});
-    if (this.state.minAmount > 0) targetList.push({type:"MinAmount", amount:this.state.minAmount});
-    if (this.state.maxAmount > 0) targetList.push({type:"MaxAmount", amount:this.state.maxAmount});
+    if (this.state.exactAmount > 0) targetList.push({type:"ExactAmount", amount:parseFloat(this.state.exactAmount)});
+    if (this.state.minAmount > 0) targetList.push({type:"MinAmount", amount:parseFloat(this.state.minAmount)});
+    if (this.state.maxAmount > 0) targetList.push({type:"MaxAmount", amount:parseFloat(this.state.maxAmount)});
 
-    console.log(targetList)
-    this.setState({targetsChanged:false});
+    setTargets(this.state.nodeId, targetList).then(r => {
+      this.setState({targetsChanged:false});
+    });
   }
 }

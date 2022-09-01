@@ -47,6 +47,11 @@ const nodeReducer = createReducer([], {
     node.recipe = action.payload.recipe;
     return state;
   },
+  "node/change/targets": (state, action) => {
+    let node = state.find(value => value.id === action.payload.id);
+    node.targets = action.payload.targets;
+    return state;
+  },
 });
 
 const connectionReducer = createReducer([], {
