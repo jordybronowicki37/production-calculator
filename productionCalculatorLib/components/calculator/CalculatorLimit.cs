@@ -52,9 +52,23 @@ public class CalculatorLimit
     {
         foreach (var node in _worksheet.Nodes)
         {
-            if (node is IHasProduct productNode) productNode.Amount = 0;
-            if (node is IHasRecipe recipeNode) recipeNode.ProductionAmount = 0;
-            if (node is INodeIn inNode) foreach (var connection in inNode.InputConnections) connection.Amount = 0;
+            if (node is IHasProduct productNode)
+            {
+                var exactTarget = productNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
+                var minTarget = productNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
+                if (exactTarget != null) productNode.Amount = exactTarget.Amount;
+                else if (minTarget != null) productNode.Amount = minTarget.Amount;
+                else productNode.Amount = 0;
+            };
+            if (node is IHasRecipe recipeNode)
+            {
+                var exactTarget = recipeNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
+                var minTarget = recipeNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
+                if (exactTarget != null) recipeNode.ProductionAmount = exactTarget.Amount;
+                else if (minTarget != null) recipeNode.ProductionAmount = minTarget.Amount;
+                else recipeNode.ProductionAmount = 0;
+            };
+            if (node is INodeIn inNode) foreach (var connection in inNode.InputConnections)connection.Amount = 0;
         }
     }
     
