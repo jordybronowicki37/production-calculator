@@ -4,9 +4,11 @@ namespace SiteReact.Controllers.dto.targets;
 
 public class DtoConnectionTarget
 {
-    public float Amount { get; }
-    public string Type { get; }
-    
+    public float Amount { get; set; }
+    public string Type { get; set; }
+
+    public DtoConnectionTarget() {}
+
     public DtoConnectionTarget(TargetConnection target)
     {
         Amount = target.Amount;

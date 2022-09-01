@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.nodes;
+using SiteReact.Controllers.dto.targets;
 using SiteReact.Data;
 
 namespace SiteReact.Controllers;
@@ -98,6 +100,25 @@ public class NodeController : ControllerBase
         recipeNode.Recipe = recipe;
         
         return Ok(NodeDto.GenerateNode(recipeNode));
+    }
+    
+    [HttpPut("{nodeId:int}/targets")]
+    public IActionResult EditNodeTargets(int nodeId, int worksheetId, IEnumerable<DtoProductionTarget> dto)
+    {
+        var w = StaticValues.Get().Worksheet[worksheetId];
+        
+        var node = w.Nodes.FirstOrDefault(n => n.Id == nodeId);
+        if (node == null) return NotFound("Node is not found");
+
+        node.ProductionTargets.Clear();
+        
+        foreach (var dtoTarget in dto)
+        {
+            if (!Enum.TryParse(dtoTarget.Type, out TargetProductionTypes type)) return BadRequest("Could not parse type");
+            node.AddProductionTarget(new TargetProduction(type, dtoTarget.Amount));
+        }
+        
+        return Ok(NodeDto.GenerateNode(node));
     }
     
     [HttpDelete("{nodeId:int}")]
