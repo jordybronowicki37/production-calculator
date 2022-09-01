@@ -27,6 +27,13 @@ public class CalculatorLimit
             return;
         }
         
+        if (w.CheckResult())
+        {
+            worksheet.CalculationSucceeded = true;
+            worksheet.CalculationError = "";
+            return;
+        }
+        
         w.ResetAmounts();
         while (w._amountOfTimesCalculated < 20)
         {
@@ -39,6 +46,8 @@ public class CalculatorLimit
             }
             w._amountOfTimesCalculated++;
         }
+        worksheet.CalculationSucceeded = false;
+        worksheet.CalculationError = "Calculator could not find stable solution";
     }
 
     private bool CheckLimits()
