@@ -35,7 +35,7 @@ public class CalculatorLimit
         }
         
         w.ResetAmounts();
-        while (w._amountOfTimesCalculated < 20)
+        while (w._amountOfTimesCalculated < worksheet.Nodes.Count*5)
         {
             w.Calculate();
             if (w.CheckResult())
