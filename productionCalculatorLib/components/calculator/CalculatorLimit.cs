@@ -88,25 +88,27 @@ public class CalculatorLimit
             switch (node)
             {
                 case SpawnNode spawnNode:
-                    if (spawnNode.Amount - spawnNode.OutputConnections.Sum(connection => connection.Amount) > 0.1) return false;
+                    if (CompareFloatingPointNumbers(spawnNode.Amount, FilterConnections(spawnNode.OutputConnections, spawnNode.Product)
+                            .Sum(connection => connection.Amount))) return false;
                     break;
                 case ProductionNode productionNode:
                     if ((from throughPut in productionNode.Recipe.InputThroughPuts 
                          let amountRequired = productionNode.InputConnections
                              .Where(c => c.Product.Equals(throughPut.Product))
                              .Sum(connection => connection.Amount) 
-                         where productionNode.ProductionAmount * throughPut.Amount - amountRequired > 0.1 
+                         where CompareFloatingPointNumbers(productionNode.ProductionAmount * throughPut.Amount, amountRequired)
                          select throughPut).Any()) return false;
                     
                     if ((from throughPut in productionNode.Recipe.OutputThroughPuts 
                          let amountProvided = productionNode.OutputConnections
                              .Where(c => c.Product.Equals(throughPut.Product))
                              .Sum(connection => connection.Amount) 
-                         where productionNode.ProductionAmount * throughPut.Amount - amountProvided > 0.1 
+                         where CompareFloatingPointNumbers(productionNode.ProductionAmount * throughPut.Amount, amountProvided)
                          select throughPut).Any()) return false;
                     break;
                 case EndNode endNode:
-                    if (endNode.Amount - endNode.InputConnections.Sum(connection => connection.Amount) > 0.1) return false;
+                    if (CompareFloatingPointNumbers(endNode.Amount, FilterConnections(endNode.InputConnections, endNode.Product)
+                            .Sum(connection => connection.Amount))) return false;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(node));
@@ -193,5 +195,10 @@ public class CalculatorLimit
     private static IEnumerable<Connection> FilterConnections(IEnumerable<Connection> connections, Product product)
     {
         return connections.Where(connection => connection.Product.Equals(product));
+    }
+
+    private static bool CompareFloatingPointNumbers(float num1, float num2)
+    {
+        return Math.Abs(num1 - num2) > 0.1;
     }
 }
