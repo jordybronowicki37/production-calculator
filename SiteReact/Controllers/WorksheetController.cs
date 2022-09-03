@@ -23,10 +23,12 @@ public class WorksheetController : ControllerBase
         return Ok(StaticValues.Get().Worksheet.Select(w => new DtoWorksheetSmall(w)));
     }
 
-    [HttpGet("{id:int}")]
-    public IActionResult Get(int id)
+    [HttpGet("{id:long}")]
+    public IActionResult Get(long id)
     {
-        var w = StaticValues.Get().Worksheet[id];
+        var w = GetWorksheet(id);
+        if (w == null) return NotFound("Worksheet is not found");
+        
         if (w.Nodes.Count != 0) CalculatorLimit.ReCalculateAmounts(w);
         return Ok(new DtoWorksheet(w));
     }
@@ -39,19 +41,28 @@ public class WorksheetController : ControllerBase
         return Ok(new DtoWorksheet(w));
     }
 
-    [HttpPatch("{id:int}")]
-    public IActionResult Edit(int id, DtoWorksheetCreate dto)
+    [HttpPatch("{id:long}")]
+    public IActionResult Edit(long id, DtoWorksheetCreate dto)
     {
-        var w = StaticValues.Get().Worksheet[id];
+        var w = GetWorksheet(id);
+        if (w == null) return NotFound("Worksheet is not found");
+        
         w.Name = dto.Name;
         return Ok();
     }
     
-    [HttpPost("{id:int}/calculate")]
-    public IActionResult Calculate(int id)
+    [HttpPost("{id:long}/calculate")]
+    public IActionResult Calculate(long id)
     {
-        var w = StaticValues.Get().Worksheet[id];
+        var w = GetWorksheet(id);
+        if (w == null) return NotFound("Worksheet is not found");
+        
         CalculatorLimit.ReCalculateAmounts(w);
         return Ok(new DtoWorksheet(w));
+    }
+    
+    private Worksheet? GetWorksheet(long worksheetId)
+    {
+        return StaticValues.Get().Worksheet.FirstOrDefault(w => w.Id == worksheetId);
     }
 }

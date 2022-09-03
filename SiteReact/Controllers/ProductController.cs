@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.products;
 using SiteReact.Data;
 
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("worksheet/{worksheetId:int}/[controller]")]
+[Route("worksheet/{worksheetId:long}/[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
@@ -16,38 +17,48 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll(int worksheetId)
+    public IActionResult GetAll(long worksheetId)
     {
-        return Ok(StaticValues.Get().Worksheet[worksheetId].Products);
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+        
+        return Ok(w.Products);
     }
 
     [HttpPost]
-    public IActionResult Create(DtoProduct dto, int worksheetId)
+    public IActionResult Create(DtoProduct dto, long worksheetId)
     {
-        var p = StaticValues.Get().Worksheet[worksheetId].GetOrGenerateProduct(dto.Name);
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+        
+        var p = w.GetOrGenerateProduct(dto.Name);
         return Ok(p);
     }
     
     [HttpPatch("{name}")]
-    public IActionResult Update(string name, int worksheetId, DtoProduct dto)
+    public IActionResult Update(string name, long worksheetId, DtoProduct dto)
     {
-        var p = StaticValues.Get().Worksheet[worksheetId].Products.FirstOrDefault(p => p.Name == name);
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+        
+        var p = w.GetProduct(name);
         if (p == null) return NotFound("Product is not found");
         p.Name = dto.Name;
         return Ok(p);
     }
     
     [HttpDelete("{name}")]
-    public IActionResult Remove(string name, int worksheetId)
+    public IActionResult Remove(string name, long worksheetId)
     {
-        try
-        {
-            StaticValues.Get().Worksheet[worksheetId].RemoveProduct(name);
-            return NoContent();
-        }
-        catch (InvalidOperationException)
-        {
-            return NotFound();
-        }
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+        
+        w.RemoveProduct(name);
+        return NoContent();
+    }
+    
+    private Worksheet? GetWorksheet(long worksheetId)
+    {
+        return StaticValues.Get().Worksheet.FirstOrDefault(w => w.Id == worksheetId);
     }
 }
