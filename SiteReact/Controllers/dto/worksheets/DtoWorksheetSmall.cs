@@ -39,7 +39,7 @@ public class DtoWorksheetSmall
                     }
                     break;
                 case EndNode endNode:
-                    var foundOutput = InputProducts.Find(put => put.Product.Name == endNode.Product.Name);
+                    var foundOutput = OutputProducts.Find(put => put.Product.Name == endNode.Product.Name);
                     if (foundOutput != null)
                     {
                         foundOutput.Amount += endNode.Amount;
