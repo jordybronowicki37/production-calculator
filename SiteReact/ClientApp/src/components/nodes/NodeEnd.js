@@ -70,4 +70,8 @@ export class NodeEnd extends Node {
   productChanged(name) {
     nodeEditProduct(Store.getState().worksheet.id, this.state.data.id, name);
   }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 }

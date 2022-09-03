@@ -146,6 +146,14 @@ public class NodeController : ControllerBase
     [HttpDelete("{nodeId:long}")]
     public IActionResult DeleteNode(long nodeId, long worksheetId)
     {
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+        
+        var node = GetNode(w, nodeId);
+        if (node == null) return NotFound("Node is not found");
+        
+        w.RemoveNode(node);
+        
         return Ok();
     }
 

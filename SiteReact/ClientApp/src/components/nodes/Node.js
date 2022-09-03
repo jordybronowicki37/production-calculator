@@ -114,8 +114,4 @@ export class Node extends Component {
     }
     return products;
   }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
 }
