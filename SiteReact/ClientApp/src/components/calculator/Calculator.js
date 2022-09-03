@@ -26,13 +26,22 @@ export class Calculator extends Component {
       worksheetId: props.match.params.id,
       worksheetLoading: true,
       calculatorStateSuccess:false,
-      calculatorStateLoading:false,
+      calculatorStateLoading:true,
       calculatorStateWarning:false,
       calculatorStateError:false,
-      calculatorStateRefresh:true,
+      calculatorStateRefresh:false,
       popupRecipeCreatorOpen:false,
     }
-    fetchWorksheet(this.state.worksheetId).then(r => this.setState({worksheetLoading:false}));
+    fetchWorksheet(this.state.worksheetId).then(r => {
+      this.setState({worksheetLoading:false});
+      if (r.calculationSucceeded) {
+        this.setCalculatorState("success");
+      } else {
+        this.setCalculatorState("warning");
+      }
+    }).catch(r => {
+      this.setCalculatorState("error");
+    });
     this.unsubscribe = Store.subscribe(() => {
       this.setCalculatorState("refresh");
       this.forceUpdate();
