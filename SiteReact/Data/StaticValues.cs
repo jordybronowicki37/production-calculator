@@ -36,7 +36,7 @@ public class StaticValues
         
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
         var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).AddInputNode(node1, productIronOre).Build();
-        var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).AddInputNode(node2, productIronIngot).AddTarget(new TargetProduction(TargetProductionTypes.ExactAmount, 20)).Build();
+        var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).AddInputNode(node2, productIronIngot).SetExactTarget(20).Build();
     }
 
     private void GenerateDoubleSpawn()
@@ -58,7 +58,7 @@ public class StaticValues
         
         var node0 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productCoal).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).AddInputNode(node0, productIronOre).AddInputNode(node1, productCoal).AddTarget(new TargetProduction(TargetProductionTypes.ExactAmount, 2)).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).AddInputNode(node0, productIronOre).AddInputNode(node1, productCoal).SetExactTarget(2).Build();
         var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productSteelIngot).AddInputNode(node2, productSteelIngot).Build();
         node3.Amount = 30;
     }

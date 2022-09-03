@@ -110,12 +110,28 @@ public class NodeController : ControllerBase
         var node = w.Nodes.FirstOrDefault(n => n.Id == nodeId);
         if (node == null) return NotFound("Node is not found");
 
-        node.ProductionTargets.Clear();
-        
+        var targetTypes = new List<TargetProduction>();
         foreach (var dtoTarget in dto)
         {
-            if (!Enum.TryParse(dtoTarget.Type, out TargetProductionTypes type)) return BadRequest("Could not parse type");
-            node.AddProductionTarget(new TargetProduction(type, dtoTarget.Amount));
+            if (!Enum.TryParse(dtoTarget.Type, out TargetProductionTypes type)) return BadRequest("Could not parse type " + dtoTarget.Type);
+            targetTypes.Add(new TargetProduction(type, dtoTarget.Amount));
+        }
+
+        if (targetTypes.Count == 0)
+        {
+            node.ClearTargets();
+        }
+        else if (targetTypes[0].Type == TargetProductionTypes.ExactAmount)
+        {
+            node.SetExactTarget(targetTypes[0].Amount);
+        }
+        else
+        {
+            var minTarget = targetTypes.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
+            float? minAmount = minTarget == null ? null : minTarget.Amount;
+            var maxTarget = targetTypes.FirstOrDefault(v => v.Type == TargetProductionTypes.MaxAmount);
+            float? maxAmount = maxTarget == null ? null : maxTarget.Amount;
+            node.SetMinMaxTarget(minAmount, maxAmount);
         }
         
         return Ok(NodeDto.GenerateNode(node));

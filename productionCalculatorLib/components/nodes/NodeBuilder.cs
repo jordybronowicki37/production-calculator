@@ -13,7 +13,9 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
     private Recipe? _recipe;
     private readonly List<ConnectionPlaceholder<INodeOut>> _inputNodes = new();
     private readonly List<ConnectionPlaceholder<INodeIn>> _outputNodes = new();
-    private readonly List<TargetProduction> _targets = new();
+    private float? _exactAmount = null;
+    private float? _minAmount = null;
+    private float? _maxAmount = null;
 
     public NodeBuilder(Worksheet worksheet)
     {
@@ -48,9 +50,19 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
         return this;
     }
 
-    public NodeBuilder<TNodeType> AddTarget(TargetProduction target)
+    public NodeBuilder<TNodeType> SetExactTarget(float amount)
     {
-        _targets.Add(target);
+        if (_minAmount == null && _maxAmount == null) _exactAmount = amount;
+        return this;
+    }
+
+    public NodeBuilder<TNodeType> SetMinMaxTarget(float? minAmount, float? maxAmount)
+    {
+        if (_exactAmount == null)
+        {
+            _minAmount = minAmount;
+            _maxAmount = maxAmount;
+        }
         return this;
     }
 
@@ -93,8 +105,15 @@ public class NodeBuilder<TNodeType> where TNodeType : INode, new()
                 otherNode.AddInputConnection(connection);
             });
         }
-        
-        _targets.ForEach(v => newNode.AddProductionTarget(v));
+
+        if (_exactAmount != null)
+        {
+            newNode.SetExactTarget((float) _exactAmount);
+        } 
+        else if (_minAmount != null || _maxAmount != null)
+        {
+            newNode.SetMinMaxTarget(_minAmount, _maxAmount);
+        }
 
         _worksheet.AddNode(newNode);
         return newNode;

@@ -46,13 +46,30 @@ public class ProductionNode: INodeInOut, IHasRecipe
         }
     }
 
-    public List<TargetProduction> ProductionTargets { get; } = new();
-    public void AddProductionTarget(TargetProduction target)
+    private readonly List<TargetProduction> _targets = new();
+    public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
+    public void SetExactTarget(float amount) 
     {
-        if (!ProductionTargets.Contains(target)) ProductionTargets.Add(target);
+        ClearTargets();
+        _targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
+        ProductionAmount = amount;
     }
-    public void RemoveProductionTarget(TargetProduction target)
+    public void SetMinMaxTarget(float? minAmount, float? maxAmount) 
     {
-        ProductionTargets.Remove(target);
+        ClearTargets();
+        if (minAmount != null)
+        {
+            _targets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
+            ProductionAmount = (float) minAmount;
+        }
+        if (maxAmount != null)
+        {
+            _targets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
+            if (ProductionAmount > (float) maxAmount) ProductionAmount = (float) maxAmount;
+        }
+    }
+    public void ClearTargets() 
+    {
+        _targets.Clear();
     }
 }
