@@ -9,7 +9,7 @@ import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
 import {calculate, fetchWorksheet} from "../worksheets/WorksheetAPI";
-import {nodeCreateProduct, nodeCreateRecipe} from "../nodes/NodeAPI";
+import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../nodes/NodeAPI";
 import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
 import {RecipeCreator} from "../recipes/RecipeCreator";
 
@@ -157,9 +157,11 @@ export class Calculator extends Component {
             // TODO update end position on back-end
           }
           break;
+        case "remove":
+          nodeRemove(this.state.worksheetId, change.id);
+          break;
         case "dimensions":
         case "select":
-        case "remove":
         case "add":
         case "reset":
         default:

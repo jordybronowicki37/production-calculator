@@ -32,6 +32,7 @@ const nodeReducer = createReducer([], {
     return state;
   },
   "node/add": (state, action) => [...state, action.payload],
+  "node/remove": (state, action) => state.filter(value => value.id !== action.payload),
   "node/change/position": (state, action) => {
     let node = state.find(value => value.id === action.payload.id);
     node.position = action.payload.position;

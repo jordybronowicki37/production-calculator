@@ -45,3 +45,8 @@ export const nodeEditRecipe = async function(worksheetId, nodeId, recipe) {
   return json;
 }
 
+export const nodeRemove = async function(worksheetId, nodeId) {
+  let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}`, {method: "delete"});
+  if (!response.ok) throw new Error();
+  Store.dispatch({type:"node/remove", payload: parseInt(nodeId)});
+}
