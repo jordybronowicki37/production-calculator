@@ -22,7 +22,7 @@ export class NodeProduction extends Node {
       );
     };
     
-    let recipeField, amountField, productInList, productOutList, targets, targetEditor, targetIcon;
+    let recipeField, amountField, productInList, productOutList, targets, targetEditor;
     
     if (super.previewMode()) {
       recipeField = <div className="previewField">name</div>;
@@ -37,7 +37,6 @@ export class NodeProduction extends Node {
         </div></div>;
       targets = <div></div>;
       targetEditor = <div></div>;
-      targetIcon = <div></div>;
     } else {
       recipeField = <div>
         <select value={super.recipe()} onChange={e => this.RecipeChanged(e.target.value)}>
@@ -47,13 +46,15 @@ export class NodeProduction extends Node {
       amountField = <div>{super.amount()}</div>;
       productInList = generateProductList(super.requiredInProducts());
       productOutList = generateProductList(super.requiredOutProducts());
-      if (this.state.data.targets.length !== 0) {
-        if (this.state.data.targets[0].type === "ExactValue") {
+      let targetIcon;
+      let targetData = this.state.data.targets;
+      if (targetData.length !== 0) {
+        if (targetData[0].type === "ExactAmount") {
           targetIcon = <div>
             <i className='bx bx-arrow-to-right right-one'></i>
             <i className='bx bx-arrow-to-left left-one'></i>
           </div>;
-        } else {
+        } else if (targetData[0].type === "MinAmount" || targetData[0].type === "MaxAmount") {
           targetIcon = <div>
             <i className='bx bx-arrow-to-left right-one'></i>
             <i className='bx bx-arrow-to-right left-one'></i>
@@ -70,7 +71,7 @@ export class NodeProduction extends Node {
           <button type="button" className="popup-close-button" onClick={() => this.setState({targetEditorOpen: false})}>
             <i className='bx bx-x'></i>
           </button>
-          <TargetManager nodeId={this.state.data.id} targets={this.state.data.targets}></TargetManager>
+          <TargetManager nodeId={this.state.data.id} targets={targetData}></TargetManager>
         </div>
     }
     

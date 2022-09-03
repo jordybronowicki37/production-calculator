@@ -21,13 +21,14 @@ export class NodeSpawn extends Node {
             <option key={v.name} value={v.name}>{v.name}</option>))}
         </select>;
       let targetIcon = <div></div>;
-      if (this.state.data.targets.length !== 0) {
-        if (this.state.data.targets[0].type === "ExactAmount") {
+      let targetData = this.state.data.targets;
+      if (targetData.length !== 0) {
+        if (targetData[0].type === "ExactAmount") {
           targetIcon = <div>
               <i className='bx bx-arrow-to-right right-one'></i>
               <i className='bx bx-arrow-to-left left-one'></i>
             </div>;
-        } else {
+        } else if (targetData[0].type === "MinAmount" || targetData[0].type === "MaxAmount") {
           targetIcon = <div>
               <i className='bx bx-arrow-to-left right-one'></i>
               <i className='bx bx-arrow-to-right left-one'></i>
@@ -44,7 +45,7 @@ export class NodeSpawn extends Node {
           <button type="button" className="popup-close-button" onClick={() => this.setState({targetEditorOpen: false})}>
             <i className='bx bx-x'></i>
           </button>
-          <TargetManager nodeId={this.state.data.id} targets={this.state.data.targets}></TargetManager>
+          <TargetManager nodeId={this.state.data.id} targets={targetData}></TargetManager>
         </div>
     }
     
