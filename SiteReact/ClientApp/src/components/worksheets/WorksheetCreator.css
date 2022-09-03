@@ -1,0 +1,48 @@
+﻿.worksheet-creator {
+    min-width: 25vw;
+    min-height: 25vh;
+}
+
+.worksheet-creator>* {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+.worksheet-creator h3 {
+    font-size: large;
+    border-bottom: 1px solid gray;
+    padding-bottom: 5px;
+    margin: 0;
+}
+
+.worksheet-creator .creation-page form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.worksheet-creator .loading-page {
+    align-items: center;
+}
+
+.worksheet-creator .success-page {
+    
+}
+
+.worksheet-creator .success-page .buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.worksheet-creator .success-page .buttons button {
+    border-radius: 1rem;
+    padding: 0.2rem 1rem;
+}
+
+.worksheet-creator .error-page {
+    
+}
+
