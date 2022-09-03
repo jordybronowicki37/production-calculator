@@ -38,7 +38,7 @@ public class SpawnNode: INodeOut, IHasProduct
         {
             outCon.NodeOut.RemoveConnnection(outCon.Id);
         }
-        OutputConnections.Clear();
+        _outputConnections.Clear();
     }
     
     public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);

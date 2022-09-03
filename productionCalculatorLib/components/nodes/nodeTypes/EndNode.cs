@@ -38,7 +38,7 @@ public class EndNode: INodeIn, IHasProduct
         {
             inCon.NodeIn.RemoveConnnection(inCon.Id);
         }
-        InputConnections.Clear();
+        _inputConnections.Clear();
     }
 
     public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);

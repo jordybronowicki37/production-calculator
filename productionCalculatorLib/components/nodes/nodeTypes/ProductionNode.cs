@@ -55,8 +55,8 @@ public class ProductionNode: INodeInOut, IHasRecipe
         {
             outCon.NodeOut.RemoveConnnection(outCon.Id);
         }
-        InputConnections.Clear();
-        OutputConnections.Clear();
+        _inputConnections.Clear();
+        _outputConnections.Clear();
     }
 
     private readonly List<TargetProduction> _targets = new();
