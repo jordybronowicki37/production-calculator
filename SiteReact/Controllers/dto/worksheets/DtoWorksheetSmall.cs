@@ -6,6 +6,7 @@ namespace SiteReact.Controllers.dto.worksheets;
 
 public class DtoWorksheetSmall
 {
+    public long Id { get; }
     public string Name { get; }
     public int AmountProducts { get; }
     public int AmountRecipes { get; }
@@ -16,6 +17,7 @@ public class DtoWorksheetSmall
 
     public DtoWorksheetSmall(Worksheet worksheet)
     {
+        Id = worksheet.Id;
         Name = worksheet.Name;
         AmountProducts = worksheet.Products.Count;
         AmountRecipes = worksheet.Recipes.Count;
