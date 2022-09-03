@@ -32,6 +32,14 @@ public class SpawnNode: INodeOut, IHasProduct
         if (connection == null) return;
         _outputConnections.Remove(connection);
     }
+    public void ClearConnections()
+    {
+        foreach (var outCon in OutputConnections)
+        {
+            outCon.NodeOut.RemoveConnnection(outCon.Id);
+        }
+        OutputConnections.Clear();
+    }
     
     public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
     public void SetExactTarget(float amount) 

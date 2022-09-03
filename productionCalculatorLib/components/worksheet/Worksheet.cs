@@ -25,7 +25,7 @@ public class Worksheet
     public void RemoveNode(INode node)
     {
         _nodes.Remove(node);
-        // TODO remove connections
+        node.ClearConnections();
     }
     
     private readonly List<Product> _products = new();

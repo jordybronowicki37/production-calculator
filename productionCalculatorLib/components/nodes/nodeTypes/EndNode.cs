@@ -32,6 +32,14 @@ public class EndNode: INodeIn, IHasProduct
         if (connection == null) return;
         _inputConnections.Remove(connection);
     }
+    public void ClearConnections()
+    {
+        foreach (var inCon in InputConnections)
+        {
+            inCon.NodeIn.RemoveConnnection(inCon.Id);
+        }
+        InputConnections.Clear();
+    }
 
     public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
     public void SetExactTarget(float amount) 

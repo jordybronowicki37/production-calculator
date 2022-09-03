@@ -45,6 +45,19 @@ public class ProductionNode: INodeInOut, IHasRecipe
             
         }
     }
+    public void ClearConnections()
+    {
+        foreach (var inCon in InputConnections)
+        {
+            inCon.NodeIn.RemoveConnnection(inCon.Id);
+        }
+        foreach (var outCon in OutputConnections)
+        {
+            outCon.NodeOut.RemoveConnnection(outCon.Id);
+        }
+        InputConnections.Clear();
+        OutputConnections.Clear();
+    }
 
     private readonly List<TargetProduction> _targets = new();
     public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
