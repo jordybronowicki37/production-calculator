@@ -32,3 +32,7 @@
     all: unset;
     float: right;
 }
+
+.worksheet-filter-container {
+    display: flex;
+}
