@@ -25,11 +25,18 @@ export class Calculator extends Component {
       wrapperInstance: null,
       worksheetId: props.match.params.id,
       worksheetLoading: true,
+      
       calculatorStateSuccess:false,
       calculatorStateLoading:true,
       calculatorStateWarning:false,
       calculatorStateError:false,
       calculatorStateRefresh:false,
+      
+      dropMenuWorksheetOpen:false,
+      dropMenuProductsOpen:false,
+      dropMenuRecipesOpen:false,
+      dropMenuNodesOpen:false,
+      
       popupRecipeCreatorOpen:false,
     }
     fetchWorksheet(this.state.worksheetId).then(r => {
@@ -87,11 +94,50 @@ export class Calculator extends Component {
           </div>
         </div>
         <div className="calculator-screen">
-          <h1>Calculator</h1>
-          <div>Worksheet: {title}</div>
+          <div className="top-bar">
+            <h1>Calculator</h1>
+            <div>Worksheet: {title}</div>
+          </div>
+          
           <div className="flow-chart-container">
+            <div className="toolbar">
+              <div>
+                <button onClick={() => this.setDropDownState(this.state.dropMenuWorksheetOpen?"none":"worksheet")} 
+                        className={this.state.dropMenuWorksheetOpen?"selected":""}>Worksheet</button>
+                <div className="drop-menu" hidden={!this.state.dropMenuWorksheetOpen}>
+                  <button>View all</button>
+                  <button>Change name</button>
+                </div>
+              </div>
+              <div>
+                <button onClick={() => this.setDropDownState(this.state.dropMenuProductsOpen?"none":"products")} 
+                        className={this.state.dropMenuProductsOpen?"selected":""}>Products</button>
+                <div className="drop-menu" hidden={!this.state.dropMenuProductsOpen}>
+                  <button>View products</button>
+                  <button>Add product</button>
+                </div>
+              </div>
+              <div>
+                <button onClick={() => this.setDropDownState(this.state.dropMenuRecipesOpen?"none":"recipes")} 
+                        className={this.state.dropMenuRecipesOpen?"selected":""}>Recipes</button>
+                <div className="drop-menu" hidden={!this.state.dropMenuRecipesOpen}>
+                  <button>View recipes</button>
+                  <button>Add recipe</button>
+                </div>
+              </div>
+              <div>
+                <button onClick={() => this.setDropDownState(this.state.dropMenuNodesOpen?"none":"nodes")} 
+                        className={this.state.dropMenuNodesOpen?"selected":""}>Nodes</button>
+                <div className="drop-menu" hidden={!this.state.dropMenuNodesOpen}>
+                  <div className="draggable-node-icon" onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable>Spawn</div>
+                  <div className="draggable-node-icon" onDragStart={(event) => this.onDragStart(event, "Production")} draggable>Production</div>
+                  <div className="draggable-node-icon" onDragStart={(event) => this.onDragStart(event, "End")} draggable>End</div>
+                </div>
+              </div>
+            </div>
+            
             <ReactFlowProvider>
-              <div className="flow-chart-wrapper" ref={this.setReactFlowWrapper}>
+              <div className="flow-chart-wrapper flex-grow-1" ref={this.setReactFlowWrapper}>
                 <div className="calculator-states">
                   <div hidden={message===""} className="calculator-states-label">{message}</div>
                   <div className="calculator-states-icon" onClick={() => this.calculateWorksheet()}>
@@ -119,24 +165,24 @@ export class Calculator extends Component {
                 </ReactFlow>
               </div>
             </ReactFlowProvider>
-
-            <div className="attribute-manager">
-              <div className="product-manager">
-                <h2>Products</h2>
-                <ProductManager worksheetId={this.state.worksheetId}></ProductManager>
-              </div>
-              <div className="recipe-manager">
-                <h2>Recipes</h2>
-                <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Create new</button>
-                <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
-              </div>
-            </div>
           </div>
 
-          <div className="test-nodes">
+          <div hidden className="test-nodes">
             <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction previewMode/></div>
             <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn previewMode/></div>
             <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd previewMode/></div>
+          </div>
+
+          <div className="attribute-manager">
+            <div className="product-manager">
+              <h2>Products</h2>
+              <ProductManager worksheetId={this.state.worksheetId}></ProductManager>
+            </div>
+            <div className="recipe-manager">
+              <h2>Recipes</h2>
+              <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Create new</button>
+              <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
+            </div>
           </div>
         </div>
       </div>
@@ -251,6 +297,35 @@ export class Calculator extends Component {
     }).catch(r => {
       this.setCalculatorState("error");
     });
+  }
+  
+  setDropDownState(state) {
+    let options = {
+      dropMenuWorksheetOpen:false,
+      dropMenuProductsOpen:false,
+      dropMenuRecipesOpen:false,
+      dropMenuNodesOpen:false,
+    }
+    
+    switch (state) {
+      case "worksheet":
+        options.dropMenuWorksheetOpen = true;
+        break;
+      case "products":
+        options.dropMenuProductsOpen = true;
+        break;
+      case "recipes":
+        options.dropMenuRecipesOpen = true;
+        break;
+      case "nodes":
+        options.dropMenuNodesOpen = true;
+        break;
+      case "none":
+        break;
+      default: return;
+    }
+    
+    this.setState(options);
   }
   
   setCalculatorState(state) {
