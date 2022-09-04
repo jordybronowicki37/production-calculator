@@ -35,14 +35,11 @@ public class ProductionNode: INodeInOut, IHasRecipe
     {
         {
             var connection = _inputConnections.Find(c => c.Id == connectionId);
-            if (connection == null) return;
-            _inputConnections.Remove(connection);
+            if (connection != null) _inputConnections.Remove(connection);
         }
         {
             var connection = _outputConnections.Find(c => c.Id == connectionId);
-            if (connection == null) return;
-            _outputConnections.Remove(connection);
-            
+            if (connection != null) _outputConnections.Remove(connection);
         }
     }
     public void ClearConnections()
