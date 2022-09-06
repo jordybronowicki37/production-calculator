@@ -80,8 +80,13 @@
     background-color: rgba(245, 245, 245, 0.4);
 }
 
+.popup-container h3 {
+    font-size: medium;
+}
+
 .popup-container>div {
     max-height: 80%;
+    max-width: 70%;
     background-color: white;
     border: 1px solid black;
     border-radius: 8px;
@@ -146,10 +151,15 @@
     background-color: #1b6ec2;
 }
 
+.drop-menu>.item-with-info {
+    display: flex;
+    justify-content: space-between;
+    color: whitesmoke;
+}
+
 .draggable-node-icon {
     cursor: grab;
     user-select: none;
     padding: 0 5px;
-    color: whitesmoke;
     font-size: small;
 }

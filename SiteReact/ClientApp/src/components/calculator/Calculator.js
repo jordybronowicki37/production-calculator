@@ -38,6 +38,9 @@ export class Calculator extends Component {
       dropMenuNodesOpen:false,
       
       popupRecipeCreatorOpen:false,
+      popupNodeSpawnPreviewOpen:false,
+      popupNodeProductionPreviewOpen:false,
+      popupNodeEndPreviewOpen:false,
     }
     fetchWorksheet(this.state.worksheetId).then(r => {
       this.setState({worksheetLoading:false});
@@ -93,6 +96,44 @@ export class Calculator extends Component {
             <RecipeCreator></RecipeCreator>
           </div>
         </div>
+        <div hidden={!this.state.popupNodeSpawnPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
+          <div onClick={e => e.stopPropagation()}>
+            <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
+              <i className='bx bx-x'></i>
+            </button>
+            <div>
+              <h3>Spawn node</h3>
+              <div className="user-select-none border border-secondary float-start m-1"><NodeSpawn previewMode/></div>
+              <p>The spawn node inputs products into the calculator. This could for example be a resource mine or some other kind of collector. 
+                Targets can be set on this node to limit the generation of the node.</p>
+            </div>
+          </div>
+        </div>
+        <div hidden={!this.state.popupNodeProductionPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeProductionPreviewOpen:false})}>
+          <div onClick={e => e.stopPropagation()}>
+            <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeProductionPreviewOpen:false})}>
+              <i className='bx bx-x'></i>
+            </button>
+            <div>
+              <h3>Production node</h3>
+              <div className="user-select-none border border-secondary float-start m-1"><NodeProduction previewMode/></div>
+              <p>In the production node a recipe can be set. The recipe is a way to convert one or multiple products into others.</p>
+            </div>
+          </div>
+        </div>
+        <div hidden={!this.state.popupNodeEndPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeEndPreviewOpen:false})}>
+          <div onClick={e => e.stopPropagation()}>
+            <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeEndPreviewOpen:false})}>
+              <i className='bx bx-x'></i>
+            </button>
+            <div>
+              <h3>End node</h3>
+              <div className="user-select-none border border-secondary float-start m-1"><NodeEnd previewMode/></div>
+              <p>The end node is the output for products and can be used to set output targets or to see waste products.</p>
+            </div>
+          </div>
+        </div>
+        
         <div className="calculator-screen">
           <div className="top-bar">
             <h1>Calculator</h1>
@@ -129,9 +170,18 @@ export class Calculator extends Component {
                 <button onClick={() => this.setDropDownState(this.state.dropMenuNodesOpen?"none":"nodes")} 
                         className={this.state.dropMenuNodesOpen?"selected":""}>Nodes</button>
                 <div className="drop-menu" hidden={!this.state.dropMenuNodesOpen}>
-                  <div className="draggable-node-icon" onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable>Spawn</div>
-                  <div className="draggable-node-icon" onDragStart={(event) => this.onDragStart(event, "Production")} draggable>Production</div>
-                  <div className="draggable-node-icon" onDragStart={(event) => this.onDragStart(event, "End")} draggable>End</div>
+                  <div className="item-with-info">
+                    <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable>Spawn</div>
+                    <i className='bx bx-info-circle' onClick={() => this.setState({popupNodeSpawnPreviewOpen:true})}></i>
+                  </div>
+                  <div className="item-with-info">
+                    <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "Production")} draggable>Production</div>
+                    <i className='bx bx-info-circle' onClick={() => this.setState({popupNodeProductionPreviewOpen:true})}></i>
+                  </div>
+                  <div className="item-with-info">
+                    <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "End")} draggable>End</div>
+                    <i className='bx bx-info-circle' onClick={() => this.setState({popupNodeEndPreviewOpen:true})}></i>
+                  </div>
                 </div>
               </div>
             </div>
