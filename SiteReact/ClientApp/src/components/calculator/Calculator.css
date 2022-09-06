@@ -133,18 +133,22 @@
     background-color: var(--bs-gray-600);
 }
 
-.drop-menu>button {
+.drop-menu button {
     all: unset;
     padding: 0 5px;
     color: whitesmoke;
     font-size: small;
 }
 
+.drop-menu a {
+    text-decoration: none;
+}
+
 .drop-menu>*:hover {
     background-color: #1b6ec2;
 }
 
-.drop-menu>.item-with-info {
+.drop-menu .item-with-info {
     display: flex;
     justify-content: space-between;
     color: whitesmoke;

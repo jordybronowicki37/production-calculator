@@ -12,6 +12,7 @@ import {calculate, fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../nodes/NodeAPI";
 import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
 import {RecipeCreator} from "../recipes/RecipeCreator";
+import {Link} from "react-router-dom";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -164,16 +165,16 @@ export class Calculator extends Component {
           <div className="flow-chart-container">
             <div className="toolbar">
               <div>
-                <button onClick={() => this.setDropDownState(this.state.dropMenuWorksheetOpen?"none":"worksheet")} 
-                        className={this.state.dropMenuWorksheetOpen?"selected":""}>Worksheet</button>
+                <button onClick={() => this.setDropDownState(this.state.dropMenuWorksheetOpen?"none":"worksheet")}
+                       type="button" className={this.state.dropMenuWorksheetOpen?"selected":""}>Worksheet</button>
                 <div className="drop-menu" hidden={!this.state.dropMenuWorksheetOpen}>
-                  <button>View all</button>
-                  <button>Change name</button>
+                  <Link to="/worksheets"><button type="button">View all</button></Link>
+                  <button type="button">Change name</button>
                 </div>
               </div>
               <div>
                 <button onClick={() => this.setDropDownState(this.state.dropMenuProductsOpen?"none":"products")} 
-                        className={this.state.dropMenuProductsOpen?"selected":""}>Products</button>
+                        type="button" className={this.state.dropMenuProductsOpen?"selected":""}>Products</button>
                 <div className="drop-menu" hidden={!this.state.dropMenuProductsOpen}>
                   <button type="button" onClick={() => this.setState({popupProductManagerOpen:true})}>View products</button>
                   <button type="button">Add product</button>
@@ -181,7 +182,7 @@ export class Calculator extends Component {
               </div>
               <div>
                 <button onClick={() => this.setDropDownState(this.state.dropMenuRecipesOpen?"none":"recipes")} 
-                        className={this.state.dropMenuRecipesOpen?"selected":""}>Recipes</button>
+                        type="button" className={this.state.dropMenuRecipesOpen?"selected":""}>Recipes</button>
                 <div className="drop-menu" hidden={!this.state.dropMenuRecipesOpen}>
                   <button type="button" onClick={() => this.setState({popupRecipeManagerOpen:true})}>View recipes</button>
                   <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Add recipe</button>
