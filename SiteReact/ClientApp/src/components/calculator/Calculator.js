@@ -37,7 +37,9 @@ export class Calculator extends Component {
       dropMenuRecipesOpen:false,
       dropMenuNodesOpen:false,
       
+      popupProductManagerOpen:false,
       popupRecipeCreatorOpen:false,
+      popupRecipeManagerOpen:false,
       popupNodeSpawnPreviewOpen:false,
       popupNodeProductionPreviewOpen:false,
       popupNodeEndPreviewOpen:false,
@@ -88,6 +90,16 @@ export class Calculator extends Component {
           <div>Loading</div>
           <div><i className='bx bx-loader-alt bx-spin'></i></div>
         </div>
+        
+        <div hidden={!this.state.popupProductManagerOpen} className="popup-container" onClick={() => this.setState({popupProductManagerOpen:false})}>
+          <div onClick={e => e.stopPropagation()}>
+            <button type="button" className="popup-close-button" onClick={() => this.setState({popupProductManagerOpen:false})}>
+              <i className='bx bx-x'></i>
+            </button>
+            <ProductManager></ProductManager>
+          </div>
+        </div>
+        
         <div hidden={!this.state.popupRecipeCreatorOpen} className="popup-container" onClick={() => this.setState({popupRecipeCreatorOpen:false})}>
           <div onClick={e => e.stopPropagation()}>
             <button type="button" className="popup-close-button" onClick={() => this.setState({popupRecipeCreatorOpen:false})}>
@@ -96,6 +108,15 @@ export class Calculator extends Component {
             <RecipeCreator></RecipeCreator>
           </div>
         </div>
+        <div hidden={!this.state.popupRecipeManagerOpen} className="popup-container" onClick={() => this.setState({popupRecipeManagerOpen:false})}>
+          <div onClick={e => e.stopPropagation()}>
+            <button type="button" className="popup-close-button" onClick={() => this.setState({popupRecipeManagerOpen:false})}>
+              <i className='bx bx-x'></i>
+            </button>
+            <RecipeManager></RecipeManager>
+          </div>
+        </div>
+        
         <div hidden={!this.state.popupNodeSpawnPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
           <div onClick={e => e.stopPropagation()}>
             <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
@@ -154,16 +175,16 @@ export class Calculator extends Component {
                 <button onClick={() => this.setDropDownState(this.state.dropMenuProductsOpen?"none":"products")} 
                         className={this.state.dropMenuProductsOpen?"selected":""}>Products</button>
                 <div className="drop-menu" hidden={!this.state.dropMenuProductsOpen}>
-                  <button>View products</button>
-                  <button>Add product</button>
+                  <button type="button" onClick={() => this.setState({popupProductManagerOpen:true})}>View products</button>
+                  <button type="button">Add product</button>
                 </div>
               </div>
               <div>
                 <button onClick={() => this.setDropDownState(this.state.dropMenuRecipesOpen?"none":"recipes")} 
                         className={this.state.dropMenuRecipesOpen?"selected":""}>Recipes</button>
                 <div className="drop-menu" hidden={!this.state.dropMenuRecipesOpen}>
-                  <button>View recipes</button>
-                  <button>Add recipe</button>
+                  <button type="button" onClick={() => this.setState({popupRecipeManagerOpen:true})}>View recipes</button>
+                  <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Add recipe</button>
                 </div>
               </div>
               <div>
@@ -221,18 +242,6 @@ export class Calculator extends Component {
             <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction previewMode/></div>
             <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn previewMode/></div>
             <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd previewMode/></div>
-          </div>
-
-          <div className="attribute-manager">
-            <div className="product-manager">
-              <h2>Products</h2>
-              <ProductManager worksheetId={this.state.worksheetId}></ProductManager>
-            </div>
-            <div className="recipe-manager">
-              <h2>Recipes</h2>
-              <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Create new</button>
-              <RecipeManager worksheetId={this.state.worksheetId}></RecipeManager>
-            </div>
           </div>
         </div>
       </div>
