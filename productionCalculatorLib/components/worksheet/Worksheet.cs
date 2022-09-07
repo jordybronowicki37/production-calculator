@@ -58,6 +58,10 @@ public class Worksheet
         _recipes.Add(r);
         return r;
     }
+    public RecipeBuilder GetRecipeBuilder(string name)
+    {
+        return new RecipeBuilder(this, name);
+    }
     public Recipe? GetRecipe(string name)
     {
         return _recipes.FirstOrDefault(r => r.Name == name);
