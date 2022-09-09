@@ -1,4 +1,4 @@
-﻿using productionCalculatorLib.components.calculator.targets;
+﻿using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.nodes.interfaces;
 

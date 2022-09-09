@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
+using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 

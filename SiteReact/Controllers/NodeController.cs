@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using productionCalculatorLib.components.calculator.targets;
 using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
+using productionCalculatorLib.components.targets;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.nodes;

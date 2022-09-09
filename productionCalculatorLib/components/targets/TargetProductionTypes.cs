@@ -1,4 +1,4 @@
-﻿namespace productionCalculatorLib.components.calculator.targets;
+﻿namespace productionCalculatorLib.components.targets;
 
 public enum TargetProductionTypes
 {
