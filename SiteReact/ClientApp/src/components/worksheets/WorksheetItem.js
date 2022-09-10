@@ -28,7 +28,7 @@ export class WorksheetItem extends Component {
       </li>);
     
     return (
-      <div className="worksheet-item-container">
+      <div className="worksheet-item">
         <div className="worksheet-item-top">
           <Link className="worksheet-item-title" to={`calculator/${id}`}>{name}</Link>
           <Link className="worksheet-item-open-icon" to={`calculator/${id}`}><i className='bx bx-folder-open bx-tada-hover'></i></Link>

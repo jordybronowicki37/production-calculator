@@ -36,3 +36,10 @@
 .worksheet-filter-container {
     display: flex;
 }
+
+.worksheet-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: fit-content;
+}

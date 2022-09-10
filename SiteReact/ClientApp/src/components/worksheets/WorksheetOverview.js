@@ -61,7 +61,7 @@ export class WorksheetOverview extends Component {
             <div className="flex-grow-1"></div>
             <button type="button" onClick={() => this.setState({worksheetCreatorOpen:true})}>Create new</button>
           </div>
-          <div>
+          <div className="worksheet-item-container">
             {worksheetListFiltered.map(v => <div key={v.name} className="worksheetItem"><WorksheetItem data={v} id={v.id}></WorksheetItem></div>)}
           </div>
         </div>
