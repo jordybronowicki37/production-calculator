@@ -1040,7 +1040,7 @@ public static class SatisfactoryExperimentalData
             .AddInput(PSul, 22.5f)
             .AddInput(PPetCok, 22.5f)
             .AddOutput(PTur, 45).Build();
-        worksheet.GetRecipeBuilder("Turbo Rifle Ammo")
+        worksheet.GetRecipeBuilder("Turbo Rifle Ammo Blend")
             .AddInput(PRifAmm, 125)
             .AddInput(PAluCas, 15)
             .AddInput(PTur, 15)
