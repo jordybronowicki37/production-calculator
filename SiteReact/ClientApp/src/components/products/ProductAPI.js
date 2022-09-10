@@ -4,8 +4,9 @@ import {throwErrorNotification} from "../notification/NotificationThrower";
 export const fetchAllProducts = async function() {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/product`);
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let data = await response.json();
   Store.dispatch({type:"products/set", payload:data});
@@ -20,8 +21,9 @@ export const postNewProduct = async function(productName) {
     body: JSON.stringify({name: productName})
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   await fetchAllProducts();
 }
@@ -29,8 +31,9 @@ export const postNewProduct = async function(productName) {
 export const deleteProduct = async function(productId) {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/product/${productId}`, {method: "delete"});
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   await fetchAllProducts();
 }

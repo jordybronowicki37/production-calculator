@@ -4,8 +4,9 @@ import {throwErrorNotification} from "../notification/NotificationThrower";
 export const fetchAllRecipes = async function() {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/recipe`);
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let data = await response.json();
   Store.dispatch({type:"recipes/set", payload:data});
@@ -18,8 +19,9 @@ export const createRecipe = async function(body) {
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   Store.dispatch({type:"recipes/add", payload:json});

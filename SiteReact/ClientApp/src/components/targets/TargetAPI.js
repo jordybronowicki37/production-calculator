@@ -8,8 +8,9 @@ export const setTargets = async function(nodeId, targets) {
     body: JSON.stringify(targets),
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let data = await response.json();
   Store.dispatch({type:"node/change/targets", payload:data});

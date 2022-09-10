@@ -16,8 +16,9 @@ async function nodeCreate(position, body) {
     body,
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   json.position = position;
@@ -32,8 +33,9 @@ export const nodeEditProduct = async function(nodeId, product) {
     body: JSON.stringify({product})
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   Store.dispatch({type:"node/change/product", payload: {id:json.id, product:json.product}});
@@ -47,8 +49,9 @@ export const nodeEditRecipe = async function(nodeId, recipe) {
     body: JSON.stringify({recipe})
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   Store.dispatch({type:"node/change/recipe", payload: {id:json.id, recipe:json.recipe}});
@@ -58,8 +61,9 @@ export const nodeEditRecipe = async function(nodeId, recipe) {
 export const nodeRemove = async function(nodeId) {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node/${nodeId}`, {method: "delete"});
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   Store.dispatch({type:"node/remove", payload: parseInt(nodeId)});
 }

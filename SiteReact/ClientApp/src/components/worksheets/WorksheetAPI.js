@@ -4,8 +4,9 @@ import {throwErrorNotification} from "../notification/NotificationThrower";
 export const fetchAllWorksheets = async function() {
   let response = await fetch(`worksheet`);
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   Store.dispatch({type:"worksheets/set", payload:json});
@@ -15,8 +16,9 @@ export const fetchAllWorksheets = async function() {
 export const fetchWorksheet = async function(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}`);
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   
@@ -48,8 +50,9 @@ export const createNewWorksheet = async function(name) {
     body: JSON.stringify({name})
   });
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   fetchAllWorksheets();
   return await response.json();
@@ -58,8 +61,9 @@ export const createNewWorksheet = async function(name) {
 export const calculate = async function() {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/calculate`, {method: "post"});
   if (!response.ok) {
-    throwErrorNotification(response.statusText);
-    return;
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
   }
   let json = await response.json();
   
