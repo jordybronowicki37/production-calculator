@@ -130,7 +130,7 @@ export class RecipeCreator extends Component {
       inputThroughPuts: this.state.inputThroughPuts.map(v => {return {amount: parseInt(v.amount), product: {name: v.product}}}),
       outputThroughPuts: this.state.outputThroughPuts.map(v => {return {amount: parseInt(v.amount), product: {name: v.product}}}),
     };
-    createRecipe(Store.getState().worksheet.id, dto)
+    createRecipe(dto)
   }
 
   componentWillUnmount() {

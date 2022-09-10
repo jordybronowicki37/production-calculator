@@ -100,7 +100,7 @@ export class NodeProduction extends Node {
   }
 
   RecipeChanged(name) {
-    nodeEditRecipe(Store.getState().worksheet.id, this.state.data.id, name);
+    nodeEditRecipe(this.state.data.id, name);
   }
 
   componentWillUnmount() {

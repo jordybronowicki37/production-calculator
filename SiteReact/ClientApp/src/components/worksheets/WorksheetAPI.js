@@ -55,8 +55,8 @@ export const createNewWorksheet = async function(name) {
   return await response.json();
 }
 
-export const calculate = async function(worksheetId) {
-  let response = await fetch(`worksheet/${worksheetId}/calculate`, {method: "post"});
+export const calculate = async function() {
+  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/calculate`, {method: "post"});
   if (!response.ok) {
     throwErrorNotification(response.statusText);
     return;

@@ -67,7 +67,7 @@ export class NodeSpawn extends Node {
   }
   
   productChanged(name) {
-    nodeEditProduct(Store.getState().worksheet.id, this.state.data.id, name);
+    nodeEditProduct(this.state.data.id, name);
   }
 
   componentWillUnmount() {

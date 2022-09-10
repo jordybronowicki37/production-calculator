@@ -1,8 +1,8 @@
 ﻿import Store from "../../dataStore/DataStore";
 import {throwErrorNotification} from "../notification/NotificationThrower";
 
-export const connectionCreate = async function(worksheetId, nodeInId, nodeOutId, product) {
-  let response = await fetch(`worksheet/${worksheetId}/node/connection`, {
+export const connectionCreate = async function(nodeInId, nodeOutId, product) {
+  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node/connection`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
@@ -20,8 +20,8 @@ export const connectionCreate = async function(worksheetId, nodeInId, nodeOutId,
   return json;
 }
 
-export const connectionDelete = async function(worksheetId, connectionId) {
-  let response = await fetch(`worksheet/${worksheetId}/node/connection/${connectionId}`, {method: "delete"});
+export const connectionDelete = async function(connectionId) {
+  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node/connection/${connectionId}`, {method: "delete"});
   if (!response.ok) {
     throwErrorNotification(response.statusText);
     return;

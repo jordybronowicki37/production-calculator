@@ -42,12 +42,12 @@ export class ProductManager extends Component {
     e.preventDefault()
     let name = e.target[0].value;
     e.target[0].value = "";
-    postNewProduct(this.state.worksheetId, name);
+    postNewProduct(name);
   }
   
   removeProduct(e, name) {
     e.preventDefault();
-    deleteProduct(this.state.worksheetId, name)
+    deleteProduct(name)
   }
   
   componentWillUnmount() {

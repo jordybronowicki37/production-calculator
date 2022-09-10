@@ -1,8 +1,8 @@
 import Store from "../../dataStore/DataStore";
 import {throwErrorNotification} from "../notification/NotificationThrower";
 
-export const fetchAllProducts = async function(worksheetId) {
-  let response = await fetch(`worksheet/${worksheetId}/product`);
+export const fetchAllProducts = async function() {
+  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/product`);
   if (!response.ok) {
     throwErrorNotification(response.statusText);
     return;
@@ -11,10 +11,10 @@ export const fetchAllProducts = async function(worksheetId) {
   Store.dispatch({type:"products/set", payload:data});
 }
 
-export const postNewProduct = async function(worksheetId, productName) {
+export const postNewProduct = async function(productName) {
   productName = productName.trim();
   if (productName === "") return;
-  let response = await fetch(`worksheet/${worksheetId}/product`, {
+  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/product`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({name: productName})
@@ -23,14 +23,14 @@ export const postNewProduct = async function(worksheetId, productName) {
     throwErrorNotification(response.statusText);
     return;
   }
-  await fetchAllProducts(worksheetId);
+  await fetchAllProducts();
 }
 
-export const deleteProduct = async function(worksheetId, productId) {
-  let response = await fetch(`worksheet/${worksheetId}/product/${productId}`, {method: "delete"});
+export const deleteProduct = async function(productId) {
+  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/product/${productId}`, {method: "delete"});
   if (!response.ok) {
     throwErrorNotification(response.statusText);
     return;
   }
-  await fetchAllProducts(worksheetId);
+  await fetchAllProducts();
 }

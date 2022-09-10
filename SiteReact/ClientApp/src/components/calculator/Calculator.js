@@ -264,7 +264,7 @@ export class Calculator extends Component {
           }
           break;
         case "remove":
-          nodeRemove(this.state.worksheetId, change.id);
+          nodeRemove(change.id);
           break;
         case "dimensions":
         case "select":
@@ -280,7 +280,7 @@ export class Calculator extends Component {
     changes.forEach(change => {
       switch (change.type) {
         case "remove":
-          connectionDelete(this.state.worksheetId, change.id);
+          connectionDelete(change.id);
           break;
         case "select":
         case "add":
@@ -309,7 +309,7 @@ export class Calculator extends Component {
       product = state.products[0];
     }
     
-    connectionCreate(this.state.worksheetId, edge.source, edge.target, product.name)
+    connectionCreate(edge.source, edge.target, product.name)
   };
   
   onDragStart = (event, nodetype) => {
@@ -337,18 +337,18 @@ export class Calculator extends Component {
       case "Spawn":
       case "End":
         let product = Store.getState().products[0];
-        nodeCreateProduct(this.state.worksheetId, nodetype, position, product.name);
+        nodeCreateProduct(nodetype, position, product.name);
         break;
       case "Production":
         let recipe = Store.getState().recipes[0];
-        nodeCreateRecipe(this.state.worksheetId, nodetype, position, recipe.name);
+        nodeCreateRecipe(nodetype, position, recipe.name);
         break;
     }
   };
   
   calculateWorksheet() {
     this.setCalculatorState("loading");
-    calculate(this.state.worksheetId).then(r => {
+    calculate().then(r => {
       if (r.calculationSucceeded) {
         this.setCalculatorState("success");
       } else {
