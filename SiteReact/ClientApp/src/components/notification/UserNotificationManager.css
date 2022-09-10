@@ -1,0 +1,91 @@
+﻿.user-notification-manager {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-notification-manager>* {
+    display: flex;
+    max-width: 40vw;
+    max-height: 20rem;
+    margin-top: 1rem;
+    border: 3px solid black;
+    border-radius: 1rem;
+    background-color: white;
+    overflow: hidden;
+    animation-name: fadeIn;
+    animation-duration: 1s;
+}
+
+.user-notification-manager>*.disappearing {
+    animation-name: fadeOut;
+    animation-duration: 1s;
+}
+
+.user-notification-manager>*.info {
+    border-color: var(--bs-blue);
+}
+
+.user-notification-manager>*.info>.icon-wrapper {
+    background-color: var(--bs-blue);
+}
+
+.user-notification-manager>*.success {
+    border-color: var(--bs-green);
+}
+
+.user-notification-manager>*.success>.icon-wrapper {
+    background-color: var(--bs-green);
+}
+
+.user-notification-manager>*.warning {
+    border-color: var(--bs-yellow);
+}
+
+.user-notification-manager>*.warning>.icon-wrapper {
+    background-color: var(--bs-yellow);
+}
+
+.user-notification-manager>*.error {
+    border-color: var(--bs-red);
+}
+
+.user-notification-manager>*.error>.icon-wrapper {
+    background-color: var(--bs-red);
+}
+
+.user-notification-manager .icon-wrapper {
+    min-width: 2rem;
+    width: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-notification-manager .icon-wrapper>* {
+    color: white;
+}
+
+.user-notification-manager .text-wrapper {
+    margin: 0.5rem 2rem;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+        height: 0;
+        margin: 0;
+    }
+}

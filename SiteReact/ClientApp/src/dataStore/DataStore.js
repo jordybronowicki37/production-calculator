@@ -66,6 +66,15 @@ const connectionReducer = createReducer([], {
   "connection/remove": (state, action) => state.filter(v => v.id !== action.payload),
 });
 
+let notificationId = 0;
+const notificationReducer = createReducer([], {
+  "notification/add": (state, action) => {
+    action.payload.time = new Date().valueOf();
+    action.payload.id = notificationId++;
+    return [...state, action.payload];
+  },
+});
+
 const rootReducer = combineReducers({
   products: productReducer,
   recipes: recipeReducer,
@@ -73,6 +82,7 @@ const rootReducer = combineReducers({
   worksheet: worksheetReducer,
   nodes: nodeReducer,
   connections: connectionReducer,
+  notifications: notificationReducer,
 });
 
 const Store = configureStore({reducer: rootReducer});
