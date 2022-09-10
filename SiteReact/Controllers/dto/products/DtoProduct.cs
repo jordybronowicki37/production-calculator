@@ -5,6 +5,8 @@ namespace SiteReact.Controllers.dto.products;
 public class DtoProduct
 {
     public string Name { get; set; } = "";
+    
+    public DtoProduct() {}
 
     public DtoProduct(Product product)
     {

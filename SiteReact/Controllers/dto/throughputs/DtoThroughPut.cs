@@ -7,6 +7,8 @@ public class DtoThroughPut
 {
     public DtoProduct Product { get; set; }
     public float Amount { get; set; }
+    
+    public DtoThroughPut() {}
 
     public DtoThroughPut(Product product, float amount)
     {
