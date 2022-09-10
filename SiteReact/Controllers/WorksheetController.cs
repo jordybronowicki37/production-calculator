@@ -37,6 +37,27 @@ public class WorksheetController : ControllerBase
     public IActionResult CreateNew(DtoWorksheetCreate dto)
     {
         var w = new Worksheet(){Name = dto.Name};
+
+        switch (dto.DataPreset)
+        {
+            case "":
+            case "none":
+                break;
+            case "dysonSphereProgram":
+                return NotFound("This data preset is not yet available");
+            case "satisfactoryEarlyAccess":
+                SatisfactoryData.addData(w);
+                break;
+            case "satisfactoryExperimental":
+                SatisfactoryExperimentalData.addData(w);
+                break;
+            case "satisfactoryFICSMAS":
+                SatisfactoryFicsMasData.addData(w);
+                break;
+            default:
+                return NotFound("Data preset is not found");
+        }
+        
         StaticValues.Get().Worksheet.Add(w);
         return Ok(new DtoWorksheet(w));
     }

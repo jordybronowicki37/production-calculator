@@ -42,12 +42,12 @@ export const fetchWorksheet = async function(worksheetId) {
   return json;
 }
 
-export const createNewWorksheet = async function(name) {
+export const createNewWorksheet = async function(name, dataPreset) {
   name = name.trim();
   let response = await fetch(`worksheet`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({name})
+    body: JSON.stringify({name, dataPreset})
   });
   if (!response.ok) {
     let error = await response.text();

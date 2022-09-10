@@ -14,6 +14,7 @@ export class WorksheetCreator extends Component {
       errorPageOpen:false,
       newWorksheetTitle:"",
       newWorksheetId:0,
+      newWorksheetDataPreset:"none",
     }
   }
 
@@ -23,6 +24,15 @@ export class WorksheetCreator extends Component {
         <form onSubmit={e => this.createWorksheet(e)}>
           <h3>Create a new worksheet</h3>
           <input placeholder="Worksheet name" title="Worksheet name" type="text" onChange={e => this.setState({newWorksheetTitle:e.target.value})}/>
+          <select name="dataPreset" title="Data preset" onChange={e => this.setState({newWorksheetDataPreset:e.target.value})}>
+            <option value="none">None</option>
+            <option value="dysonSphereProgram">Dyson sphere program</option>
+            <optgroup label="Satisfactory">
+              <option value="satisfactoryEarlyAccess">Early access</option>
+              <option value="satisfactoryExperimental">Experimental</option>
+              <option value="satisfactoryFICSMAS">FICSMAS</option>
+            </optgroup>
+          </select>
           <button type="submit">Create</button>
         </form>
       </div>
@@ -75,9 +85,8 @@ export class WorksheetCreator extends Component {
   createWorksheet(e) {
     e.preventDefault();
     this.openPage("loading");
-    createNewWorksheet(this.state.newWorksheetTitle).then(r => {
+    createNewWorksheet(this.state.newWorksheetTitle, this.state.newWorksheetDataPreset).then(r => {
       this.setState({
-        newWorksheetTitle:r.name,
         newWorksheetId:r.id,
       });
       this.openPage("success");
@@ -95,6 +104,7 @@ export class WorksheetCreator extends Component {
       errorPageOpen:false,
       newWorksheetTitle:"",
       newWorksheetId:0,
+      newWorksheetDataPreset:"none",
     });
   }
 }
