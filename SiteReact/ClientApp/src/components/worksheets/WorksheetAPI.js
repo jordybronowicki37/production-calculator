@@ -1,8 +1,12 @@
 import Store from "../../dataStore/DataStore";
+import {throwErrorNotification} from "../notification/NotificationThrower";
 
 export const fetchAllWorksheets = async function() {
   let response = await fetch(`worksheet`);
-  if (!response.ok) throw new Error();
+  if (!response.ok) {
+    throwErrorNotification(response.statusText);
+    return;
+  }
   let json = await response.json();
   Store.dispatch({type:"worksheets/set", payload:json});
   return json;
@@ -10,7 +14,10 @@ export const fetchAllWorksheets = async function() {
 
 export const fetchWorksheet = async function(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}`);
-  if (!response.ok) throw new Error();
+  if (!response.ok) {
+    throwErrorNotification(response.statusText);
+    return;
+  }
   let json = await response.json();
   
   // TODO remove when position is saved on back-end
@@ -40,14 +47,20 @@ export const createNewWorksheet = async function(name) {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({name})
   });
-  if (!response.ok) throw new Error();
+  if (!response.ok) {
+    throwErrorNotification(response.statusText);
+    return;
+  }
   fetchAllWorksheets();
   return await response.json();
 }
 
 export const calculate = async function(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}/calculate`, {method: "post"});
-  if (!response.ok) throw new Error();
+  if (!response.ok) {
+    throwErrorNotification(response.statusText);
+    return;
+  }
   let json = await response.json();
   
   Store.dispatch({type:"nodes/update", payload:json.nodes});
