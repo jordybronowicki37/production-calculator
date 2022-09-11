@@ -10,15 +10,34 @@ export class RecipeManager extends Component {
     this.state = {
       recipes: this.sortRecipes(Store.getState().recipes),
       worksheetId: props.worksheetId,
+      filter: "",
     };
     this.unsubscribe = Store.subscribe(() => this.setState({recipes: this.sortRecipes(Store.getState().recipes)}));
   }
 
   render() {
+    let recipesFiltered = this.state.recipes.filter(v => {
+      let filter = this.state.filter.toLowerCase();
+      if (v.name.toLowerCase().includes(filter)) return true;
+      for (const input of v.inputThroughPuts) if (input.product.name.toLowerCase().includes(filter)) return true;
+      for (const output of v.outputThroughPuts) if (output.product.name.toLowerCase().includes(filter)) return true;
+      return false;
+    });
+    
     return (
-      <div>
+      <div className="recipe-manager">
+        <h3>Recipes</h3>
+
+        <div className="separation-line"></div>
+
+        <form className="recipe-filter">
+          <input placeholder="Filter recipe" type="text" onChange={e => this.setState({filter: e.target.value})}/>
+        </form>
+        
+        <div className="separation-line"></div>
+        
         <ul className="recipes">
-          {this.state.recipes.map(recipe => (
+          {recipesFiltered.map(recipe => (
             <li key={recipe.name}>
               <div>{recipe.name}</div>
               <button className="recipe-remove-button" title="Remove recipe">

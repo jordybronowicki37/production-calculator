@@ -1,6 +1,7 @@
 ﻿.recipes {
     list-style-type: none;
     padding-left: 2px;
+    margin: 0;
 }
 
 .recipes>* {
@@ -14,4 +15,11 @@
 
 .recipe-remove-button {
     all: unset;
+}
+
+.recipe-manager .separation-line {
+    width: 100%;
+    margin: 0.5rem 0;
+    align-self: center;
+    border-top: 1px solid darkgray;
 }
