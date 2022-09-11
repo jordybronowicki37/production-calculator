@@ -11,13 +11,20 @@ export class ProductManager extends Component {
     this.state = {
       products: [],
       worksheetId: this.sortProducts(Store.getState().products),
+      filter:"",
     };
     this.unsubscribe = Store.subscribe(() => this.setState({products: this.sortProducts(Store.getState().products)}));
   }
   
   render() {
+    let productsFiltered = this.state.products.filter(v => v.name.toLowerCase().includes(this.state.filter.toLowerCase()));
+    
     return (
-      <div>
+      <div className="product-manager">
+        <h3>Products</h3>
+        
+        <div className="separation-line"></div>
+
         <form className="product-creator" onSubmit={e => this.createNewProduct(e)}>
           <input name="product" type="text" autoComplete="off" placeholder="Product name"/>
           <button type="submit" title="Add product">
@@ -25,8 +32,16 @@ export class ProductManager extends Component {
           </button>
         </form>
 
+        <div className="separation-line"></div>
+
+        <form className="product-filter">
+          <input placeholder="Filter products" type="text" onChange={e => this.setState({filter: e.target.value})}/>
+        </form>
+
+        <div className="separation-line"></div>
+
         <ul className="products">
-          {this.state.products.map(product => (
+          {productsFiltered.map(product => (
             <li key={product.name}>
               <div>{product.name}</div>
               <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(e, product.name)}>
