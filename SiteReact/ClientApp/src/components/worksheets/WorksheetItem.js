@@ -29,11 +29,11 @@ export class WorksheetItem extends Component {
     
     return (
       <div className="worksheet-item">
-        <div className="worksheet-item-top">
-          <Link className="worksheet-item-title" to={`calculator/${id}`}>{name}</Link>
-          <Link className="worksheet-item-open-icon" to={`calculator/${id}`}><i className='bx bx-folder-open bx-tada-hover'></i></Link>
+        <div className="top-container">
+          <Link className="title" to={`calculator/${id}`}>{name}</Link>
+          <Link className="open-icon" to={`calculator/${id}`}><i className='bx bx-folder-open bx-tada-hover'></i></Link>
         </div>
-        <div className="worksheet-item-amounts">
+        <div className="amounts-container">
           <div>Products:</div>
           <div>{amountProducts}</div>
           <div>Recipes:</div>
@@ -41,7 +41,7 @@ export class WorksheetItem extends Component {
           <div>Nodes:</div>
           <div>{amountNodes}</div>
         </div>
-        <div className="worksheet-item-io" hidden={inputProducts.length===0 && outputProducts.length===0}>
+        <div className="input-output-container" hidden={inputProducts.length===0 && outputProducts.length===0}>
           <div>Inputs</div>
           <div>Outputs</div>
           <ul>

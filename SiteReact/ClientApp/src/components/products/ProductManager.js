@@ -25,7 +25,7 @@ export class ProductManager extends Component {
         
         <div className="separation-line"></div>
 
-        <form className="product-creator" onSubmit={e => this.createNewProduct(e)}>
+        <form className="creator" onSubmit={e => this.createNewProduct(e)}>
           <input name="product" type="text" autoComplete="off" placeholder="Product name"/>
           <button type="submit" title="Add product">
             <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
@@ -34,7 +34,7 @@ export class ProductManager extends Component {
 
         <div className="separation-line"></div>
 
-        <form className="product-filter">
+        <form className="filter">
           <input placeholder="Filter products" type="text" onChange={e => this.setState({filter: e.target.value})}/>
         </form>
 
@@ -44,7 +44,7 @@ export class ProductManager extends Component {
           {productsFiltered.map(product => (
             <li key={product.name}>
               <div>{product.name}</div>
-              <button className="product-remove-button" title="Remove product" onClick={e => this.removeProduct(e, product.name)}>
+              <button className="remove-button" title="Remove product" onClick={e => this.removeProduct(e, product.name)}>
                 <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
               </button>
             </li>))}

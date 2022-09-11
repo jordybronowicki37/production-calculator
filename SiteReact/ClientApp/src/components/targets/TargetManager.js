@@ -43,7 +43,7 @@ export class TargetManager extends Component {
 
   render() {
     return <div className="target-editor">
-      <div className="target-editor-tabs">
+      <div className="tabs">
         <button type="button" title="No target" onClick={() => this.setMode("none")} className={`${this.state.mode==="none"?"selected":""}`}>
           <i className='bx bx-x'></i>
         </button>
@@ -55,49 +55,49 @@ export class TargetManager extends Component {
           <i className='bx bx-arrow-to-left right-one'></i>
           <i className='bx bx-arrow-to-right left-one'></i>
         </button>
-        <div></div>
+        <div className="filler"></div>
         <button hidden={!this.state.targetsChanged} type="submit" title="Save targets" onClick={() => this.saveTargets()}>
           <i className='bx bx-save' style={{'color':'#24bddc'}}></i>
         </button>
       </div>
-      <div hidden={this.state.mode!=="none"} className="target-editor-tab-content">
-        <div className="target-editor-vis">
-          <div className="target-editor-vis-line">
+      <div hidden={this.state.mode!=="none"} className="tab-content">
+        <div className="visualisation">
+          <div className="visualisation-line">
             <div className="blue"></div>
           </div>
         </div>
-        <div className="target-editor-value">
+        <div className="target-values">
           <div>No target set</div>
         </div>
       </div>
-      <div hidden={this.state.mode!=="exact"} className="target-editor-tab-content">
-        <div className="target-editor-vis">
-          <div className="target-editor-vis-line">
+      <div hidden={this.state.mode!=="exact"} className="tab-content">
+        <div className="visualisation">
+          <div className="visualisation-line">
             <div className={`${this.state.exactAmount>0?"gray":"blue"}`}></div>
           </div>
-          <div className="target-editor-vis-icon">
+          <div className="visualisation-icon">
             <i title="Exact" className={`bx bxs-location-plus bx-flip-vertical ${this.state.exactAmount>0?"blue":"gray"}`}></i>
           </div>
         </div>
-        <div className="target-editor-value">
-          <input type="number" className="target-editor-amount-field" min="0" step="0.001" onChange={e => {this.setAmount(e.target.value, "exact")}} value={this.state.exactAmount}/>
+        <div className="target-values">
+          <input type="number" className="amount-field" min="0" step="0.001" onChange={e => {this.setAmount(e.target.value, "exact")}} value={this.state.exactAmount}/>
         </div>
       </div>
-      <div hidden={this.state.mode!=="min-max"} className="target-editor-tab-content">
-        <div className="target-editor-vis">
-          <div className="target-editor-vis-line">
+      <div hidden={this.state.mode!=="min-max"} className="tab-content">
+        <div className="visualisation">
+          <div className="visualisation-line">
             <div className={`${this.state.minAmount>0?"gray":"blue"}`}></div>
             <div className="blue"></div>
             <div className={`${this.state.maxAmount>0?"gray":"blue"}`}></div>
           </div>
-          <div className="target-editor-vis-icon">
+          <div className="visualisation-icon">
             <i title="Minimum" className={`bx bxs-location-plus bx-flip-vertical ${this.state.minAmount>0?"red":"gray"}`}></i>
             <i title="Maximum" className={`bx bxs-location-plus bx-flip-vertical ${this.state.maxAmount>0?"green":"gray"}`}></i>
           </div>
         </div>
-        <div className="target-editor-value">
-          <input type="number" className="target-editor-amount-field" min="0" step="0.001" onChange={e => {this.setAmount(e.target.value, "min")}} value={this.state.minAmount}/>
-          <input type="number" className="target-editor-amount-field" min="0" step="0.001" onChange={e => {this.setAmount(e.target.value, "max")}} value={this.state.maxAmount}/>
+        <div className="target-values">
+          <input type="number" className="amount-field" min="0" step="0.001" onChange={e => {this.setAmount(e.target.value, "min")}} value={this.state.minAmount}/>
+          <input type="number" className="amount-field" min="0" step="0.001" onChange={e => {this.setAmount(e.target.value, "max")}} value={this.state.maxAmount}/>
         </div>
       </div>
     </div>;

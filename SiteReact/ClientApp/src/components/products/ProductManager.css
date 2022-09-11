@@ -1,32 +1,32 @@
-﻿.product-creator {
+﻿.product-manager .creator {
     display: flex;
 }
 
-.product-creator>input {
+.product-manager .creator>input {
     flex-grow: 2;
 }
 
-.product-creator>button {
+.product-manager .creator>button {
     all: unset;
     margin-left: 0.5rem;
 }
 
-.products {
+.product-manager .products {
     list-style-type: none;
     padding-left: 2px;
     margin: 0;
 }
 
-.products>* {
+.product-manager .products>* {
     display: flex;
     width: 100%;
 }
 
-.products>*>:first-child {
+.product-manager .products>*>:first-child {
     flex-grow: 2;
 }
 
-.product-remove-button {
+.product-manager .remove-button {
     all: unset;
 }
 
@@ -37,7 +37,7 @@
     border-top: 1px solid darkgray;
 }
 
-.product-filter {
+.product-manager .filter {
     display: flex;
     flex-direction: column;
 }

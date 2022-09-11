@@ -1,14 +1,14 @@
-.node-product-table {
+.node-production .product-table {
     display: grid;
     grid-template-columns: auto auto;
     margin: 0;
 }
 
-.node-product-table>:last-child {
+.node-production .product-table>:last-child {
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
-.recipeProduct {
+.node-production .recipe-product {
     margin-right: 3px;
 }

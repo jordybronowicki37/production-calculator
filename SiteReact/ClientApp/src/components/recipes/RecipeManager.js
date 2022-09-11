@@ -30,7 +30,7 @@ export class RecipeManager extends Component {
 
         <div className="separation-line"></div>
 
-        <form className="recipe-filter">
+        <form className="filter">
           <input placeholder="Filter recipe" type="text" onChange={e => this.setState({filter: e.target.value})}/>
         </form>
         
@@ -40,7 +40,7 @@ export class RecipeManager extends Component {
           {recipesFiltered.map(recipe => (
             <li key={recipe.name}>
               <div>{recipe.name}</div>
-              <button className="recipe-remove-button" title="Remove recipe">
+              <button className="remove-button" title="Remove recipe">
                 <i className='bx bxs-minus-circle' style={{color:"#ff8080"}}/>
               </button>
             </li>))}

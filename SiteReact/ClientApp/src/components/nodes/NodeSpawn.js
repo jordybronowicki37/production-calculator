@@ -10,7 +10,7 @@ export class NodeSpawn extends Node {
   }
 
   render () {
-    let productField = <div className="previewField">name</div>;
+    let productField = <div className="preview-field">name</div>;
     let targets = <div></div>;
     let targetEditor = <div></div>;
     
@@ -38,10 +38,10 @@ export class NodeSpawn extends Node {
       targets = 
         <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
           {targetIcon}
-          <i className='bx bx-target-lock bx-rotate-90'></i>
+          <i className='bx bx-target-lock'></i>
         </div>;
       targetEditor = 
-        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
+        <div className="target-editor-wrapper" hidden={!this.state.targetEditorOpen}>
           <button type="button" className="popup-close-button" onClick={() => this.setState({targetEditorOpen: false})}>
             <i className='bx bx-x'></i>
           </button>
@@ -50,16 +50,16 @@ export class NodeSpawn extends Node {
     }
     
     return (
-      <div className="node-container">
-        <div className="node-top">
+      <div className="node node-spawn">
+        <div className="top-container">
           <h3>Spawn</h3>
           {targets}
         </div>
-        <div className="node-content node-table">
+        <div className="content-table">
           <div>Product</div>
           {productField}
           <div>Amount</div>
-          <div className={super.previewMode()?"previewField":""}>{super.amount()}</div>
+          <div className={super.previewMode()?"preview-field":""}>{super.amount()}</div>
         </div>
         {targetEditor}
       </div>

@@ -1,4 +1,4 @@
-﻿.notification-wrapper {
+﻿.layout .notification-wrapper {
     position: absolute;
     z-index: 20000;
     left: 50%;

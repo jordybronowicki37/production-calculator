@@ -29,16 +29,20 @@ export class RecipeCreator extends Component {
   render() {
     return <div className="recipe-creator">
       <h3>Recipe creator</h3>
+      
       <div>
         <input type="text" name="recipeName" placeholder="Recipe name" autoComplete="off" value={this.state.name} onChange={e => this.nameChanged(e.target.value)}/>
       </div>
-      <div className="recipe-creator-separation-line"></div>
-      <div className="recipe-creator-header">
+      
+      <div className="separation-line"></div>
+      
+      <div className="header">
         <div>Inputs</div>
         <button className="add-throughput-button" type="button" title="Add input throughput" onClick={() => this.inputThroughPutAdd()}>
           <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
         </button>
       </div>
+      
       <div className="input-throughputs throughput-list">
         {this.state.inputThroughPuts.map((value, index) =>
           <div key={value.tempId}>
@@ -53,13 +57,16 @@ export class RecipeCreator extends Component {
             </button>
           </div>)}
       </div>
-      <div className="recipe-creator-separation-line"></div>
-      <div className="recipe-creator-header">
+      
+      <div className="separation-line"></div>
+      
+      <div className="header">
         <div>Outputs</div>
         <button className="add-throughput-button" type="button" title="Add output throughput" onClick={() => this.outputThroughPutAdd()}>
           <i className='bx bxs-add-to-queue' style={{color:"#96f378"}}/>
         </button>
       </div>
+      
       <div className="output-throughputs throughput-list">
         {this.state.outputThroughPuts.map((value, index) =>
           <div key={value.tempId}>
@@ -74,8 +81,10 @@ export class RecipeCreator extends Component {
             </button>
           </div>)}
       </div>
-      <div className="recipe-creator-separation-line"></div>
-      <button className="recipe-creator-submit" type="submit" onClick={e => this.createRecipe(e)}>Create</button>
+      
+      <div className="separation-line"></div>
+      
+      <button className="submit-button" type="submit" onClick={e => this.createRecipe(e)}>Create</button>
     </div>
   }
   

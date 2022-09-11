@@ -51,7 +51,7 @@ export class WorksheetOverview extends Component {
         
         <div>
           <h1>Worksheet overview</h1>
-          <div className="worksheet-filter-container">
+          <div className="filter-container">
             <select name="worksheetFilterType" title="Worksheet filter type" value={this.state.worksheetSearchType} onChange={e => this.setState({worksheetSearchType:e.target.value})}>
               <option value="title">Title</option>
               <option value="inputProduct">Input product</option>
@@ -62,7 +62,7 @@ export class WorksheetOverview extends Component {
             <button type="button" onClick={() => this.setState({worksheetCreatorOpen:true})}>Create new</button>
           </div>
           <div className="worksheet-item-container">
-            {worksheetListFiltered.map(v => <div key={v.name} className="worksheetItem"><WorksheetItem data={v} id={v.id}></WorksheetItem></div>)}
+            {worksheetListFiltered.map(v => <div key={v.name} className="worksheet-item-wrapper"><WorksheetItem data={v} id={v.id}></WorksheetItem></div>)}
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
-﻿.recipe-creator-header {
+﻿.recipe-creator .header {
     display: flex;
     justify-content: space-between;
 }
 
-.add-throughput-button, .remove-throughput-button {
+.recipe-creator .add-throughput-button, .remove-throughput-button {
     all: unset;
     margin: 0 0.5rem;
     width: min-content;
@@ -11,26 +11,26 @@
     align-self: center;
 }
 
-.throughput-amount-field {
+.recipe-creator .throughput-amount-field {
     width: 7ch;
 }
 
-.throughput-product-field {
+.recipe-creator .throughput-product-field {
     width: 20ch;
 }
 
-.throughput-list>* {
+.recipe-creator .throughput-list>* {
     display: flex;
 }
 
-.recipe-creator-submit {
+.recipe-creator .submit-button {
     float: right;
     border-radius: 7px;
     margin: 0.2rem 0.5rem;
     padding: 0 0.5rem;
 }
 
-.recipe-creator-separation-line {
+.recipe-creator .separation-line {
     width: 100%;
     margin: 0.5rem 0;
     align-self: center;

@@ -1,19 +1,19 @@
-﻿.recipes {
+﻿.recipe-manager .recipes {
     list-style-type: none;
     padding-left: 2px;
     margin: 0;
 }
 
-.recipes>* {
+.recipe-manager .recipes>* {
     display: flex;
     width: 100%;
 }
 
-.recipes>*>:first-child {
+.recipe-manager .recipes>*>:first-child {
     flex-grow: 2;
 }
 
-.recipe-remove-button {
+.recipe-manager .remove-button {
     all: unset;
 }
 
@@ -24,7 +24,7 @@
     border-top: 1px solid darkgray;
 }
 
-.recipe-filter {
+.recipe-manager .filter {
     display: flex;
     flex-direction: column;
 }

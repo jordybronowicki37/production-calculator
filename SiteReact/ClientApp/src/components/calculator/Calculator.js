@@ -86,7 +86,7 @@ export class Calculator extends Component {
     });
     
     return (
-      <div className="calculator-screen-manager">
+      <div className="calculator">
         <div hidden={!this.state.worksheetLoading} className="loading-screen">
           <div>Loading</div>
           <div><i className='bx bx-loader-alt bx-spin'></i></div>
@@ -194,15 +194,15 @@ export class Calculator extends Component {
                 <div className="drop-menu" hidden={!this.state.dropMenuNodesOpen}>
                   <div className="item-with-info">
                     <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable>Spawn</div>
-                    <i className='bx bx-info-circle' onClick={() => this.setState({popupNodeSpawnPreviewOpen:true})}></i>
+                    <i className='bx bx-info-circle icon' onClick={() => this.setState({popupNodeSpawnPreviewOpen:true})}></i>
                   </div>
                   <div className="item-with-info">
                     <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "Production")} draggable>Production</div>
-                    <i className='bx bx-info-circle' onClick={() => this.setState({popupNodeProductionPreviewOpen:true})}></i>
+                    <i className='bx bx-info-circle icon' onClick={() => this.setState({popupNodeProductionPreviewOpen:true})}></i>
                   </div>
                   <div className="item-with-info">
                     <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "End")} draggable>End</div>
-                    <i className='bx bx-info-circle' onClick={() => this.setState({popupNodeEndPreviewOpen:true})}></i>
+                    <i className='bx bx-info-circle icon' onClick={() => this.setState({popupNodeEndPreviewOpen:true})}></i>
                   </div>
                 </div>
               </div>
@@ -210,9 +210,9 @@ export class Calculator extends Component {
             
             <ReactFlowProvider>
               <div className="flow-chart-wrapper flex-grow-1" ref={this.setReactFlowWrapper}>
-                <div className="calculator-states">
-                  <div hidden={message===""} className="calculator-states-label">{message}</div>
-                  <div className="calculator-states-icon" onClick={() => this.calculateWorksheet()}>
+                <div className="calculation-states">
+                  <div hidden={message===""} className="calculation-states-label">{message}</div>
+                  <div className="calculation-states-icon" onClick={() => this.calculateWorksheet()}>
                     <i hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></i>
                     <i hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
                     <i hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error-circle' style={{color:"#F1B22C"}}></i>

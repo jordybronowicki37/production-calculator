@@ -17,40 +17,40 @@
     animation-duration: 1s;
 }
 
-.user-notification-manager>*.disappearing {
+.user-notification-manager .disappearing {
     animation-name: fadeOut;
     animation-duration: 1s;
 }
 
-.user-notification-manager>*.info {
+.user-notification-manager .info {
     border-color: var(--bs-blue);
 }
 
-.user-notification-manager>*.info>.icon-wrapper {
+.user-notification-manager .info .icon-wrapper {
     background-color: var(--bs-blue);
 }
 
-.user-notification-manager>*.success {
+.user-notification-manager .success {
     border-color: var(--bs-green);
 }
 
-.user-notification-manager>*.success>.icon-wrapper {
+.user-notification-manager .success .icon-wrapper {
     background-color: var(--bs-green);
 }
 
-.user-notification-manager>*.warning {
+.user-notification-manager .warning {
     border-color: var(--bs-yellow);
 }
 
-.user-notification-manager>*.warning>.icon-wrapper {
+.user-notification-manager .warning .icon-wrapper {
     background-color: var(--bs-yellow);
 }
 
-.user-notification-manager>*.error {
+.user-notification-manager .error {
     border-color: var(--bs-red);
 }
 
-.user-notification-manager>*.error>.icon-wrapper {
+.user-notification-manager .error .icon-wrapper {
     background-color: var(--bs-red);
 }
 

@@ -1,57 +1,57 @@
-﻿.worksheet-item {
+﻿.worksheet-item-wrapper {
     border: 1px solid black;
     border-radius: 7px;
     overflow: hidden;
 }
 
-.worksheet-item>* {
+.worksheet-item-wrapper>* {
     padding: 0.2rem 0.3rem;
 }
 
-.worksheet-item-top {
+.worksheet-item-wrapper .top-container {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid black;
     margin-bottom: 0.3rem;
 }
 
-.worksheet-item-title {
+.worksheet-item-wrapper .title {
     white-space: nowrap;
     color: unset;
     text-decoration: none;
 }
 
-.worksheet-item-open-icon {
+.worksheet-item-wrapper .open-icon {
     color: unset;
 }
 
-.worksheet-item-amounts {
+.worksheet-item-wrapper .amounts-container {
     display: grid;
     grid-template-columns: auto auto;
 }
 
-.worksheet-item-amounts>*:nth-child(2n) {
+.worksheet-item-wrapper .amounts-container>*:nth-child(2n) {
     padding: 0 0.5em;
 }
 
-.worksheet-item-io {
+.worksheet-item-wrapper .input-output-container {
     display: grid;
     grid-template-columns: auto auto;
     padding: 0;
 }
 
-.worksheet-item-io>* {
+.worksheet-item-wrapper .input-output-container>* {
     border-top: 1px solid black;
     padding: 0 3px;
     margin: 0;
     white-space: nowrap;
 }
 
-.worksheet-item-io>*:nth-child(2n) {
+.worksheet-item-wrapper .input-output-container>*:nth-child(2n) {
     border-left: 1px solid black;
 }
 
-.worksheet-item-throughput {
+.worksheet-item-wrapper .worksheet-item-throughput {
     display: flex;
     justify-content: space-between;
     column-gap: 0.5em;

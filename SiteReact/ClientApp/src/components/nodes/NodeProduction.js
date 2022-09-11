@@ -15,7 +15,7 @@ export class NodeProduction extends Node {
         <div className="node-list">
           {list.map((value, index) => 
             <div key={index}>
-              <div className="recipeProduct">{value.product}: </div>
+              <div className="recipe-product">{value.product}: </div>
               <div>{value.amount}</div>
             </div>)}
         </div>
@@ -25,8 +25,8 @@ export class NodeProduction extends Node {
     let recipeField, amountField, productInList, productOutList, targets, targetEditor;
     
     if (super.previewMode()) {
-      recipeField = <div className="previewField">name</div>;
-      amountField = <div className="previewField">0</div>;
+      recipeField = <div className="preview-field">name</div>;
+      amountField = <div className="preview-field">0</div>;
       productInList = <div className="node-list"><div>
           <div className="previewField">name</div>
           <div className="previewField">0</div>
@@ -64,10 +64,10 @@ export class NodeProduction extends Node {
       targets =
         <div className="targets" onClick={e => this.setState({targetEditorOpen: true})}>
           {targetIcon}
-          <i className='bx bx-target-lock bx-rotate-90'></i>
+          <i className='bx bx-target-lock'></i>
         </div>;
       targetEditor = 
-        <div className="targetEditor" hidden={!this.state.targetEditorOpen}>
+        <div className="target-editor-wrapper" hidden={!this.state.targetEditorOpen}>
           <button type="button" className="popup-close-button" onClick={() => this.setState({targetEditorOpen: false})}>
             <i className='bx bx-x'></i>
           </button>
@@ -76,18 +76,18 @@ export class NodeProduction extends Node {
     }
     
     return (
-      <div className="node-container">
-        <div className="node-top">
+      <div className="node node-production">
+        <div className="top-container">
           <h3>Production</h3>
           {targets}
         </div>
-        <div className="node-content node-product-table">
+        <div className="product-table">
           <div>Recipe: </div>
           {recipeField}
           <div>Amount: </div>
           {amountField}
           
-          <div className="node-table">
+          <div className="content-table">
             <div>Required in</div>
             <div>Required out</div>
             {productInList}

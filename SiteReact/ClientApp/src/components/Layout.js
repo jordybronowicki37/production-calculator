@@ -9,7 +9,7 @@ export class Layout extends Component {
 
   render () {
     return (
-      <div>
+      <div className="layout">
         <NavMenu />
         <Container>
           <div className="notification-wrapper">

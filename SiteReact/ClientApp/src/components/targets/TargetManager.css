@@ -1,110 +1,112 @@
 ﻿.target-editor {
-    padding: 0 2px;;
+    padding: 0 2px;
 }
 
-.target-editor-tabs {
+.target-editor .tabs {
     display: flex;
 }
 
-.target-editor-tabs>div {
+.target-editor .tabs>.filler {
     flex-grow: 2;
 }
 
-.target-editor-tabs>button {
+.target-editor .tabs>button {
     all: unset;
     border: 1px solid darkgray;
     font-size: xx-small;
+    cursor: pointer;
 }
 
-.target-editor-tabs>button:first-child {
+.target-editor .tabs>button:first-child {
     border-radius: 5px 0 0 5px;
 }
 
-.target-editor-tabs>button:nth-child(3) {
+.target-editor .tabs>button:nth-child(3) {
     border-radius: 0 5px 5px 0;
 }
 
-.target-editor-tabs>button:last-child {
+.target-editor .tabs>button:last-child {
     margin-left: 5px;
     padding: 0 2px;
     border: none;
 }
 
-.target-editor-tabs>.selected {
+.target-editor .tabs>.selected {
     background-color: #eeeeee;
 }
 
-.right-one {
+.target-editor .right-one {
     transform: translateX(1px);
 }
 
-.left-one {
+.target-editor .left-one {
     transform: translateX(-1px);
 }
 
-.target-editor-tab-content {
+.target-editor .tab-content {
     padding: 5px;
 }
 
-.target-editor-vis {
+.target-editor .visualisation {
     width: 100%;
     position: relative;
 }
 
-.target-editor-vis-line {
+.target-editor .visualisation-line {
     width: 100%;
     display: flex;
     position: absolute;
 }
 
-.target-editor-vis-line>div {
+.target-editor .visualisation-line>div {
     flex-grow: 2;
     transition: border-top-color ease 0.5s;
 }
 
-.target-editor-vis-line>.blue {
+.target-editor .visualisation-line>.blue {
     border-top: 2px solid deepskyblue;
 }
 
-.target-editor-vis-line>.gray {
+.target-editor .visualisation-line>.gray {
     border-top: 2px solid gray;
 }
 
-.target-editor-vis-icon {
+.target-editor .visualisation-icon {
     width: 100%;
     display: flex;
     position: absolute;
     justify-content: space-evenly;
 }
 
-.target-editor-vis-icon>* {
+.target-editor .visualisation-icon>* {
     transition: color ease 0.5s;
+    cursor: default;
 }
 
-.target-editor-vis-icon>.gray {
+.target-editor .visualisation-icon>.gray {
     color: gray;
 }
 
-.target-editor-vis-icon>.blue {
+.target-editor .visualisation-icon>.blue {
     color: deepskyblue;
 }
 
-.target-editor-vis-icon>.red {
+.target-editor .visualisation-icon>.red {
     color: orangered;
 }
 
-.target-editor-vis-icon>.green {
+.target-editor .visualisation-icon>.green {
     color: lawngreen;
 }
 
-.target-editor-value {
+.target-editor .target-values {
     width: 100%;
     display: flex;
     justify-content: center;
     margin: 1rem 0;
 }
 
-.target-editor-amount-field {
+.target-editor .amount-field {
     width: 50%;
     font-size: xx-small;
 }

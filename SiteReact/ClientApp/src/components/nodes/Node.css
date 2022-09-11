@@ -1,20 +1,20 @@
-.node-container {
+.node {
     width: min-content;
     height: min-content;
     position: relative;
 }
 
-.node-top {
+.node .top-container {
     display: flex;
     justify-content: space-between;
 }
 
-.node-top>h3 {
+.node .top-container>h3 {
     font-size: medium;
     margin: 2px;
 }
 
-.node-top>.targets {
+.node .top-container>.targets {
     display: flex;
     align-content: flex-end;
     height: fit-content;
@@ -24,57 +24,61 @@
     font-size: x-small;
     background-color: #bbbbbb;
 }
-.node-top>.targets:hover {
+.node .top-container>.targets:hover {
     background-color: #a1a1a1;
 }
 
-.node-table {
+.node .content-table {
     display: grid;
     grid-template-columns: auto auto;
     margin: 0;
 }
 
-.node-table>* {
+.node .content-table>* {
     border-top: 1px solid black;
     border-left: 1px solid black;
     padding: 1px 2px;
     white-space: nowrap;
 }
 
-.node-table>:nth-child(2n+1) {
+.node .content-table>:nth-child(2n+1) {
     border-left: unset;
 }
 
-.node-list>* {
+.node .node-list>* {
     display: flex;
     justify-content: space-between;
 }
 
-.previewField {
+.node .preview-field {
     color: lightgray;
     font-style: italic;
 }
 
-.node-top>.targets {
+.node .top-container>.targets {
     cursor: pointer;
 }
 
-.node-top>.targets>.bx-target-lock {
+.node .top-container>.targets>.bx-target-lock {
     line-height: unset;
 }
 
-.right-one {
+.node .right-one {
     transform: translateX(1px);
 }
 
-.left-one {
+.node .left-one {
     transform: translateX(-1px);
 }
 
-.targetEditor {
+.node .target-editor-wrapper {
     height: 100%;
     width: 100%;
     position: absolute;
     top: 0;
     background-color: white;
+}
+
+.node .popup-close-button {
+    cursor: pointer;
 }
