@@ -8,10 +8,10 @@ export class RecipeManager extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recipes: [],
+      recipes: this.sortRecipes(Store.getState().recipes),
       worksheetId: props.worksheetId,
     };
-    this.unsubscribe = Store.subscribe(() => this.setState({recipes: Store.getState().recipes}));
+    this.unsubscribe = Store.subscribe(() => this.setState({recipes: this.sortRecipes(Store.getState().recipes)}));
   }
 
   render() {
@@ -28,6 +28,16 @@ export class RecipeManager extends Component {
         </ul>
       </div>
     );
+  }
+
+  sortRecipes(recipes) {
+    return [...recipes].sort((v1, v2) => {
+      const n1 = v1.name;
+      const n2 = v2.name;
+      if (n1 > n2) return 1;
+      if (n1 < n2) return -1;
+      return 0
+    });
   }
 
   componentWillUnmount() {
