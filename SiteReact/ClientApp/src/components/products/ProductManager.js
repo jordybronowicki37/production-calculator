@@ -10,9 +10,9 @@ export class ProductManager extends Component {
     super(props);
     this.state = {
       products: [],
-      worksheetId: props.worksheetId,
+      worksheetId: this.sortProducts(Store.getState().products),
     };
-    this.unsubscribe = Store.subscribe(() => this.setState({products: Store.getState().products}));
+    this.unsubscribe = Store.subscribe(() => this.setState({products: this.sortProducts(Store.getState().products)}));
   }
   
   render() {
@@ -48,6 +48,16 @@ export class ProductManager extends Component {
   removeProduct(e, name) {
     e.preventDefault();
     deleteProduct(name)
+  }
+  
+  sortProducts(products) {
+    return [...products].sort((v1, v2) => {
+      const n1 = v1.name;
+      const n2 = v2.name;
+      if (n1 > n2) return 1;
+      if (n1 < n2) return -1;
+      return 0
+    });
   }
   
   componentWillUnmount() {
