@@ -45,14 +45,30 @@ export class Node extends Component {
     return "";
   }
   
-  products() {return this.state.products;}
+  products() {
+    return [...this.state.products].sort((v1, v2) => {
+      const n1 = v1.name;
+      const n2 = v2.name;
+      if (n1 > n2) return 1;
+      if (n1 < n2) return -1;
+      return 0
+    });
+  }
   
   recipe() {
     if (this.state.data.hasOwnProperty("recipe")) return this.state.data.recipe.name;
     return "";
   }
   
-  recipes() {return this.state.recipes;}
+  recipes() {
+    return [...this.state.recipes].sort((v1, v2) => {
+      const n1 = v1.name;
+      const n2 = v2.name;
+      if (n1 > n2) return 1;
+      if (n1 < n2) return -1;
+      return 0
+    });
+  }
   
   amount() {
     if (this.state.data.hasOwnProperty("amount")) return this.state.data.amount;
