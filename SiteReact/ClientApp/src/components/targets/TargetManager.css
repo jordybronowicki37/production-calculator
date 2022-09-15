@@ -14,7 +14,6 @@
     all: unset;
     border: 1px solid darkgray;
     font-size: xx-small;
-    cursor: pointer;
 }
 
 .target-editor .tabs>button:first-child {

@@ -90,7 +90,6 @@
 .calculator .popup-close-button {
     all: unset;
     float: right;
-    cursor: pointer;
 }
 
 .calculator .calculator-screen .top-bar {
@@ -115,7 +114,6 @@
     padding: 0.1rem 0.3rem;
     color: whitesmoke;
     position: relative;
-    cursor: pointer;
 }
 
 .calculator .toolbar>div>button.selected {
