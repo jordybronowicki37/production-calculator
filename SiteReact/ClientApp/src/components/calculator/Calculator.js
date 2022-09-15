@@ -21,11 +21,18 @@ export class Calculator extends Component {
   
   constructor(props) {
     super(props);
+    
+    let store = Store.getState();
+    
     this.state = {
       flowInstance: null,
       wrapperInstance: null,
       worksheetId: props.match.params.id,
       worksheetLoading: true,
+      
+      worksheetData: store.worksheet,
+      nodes: store.nodes,
+      connections: store.connections,
       
       calculatorStateSuccess:false,
       calculatorStateLoading:true,
@@ -44,6 +51,8 @@ export class Calculator extends Component {
       popupNodeSpawnPreviewOpen:false,
       popupNodeProductionPreviewOpen:false,
       popupNodeEndPreviewOpen:false,
+      
+      tempPositionData:null,
     }
     fetchWorksheet(this.state.worksheetId).then(r => {
       this.setState({worksheetLoading:false});
@@ -57,25 +66,34 @@ export class Calculator extends Component {
     });
     this.unsubscribe = Store.subscribe(() => {
       this.setCalculatorState("refresh");
-      this.forceUpdate();
+      let store = Store.getState();
+      
+      this.setState({
+        worksheetData: store.worksheet,
+        nodes: store.nodes,
+        connections: store.connections,
+      })
     });
   }
 
   render() {
-    let state = Store.getState();
-    let title = state.worksheet ? state.worksheet.name : "";
-    let message = state.worksheet ? state.worksheet.calculationError : "";
-    let nodes = state.nodes.map(node => {
+    let title = this.state.worksheet ? this.state.worksheet.name : "";
+    let message = this.state.worksheet ? this.state.worksheet.calculationError : "";
+    let nodes = this.state.nodes.map(node => {
       const {body, type} = createNodeBody(node.type, node);
+      let tempPos = this.state.tempPositionData
+      let position = node.position;
+      if (tempPos !== null && tempPos.id === node.id) position = tempPos.position;
+      
       return {
         id: node.id.toString(),
         type,
         style: this.defaultNodeStyle,
         data: { label: body },
-        position: node.position,
+        position,
       };
     });
-    let edges = state.connections.map(edge => {
+    let edges = this.state.connections.map(edge => {
       let id1 = edge.inputNodeId.toString();
       let id2 = edge.outputNodeId.toString();
       return {
@@ -257,9 +275,10 @@ export class Calculator extends Component {
       switch (change.type) {
         case "position":
           if (change.dragging) {
-            Store.dispatch({type:"node/change/position", payload: {position:change.position, id:parseInt(change.id)}});
+            this.setState({tempPositionData: {position:change.position, id:parseInt(change.id)}})
           } else {
-            let position = Store.getState().nodes.find(value => value.id === parseInt(change.id)).position;
+            const {position, id} = this.state.tempPositionData;
+            Store.dispatch({type:"node/change/position", payload: {position, id}});
             // TODO update end position on back-end
           }
           break;
