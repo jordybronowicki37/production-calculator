@@ -19,8 +19,8 @@ public class DtoWorksheetSmall
     {
         Id = worksheet.Id;
         Name = worksheet.Name;
-        AmountProducts = worksheet.Products.Count;
-        AmountRecipes = worksheet.Recipes.Count;
+        AmountProducts = worksheet.EntityContainer.Products.Count;
+        AmountRecipes = worksheet.EntityContainer.Recipes.Count;
         AmountNodes = worksheet.Nodes.Count;
 
         foreach (var node in worksheet.Nodes)

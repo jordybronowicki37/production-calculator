@@ -27,8 +27,8 @@ public class DtoWorksheet
         CalculationSucceeded = worksheet.CalculationSucceeded;
         CalculationError = worksheet.CalculationError;
         Nodes = worksheet.Nodes.Select(n => NodeDto.GenerateNode(n));
-        Products = worksheet.Products;
-        Recipes = worksheet.Recipes;
+        Products = worksheet.EntityContainer.Products;
+        Recipes = worksheet.EntityContainer.Recipes;
         
         foreach (var node in worksheet.Nodes)
         {

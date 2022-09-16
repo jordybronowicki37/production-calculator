@@ -36,7 +36,7 @@ public class NodeController : ControllerBase
             case ENodeTypes.Spawn:
             {
                 if (dto.Product == null) return BadRequest("Product field was empty");
-                var product = w.GetProduct(dto.Product);
+                var product = w.EntityContainer.GetProduct(dto.Product);
                 if (product == null) return NotFound("Product not found");
                 node = w.GetNodeBuilder<SpawnNode>().SetProduct(product).Build();
                 break;
@@ -44,7 +44,7 @@ public class NodeController : ControllerBase
             case ENodeTypes.Production:
             {
                 if (dto.Recipe == null) return BadRequest("Recipe field was empty");
-                var recipe = w.GetRecipe(dto.Recipe);
+                var recipe = w.EntityContainer.GetRecipe(dto.Recipe);
                 if (recipe == null) return NotFound("Recipe not found");
                 node = w.GetNodeBuilder<ProductionNode>().SetRecipe(recipe).Build();
                 break;
@@ -52,7 +52,7 @@ public class NodeController : ControllerBase
             case ENodeTypes.End:
             {
                 if (dto.Product == null) return BadRequest("Product field was empty");
-                var product = w.GetProduct(dto.Product);
+                var product = w.EntityContainer.GetProduct(dto.Product);
                 if (product == null) return NotFound("Product not found");
                 node = w.GetNodeBuilder<EndNode>().SetProduct(product).Build();
                 break;
@@ -74,7 +74,7 @@ public class NodeController : ControllerBase
         if (node == null) return NotFound("Node is not found");
         if (node is not IHasProduct productNode) return BadRequest("Node does not support products");
 
-        var product = w.GetProduct(dto.Product);
+        var product = w.EntityContainer.GetProduct(dto.Product);
         if (product == null) return NotFound("Product not found");
         productNode.Product = product;
 
@@ -100,7 +100,7 @@ public class NodeController : ControllerBase
         if (node == null) return NotFound("Node is not found");
         if (node is not IHasRecipe recipeNode) return BadRequest("Node does not support recipes");
         
-        var recipe = w.GetRecipe(dto.Recipe);
+        var recipe = w.EntityContainer.GetRecipe(dto.Recipe);
         if (recipe == null) return NotFound("Product not found");
         recipeNode.Recipe = recipe;
         
@@ -171,7 +171,7 @@ public class NodeController : ControllerBase
         if (node2 == null) return NotFound("Node is not found");
         if (node2 is not INodeIn target) return BadRequest("Target node is not an input");
         
-        var product = w.GetProduct(dto.Product);
+        var product = w.EntityContainer.GetProduct(dto.Product);
         if (product == null) return BadRequest();
 
         var connection = new Connection(source, target, product);

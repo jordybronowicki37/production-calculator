@@ -1,18 +1,18 @@
-﻿using productionCalculatorLib.components.worksheet;
+﻿using productionCalculatorLib.components.entityContainer;
 
 namespace productionCalculatorLib.components.products;
 
 public class RecipeBuilder
 {
-    private readonly Worksheet _worksheet;
+    private readonly EntityContainer _container;
     private readonly string _name;
 
     private List<ThroughPut> _inputs = new();
     private List<ThroughPut> _outputs = new();
 
-    public RecipeBuilder(Worksheet worksheet, string name)
+    public RecipeBuilder(EntityContainer container, string name)
     {
-        _worksheet = worksheet;
+        _container = container;
         _name = name;
     }
 
@@ -30,7 +30,7 @@ public class RecipeBuilder
 
     public Recipe Build()
     {
-        var recipe = _worksheet.GenerateRecipe(_name);
+        var recipe = _container.GenerateRecipe(_name);
 
         foreach (var input in _inputs) recipe.InputThroughPuts.Add(input);
         foreach (var output in _outputs) recipe.OutputThroughPuts.Add(output);

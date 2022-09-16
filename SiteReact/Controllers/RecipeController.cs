@@ -23,7 +23,7 @@ public class RecipeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        return Ok(w.Recipes);
+        return Ok(w.EntityContainer.Recipes);
     }
 
     [HttpPost]
@@ -32,13 +32,13 @@ public class RecipeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var r = w.GenerateRecipe(dto.Name);
+        var r = w.EntityContainer.GenerateRecipe(dto.Name);
 
         foreach (var inputThroughPut in dto.InputThroughPuts)
-            r.InputThroughPuts.Add(new ThroughPut(w.GetOrGenerateProduct(inputThroughPut.Product.Name), inputThroughPut.Amount));
+            r.InputThroughPuts.Add(new ThroughPut(w.EntityContainer.GetOrGenerateProduct(inputThroughPut.Product.Name), inputThroughPut.Amount));
         
         foreach (var outputThroughPut in dto.OutputThroughPuts)
-            r.OutputThroughPuts.Add(new ThroughPut(w.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
+            r.OutputThroughPuts.Add(new ThroughPut(w.EntityContainer.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
         
         return Ok(r);
     }
@@ -49,7 +49,7 @@ public class RecipeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        w.Recipes.RemoveAt(id);
+        w.EntityContainer.Recipes.RemoveAt(id);
         return NoContent();
     }
     

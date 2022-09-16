@@ -22,7 +22,7 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        return Ok(w.Products);
+        return Ok(w.EntityContainer.Products);
     }
 
     [HttpPost]
@@ -31,7 +31,7 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var p = w.GetOrGenerateProduct(dto.Name);
+        var p = w.EntityContainer.GetOrGenerateProduct(dto.Name);
         return Ok(p);
     }
     
@@ -41,7 +41,7 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var p = w.GetProduct(name);
+        var p = w.EntityContainer.GetProduct(name);
         if (p == null) return NotFound("Product is not found");
         p.Name = dto.Name;
         return Ok(p);
@@ -53,7 +53,7 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        w.RemoveProduct(name);
+        w.EntityContainer.RemoveProduct(name);
         return NoContent();
     }
     
