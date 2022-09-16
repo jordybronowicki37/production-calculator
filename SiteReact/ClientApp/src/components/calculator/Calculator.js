@@ -13,6 +13,7 @@ import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../nodes/NodeAPI"
 import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
 import {RecipeCreator} from "../recipes/RecipeCreator";
 import {Link} from "react-router-dom";
+import {throwWarningNotification} from "../notification/NotificationThrower";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -311,7 +312,12 @@ export class Calculator extends Component {
     })
   };
   onConnect = edge => {
-    let state = Store.getState().nodes;
+    let store = Store.getState();
+    if (store.products.length === 0) {
+      throwWarningNotification("Cannot connect nodes because no products exist in worksheet");
+      return;
+    }
+    let state = store.nodes;
     let source = state.find(n => n.id === parseInt(edge.source));
     let target = state.find(n => n.id === parseInt(edge.target));
     let product;
@@ -343,6 +349,7 @@ export class Calculator extends Component {
     event.preventDefault();
     const reactFlowBounds = this.state.wrapperInstance.getBoundingClientRect();
     const nodetype = event.dataTransfer.getData('application/reactflow');
+    const store = Store.getState();
 
     // check if the dropped element is valid
     if (typeof nodetype === 'undefined' || !nodetype) return;
@@ -355,11 +362,19 @@ export class Calculator extends Component {
     switch (nodetype) {
       case "Spawn":
       case "End":
-        let product = Store.getState().products[0];
+        if (store.products.length === 0) {
+          throwWarningNotification("Cannot create node because no products exist in worksheet");
+          return;
+        }
+        let product = store.products[0];
         nodeCreateProduct(nodetype, position, product.name);
         break;
       case "Production":
-        let recipe = Store.getState().recipes[0];
+        if (store.recipes.length === 0) {
+          throwWarningNotification("Cannot create node because no recipes exist in worksheet");
+          return;
+        }
+        let recipe = store.recipes[0];
         nodeCreateRecipe(nodetype, position, recipe.name);
         break;
     }
