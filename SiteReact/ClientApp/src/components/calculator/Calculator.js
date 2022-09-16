@@ -78,8 +78,8 @@ export class Calculator extends Component {
   }
 
   render() {
-    let title = this.state.worksheet ? this.state.worksheet.name : "";
-    let message = this.state.worksheet ? this.state.worksheet.calculationError : "";
+    let title = this.state.worksheetData ? this.state.worksheetData.name : "";
+    let message = this.state.worksheetData ? this.state.worksheetData.calculationError : "";
     let nodes = this.state.nodes.map(node => {
       const {body, type} = createNodeBody(node.type, node);
       let tempPos = this.state.tempPositionData
