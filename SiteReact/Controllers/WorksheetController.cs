@@ -44,7 +44,8 @@ public class WorksheetController : ControllerBase
             case "none":
                 break;
             case "dysonSphereProgram":
-                return NotFound("This data preset is not yet available");
+                DSPData.addData(w);
+                break;
             case "satisfactoryEarlyAccess":
                 SatisfactoryData.addData(w);
                 break;
