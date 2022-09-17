@@ -1,6 +1,6 @@
 ﻿using productionCalculatorLib.components.worksheet;
 
-namespace SiteReact.Data;
+namespace SiteReact.Data.GameDataPresets;
 
 public static class SatisfactoryFicsMasData
 {
