@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using productionCalculatorLib.components.connections;
+using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
@@ -175,7 +176,7 @@ public class NodeController : ControllerBase
         var product = w.EntityContainer.GetProduct(dto.Product);
         if (product == null) return BadRequest();
 
-        var connection = new Connection(source, target, product);
+        var connection = new Connection((ANodeOut) source, (ANodeIn) target, product);
         source.AddOutputConnection(connection);
         target.AddInputConnection(connection);
         
@@ -202,7 +203,7 @@ public class NodeController : ControllerBase
         return StaticValues.Get().Worksheet.FirstOrDefault(w => w.Id == worksheetId);
     }
 
-    private INode? GetNode(Worksheet worksheet, long nodeId)
+    private ANode? GetNode(Worksheet worksheet, long nodeId)
     {
         return worksheet.Nodes.FirstOrDefault(n => n.Id == nodeId);
     }

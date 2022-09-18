@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.nodes.abstractions;
+using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
 
@@ -7,8 +8,8 @@ namespace productionCalculatorLib.components.connections;
 public class Connection
 {
     public long Id { get; set; }
-    public INodeOut NodeIn { get; }
-    public INodeIn NodeOut { get; }
+    public ANode NodeIn { get; }
+    public ANode NodeOut { get; }
     public Product Product { get; set; }
     public float Amount { get; set; }
     
@@ -16,8 +17,8 @@ public class Connection
 
     public Connection(INodeOut nodeIn, INodeIn nodeOut, Product product)
     {
-        NodeIn = nodeIn;
-        NodeOut = nodeOut;
+        NodeIn = (ANode) nodeIn;
+        NodeOut = (ANode) nodeOut;
         Product = product;
     }
 

@@ -1,11 +1,12 @@
 ﻿using productionCalculatorLib.components.connections;
+using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 
 namespace productionCalculatorLib.components.nodes;
 
-public class NodeBuilder<TNodeType> where TNodeType : INode, new()
+public class NodeBuilder<TNodeType> where TNodeType : ANode, new()
 {
     private readonly Worksheet _worksheet;
     private Product? _product;
