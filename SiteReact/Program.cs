@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using SiteReact.Data.DbContexts;
+using SiteReact.Data.Initializers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 const string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -18,6 +22,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<ProjectContext>(context =>
+{
+    var database = Environment.GetEnvironmentVariable("DatabaseName") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseName\")");
+    var username = Environment.GetEnvironmentVariable("DatabaseUsername") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseUsername\")");
+    var password = Environment.GetEnvironmentVariable("DatabasePassword") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabasePassword\")");
+
+    context.UseNpgsql($"Host=localhost;Database={database};Username={username};Password={password}");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +44,19 @@ else
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ProjectContext>();
+
+    if (app.Environment.IsDevelopment())
+    {
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        TestDataInitializer.InitializeAllData(context);
+    }
 }
 
 app.UseHttpsRedirection();
