@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using productionCalculatorLib.components.connections;
+using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.targets;
