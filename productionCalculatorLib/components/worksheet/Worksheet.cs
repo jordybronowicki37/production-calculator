@@ -9,7 +9,7 @@ public class Worksheet
 {
     public Worksheet() {}
 
-    public long Id { get; } = IdGenerators.WorksheetId;
+    public long Id { get; set; }
     public string Name { get; set; } = "";
     public EntityContainer EntityContainer { get; } = new();
 

@@ -8,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class SpawnNode: INodeOut, IHasProduct
 {
-    public long Id { get; } = IdGenerators.NodeId;
+    public long Id { get; set; }
     private readonly List<Connection> _outputConnections = new();
     private readonly List<TargetProduction> _targets = new();
     public Product Product { get; set; } = null!;

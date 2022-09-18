@@ -8,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class ProductionNode: INodeInOut, IHasRecipe
 {
-    public long Id { get; } = IdGenerators.NodeId;
+    public long Id { get; set; }
     public Recipe Recipe { get; set; } = null!;
     public float ProductionAmount { get; set; }
     

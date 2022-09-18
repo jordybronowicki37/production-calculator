@@ -6,7 +6,7 @@ namespace productionCalculatorLib.components.connections;
 
 public class Connection
 {
-    public long Id { get; } = IdGenerators.ConnectionId;
+    public long Id { get; set; }
     public INodeOut NodeIn { get; }
     public INodeIn NodeOut { get; }
     public Product Product { get; set; }
