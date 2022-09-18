@@ -5,6 +5,8 @@ namespace productionCalculatorLib.components.entityContainer;
 
 public class EntityContainer
 {
+    public long Id { get; set; }
+    
     public EntityContainer() {}
 
     private readonly List<Product> _products = new();

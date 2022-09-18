@@ -2,6 +2,7 @@
 
 public class TargetProduction
 {
+    public long Id { get; set; }
     public TargetProductionTypes Type { get; }
     public float Amount { get; }
     

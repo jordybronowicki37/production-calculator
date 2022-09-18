@@ -2,6 +2,7 @@
 
 public class ThroughPut
 {
+    public long Id { get; set; }
     public Product Product { get; set; }
     public float Amount { get; set; }
     
