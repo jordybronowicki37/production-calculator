@@ -1,14 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using productionCalculatorLib.components.connections;
+using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 
-public class EndNode: INodeIn, IHasProduct
+public class EndNode: ANodeIn, IHasProduct
 {
-    public long Id { get; set; }
     private readonly List<Connection> _inputConnections = new();
     private readonly List<TargetProduction> _targets = new();
     public Product Product { get; set; } = null!;
@@ -21,18 +21,18 @@ public class EndNode: INodeIn, IHasProduct
         Product = product;
     }
 
-    public IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
-    public void AddInputConnection(Connection connection)
+    public override IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
+    public override void AddInputConnection(Connection connection)
     {
         if (!_inputConnections.Contains(connection)) _inputConnections.Add(connection);
     }
-    public void RemoveConnnection(long connectionId)
+    public override void RemoveConnnection(long connectionId)
     {
         var connection = _inputConnections.Find(c => c.Id == connectionId);
         if (connection == null) return;
         _inputConnections.Remove(connection);
     }
-    public void ClearConnections()
+    public override void ClearConnections()
     {
         foreach (var inCon in InputConnections)
         {
@@ -41,14 +41,14 @@ public class EndNode: INodeIn, IHasProduct
         _inputConnections.Clear();
     }
 
-    public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
-    public void SetExactTarget(float amount) 
+    public override IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
+    public override void SetExactTarget(float amount) 
     {
         ClearTargets();
         _targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         Amount = amount;
     }
-    public void SetMinMaxTarget(float? minAmount, float? maxAmount) 
+    public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
     {
         ClearTargets();
         if (minAmount != null)
@@ -62,7 +62,7 @@ public class EndNode: INodeIn, IHasProduct
             if (Amount > (float) maxAmount) Amount = (float) maxAmount;
         }
     }
-    public void ClearTargets() 
+    public override void ClearTargets() 
     {
         _targets.Clear();
     }

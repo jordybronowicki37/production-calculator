@@ -1,14 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using productionCalculatorLib.components.connections;
+using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 
-public class ProductionNode: INodeInOut, IHasRecipe
+public class ProductionNode: ANodeInOut, IHasRecipe
 {
-    public long Id { get; set; }
     public Recipe Recipe { get; set; } = null!;
     public float ProductionAmount { get; set; }
     
@@ -21,17 +21,17 @@ public class ProductionNode: INodeInOut, IHasRecipe
 
     private readonly List<Connection> _inputConnections = new();
     private readonly List<Connection> _outputConnections = new();
-    public IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
-    public IList<Connection> OutputConnections => new ReadOnlyCollection<Connection>(_outputConnections);
-    public void AddInputConnection(Connection connection)
+    public override IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
+    public override IList<Connection> OutputConnections => new ReadOnlyCollection<Connection>(_outputConnections);
+    public override void AddInputConnection(Connection connection)
     {
         if (!_inputConnections.Contains(connection))_inputConnections.Add(connection);
     }
-    public void AddOutputConnection(Connection connection)
+    public override void AddOutputConnection(Connection connection)
     {
         if (!_outputConnections.Contains(connection))_outputConnections.Add(connection);
     }
-    public void RemoveConnnection(long connectionId)
+    public override void RemoveConnnection(long connectionId)
     {
         {
             var connection = _inputConnections.Find(c => c.Id == connectionId);
@@ -42,7 +42,7 @@ public class ProductionNode: INodeInOut, IHasRecipe
             if (connection != null) _outputConnections.Remove(connection);
         }
     }
-    public void ClearConnections()
+    public override void ClearConnections()
     {
         foreach (var inCon in InputConnections)
         {
@@ -57,14 +57,14 @@ public class ProductionNode: INodeInOut, IHasRecipe
     }
 
     private readonly List<TargetProduction> _targets = new();
-    public IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
-    public void SetExactTarget(float amount) 
+    public override IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
+    public override void SetExactTarget(float amount) 
     {
         ClearTargets();
         _targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         ProductionAmount = amount;
     }
-    public void SetMinMaxTarget(float? minAmount, float? maxAmount) 
+    public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
     {
         ClearTargets();
         if (minAmount != null)
@@ -78,7 +78,7 @@ public class ProductionNode: INodeInOut, IHasRecipe
             if (ProductionAmount > (float) maxAmount) ProductionAmount = (float) maxAmount;
         }
     }
-    public void ClearTargets() 
+    public override void ClearTargets() 
     {
         _targets.Clear();
     }
