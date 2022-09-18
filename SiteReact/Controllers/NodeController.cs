@@ -10,6 +10,7 @@ using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.nodes;
 using SiteReact.Controllers.dto.targets;
 using SiteReact.Data;
+using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
@@ -18,10 +19,14 @@ namespace SiteReact.Controllers;
 public class NodeController : ControllerBase
 {
     private readonly ILogger<NodeController> _logger;
+    private readonly ProjectContext _context;
     
-    public NodeController(ILogger<NodeController> logger)
+    public NodeController(
+        ILogger<NodeController> logger, 
+        ProjectContext context)
     {
         _logger = logger;
+        _context = context;
     }
     
     [HttpPost]

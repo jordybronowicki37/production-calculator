@@ -3,6 +3,7 @@ using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data;
+using SiteReact.Data.DbContexts;
 using SiteReact.Data.GameDataPresets;
 
 namespace SiteReact.Controllers;
@@ -12,10 +13,14 @@ namespace SiteReact.Controllers;
 public class WorksheetController : ControllerBase
 {
     private readonly ILogger<WorksheetController> _logger;
+    private readonly ProjectContext _context;
     
-    public WorksheetController(ILogger<WorksheetController> logger)
+    public WorksheetController(
+        ILogger<WorksheetController> logger, 
+        ProjectContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     [HttpGet]

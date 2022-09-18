@@ -2,6 +2,7 @@
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.products;
 using SiteReact.Data;
+using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
@@ -10,10 +11,14 @@ namespace SiteReact.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
+    private readonly ProjectContext _context;
     
-    public ProductController(ILogger<ProductController> logger)
+    public ProductController(
+        ILogger<ProductController> logger, 
+        ProjectContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     [HttpGet]
