@@ -4,7 +4,7 @@ namespace productionCalculatorLib.components.nodes.interfaces;
 
 public interface INode
 {
-    long Id { get; }
+    long Id { get; set; }
     void RemoveConnnection(long connectionId);
     void ClearConnections();
     IEnumerable<TargetProduction> ProductionTargets { get; }
