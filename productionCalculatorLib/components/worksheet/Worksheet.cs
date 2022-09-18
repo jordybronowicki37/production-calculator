@@ -16,18 +16,17 @@ public class Worksheet
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
 
-    private readonly List<ANode> _nodes = new();
-    public IList<ANode> Nodes => new ReadOnlyCollection<ANode>(_nodes);
+    public IList<ANode> Nodes { get; } = new List<ANode>();
     public void AddNode(ANode node)
     {
-        if (!_nodes.Contains(node))
+        if (!Nodes.Contains(node))
         {
-            _nodes.Add(node);
+            Nodes.Add(node);
         }
     }
     public void RemoveNode(ANode node)
     {
-        _nodes.Remove(node);
+        Nodes.Remove(node);
         node.ClearConnections();
     }
 
