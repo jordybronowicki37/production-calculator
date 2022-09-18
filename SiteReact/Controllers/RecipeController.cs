@@ -48,8 +48,10 @@ public class RecipeController : ControllerBase
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
+
+        var recipe = w.EntityContainer.Recipes.FirstOrDefault(r => r.Id == id);
+        w.EntityContainer.Recipes.Remove(recipe);
         
-        w.EntityContainer.Recipes.RemoveAt(id);
         return NoContent();
     }
     
