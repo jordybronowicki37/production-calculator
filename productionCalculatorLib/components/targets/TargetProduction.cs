@@ -4,6 +4,8 @@ public class TargetProduction
 {
     public TargetProductionTypes Type { get; }
     public float Amount { get; }
+    
+    public TargetProduction() {}
 
     public TargetProduction(TargetProductionTypes type, float amount)
     {

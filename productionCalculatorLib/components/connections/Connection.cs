@@ -11,6 +11,8 @@ public class Connection
     public INodeIn NodeOut { get; }
     public Product Product { get; set; }
     public float Amount { get; set; }
+    
+    public Connection() {}
 
     public Connection(INodeOut nodeIn, INodeIn nodeOut, Product product)
     {

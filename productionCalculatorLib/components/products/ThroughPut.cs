@@ -4,6 +4,8 @@ public class ThroughPut
 {
     public Product Product { get; set; }
     public float Amount { get; set; }
+    
+    public ThroughPut() {}
 
     public ThroughPut(Product product, float amount)
     {

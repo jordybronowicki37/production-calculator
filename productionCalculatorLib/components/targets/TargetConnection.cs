@@ -4,6 +4,8 @@ public class TargetConnection
 {
     public TargetConnectionTypes Type { get; }
     public float Amount { get; }
+    
+    public TargetConnection() {}
 
     public TargetConnection(TargetConnectionTypes type, float amount)
     {

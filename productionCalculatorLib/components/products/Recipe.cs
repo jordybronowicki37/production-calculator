@@ -8,6 +8,8 @@ public class Recipe
     public List<ThroughPut> InputThroughPuts { get; } = new();
     public List<ThroughPut> OutputThroughPuts { get; } = new();
 
+    public Recipe() {}
+
     public Recipe(string name)
     {
         Name = name;
