@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.connections;
+﻿using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
@@ -9,8 +8,6 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class EndNode: ANodeIn, IHasProduct
 {
-    private readonly List<Connection> _inputConnections = new();
-    private readonly List<TargetProduction> _targets = new();
     public Product Product { get; set; } = null!;
     public float Amount { get; set; }
     
@@ -21,16 +18,16 @@ public class EndNode: ANodeIn, IHasProduct
         Product = product;
     }
 
-    public override IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
+    public override IList<Connection> InputConnections => new List<Connection>();
     public override void AddInputConnection(Connection connection)
     {
-        if (!_inputConnections.Contains(connection)) _inputConnections.Add(connection);
+        if (!InputConnections.Contains(connection)) InputConnections.Add(connection);
     }
     public override void RemoveConnnection(long connectionId)
     {
-        var connection = _inputConnections.Find(c => c.Id == connectionId);
+        var connection = InputConnections.FirstOrDefault(c => c.Id == connectionId);
         if (connection == null) return;
-        _inputConnections.Remove(connection);
+        InputConnections.Remove(connection);
     }
     public override void ClearConnections()
     {
@@ -38,14 +35,14 @@ public class EndNode: ANodeIn, IHasProduct
         {
             inCon.NodeIn.RemoveConnnection(inCon.Id);
         }
-        _inputConnections.Clear();
+        InputConnections.Clear();
     }
 
-    public override IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
+    public override IList<TargetProduction> ProductionTargets { get; set; } = new List<TargetProduction>();
     public override void SetExactTarget(float amount) 
     {
         ClearTargets();
-        _targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
+        ProductionTargets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         Amount = amount;
     }
     public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
@@ -53,17 +50,17 @@ public class EndNode: ANodeIn, IHasProduct
         ClearTargets();
         if (minAmount != null)
         {
-            _targets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
+            ProductionTargets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
             Amount = (float) minAmount;
         }
         if (maxAmount != null)
         {
-            _targets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
+            ProductionTargets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
             if (Amount > (float) maxAmount) Amount = (float) maxAmount;
         }
     }
     public override void ClearTargets() 
     {
-        _targets.Clear();
+        ProductionTargets.Clear();
     }
 }

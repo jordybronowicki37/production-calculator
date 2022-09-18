@@ -7,7 +7,7 @@ public interface INode
     long Id { get; set; }
     void RemoveConnnection(long connectionId);
     void ClearConnections();
-    IEnumerable<TargetProduction> ProductionTargets { get; }
+    IList<TargetProduction> ProductionTargets { get; set; }
     void SetExactTarget(float amount);
     void SetMinMaxTarget(float? minAmount, float? maxAmount);
     void ClearTargets();

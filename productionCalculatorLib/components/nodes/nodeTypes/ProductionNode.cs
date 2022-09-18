@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using productionCalculatorLib.components.connections;
+﻿using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
@@ -18,28 +17,26 @@ public class ProductionNode: ANodeInOut, IHasRecipe
     {
         Recipe = recipe;
     }
-
-    private readonly List<Connection> _inputConnections = new();
-    private readonly List<Connection> _outputConnections = new();
-    public override IList<Connection> InputConnections => new ReadOnlyCollection<Connection>(_inputConnections);
-    public override IList<Connection> OutputConnections => new ReadOnlyCollection<Connection>(_outputConnections);
+    
+    public override IList<Connection> InputConnections => new List<Connection>();
+    public override IList<Connection> OutputConnections => new List<Connection>();
     public override void AddInputConnection(Connection connection)
     {
-        if (!_inputConnections.Contains(connection))_inputConnections.Add(connection);
+        if (!InputConnections.Contains(connection))InputConnections.Add(connection);
     }
     public override void AddOutputConnection(Connection connection)
     {
-        if (!_outputConnections.Contains(connection))_outputConnections.Add(connection);
+        if (!OutputConnections.Contains(connection))OutputConnections.Add(connection);
     }
     public override void RemoveConnnection(long connectionId)
     {
         {
-            var connection = _inputConnections.Find(c => c.Id == connectionId);
-            if (connection != null) _inputConnections.Remove(connection);
+            var connection = InputConnections.FirstOrDefault(c => c.Id == connectionId);
+            if (connection != null) InputConnections.Remove(connection);
         }
         {
-            var connection = _outputConnections.Find(c => c.Id == connectionId);
-            if (connection != null) _outputConnections.Remove(connection);
+            var connection = OutputConnections.FirstOrDefault(c => c.Id == connectionId);
+            if (connection != null) OutputConnections.Remove(connection);
         }
     }
     public override void ClearConnections()
@@ -52,16 +49,15 @@ public class ProductionNode: ANodeInOut, IHasRecipe
         {
             outCon.NodeOut.RemoveConnnection(outCon.Id);
         }
-        _inputConnections.Clear();
-        _outputConnections.Clear();
+        InputConnections.Clear();
+        OutputConnections.Clear();
     }
 
-    private readonly List<TargetProduction> _targets = new();
-    public override IEnumerable<TargetProduction> ProductionTargets => new ReadOnlyCollection<TargetProduction>(_targets);
+    public override IList<TargetProduction> ProductionTargets { get; set; } = new List<TargetProduction>();
     public override void SetExactTarget(float amount) 
     {
         ClearTargets();
-        _targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
+        ProductionTargets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         ProductionAmount = amount;
     }
     public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
@@ -69,17 +65,17 @@ public class ProductionNode: ANodeInOut, IHasRecipe
         ClearTargets();
         if (minAmount != null)
         {
-            _targets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
+            ProductionTargets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
             ProductionAmount = (float) minAmount;
         }
         if (maxAmount != null)
         {
-            _targets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
+            ProductionTargets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
             if (ProductionAmount > (float) maxAmount) ProductionAmount = (float) maxAmount;
         }
     }
     public override void ClearTargets() 
     {
-        _targets.Clear();
+        ProductionTargets.Clear();
     }
 }
