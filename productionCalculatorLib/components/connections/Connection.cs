@@ -10,7 +10,7 @@ public class Connection
     public long Id { get; set; }
     public ANode NodeIn { get; }
     public ANode NodeOut { get; }
-    public Product Product { get; set; }
+    public virtual Product Product { get; set; }
     public float Amount { get; set; }
     
     public Connection() {}
@@ -22,7 +22,7 @@ public class Connection
         Product = product;
     }
 
-    public List<TargetConnection> ConnectionTargets { get; } = new();
+    public virtual List<TargetConnection> ConnectionTargets { get; } = new();
     public void AddConnectionTarget(TargetConnection target)
     {
         if (!ConnectionTargets.Contains(target)) ConnectionTargets.Add(target);

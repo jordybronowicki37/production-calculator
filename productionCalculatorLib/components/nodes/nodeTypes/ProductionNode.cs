@@ -8,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class ProductionNode: ANodeInOut, IHasRecipe
 {
-    public Recipe Recipe { get; set; } = null!;
+    public virtual Recipe Recipe { get; set; } = null!;
     public float ProductionAmount { get; set; }
     
     public ProductionNode() {}
@@ -18,8 +18,8 @@ public class ProductionNode: ANodeInOut, IHasRecipe
         Recipe = recipe;
     }
     
-    public override IList<Connection> InputConnections => new List<Connection>();
-    public override IList<Connection> OutputConnections => new List<Connection>();
+    public override IList<Connection> InputConnections { get; } = new List<Connection>();
+    public override IList<Connection> OutputConnections { get; } = new List<Connection>();
     public override void AddInputConnection(Connection connection)
     {
         if (!InputConnections.Contains(connection))InputConnections.Add(connection);

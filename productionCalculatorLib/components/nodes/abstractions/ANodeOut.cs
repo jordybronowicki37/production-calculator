@@ -5,6 +5,6 @@ namespace productionCalculatorLib.components.nodes.abstractions;
 
 public abstract class ANodeOut : ANode, INodeOut
 {
-    public abstract IList<Connection> OutputConnections { get; }
+    public virtual IList<Connection> OutputConnections { get; }
     public abstract void AddOutputConnection(Connection connection);
 }

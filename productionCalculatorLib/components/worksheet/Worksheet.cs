@@ -11,12 +11,12 @@ public class Worksheet
 
     public long Id { get; set; }
     public string Name { get; set; } = "";
-    public EntityContainer EntityContainer { get; } = new();
+    public virtual EntityContainer EntityContainer { get; } = new();
 
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
 
-    public IList<ANode> Nodes { get; } = new List<ANode>();
+    public virtual IList<ANode> Nodes { get; } = new List<ANode>();
     public void AddNode(ANode node)
     {
         if (!Nodes.Contains(node))

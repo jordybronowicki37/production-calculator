@@ -8,7 +8,7 @@ public class EntityContainer
     
     public EntityContainer() {}
 
-    public ICollection<Product> Products { get; } = new List<Product>();
+    public virtual ICollection<Product> Products { get; } = new List<Product>();
     public Product GetOrGenerateProduct(string name)
     {
         var existingProduct = GetProduct(name);
@@ -29,7 +29,7 @@ public class EntityContainer
         Products.Remove(product);
     }
 
-    public ICollection<Recipe> Recipes { get; } = new List<Recipe>();
+    public virtual ICollection<Recipe> Recipes { get; } = new List<Recipe>();
     public Recipe GenerateRecipe(string name)
     {
         if (Recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");

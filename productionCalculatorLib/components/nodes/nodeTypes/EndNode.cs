@@ -8,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class EndNode: ANodeIn, IHasProduct
 {
-    public Product Product { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
     public float Amount { get; set; }
     
     public EndNode() {}
@@ -18,7 +18,7 @@ public class EndNode: ANodeIn, IHasProduct
         Product = product;
     }
 
-    public override IList<Connection> InputConnections => new List<Connection>();
+    public override IList<Connection> InputConnections { get; } = new List<Connection>();
     public override void AddInputConnection(Connection connection)
     {
         if (!InputConnections.Contains(connection)) InputConnections.Add(connection);

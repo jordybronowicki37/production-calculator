@@ -8,7 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class SpawnNode: ANodeOut, IHasProduct
 {
-    public Product Product { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
     public float Amount { get; set; }
     
     public SpawnNode() {}
@@ -18,7 +18,7 @@ public class SpawnNode: ANodeOut, IHasProduct
         Product = product;
     }
 
-    public override IList<Connection> OutputConnections => new List<Connection>();
+    public override IList<Connection> OutputConnections { get; } = new List<Connection>();
     public override void AddOutputConnection(Connection connection)
     {
         if (!OutputConnections.Contains(connection))OutputConnections.Add(connection);
