@@ -28,7 +28,9 @@ builder.Services.AddDbContext<ProjectContext>(context =>
     var username = Environment.GetEnvironmentVariable("DatabaseUsername") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseUsername\")");
     var password = Environment.GetEnvironmentVariable("DatabasePassword") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabasePassword\")");
 
-    context.UseNpgsql($"Host=localhost;Database={database};Username={username};Password={password}");
+    context.UseNpgsql(
+        $"Host=localhost;Database={database};Username={username};Password={password}", 
+        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 });
 
 var app = builder.Build();
