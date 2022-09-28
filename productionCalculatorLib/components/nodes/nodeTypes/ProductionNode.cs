@@ -6,7 +6,7 @@ using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 
-public class ProductionNode: ANodeInOut, IHasRecipe
+public class ProductionNode: ANode, INodeInOut, IHasRecipe
 {
     public virtual Recipe Recipe { get; set; } = null!;
     public float ProductionAmount { get; set; }

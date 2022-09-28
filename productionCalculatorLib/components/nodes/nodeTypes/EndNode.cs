@@ -6,7 +6,7 @@ using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.nodes.nodeTypes;
 
-public class EndNode: ANodeIn, IHasProduct
+public class EndNode: ANode, INodeIn, IHasProduct
 {
     public virtual Product Product { get; set; } = null!;
     public float Amount { get; set; }
