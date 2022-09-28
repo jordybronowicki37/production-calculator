@@ -11,8 +11,8 @@ namespace SiteReact.Data.DbContexts;
 
 public class ProjectContext: DbContext
 {
-    public DbSet<Worksheet> Worksheets { get; set; }
-    public DbSet<EntityContainer> EntityContainers { get; set; }
+    public DbSet<Worksheet> Worksheets { get; set; } = null!;
+    public DbSet<EntityContainer> EntityContainers { get; set; } = null!;
 
     public ProjectContext(DbContextOptions<ProjectContext> options) : base(options) {}
 
@@ -42,17 +42,13 @@ public class ProjectContext: DbContext
         modelBuilder.Entity<SpawnNode>().Property(n => n.Amount).HasColumnName("Amount");
         modelBuilder.Entity<SpawnNode>().HasOne(n => n.Product).WithMany().HasForeignKey("ProductId");
         modelBuilder.Entity<SpawnNode>().Property("ProductId").HasColumnName("ProductId");
-        modelBuilder.Entity<SpawnNode>().HasMany(n => n.OutputConnections).WithOne().HasForeignKey("NodeInId");
         
         modelBuilder.Entity<ProductionNode>().Property(n => n.ProductionAmount).HasColumnName("Amount");
         modelBuilder.Entity<ProductionNode>().HasOne(n => n.Recipe).WithMany().HasForeignKey("RecipeId");
-        modelBuilder.Entity<ProductionNode>().HasMany(n => n.InputConnections).WithOne().HasForeignKey("NodeOutId");
-        modelBuilder.Entity<ProductionNode>().HasMany(n => n.OutputConnections).WithOne().HasForeignKey("NodeInId");
 
         modelBuilder.Entity<EndNode>().Property(n => n.Amount).HasColumnName("Amount");
         modelBuilder.Entity<EndNode>().HasOne(n => n.Product).WithMany().HasForeignKey("ProductId");
         modelBuilder.Entity<EndNode>().Property("ProductId").HasColumnName("ProductId");
-        modelBuilder.Entity<EndNode>().HasMany(n => n.InputConnections).WithOne().HasForeignKey("NodeOutId");
         
         modelBuilder.Entity<Connection>().ToTable("connection");
 
