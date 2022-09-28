@@ -14,8 +14,8 @@ public class DtoWorksheet
     public bool CalculationSucceeded { get; }
     public string CalculationError { get; }
     
-    public IEnumerable<NodeDto> Nodes { get; }
-    public List<DtoConnectionDouble> Connections { get; } = new();
+    public IEnumerable<DtoNode> Nodes { get; }
+    public IEnumerable<DtoConnectionDouble> Connections { get; }
 
     public IEnumerable<Product> Products { get; }
     public IEnumerable<Recipe> Recipes { get; }
@@ -26,28 +26,9 @@ public class DtoWorksheet
         Name = worksheet.Name;
         CalculationSucceeded = worksheet.CalculationSucceeded;
         CalculationError = worksheet.CalculationError;
-        Nodes = worksheet.Nodes.Select(n => NodeDto.GenerateNode(n));
+        Nodes = worksheet.Nodes.Select(n => DtoNode.GenerateNode(n));
         Products = worksheet.EntityContainer.Products;
         Recipes = worksheet.EntityContainer.Recipes;
-        
-        foreach (var node in worksheet.Nodes)
-        {
-            if (node is INodeIn nodeIn)
-            {
-                foreach (var inConnection in nodeIn.InputConnections)
-                {
-                    var dto = new DtoConnectionDouble(inConnection);
-                    if (!Connections.Contains(dto)) Connections.Add(dto);
-                }
-            }
-            if (node is INodeOut nodeOut)
-            {
-                foreach (var outConnection in nodeOut.OutputConnections)
-                {
-                    var dto = new DtoConnectionDouble(outConnection);
-                    if (!Connections.Contains(dto)) Connections.Add(dto);
-                }
-            }
-        }
+        Connections = worksheet.Connections.Select(c => new DtoConnectionDouble(c));
     }
 }

@@ -4,7 +4,7 @@ using SiteReact.Controllers.dto.targets;
 
 namespace SiteReact.Controllers.dto.nodes;
 
-public class DtoNodeProduction : NodeDto
+public class DtoNodeProduction : DtoNode
 {
     public DtoNodeProduction(ProductionNode node)
     {
@@ -14,8 +14,5 @@ public class DtoNodeProduction : NodeDto
         Amount = node.ProductionAmount;
         Recipe = node.Recipe;
         Targets = node.ProductionTargets.Select(t => new DtoProductionTarget(t));
-        
-        InputNodes = node.InputConnections.Select(n => new DtoConnectionSingle(n.NodeIn.Id, n));
-        OutputNodes = node.OutputConnections.Select(n => new DtoConnectionSingle(n.NodeOut.Id, n));
     }
 }

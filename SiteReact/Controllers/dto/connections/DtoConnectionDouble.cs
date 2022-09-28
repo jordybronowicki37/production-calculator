@@ -15,8 +15,8 @@ public class DtoConnectionDouble
     public DtoConnectionDouble(Connection connection)
     {
         Id = connection.Id;
-        InputNodeId = connection.NodeIn.Id;
-        OutputNodeId = connection.NodeOut.Id;
+        InputNodeId = connection.NodeInId;
+        OutputNodeId = connection.NodeOutId;
         Product = connection.Product.Name;
         Amount = connection.Amount;
         Targets = connection.ConnectionTargets.Select(t => new DtoConnectionTarget(t));

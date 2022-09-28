@@ -1,12 +1,11 @@
 ﻿using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.products;
-using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.targets;
 
 namespace SiteReact.Controllers.dto.nodes;
 
-public class NodeDto
+public class DtoNode
 {
     public long Id { get; set; }
     public string Type { get; set; } = "";
@@ -15,11 +14,9 @@ public class NodeDto
     public Recipe? Recipe { get; set; }
     public Product? Product { get; set; }
     
-    public IEnumerable<DtoConnectionSingle>? InputNodes { get; set; }
-    public IEnumerable<DtoConnectionSingle>? OutputNodes { get; set; }
     public IEnumerable<DtoProductionTarget>? Targets { get; set; }
 
-    public static NodeDto GenerateNode(INode node)
+    public static DtoNode GenerateNode(INode node)
     {
         return node switch
         {
