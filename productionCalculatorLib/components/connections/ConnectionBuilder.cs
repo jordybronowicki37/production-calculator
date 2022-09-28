@@ -16,6 +16,7 @@ public class ConnectionBuilder
         _worksheet = worksheet;
         _nodeOut = nodeOut;
         _nodeIn = nodeIn;
+        _product = product;
     }
 
     public Connection Build()
