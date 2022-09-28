@@ -2,7 +2,6 @@
 using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.worksheets;
-using SiteReact.Data;
 using SiteReact.Data.DbContexts;
 using SiteReact.Data.GameDataPresets;
 
@@ -26,7 +25,7 @@ public class WorksheetController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(StaticValues.Get().Worksheet.Select(w => new DtoWorksheetSmall(w)));
+        return Ok(_context.Worksheets.Select(w => new DtoWorksheetSmall(w)));
     }
 
     [HttpGet("{id:long}")]
@@ -65,7 +64,10 @@ public class WorksheetController : ControllerBase
                 return NotFound("Data preset is not found");
         }
         
-        StaticValues.Get().Worksheet.Add(w);
+        _context.Worksheets.Add(w);
+        
+        _context.SaveChanges();
+        
         return Ok(new DtoWorksheet(w));
     }
 
@@ -76,7 +78,10 @@ public class WorksheetController : ControllerBase
         if (w == null) return NotFound("Worksheet is not found");
         
         w.Name = dto.Name;
-        return Ok();
+        
+        _context.SaveChanges();
+        
+        return Ok(new DtoWorksheet(w));
     }
     
     [HttpPost("{id:long}/calculate")]
@@ -86,11 +91,14 @@ public class WorksheetController : ControllerBase
         if (w == null) return NotFound("Worksheet is not found");
         
         CalculatorLimit.ReCalculateAmounts(w);
+        
+        _context.SaveChanges();
+        
         return Ok(new DtoWorksheet(w));
     }
     
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return StaticValues.Get().Worksheet.FirstOrDefault(w => w.Id == worksheetId);
+        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
     }
 }

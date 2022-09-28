@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.products;
-using SiteReact.Data;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
@@ -37,6 +36,9 @@ public class ProductController : ControllerBase
         if (w == null) return NotFound("Worksheet is not found");
         
         var p = w.EntityContainer.GetOrGenerateProduct(dto.Name);
+        
+        _context.SaveChanges();
+        
         return Ok(p);
     }
     
@@ -49,6 +51,9 @@ public class ProductController : ControllerBase
         var p = w.EntityContainer.GetProduct(name);
         if (p == null) return NotFound("Product is not found");
         p.Name = dto.Name;
+        
+        _context.SaveChanges();
+        
         return Ok(p);
     }
     
@@ -59,11 +64,14 @@ public class ProductController : ControllerBase
         if (w == null) return NotFound("Worksheet is not found");
         
         w.EntityContainer.RemoveProduct(name);
+        
+        _context.SaveChanges();
+        
         return NoContent();
     }
     
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return StaticValues.Get().Worksheet.FirstOrDefault(w => w.Id == worksheetId);
+        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
     }
 }

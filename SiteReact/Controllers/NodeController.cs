@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using productionCalculatorLib.components.connections;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
@@ -9,7 +8,6 @@ using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.nodes;
 using SiteReact.Controllers.dto.targets;
-using SiteReact.Data;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
@@ -67,8 +65,10 @@ public class NodeController : ControllerBase
             default:
                 return BadRequest();
         }
+        
+        _context.SaveChanges();
 
-        return Ok(NodeDto.GenerateNode(node));
+        return Ok(DtoNode.GenerateNode(node));
     }
     
     [HttpPut("{nodeId:long}/product")]
@@ -85,16 +85,9 @@ public class NodeController : ControllerBase
         if (product == null) return NotFound("Product not found");
         productNode.Product = product;
 
-        if (node is INodeOut nodeOut)
-        {
-            foreach (var connection in nodeOut.OutputConnections) connection.Product = product;
-        }
-        if (node is INodeIn nodeIn)
-        {
-            foreach (var connection in nodeIn.InputConnections) connection.Product = product;
-        }
+        _context.SaveChanges();
         
-        return Ok(NodeDto.GenerateNode(productNode));
+        return Ok(DtoNode.GenerateNode(productNode));
     }
     
     [HttpPut("{nodeId:long}/recipe")]
@@ -111,7 +104,9 @@ public class NodeController : ControllerBase
         if (recipe == null) return NotFound("Product not found");
         recipeNode.Recipe = recipe;
         
-        return Ok(NodeDto.GenerateNode(recipeNode));
+        _context.SaveChanges();
+        
+        return Ok(DtoNode.GenerateNode(recipeNode));
     }
     
     [HttpPut("{nodeId:long}/targets")]
@@ -146,8 +141,15 @@ public class NodeController : ControllerBase
             float? maxAmount = maxTarget == null ? null : maxTarget.Amount;
             node.SetMinMaxTarget(minAmount, maxAmount);
         }
+
+        foreach (var target in node.ProductionTargets)
+        {
+            target.NodeId = node.Id;
+            _context.Add(target);
+        }
+        _context.SaveChanges();
         
-        return Ok(NodeDto.GenerateNode(node));
+        return Ok(DtoNode.GenerateNode(node));
     }
     
     [HttpDelete("{nodeId:long}")]
@@ -160,6 +162,8 @@ public class NodeController : ControllerBase
         if (node == null) return NotFound("Node is not found");
         
         w.RemoveNode(node);
+        
+        _context.SaveChanges();
         
         return Ok();
     }
@@ -181,9 +185,9 @@ public class NodeController : ControllerBase
         var product = w.EntityContainer.GetProduct(dto.Product);
         if (product == null) return BadRequest();
 
-        var connection = new Connection((ANodeOut) source, (ANodeIn) target, product);
-        source.AddOutputConnection(connection);
-        target.AddInputConnection(connection);
+        var connection = w.GetConnectionBuilder(source, target, product).Build();
+
+        _context.SaveChanges();
         
         return Ok(new DtoConnectionDouble(connection));
     }
@@ -191,21 +195,22 @@ public class NodeController : ControllerBase
     [HttpDelete("connection/{connectionId:long}")]
     public IActionResult RemoveNode(long worksheetId, long connectionId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
+        var worksheet = GetWorksheet(worksheetId);
+        if (worksheet == null) return NotFound("Worksheet is not found");
+
+        var connection = worksheet.Connections.FirstOrDefault(c => c.Id == connectionId);
+        if (connection == null) return NotFound("Connection is not found");
         
-        foreach (var node in w.Nodes)
-        {
-            if (node is INodeOut nodeOut) nodeOut.RemoveConnnection(connectionId);
-            if (node is INodeIn nodeIn) nodeIn.RemoveConnnection(connectionId);
-        }
+        worksheet.RemoveConnection(connection);
+        
+        _context.SaveChanges();
 
         return NoContent();
     }
 
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return StaticValues.Get().Worksheet.FirstOrDefault(w => w.Id == worksheetId);
+        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
     }
 
     private ANode? GetNode(Worksheet worksheet, long nodeId)
