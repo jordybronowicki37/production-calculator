@@ -28,6 +28,7 @@ public class ProjectContext: DbContext
         modelBuilder.Entity<Worksheet>().ToTable("worksheet");
         modelBuilder.Entity<Worksheet>().HasOne(w => w.EntityContainer).WithMany();
         modelBuilder.Entity<Worksheet>().HasMany(w => w.Nodes).WithOne();
+        modelBuilder.Entity<Worksheet>().HasMany(w => w.Connections).WithOne();
         modelBuilder.Entity<Worksheet>().Ignore(w => w.CalculationSucceeded);
         modelBuilder.Entity<Worksheet>().Ignore(w => w.CalculationError);
 
@@ -51,6 +52,7 @@ public class ProjectContext: DbContext
         modelBuilder.Entity<EndNode>().Property("ProductId").HasColumnName("ProductId");
         
         modelBuilder.Entity<Connection>().ToTable("connection");
+        modelBuilder.Entity<Connection>().HasOne(c => c.Product).WithMany();
 
         // Entities
         modelBuilder.Entity<EntityContainer>().ToTable("entity_container");
