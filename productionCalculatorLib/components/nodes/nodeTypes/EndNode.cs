@@ -1,5 +1,4 @@
-﻿using productionCalculatorLib.components.connections;
-using productionCalculatorLib.components.nodes.abstractions;
+﻿using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
@@ -16,26 +15,6 @@ public class EndNode: ANode, INodeIn, IHasProduct
     public EndNode(Product product)
     {
         Product = product;
-    }
-
-    public override IList<Connection> InputConnections { get; } = new List<Connection>();
-    public override void AddInputConnection(Connection connection)
-    {
-        if (!InputConnections.Contains(connection)) InputConnections.Add(connection);
-    }
-    public override void RemoveConnnection(long connectionId)
-    {
-        var connection = InputConnections.FirstOrDefault(c => c.Id == connectionId);
-        if (connection == null) return;
-        InputConnections.Remove(connection);
-    }
-    public override void ClearConnections()
-    {
-        foreach (var inCon in InputConnections)
-        {
-            inCon.NodeIn.RemoveConnnection(inCon.Id);
-        }
-        InputConnections.Clear();
     }
 
     public override IList<TargetProduction> ProductionTargets { get; set; } = new List<TargetProduction>();

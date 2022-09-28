@@ -1,5 +1,4 @@
-﻿using productionCalculatorLib.components.connections;
-using productionCalculatorLib.components.nodes.abstractions;
+﻿using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
@@ -18,26 +17,6 @@ public class SpawnNode: ANode, INodeOut, IHasProduct
         Product = product;
     }
 
-    public override IList<Connection> OutputConnections { get; } = new List<Connection>();
-    public override void AddOutputConnection(Connection connection)
-    {
-        if (!OutputConnections.Contains(connection))OutputConnections.Add(connection);
-    }
-    public override void RemoveConnnection(long connectionId)
-    {
-        var connection = OutputConnections.FirstOrDefault(c => c.Id == connectionId);
-        if (connection == null) return;
-        OutputConnections.Remove(connection);
-    }
-    public override void ClearConnections()
-    {
-        foreach (var outCon in OutputConnections)
-        {
-            outCon.NodeOut.RemoveConnnection(outCon.Id);
-        }
-        OutputConnections.Clear();
-    }
-    
     public override IList<TargetProduction> ProductionTargets { get; set; } = new List<TargetProduction>();
     public override void SetExactTarget(float amount) 
     {

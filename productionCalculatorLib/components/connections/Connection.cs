@@ -1,5 +1,4 @@
-﻿using productionCalculatorLib.components.nodes.abstractions;
-using productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
 
@@ -8,8 +7,8 @@ namespace productionCalculatorLib.components.connections;
 public class Connection
 {
     public long Id { get; set; }
-    public ANode NodeIn { get; }
-    public ANode NodeOut { get; }
+    public long NodeInId { get; init; }
+    public long NodeOutId { get; init; }
     public virtual Product Product { get; set; }
     public float Amount { get; set; }
     
@@ -17,8 +16,9 @@ public class Connection
 
     public Connection(INodeOut nodeIn, INodeIn nodeOut, Product product)
     {
-        NodeIn = (ANode) nodeIn;
-        NodeOut = (ANode) nodeOut;
+        if (nodeIn.Id == null || nodeOut.Id == null) throw new NullReferenceException("Node has no id");
+        NodeInId = nodeIn.Id;
+        NodeOutId = nodeOut.Id;
         Product = product;
     }
 
@@ -34,7 +34,7 @@ public class Connection
 
     protected bool Equals(Connection other)
     {
-        return NodeIn.Equals(other.NodeIn) && NodeOut.Equals(other.NodeOut) && Product.Equals(other.Product);
+        return NodeInId.Equals(other.NodeInId) && NodeOutId.Equals(other.NodeOutId) && Product.Equals(other.Product);
     }
 
     public override bool Equals(object? obj)
@@ -47,7 +47,7 @@ public class Connection
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(NodeIn, NodeOut);
+        return HashCode.Combine(NodeInId, NodeOutId);
     }
 
     public static bool operator ==(Connection? left, Connection? right)
