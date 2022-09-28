@@ -19,6 +19,7 @@ public static class TestDataInitializer
         {
             Name = "Iron ingot smelting"
         };
+        context.Worksheets.Add(worksheet);
 
         var productIronOre = worksheet.EntityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = worksheet.EntityContainer.GetOrGenerateProduct("Iron ingot");
@@ -28,10 +29,14 @@ public static class TestDataInitializer
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 10));
 
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).AddInputNode(node1, productIronOre).Build();
-        var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).AddInputNode(node2, productIronIngot).SetExactTarget(20).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).Build();
+        var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).SetExactTarget(20).Build();
 
-        context.Worksheets.Add(worksheet);
+        context.SaveChanges();
+
+        worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
+        worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
+        
         context.SaveChanges();
     }
 
@@ -41,6 +46,7 @@ public static class TestDataInitializer
         {
             Name = "Steel ingot smelting"
         };
+        context.Worksheets.Add(worksheet);
 
         var productIronOre = worksheet.EntityContainer.GetOrGenerateProduct("Iron ore");
         var productCoal = worksheet.EntityContainer.GetOrGenerateProduct("Coal");
@@ -51,12 +57,17 @@ public static class TestDataInitializer
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productCoal, 5));
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productSteelIngot, 10));
         
-        var node0 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
-        var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productCoal).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).AddInputNode(node0, productIronOre).AddInputNode(node1, productCoal).SetExactTarget(2).Build();
-        var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productSteelIngot).AddInputNode(node2, productSteelIngot).Build();
+        var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
+        var node2 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productCoal).Build();
+        var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).SetExactTarget(2).Build();
+        var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productSteelIngot).Build();
         
-        context.Worksheets.Add(worksheet);
+        context.SaveChanges();
+        
+        worksheet.GetConnectionBuilder(node1, node3, productIronOre).Build();
+        worksheet.GetConnectionBuilder(node2, node3, productCoal).Build();
+        worksheet.GetConnectionBuilder(node3, node4, productSteelIngot).Build();
+        
         context.SaveChanges();
     }
 }
