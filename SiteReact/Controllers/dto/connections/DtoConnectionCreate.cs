@@ -2,7 +2,7 @@
 
 public class DtoConnectionCreate
 {
-    public long InputNodeId { get; set; }
-    public long OutputNodeId { get; set; }
+    public Guid InputNodeId { get; set; }
+    public Guid OutputNodeId { get; set; }
     public string Product { get; set; } = "";
 }

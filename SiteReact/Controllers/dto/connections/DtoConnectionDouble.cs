@@ -5,9 +5,9 @@ namespace SiteReact.Controllers.dto.connections;
 
 public class DtoConnectionDouble
 {
-    public long Id { get; }
-    public long InputNodeId { get; }
-    public long OutputNodeId { get; }
+    public Guid Id { get; }
+    public Guid InputNodeId { get; }
+    public Guid OutputNodeId { get; }
     public string Product { get; }
     public float Amount { get; }
     public IEnumerable<DtoConnectionTarget> Targets;

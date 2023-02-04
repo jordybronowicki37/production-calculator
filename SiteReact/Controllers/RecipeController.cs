@@ -8,7 +8,7 @@ using SiteReact.Data.DbContexts;
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("worksheet/{worksheetId:long}/[controller]")]
+[Route("worksheet/{worksheetId:Guid}/[controller]")]
 public class RecipeController : ControllerBase
 {
     private readonly ILogger<RecipeController> _logger;
@@ -22,8 +22,8 @@ public class RecipeController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
-    public IActionResult GetAll(long worksheetId)
+    [HttpGet("")]
+    public IActionResult GetAll(Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -31,8 +31,8 @@ public class RecipeController : ControllerBase
         return Ok(w.EntityContainer.Recipes);
     }
 
-    [HttpPost]
-    public IActionResult Create(DtoRecipe dto, long worksheetId)
+    [HttpPost("")]
+    public IActionResult Create(DtoRecipe dto, Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -50,8 +50,8 @@ public class RecipeController : ControllerBase
         return Ok(r);
     }
     
-    [HttpDelete("{id:int}")]
-    public IActionResult Remove(int id, long worksheetId)
+    [HttpDelete("{id:Guid}")]
+    public IActionResult Remove(Guid id, Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -65,7 +65,7 @@ public class RecipeController : ControllerBase
         return NoContent();
     }
     
-    private Worksheet? GetWorksheet(long worksheetId)
+    private Worksheet? GetWorksheet(Guid worksheetId)
     {
         var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
         return _context.Worksheets.Find(filter).FirstOrDefault();

@@ -14,7 +14,7 @@ using SiteReact.Data.DbContexts;
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("worksheet/{worksheetId:long}/[controller]")]
+[Route("worksheet/{worksheetId:Guid}/[controller]")]
 public class NodeController : ControllerBase
 {
     private readonly ILogger<NodeController> _logger;
@@ -28,8 +28,8 @@ public class NodeController : ControllerBase
         _context = context;
     }
     
-    [HttpPost]
-    public IActionResult AddNode(long worksheetId, DtoNodeCreate dto)
+    [HttpPost("")]
+    public IActionResult AddNode(Guid worksheetId, DtoNodeCreate dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -72,8 +72,8 @@ public class NodeController : ControllerBase
         return Ok(DtoNode.GenerateNode(node));
     }
     
-    [HttpPut("{nodeId:long}/product")]
-    public IActionResult EditNodeProduct(long nodeId, long worksheetId, DtoNodeSetProduct dto)
+    [HttpPut("{nodeId:Guid}/product")]
+    public IActionResult EditNodeProduct(Guid nodeId, Guid worksheetId, DtoNodeSetProduct dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -91,8 +91,8 @@ public class NodeController : ControllerBase
         return Ok(DtoNode.GenerateNode(productNode));
     }
     
-    [HttpPut("{nodeId:long}/recipe")]
-    public IActionResult EditNodeRecipe(long nodeId, long worksheetId, DtoNodeSetRecipe dto)
+    [HttpPut("{nodeId:Guid}/recipe")]
+    public IActionResult EditNodeRecipe(Guid nodeId, Guid worksheetId, DtoNodeSetRecipe dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -110,8 +110,8 @@ public class NodeController : ControllerBase
         return Ok(DtoNode.GenerateNode(recipeNode));
     }
     
-    [HttpPut("{nodeId:long}/Targets")]
-    public IActionResult EditNodeTargets(long nodeId, long worksheetId, IEnumerable<DtoProductionTarget> dto)
+    [HttpPut("{nodeId:Guid}/Targets")]
+    public IActionResult EditNodeTargets(Guid nodeId, Guid worksheetId, IEnumerable<DtoProductionTarget> dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -148,8 +148,8 @@ public class NodeController : ControllerBase
         return Ok(DtoNode.GenerateNode(node));
     }
     
-    [HttpDelete("{nodeId:long}")]
-    public IActionResult DeleteNode(long nodeId, long worksheetId)
+    [HttpDelete("{nodeId:Guid}")]
+    public IActionResult DeleteNode(Guid nodeId, Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -165,7 +165,7 @@ public class NodeController : ControllerBase
     }
 
     [HttpPost("connection")]
-    public IActionResult AddNode(long worksheetId, DtoConnectionCreate dto)
+    public IActionResult AddNode(Guid worksheetId, DtoConnectionCreate dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -188,8 +188,8 @@ public class NodeController : ControllerBase
         return Ok(new DtoConnectionDouble(connection));
     }
 
-    [HttpDelete("connection/{connectionId:long}")]
-    public IActionResult RemoveNode(long worksheetId, long connectionId)
+    [HttpDelete("connection/{connectionId:Guid}")]
+    public IActionResult RemoveNode(Guid worksheetId, Guid connectionId)
     {
         var worksheet = GetWorksheet(worksheetId);
         if (worksheet == null) return NotFound("Worksheet is not found");
@@ -204,13 +204,13 @@ public class NodeController : ControllerBase
         return NoContent();
     }
 
-    private Worksheet? GetWorksheet(long worksheetId)
+    private Worksheet? GetWorksheet(Guid worksheetId)
     {
         var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
         return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 
-    private ANode? GetNode(Worksheet worksheet, long nodeId)
+    private ANode? GetNode(Worksheet worksheet, Guid nodeId)
     {
         return worksheet.Nodes.FirstOrDefault(n => n.Id == nodeId);
     }

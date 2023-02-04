@@ -7,7 +7,7 @@ using SiteReact.Data.DbContexts;
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("worksheet/{worksheetId:long}/[controller]")]
+[Route("worksheet/{worksheetId:Guid}/[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
@@ -21,8 +21,8 @@ public class ProductController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
-    public IActionResult GetAll(long worksheetId)
+    [HttpGet("")]
+    public IActionResult GetAll(Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -30,8 +30,8 @@ public class ProductController : ControllerBase
         return Ok(w.EntityContainer.Products);
     }
 
-    [HttpPost]
-    public IActionResult Create(DtoProduct dto, long worksheetId)
+    [HttpPost("")]
+    public IActionResult Create(DtoProduct dto, Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -44,7 +44,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpPatch("{name}")]
-    public IActionResult Update(string name, long worksheetId, DtoProduct dto)
+    public IActionResult Update(string name, Guid worksheetId, DtoProduct dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -59,7 +59,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpDelete("{name}")]
-    public IActionResult Remove(string name, long worksheetId)
+    public IActionResult Remove(string name, Guid worksheetId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -71,7 +71,7 @@ public class ProductController : ControllerBase
         return NoContent();
     }
     
-    private Worksheet? GetWorksheet(long worksheetId)
+    private Worksheet? GetWorksheet(Guid worksheetId)
     {
         var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
         return _context.Worksheets.Find(filter).FirstOrDefault();    }

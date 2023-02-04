@@ -24,14 +24,14 @@ public class WorksheetController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
+    [HttpGet("")]
     public IActionResult GetAll()
     {
         return Ok(GetAllWorksheets().Select(w => new DtoWorksheetSmall(w)));
     }
 
-    [HttpGet("{id:long}")]
-    public IActionResult Get(long id)
+    [HttpGet("{id:Guid}")]
+    public IActionResult Get(Guid id)
     {
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
@@ -40,7 +40,7 @@ public class WorksheetController : ControllerBase
         return Ok(new DtoWorksheet(w));
     }
 
-    [HttpPost]
+    [HttpPost("")]
     public IActionResult CreateNew(DtoWorksheetCreate dto)
     {
         var w = new Worksheet(){Name = dto.Name};
@@ -73,8 +73,8 @@ public class WorksheetController : ControllerBase
         return Ok(new DtoWorksheet(testw));
     }
 
-    [HttpPatch("{id:long}")]
-    public IActionResult Edit(long id, DtoWorksheetCreate dto)
+    [HttpPatch("{id:Guid}")]
+    public IActionResult Edit(Guid id, DtoWorksheetCreate dto)
     {
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
@@ -86,8 +86,8 @@ public class WorksheetController : ControllerBase
         return Ok(new DtoWorksheet(w));
     }
     
-    [HttpPost("{id:long}/calculate")]
-    public IActionResult Calculate(long id)
+    [HttpPost("{id:Guid}/calculate")]
+    public IActionResult Calculate(Guid id)
     {
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
@@ -99,13 +99,13 @@ public class WorksheetController : ControllerBase
         return Ok(new DtoWorksheet(w));
     }
     
-    private IList<Worksheet> GetAllWorksheets()
+    private IEnumerable<Worksheet> GetAllWorksheets()
     {
         var filter = Builders<Worksheet>.Filter.Empty;
         return _context.Worksheets.Find(filter).ToList();
     }
     
-    private Worksheet? GetWorksheet(long worksheetId)
+    private Worksheet? GetWorksheet(Guid worksheetId)
     {
         var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
         return _context.Worksheets.Find(filter).FirstOrDefault();

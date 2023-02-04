@@ -8,7 +8,7 @@ namespace SiteReact.Controllers.dto.worksheets;
 
 public class DtoWorksheet
 {
-    public long Id { get; }
+    public Guid Id { get; }
     public string Name { get; }
     
     public bool CalculationSucceeded { get; }
