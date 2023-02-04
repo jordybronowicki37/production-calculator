@@ -6,7 +6,6 @@ public class RecipeBuilder
 {
     private readonly EntityContainer _container;
     private readonly string _name;
-
     private List<ThroughPut> _inputs = new();
     private List<ThroughPut> _outputs = new();
 

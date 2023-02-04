@@ -9,6 +9,7 @@ public class SpawnNode: ANode, INodeOut, IHasProduct
 {
     public virtual Product Product { get; set; } = null!;
     public float Amount { get; set; }
+    public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
     public SpawnNode() {}
 
@@ -17,13 +18,13 @@ public class SpawnNode: ANode, INodeOut, IHasProduct
         Product = product;
     }
 
-    public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     public override void SetExactTarget(float amount) 
     {
         ClearTargets();
         Targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         Amount = amount;
     }
+    
     public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
     {
         ClearTargets();
@@ -38,6 +39,7 @@ public class SpawnNode: ANode, INodeOut, IHasProduct
             if (Amount > (float) maxAmount) Amount = (float) maxAmount;
         }
     }
+    
     public override void ClearTargets() 
     {
         Targets.Clear();

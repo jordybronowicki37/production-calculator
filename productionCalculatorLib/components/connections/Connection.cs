@@ -6,9 +6,9 @@ namespace productionCalculatorLib.components.connections;
 
 public class Connection
 {
-    public long Id { get; set; }
-    public long NodeInId { get; init; }
-    public long NodeOutId { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid NodeInId { get; init; }
+    public Guid NodeOutId { get; init; }
     public virtual Product Product { get; set; }
     public float Amount { get; set; }
     public virtual ICollection<TargetConnection> Targets { get; private set; } = new List<TargetConnection>();

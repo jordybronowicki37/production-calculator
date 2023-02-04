@@ -5,7 +5,7 @@ namespace productionCalculatorLib.components.nodes.abstractions;
 
 public abstract class ANode: INode
 {
-    public long Id { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public virtual ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     public abstract void SetExactTarget(float amount);
     public abstract void SetMinMaxTarget(float? minAmount, float? maxAmount);

@@ -4,7 +4,7 @@ namespace productionCalculatorLib.components.entityContainer;
 
 public class EntityContainer
 {
-    public long Id { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public virtual ICollection<Product> Products { get; private set; } = new List<Product>();
     public virtual ICollection<Recipe> Recipes { get; private set; } = new List<Recipe>();
     
@@ -19,10 +19,12 @@ public class EntityContainer
         Products.Add(p);
         return p;
     }
+    
     public Product? GetProduct(string name)
     {
         return Products.FirstOrDefault(r => r.Name == name);
     }
+    
     public void RemoveProduct(string name)
     {
         var product = Products.FirstOrDefault(p => p.Name == name);
@@ -37,11 +39,13 @@ public class EntityContainer
         Recipes.Add(r);
         return r;
     }
+    
     public RecipeBuilder GetRecipeBuilder(string name)
     {
         if (Recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");
         return new RecipeBuilder(this, name);
     }
+    
     public Recipe? GetRecipe(string name)
     {
         return Recipes.FirstOrDefault(r => r.Name == name);

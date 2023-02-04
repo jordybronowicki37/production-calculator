@@ -2,9 +2,8 @@
 
 public class Recipe
 {
-    public long Id { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public string Name { get; set; }
-
     public virtual List<ThroughPut> InputThroughPuts { get; private set; } = new();
     public virtual List<ThroughPut> OutputThroughPuts { get; private set; } = new();
 

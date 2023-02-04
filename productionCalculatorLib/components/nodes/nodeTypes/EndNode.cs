@@ -9,6 +9,7 @@ public class EndNode: ANode, INodeIn, IHasProduct
 {
     public virtual Product Product { get; set; } = null!;
     public float Amount { get; set; }
+    public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
     public EndNode() {}
 
@@ -17,13 +18,13 @@ public class EndNode: ANode, INodeIn, IHasProduct
         Product = product;
     }
 
-    public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     public override void SetExactTarget(float amount) 
     {
         ClearTargets();
         Targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         Amount = amount;
     }
+    
     public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
     {
         ClearTargets();
@@ -38,6 +39,7 @@ public class EndNode: ANode, INodeIn, IHasProduct
             if (Amount > (float) maxAmount) Amount = (float) maxAmount;
         }
     }
+    
     public override void ClearTargets() 
     {
         Targets.Clear();

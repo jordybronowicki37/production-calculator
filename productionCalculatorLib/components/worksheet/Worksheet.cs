@@ -9,15 +9,15 @@ namespace productionCalculatorLib.components.worksheet;
 
 public class Worksheet
 {
-    public Worksheet() {}
-
-    public long Id { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
     public string Name { get; set; } = "";
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
     public virtual EntityContainer EntityContainer { get; private set; } = new();
     public virtual ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
     public virtual ICollection<Connection> Connections { get; private set; } = new List<Connection>();
+    
+    public Worksheet() {}
     
     public void AddNode(ANode node)
     {
@@ -26,11 +26,13 @@ public class Worksheet
             Nodes.Add(node);
         }
     }
+    
     public void RemoveNode(ANode node)
     {
         Nodes.Remove(node);
         ClearNodeConnections(node);
     }
+    
     public NodeBuilder<TNodeType> GetNodeBuilder<TNodeType>() where TNodeType : ANode, new()
     {
         return new NodeBuilder<TNodeType>(this);
@@ -43,16 +45,19 @@ public class Worksheet
             Connections.Add(connection);
         }
     }
+    
     public void RemoveConnection(Connection connection)
     {
         Connections.Remove(connection);
     }
+    
     public void ClearNodeConnections(ANode node)
     {
         var id = node.Id;
         var filtered = Connections.Where(c => c.NodeInId != id && c.NodeOutId != id);
         Connections = new List<Connection>(filtered);
     }
+    
     public ConnectionBuilder GetConnectionBuilder(INodeOut nodeOut, INodeIn nodeIn, Product product)
     {
         return new ConnectionBuilder(this, nodeOut, nodeIn, product);
