@@ -17,11 +17,11 @@ namespace SiteReact.Controllers;
 public class NodeController : ControllerBase
 {
     private readonly ILogger<NodeController> _logger;
-    private readonly ProjectContext _context;
+    private readonly MainContext _context;
     
     public NodeController(
         ILogger<NodeController> logger, 
-        ProjectContext context)
+        MainContext context)
     {
         _logger = logger;
         _context = context;

@@ -12,11 +12,11 @@ namespace SiteReact.Controllers;
 public class WorksheetController : ControllerBase
 {
     private readonly ILogger<WorksheetController> _logger;
-    private readonly ProjectContext _context;
+    private readonly MainContext _context;
     
     public WorksheetController(
         ILogger<WorksheetController> logger, 
-        ProjectContext context)
+        MainContext context)
     {
         _logger = logger;
         _context = context;

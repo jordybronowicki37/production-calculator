@@ -11,11 +11,11 @@ namespace SiteReact.Controllers;
 public class RecipeController : ControllerBase
 {
     private readonly ILogger<RecipeController> _logger;
-    private readonly ProjectContext _context;
+    private readonly MainContext _context;
     
     public RecipeController(
         ILogger<RecipeController> logger, 
-        ProjectContext context)
+        MainContext context)
     {
         _logger = logger;
         _context = context;

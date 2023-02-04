@@ -10,11 +10,11 @@ namespace SiteReact.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
-    private readonly ProjectContext _context;
+    private readonly MainContext _context;
     
     public ProductController(
         ILogger<ProductController> logger, 
-        ProjectContext context)
+        MainContext context)
     {
         _logger = logger;
         _context = context;

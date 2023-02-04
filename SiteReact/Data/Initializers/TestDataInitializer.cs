@@ -7,19 +7,18 @@ namespace SiteReact.Data.Initializers;
 
 public static class TestDataInitializer
 {
-    public static void InitializeAllData(ProjectContext context)
+    public static void InitializeAllData(DocumentContext context)
     {
         InitializeSimpleOneWay(context);
         InitializeDoubleSpawn(context);
     }
     
-    public static void InitializeSimpleOneWay(ProjectContext context)
+    public static void InitializeSimpleOneWay(DocumentContext context)
     {
         var worksheet = new Worksheet
         {
             Name = "Iron ingot smelting"
         };
-        context.Worksheets.Add(worksheet);
 
         var productIronOre = worksheet.EntityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = worksheet.EntityContainer.GetOrGenerateProduct("Iron ingot");
@@ -40,13 +39,12 @@ public static class TestDataInitializer
         context.SaveChanges();
     }
 
-    public static void InitializeDoubleSpawn(ProjectContext context)
+    public static void InitializeDoubleSpawn(DocumentContext context)
     {
         var worksheet = new Worksheet
         {
             Name = "Steel ingot smelting"
         };
-        context.Worksheets.Add(worksheet);
 
         var productIronOre = worksheet.EntityContainer.GetOrGenerateProduct("Iron ore");
         var productCoal = worksheet.EntityContainer.GetOrGenerateProduct("Coal");

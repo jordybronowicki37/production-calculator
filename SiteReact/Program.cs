@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ProjectContext>(context =>
+builder.Services.AddDbContext<MainContext>(context =>
 {
     var database = Environment.GetEnvironmentVariable("DatabaseName") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseName\")");
     var username = Environment.GetEnvironmentVariable("DatabaseUsername") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseUsername\")");
@@ -51,7 +51,7 @@ else
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ProjectContext>();
+    var context = services.GetRequiredService<MainContext>();
 
     if (app.Environment.IsDevelopment())
     {
