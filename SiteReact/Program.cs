@@ -22,14 +22,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var mongoConnectionString = Environment.GetEnvironmentVariable("MongoConnectionString") ?? throw 
+    new ArgumentNullException($"Environment variable not set: MongoConnectionString");
+builder.Services.AddSingleton(new DocumentContext(mongoConnectionString));
+
 builder.Services.AddDbContext<MainContext>(context =>
 {
-    var database = Environment.GetEnvironmentVariable("DatabaseName") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseName\")");
-    var username = Environment.GetEnvironmentVariable("DatabaseUsername") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabaseUsername\")");
-    var password = Environment.GetEnvironmentVariable("DatabasePassword") ?? throw new ArgumentNullException("Environment.GetEnvironmentVariable(\"DatabasePassword\")");
-
-    context.UseLazyLoadingProxies().UseNpgsql(
-        $"Host=localhost;Database={database};Username={username};Password={password}", 
+    var postgresConnectionString = Environment.GetEnvironmentVariable("PostgreSQLConnectionString") ?? throw 
+        new ArgumentNullException($"Environment variable not set: PostgreSQLConnectionString");
+    context.UseLazyLoadingProxies().UseNpgsql(postgresConnectionString, 
         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 });
 
@@ -57,7 +58,7 @@ using (var scope = app.Services.CreateScope())
     {
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
-        TestDataInitializer.InitializeAllData(context);
+        // TestDataInitializer.InitializeAllData(context);
     }
 }
 
