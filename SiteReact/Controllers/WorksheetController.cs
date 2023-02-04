@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data.DbContexts;
 using SiteReact.Data.GameDataPresets;
+using SiteReact.Data.Initializers;
 
 namespace SiteReact.Controllers;
 
@@ -12,11 +14,11 @@ namespace SiteReact.Controllers;
 public class WorksheetController : ControllerBase
 {
     private readonly ILogger<WorksheetController> _logger;
-    private readonly MainContext _context;
+    private readonly DocumentContext _context;
     
     public WorksheetController(
         ILogger<WorksheetController> logger, 
-        MainContext context)
+        DocumentContext context)
     {
         _logger = logger;
         _context = context;
@@ -25,7 +27,7 @@ public class WorksheetController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        return Ok(_context.Worksheets.Select(w => new DtoWorksheetSmall(w)));
+        return Ok(GetAllWorksheets().Select(w => new DtoWorksheetSmall(w)));
     }
 
     [HttpGet("{id:long}")]
@@ -63,12 +65,12 @@ public class WorksheetController : ControllerBase
             default:
                 return NotFound("Data preset is not found");
         }
+
+        var testw = TestDataInitializer.InitializeSimpleOneWay();
         
-        _context.Worksheets.Add(w);
+        _context.Worksheets.InsertOne(testw);
         
-        _context.SaveChanges();
-        
-        return Ok(new DtoWorksheet(w));
+        return Ok(new DtoWorksheet(testw));
     }
 
     [HttpPatch("{id:long}")]
@@ -79,7 +81,7 @@ public class WorksheetController : ControllerBase
         
         w.Name = dto.Name;
         
-        _context.SaveChanges();
+        _context.Worksheets.InsertOne(w);
         
         return Ok(new DtoWorksheet(w));
     }
@@ -92,13 +94,20 @@ public class WorksheetController : ControllerBase
         
         CalculatorLimit.ReCalculateAmounts(w);
         
-        _context.SaveChanges();
+        _context.Worksheets.InsertOne(w);
         
         return Ok(new DtoWorksheet(w));
     }
     
+    private IList<Worksheet> GetAllWorksheets()
+    {
+        var filter = Builders<Worksheet>.Filter.Empty;
+        return _context.Worksheets.Find(filter).ToList();
+    }
+    
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 }

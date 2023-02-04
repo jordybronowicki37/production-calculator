@@ -11,25 +11,25 @@ public class Connection
     public long NodeOutId { get; init; }
     public virtual Product Product { get; set; }
     public float Amount { get; set; }
+    public virtual ICollection<TargetConnection> Targets { get; private set; } = new List<TargetConnection>();
     
     public Connection() {}
 
     public Connection(INodeOut nodeIn, INodeIn nodeOut, Product product)
     {
-        if (nodeIn.Id == null || nodeOut.Id == null) throw new NullReferenceException("Node has no id");
         NodeInId = nodeIn.Id;
         NodeOutId = nodeOut.Id;
         Product = product;
     }
 
-    public virtual List<TargetConnection> ConnectionTargets { get; } = new();
     public void AddConnectionTarget(TargetConnection target)
     {
-        if (!ConnectionTargets.Contains(target)) ConnectionTargets.Add(target);
+        if (!Targets.Contains(target)) Targets.Add(target);
     }
+    
     public void RemoveConnectionTarget(TargetConnection target)
     {
-        ConnectionTargets.Remove(target);
+        Targets.Remove(target);
     }
 
     protected bool Equals(Connection other)

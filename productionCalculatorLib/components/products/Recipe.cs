@@ -3,10 +3,10 @@
 public class Recipe
 {
     public long Id { get; set; }
-    public string Name { get; }
+    public string Name { get; set; }
 
-    public virtual List<ThroughPut> InputThroughPuts { get; } = new();
-    public virtual List<ThroughPut> OutputThroughPuts { get; } = new();
+    public virtual List<ThroughPut> InputThroughPuts { get; private set; } = new();
+    public virtual List<ThroughPut> OutputThroughPuts { get; private set; } = new();
 
     public Recipe() {}
 

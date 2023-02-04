@@ -13,12 +13,12 @@ public class Worksheet
 
     public long Id { get; set; }
     public string Name { get; set; } = "";
-    public virtual EntityContainer EntityContainer { get; } = new();
-
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
-
-    public virtual IList<ANode> Nodes { get; } = new List<ANode>();
+    public virtual EntityContainer EntityContainer { get; private set; } = new();
+    public virtual ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
+    public virtual ICollection<Connection> Connections { get; private set; } = new List<Connection>();
+    
     public void AddNode(ANode node)
     {
         if (!Nodes.Contains(node))
@@ -36,7 +36,6 @@ public class Worksheet
         return new NodeBuilder<TNodeType>(this);
     }
 
-    public virtual IList<Connection> Connections { get; private set; } = new List<Connection>();
     public void AddConnection(Connection connection)
     {
         if (!Connections.Contains(connection))

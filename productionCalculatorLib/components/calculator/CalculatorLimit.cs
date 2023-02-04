@@ -53,7 +53,7 @@ public class CalculatorLimit
     private bool CheckLimits()
     {
         return _worksheet.Nodes.Any(node =>
-            node.ProductionTargets.Any(target =>
+            node.Targets.Any(target =>
                 target.Type == TargetProductionTypes.ExactAmount));
     }
     
@@ -63,16 +63,16 @@ public class CalculatorLimit
         {
             if (node is IHasProduct productNode)
             {
-                var exactTarget = productNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
-                var minTarget = productNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
+                var exactTarget = productNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
+                var minTarget = productNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
                 if (exactTarget != null) productNode.Amount = exactTarget.Amount;
                 else if (minTarget != null) productNode.Amount = minTarget.Amount;
                 else productNode.Amount = 0;
             };
             if (node is IHasRecipe recipeNode)
             {
-                var exactTarget = recipeNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
-                var minTarget = recipeNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
+                var exactTarget = recipeNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
+                var minTarget = recipeNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
                 if (exactTarget != null) recipeNode.ProductionAmount = exactTarget.Amount;
                 else if (minTarget != null) recipeNode.ProductionAmount = minTarget.Amount;
                 else recipeNode.ProductionAmount = 0;
@@ -137,7 +137,7 @@ public class CalculatorLimit
 
     private void CalculateProductAmounts(IHasProduct productNode)
     {
-        var hasExactTarget = productNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount) != null;
+        var hasExactTarget = productNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount) != null;
         var connections = productNode switch
         {
             SpawnNode spawnNode => FilterConnections(GetOutputConnections(spawnNode), spawnNode.Product).ToList(),
@@ -164,7 +164,7 @@ public class CalculatorLimit
         switch (recipeNode)
         {
             case ProductionNode productionNode:
-                var hasExactTarget = productionNode.ProductionTargets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount) != null;
+                var hasExactTarget = productionNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount) != null;
 
                 foreach (var inputThroughPut in productionNode.Recipe.InputThroughPuts)
                 {

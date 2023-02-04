@@ -2,9 +2,8 @@
 
 public class TargetProduction
 {
-    public long Id { get; set; }
-    public TargetProductionTypes Type { get; }
-    public float Amount { get; }
+    public TargetProductionTypes Type { get; set; }
+    public float Amount { get; set; }
     
     public TargetProduction() {}
 

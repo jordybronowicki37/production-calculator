@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
@@ -17,11 +18,11 @@ namespace SiteReact.Controllers;
 public class NodeController : ControllerBase
 {
     private readonly ILogger<NodeController> _logger;
-    private readonly MainContext _context;
+    private readonly DocumentContext _context;
     
     public NodeController(
         ILogger<NodeController> logger, 
-        MainContext context)
+        DocumentContext context)
     {
         _logger = logger;
         _context = context;
@@ -66,7 +67,7 @@ public class NodeController : ControllerBase
                 return BadRequest();
         }
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
 
         return Ok(DtoNode.GenerateNode(node));
     }
@@ -85,7 +86,7 @@ public class NodeController : ControllerBase
         if (product == null) return NotFound("Product not found");
         productNode.Product = product;
 
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok(DtoNode.GenerateNode(productNode));
     }
@@ -104,12 +105,12 @@ public class NodeController : ControllerBase
         if (recipe == null) return NotFound("Product not found");
         recipeNode.Recipe = recipe;
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok(DtoNode.GenerateNode(recipeNode));
     }
     
-    [HttpPut("{nodeId:long}/targets")]
+    [HttpPut("{nodeId:long}/Targets")]
     public IActionResult EditNodeTargets(long nodeId, long worksheetId, IEnumerable<DtoProductionTarget> dto)
     {
         var w = GetWorksheet(worksheetId);
@@ -141,13 +142,8 @@ public class NodeController : ControllerBase
             float? maxAmount = maxTarget == null ? null : maxTarget.Amount;
             node.SetMinMaxTarget(minAmount, maxAmount);
         }
-
-        foreach (var target in node.ProductionTargets)
-        {
-            target.NodeId = node.Id;
-            _context.Add(target);
-        }
-        _context.SaveChanges();
+        
+        // _context.SaveChanges();
         
         return Ok(DtoNode.GenerateNode(node));
     }
@@ -163,7 +159,7 @@ public class NodeController : ControllerBase
         
         w.RemoveNode(node);
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok();
     }
@@ -187,7 +183,7 @@ public class NodeController : ControllerBase
 
         var connection = w.GetConnectionBuilder(source, target, product).Build();
 
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok(new DtoConnectionDouble(connection));
     }
@@ -203,14 +199,15 @@ public class NodeController : ControllerBase
         
         worksheet.RemoveConnection(connection);
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
 
         return NoContent();
     }
 
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 
     private ANode? GetNode(Worksheet worksheet, long nodeId)

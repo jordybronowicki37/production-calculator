@@ -19,7 +19,7 @@ public class DtoConnectionDouble
         OutputNodeId = connection.NodeOutId;
         Product = connection.Product.Name;
         Amount = connection.Amount;
-        Targets = connection.ConnectionTargets.Select(t => new DtoConnectionTarget(t));
+        Targets = connection.Targets.Select(t => new DtoConnectionTarget(t));
     }
 
     protected bool Equals(DtoConnectionDouble other)

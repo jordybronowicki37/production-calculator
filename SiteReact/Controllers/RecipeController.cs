@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.recipes;
@@ -11,11 +12,11 @@ namespace SiteReact.Controllers;
 public class RecipeController : ControllerBase
 {
     private readonly ILogger<RecipeController> _logger;
-    private readonly MainContext _context;
+    private readonly DocumentContext _context;
     
     public RecipeController(
         ILogger<RecipeController> logger, 
-        MainContext context)
+        DocumentContext context)
     {
         _logger = logger;
         _context = context;
@@ -44,7 +45,7 @@ public class RecipeController : ControllerBase
         foreach (var outputThroughPut in dto.OutputThroughPuts)
             r.OutputThroughPuts.Add(new ThroughPut(w.EntityContainer.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok(r);
     }
@@ -56,15 +57,17 @@ public class RecipeController : ControllerBase
         if (w == null) return NotFound("Worksheet is not found");
 
         var recipe = w.EntityContainer.Recipes.FirstOrDefault(r => r.Id == id);
+        if (recipe == null) return NotFound("Recipe is not found");
         w.EntityContainer.Recipes.Remove(recipe);
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return NoContent();
     }
     
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 }

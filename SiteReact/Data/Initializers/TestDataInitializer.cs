@@ -9,11 +9,11 @@ public static class TestDataInitializer
 {
     public static void InitializeAllData(DocumentContext context)
     {
-        InitializeSimpleOneWay(context);
-        InitializeDoubleSpawn(context);
+        InitializeSimpleOneWay();
+        InitializeDoubleSpawn();
     }
     
-    public static void InitializeSimpleOneWay(DocumentContext context)
+    public static Worksheet InitializeSimpleOneWay()
     {
         var worksheet = new Worksheet
         {
@@ -30,16 +30,14 @@ public static class TestDataInitializer
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
         var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).Build();
         var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).SetExactTarget(20).Build();
-
-        context.SaveChanges();
-
+        
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
         
-        context.SaveChanges();
+        return worksheet;
     }
 
-    public static void InitializeDoubleSpawn(DocumentContext context)
+    public static Worksheet InitializeDoubleSpawn()
     {
         var worksheet = new Worksheet
         {
@@ -60,12 +58,10 @@ public static class TestDataInitializer
         var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).SetExactTarget(2).Build();
         var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productSteelIngot).Build();
         
-        context.SaveChanges();
-        
         worksheet.GetConnectionBuilder(node1, node3, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productCoal).Build();
         worksheet.GetConnectionBuilder(node3, node4, productSteelIngot).Build();
         
-        context.SaveChanges();
+        return worksheet;
     }
 }

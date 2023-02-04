@@ -17,11 +17,11 @@ public class ProductionNode: ANode, INodeInOut, IHasRecipe
         Recipe = recipe;
     }
 
-    public override IList<TargetProduction> ProductionTargets { get; set; } = new List<TargetProduction>();
+    public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     public override void SetExactTarget(float amount) 
     {
         ClearTargets();
-        ProductionTargets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
+        Targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
         ProductionAmount = amount;
     }
     public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
@@ -29,17 +29,17 @@ public class ProductionNode: ANode, INodeInOut, IHasRecipe
         ClearTargets();
         if (minAmount != null)
         {
-            ProductionTargets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
+            Targets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
             ProductionAmount = (float) minAmount;
         }
         if (maxAmount != null)
         {
-            ProductionTargets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
+            Targets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
             if (ProductionAmount > (float) maxAmount) ProductionAmount = (float) maxAmount;
         }
     }
     public override void ClearTargets() 
     {
-        ProductionTargets.Clear();
+        Targets.Clear();
     }
 }

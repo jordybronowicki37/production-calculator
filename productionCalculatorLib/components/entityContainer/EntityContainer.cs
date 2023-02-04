@@ -5,10 +5,11 @@ namespace productionCalculatorLib.components.entityContainer;
 public class EntityContainer
 {
     public long Id { get; set; }
+    public virtual ICollection<Product> Products { get; private set; } = new List<Product>();
+    public virtual ICollection<Recipe> Recipes { get; private set; } = new List<Recipe>();
     
     public EntityContainer() {}
 
-    public virtual ICollection<Product> Products { get; } = new List<Product>();
     public Product GetOrGenerateProduct(string name)
     {
         var existingProduct = GetProduct(name);
@@ -29,7 +30,6 @@ public class EntityContainer
         Products.Remove(product);
     }
 
-    public virtual ICollection<Recipe> Recipes { get; } = new List<Recipe>();
     public Recipe GenerateRecipe(string name)
     {
         if (Recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");

@@ -13,6 +13,6 @@ public class DtoNodeProduction : DtoNode
         
         Amount = node.ProductionAmount;
         Recipe = node.Recipe;
-        Targets = node.ProductionTargets.Select(t => new DtoProductionTarget(t));
+        Targets = node.Targets.Select(t => new DtoProductionTarget(t));
     }
 }

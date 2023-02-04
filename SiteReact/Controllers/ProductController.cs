@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.products;
 using SiteReact.Data.DbContexts;
@@ -10,11 +11,11 @@ namespace SiteReact.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
-    private readonly MainContext _context;
+    private readonly DocumentContext _context;
     
     public ProductController(
         ILogger<ProductController> logger, 
-        MainContext context)
+        DocumentContext context)
     {
         _logger = logger;
         _context = context;
@@ -37,7 +38,7 @@ public class ProductController : ControllerBase
         
         var p = w.EntityContainer.GetOrGenerateProduct(dto.Name);
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok(p);
     }
@@ -52,7 +53,7 @@ public class ProductController : ControllerBase
         if (p == null) return NotFound("Product is not found");
         p.Name = dto.Name;
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return Ok(p);
     }
@@ -65,13 +66,13 @@ public class ProductController : ControllerBase
         
         w.EntityContainer.RemoveProduct(name);
         
-        _context.SaveChanges();
+        // _context.SaveChanges();
         
         return NoContent();
     }
     
     private Worksheet? GetWorksheet(long worksheetId)
     {
-        return _context.Worksheets.FirstOrDefault(w => w.Id == worksheetId);
-    }
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        return _context.Worksheets.Find(filter).FirstOrDefault();    }
 }

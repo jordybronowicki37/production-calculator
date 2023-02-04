@@ -6,6 +6,6 @@ public class DtoRecipe
 {
     public string Name { get; set; } = "";
 
-    public IEnumerable<DtoThroughPut> InputThroughPuts { get; set; }
-    public IEnumerable<DtoThroughPut> OutputThroughPuts { get; set; }
+    public IEnumerable<DtoThroughPut> InputThroughPuts { get; set; } = null!;
+    public IEnumerable<DtoThroughPut> OutputThroughPuts { get; set; } = null!;
 }

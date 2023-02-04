@@ -2,9 +2,8 @@
 
 public class TargetConnection
 {
-    public long Id { get; set; }
-    public TargetConnectionTypes Type { get; }
-    public float Amount { get; }
+    public TargetConnectionTypes Type { get; set; }
+    public float Amount { get; set; }
     
     public TargetConnection() {}
 
