@@ -1,0 +1,29 @@
+﻿version: "3.9"
+services:
+  mongodb:
+    image: mongo
+    restart: on-failure
+    ports:
+      - "27017:27017"
+  mongo-express:
+    image: mongo-express
+    restart: on-failure
+    ports:
+      - "8092:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+  pg:
+    image: postgres
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: on-failure
+    ports:
+      - "8091:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@example.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
