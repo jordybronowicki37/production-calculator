@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
-using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.products;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("worksheet/{worksheetId:Guid}/[controller]")]
+[Route("entityContainer/{entityContainerId:Guid}/[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;
@@ -23,63 +22,57 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("")]
-    public IActionResult GetAll(Guid worksheetId)
+    public IActionResult GetAll(Guid entityContainerId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
         return Ok(e.Products);
     }
 
     [HttpPost("")]
-    public IActionResult Create(DtoProduct dto, Guid worksheetId)
+    public IActionResult Create(DtoProduct dto, Guid entityContainerId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
         var p = e.GetOrGenerateProduct(dto.Name);
         
-        // _context.SaveChanges();
+        var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
+        var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
+        _context.EntityContainers.UpdateOne(filter, update);
         
         return Ok(p);
     }
     
-    [HttpPatch("{name}")]
-    public IActionResult Update(string name, Guid worksheetId, DtoProduct dto)
+    [HttpPatch("{productId:Guid}")]
+    public IActionResult Update(Guid productId, Guid entityContainerId, DtoProduct dto)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        var p = e.GetProduct(name);
+        var p = e.GetProduct(productId);
         if (p == null) return NotFound("ProductId is not found");
         p.Name = dto.Name;
         
-        // _context.SaveChanges();
+        var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
+        var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
+        _context.EntityContainers.UpdateOne(filter, update);
         
         return Ok(p);
     }
     
-    [HttpDelete("{name}")]
-    public IActionResult Remove(string name, Guid worksheetId)
+    [HttpDelete("{productId:Guid}")]
+    public IActionResult Remove(Guid productId, Guid entityContainerId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        e.RemoveProduct(name);
+        e.RemoveProduct(productId);
         
-        // _context.SaveChanges();
+        var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
+        var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
+        _context.EntityContainers.UpdateOne(filter, update);
         
         return NoContent();
     }
@@ -89,9 +82,4 @@ public class ProductController : ControllerBase
         var filter = Builders<EntityContainer>.Filter.Eq(w => w.Id, id);
         return _context.EntityContainers.Find(filter).FirstOrDefault();
     }
-    
-    private Worksheet? GetWorksheet(Guid id)
-    {
-        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, id);
-        return _context.Worksheets.Find(filter).FirstOrDefault();    }
 }

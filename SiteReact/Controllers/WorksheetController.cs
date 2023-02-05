@@ -44,7 +44,6 @@ public class WorksheetController : ControllerBase
         var e = GetEntityContainer(w.EntityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        if (w.Nodes.Count != 0) CalculatorLimit.ReCalculateAmounts(w, e);
         return Ok(new DtoWorksheet(w, e));
     }
 
@@ -75,6 +74,7 @@ public class WorksheetController : ControllerBase
                 return NotFound("Data preset is not found");
         }
         
+        _context.EntityContainers.InsertOne(e);
         _context.Worksheets.InsertOne(w);
         
         return Ok(new DtoWorksheet(w, e));
@@ -91,7 +91,9 @@ public class WorksheetController : ControllerBase
         
         w.Name = dto.Name;
         
-        _context.Worksheets.InsertOne(w);
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Name, w.Name);
+        _context.Worksheets.UpdateOne(filter, update);
         
         return Ok(new DtoWorksheet(w, e));
     }
@@ -106,8 +108,9 @@ public class WorksheetController : ControllerBase
         if (e == null) return NotFound("Entity container is not found");
         
         CalculatorLimit.ReCalculateAmounts(w, e);
-        
-        _context.Worksheets.InsertOne(w);
+
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        _context.Worksheets.ReplaceOne(filter, w);
         
         return Ok(new DtoWorksheet(w, e));
     }

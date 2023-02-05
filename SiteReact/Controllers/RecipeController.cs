@@ -2,14 +2,13 @@
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.products;
-using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.recipes;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
 [ApiController]
-[Route("worksheet/{worksheetId:Guid}/[controller]")]
+[Route("worksheet/{entityContainerId:Guid}/[controller]")]
 public class RecipeController : ControllerBase
 {
     private readonly ILogger<RecipeController> _logger;
@@ -24,24 +23,18 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet("")]
-    public IActionResult GetAll(Guid worksheetId)
+    public IActionResult GetAll(Guid entityContainerId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
         return Ok(e.Recipes);
     }
 
     [HttpPost("")]
-    public IActionResult Create(DtoRecipe dto, Guid worksheetId)
+    public IActionResult Create(DtoRecipe dto, Guid entityContainerId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
         var r = e.GenerateRecipe(dto.Name);
@@ -52,25 +45,24 @@ public class RecipeController : ControllerBase
         foreach (var outputThroughPut in dto.OutputThroughPuts)
             r.OutputThroughPuts.Add(new ThroughPut(e.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
         
-        // _context.SaveChanges();
+        var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
+        var update = Builders<EntityContainer>.Update.Set(f => f.Recipes, e.Recipes);
+        _context.EntityContainers.UpdateOne(filter, update);
         
         return Ok(r);
     }
     
-    [HttpDelete("{id:Guid}")]
-    public IActionResult Remove(Guid id, Guid worksheetId)
+    [HttpDelete("{recipeId:Guid}")]
+    public IActionResult Remove(Guid recipeId, Guid entityContainerId)
     {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
 
-        var recipe = e.Recipes.FirstOrDefault(r => r.Id == id);
-        if (recipe == null) return NotFound("Recipe is not found");
-        e.Recipes.Remove(recipe);
+        e.RemoveRecipe(recipeId);
         
-        // _context.SaveChanges();
+        var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
+        var update = Builders<EntityContainer>.Update.Set(f => f.Recipes, e.Recipes);
+        _context.EntityContainers.UpdateOne(filter, update);
         
         return NoContent();
     }
@@ -79,11 +71,5 @@ public class RecipeController : ControllerBase
     {
         var filter = Builders<EntityContainer>.Filter.Eq(w => w.Id, id);
         return _context.EntityContainers.Find(filter).FirstOrDefault();
-    }
-    
-    private Worksheet? GetWorksheet(Guid id)
-    {
-        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, id);
-        return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 }

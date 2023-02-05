@@ -7,7 +7,6 @@ using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.targets;
 using productionCalculatorLib.components.worksheet;
-using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.nodes;
 using SiteReact.Controllers.dto.targets;
 using SiteReact.Data.DbContexts;
@@ -71,7 +70,9 @@ public class NodeController : ControllerBase
                 return BadRequest();
         }
         
-        // _context.SaveChanges();
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
+        _context.Worksheets.UpdateOne(filter, update);
 
         return Ok(DtoNode.GenerateNode(node));
     }
@@ -94,7 +95,9 @@ public class NodeController : ControllerBase
         
         productNode.ProductId = product.Id;
 
-        // _context.SaveChanges();
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
+        _context.Worksheets.UpdateOne(filter, update);
         
         return Ok(DtoNode.GenerateNode(productNode));
     }
@@ -116,7 +119,9 @@ public class NodeController : ControllerBase
         if (recipe == null) return NotFound("ProductId not found");
         recipeNode.RecipeId = recipe.Id;
         
-        // _context.SaveChanges();
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
+        _context.Worksheets.UpdateOne(filter, update);
         
         return Ok(DtoNode.GenerateNode(recipeNode));
     }
@@ -154,7 +159,9 @@ public class NodeController : ControllerBase
             node.SetMinMaxTarget(minAmount, maxAmount);
         }
         
-        // _context.SaveChanges();
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
+        _context.Worksheets.UpdateOne(filter, update);
         
         return Ok(DtoNode.GenerateNode(node));
     }
@@ -170,51 +177,10 @@ public class NodeController : ControllerBase
         
         w.RemoveNode(node);
         
-        // _context.SaveChanges();
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
+        _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok();
-    }
-
-    [HttpPost("connection")]
-    public IActionResult AddNode(Guid worksheetId, DtoConnectionCreate dto)
-    {
-        var w = GetWorksheet(worksheetId);
-        if (w == null) return NotFound("Worksheet is not found");
-        
-        var e = GetEntityContainer(w.EntityContainerId);
-        if (e == null) return NotFound("Entity container is not found");
-        
-        var node1 = GetNode(w, dto.InputNodeId);
-        if (node1 == null) return NotFound("Node is not found");
-        if (node1 is not INodeOut source) return BadRequest("Source node is not an output");
-        
-        var node2 = GetNode(w, dto.OutputNodeId);
-        if (node2 == null) return NotFound("Node is not found");
-        if (node2 is not INodeIn target) return BadRequest("Target node is not an input");
-        
-        var product = e.GetProduct(dto.Product);
-        if (product == null) return BadRequest();
-
-        var connection = w.GetConnectionBuilder(source, target, product).Build();
-
-        // _context.SaveChanges();
-        
-        return Ok(new DtoConnectionDouble(connection));
-    }
-
-    [HttpDelete("connection/{connectionId:Guid}")]
-    public IActionResult RemoveNode(Guid worksheetId, Guid connectionId)
-    {
-        var worksheet = GetWorksheet(worksheetId);
-        if (worksheet == null) return NotFound("Worksheet is not found");
-
-        var connection = worksheet.Connections.FirstOrDefault(c => c.Id == connectionId);
-        if (connection == null) return NotFound("Connection is not found");
-        
-        worksheet.RemoveConnection(connection);
-        
-        // _context.SaveChanges();
-
         return NoContent();
     }
 
