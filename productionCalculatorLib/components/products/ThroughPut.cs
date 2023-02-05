@@ -2,20 +2,20 @@
 
 public class ThroughPut
 {
-    public Product Product { get; set; }
+    public Guid ProductId { get; init; }
     public float Amount { get; set; }
     
     public ThroughPut() {}
 
     public ThroughPut(Product product, float amount)
     {
-        Product = product;
+        ProductId = product.Id;
         Amount = amount;
     }
 
     private bool Equals(ThroughPut other)
     {
-        return Product.Equals(other.Product);
+        return ProductId.Equals(other.ProductId);
     }
 
     public override bool Equals(object? obj)
@@ -28,11 +28,11 @@ public class ThroughPut
 
     public override int GetHashCode()
     {
-        return Product.GetHashCode();
+        return ProductId.GetHashCode();
     }
 
     public override string ToString()
     {
-        return $"ThroughPut:{{Product{Product}, Amount:{Amount}}}";
+        return $"ThroughPut:{{ProductId{ProductId}, Amount:{Amount}}}";
     }
 }

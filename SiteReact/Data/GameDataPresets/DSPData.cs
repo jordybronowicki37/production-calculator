@@ -1,155 +1,153 @@
-﻿using productionCalculatorLib.components.worksheet;
+﻿using productionCalculatorLib.components.entityContainer;
 
 namespace SiteReact.Data.GameDataPresets;
 
 public static class DSPData
 {
-    public static void addData(Worksheet worksheet)
+    public static void addData(EntityContainer e)
     {
-        var a = worksheet.EntityContainer;
-        
         // Natural Resources
-        var pCoa = a.GetOrGenerateProduct("Coal");
-        var pCopOre = a.GetOrGenerateProduct("Copper Ore");
-        var pCruOil = a.GetOrGenerateProduct("Crude Oil");
-        var pDeu = a.GetOrGenerateProduct("Deuterium");
-        var pFirIce = a.GetOrGenerateProduct("Fire Ice");
-        var pFraSil = a.GetOrGenerateProduct("Fractal Silicon");
-        var pHyd = a.GetOrGenerateProduct("Hydrogen");
-        var pIroOre = a.GetOrGenerateProduct("Iron Ore");
-        var pKimOre = a.GetOrGenerateProduct("Kimberlite Ore");
-        var pLog = a.GetOrGenerateProduct("Log");
-        var pOptGraCry = a.GetOrGenerateProduct("Optical Grating Crystal");
-        var pOrgCry = a.GetOrGenerateProduct("Organic Crystal");
-        var pPlaFue = a.GetOrGenerateProduct("Plant Fuel");
-        var pSilOre = a.GetOrGenerateProduct("Silicon Ore");
-        var pSpiStaCry = a.GetOrGenerateProduct("Spiniform Stalagmite Crystal");
-        var pSto = a.GetOrGenerateProduct("Stone");
-        var pSulAci = a.GetOrGenerateProduct("Sulfuric Acid");
-        var pTitOre = a.GetOrGenerateProduct("Titanium Ore");
-        var pUniMag = a.GetOrGenerateProduct("Unipolar Magnet");
-        var pWat = a.GetOrGenerateProduct("Water");
+        var pCoa = e.GetOrGenerateProduct("Coal");
+        var pCopOre = e.GetOrGenerateProduct("Copper Ore");
+        var pCruOil = e.GetOrGenerateProduct("Crude Oil");
+        var pDeu = e.GetOrGenerateProduct("Deuterium");
+        var pFirIce = e.GetOrGenerateProduct("Fire Ice");
+        var pFraSil = e.GetOrGenerateProduct("Fractal Silicon");
+        var pHyd = e.GetOrGenerateProduct("Hydrogen");
+        var pIroOre = e.GetOrGenerateProduct("Iron Ore");
+        var pKimOre = e.GetOrGenerateProduct("Kimberlite Ore");
+        var pLog = e.GetOrGenerateProduct("Log");
+        var pOptGraCry = e.GetOrGenerateProduct("Optical Grating Crystal");
+        var pOrgCry = e.GetOrGenerateProduct("Organic Crystal");
+        var pPlaFue = e.GetOrGenerateProduct("Plant Fuel");
+        var pSilOre = e.GetOrGenerateProduct("Silicon Ore");
+        var pSpiStaCry = e.GetOrGenerateProduct("Spiniform Stalagmite Crystal");
+        var pSto = e.GetOrGenerateProduct("Stone");
+        var pSulAci = e.GetOrGenerateProduct("Sulfuric Acid");
+        var pTitOre = e.GetOrGenerateProduct("Titanium Ore");
+        var pUniMag = e.GetOrGenerateProduct("Unipolar Magnet");
+        var pWat = e.GetOrGenerateProduct("Water");
         
         // Intermediate Products
-        var pAnnConSph = a.GetOrGenerateProduct("Annihilation Constraint Sphere");
-        var pAnt = a.GetOrGenerateProduct("Antimatter");
-        var pCarNan = a.GetOrGenerateProduct("Carbon Nanotube");
-        var pCasCry = a.GetOrGenerateProduct("Casimir Crystal");
-        var pCirBoa = a.GetOrGenerateProduct("Circuit Board");
-        var pCriPho = a.GetOrGenerateProduct("Critical Photon");
-        var pCrySil = a.GetOrGenerateProduct("Crystal Silicon");
-        var pCopIng = a.GetOrGenerateProduct("Copper Ingot");
-        var pDia = a.GetOrGenerateProduct("Diamond");
-        var pDysSphCom = a.GetOrGenerateProduct("Dyson Sphere Component");
-        var pEleMot = a.GetOrGenerateProduct("Electric Motor");
-        var pEleTur = a.GetOrGenerateProduct("Electromagnetic Turbine");
-        var pEneGra = a.GetOrGenerateProduct("Energetic Graphite");
-        var pFraMat = a.GetOrGenerateProduct("Frame Material");
-        var pGea = a.GetOrGenerateProduct("Gear");
-        var pGla = a.GetOrGenerateProduct("Glass");
-        var pGra = a.GetOrGenerateProduct("Graphene");
-        var pGraLen = a.GetOrGenerateProduct("Graviton Lens");
-        var pHigPurSil = a.GetOrGenerateProduct("High-Purity Silicon");
-        var pIroIng = a.GetOrGenerateProduct("Iron Ingot");
-        var pMag = a.GetOrGenerateProduct("Magnet");
-        var pMagCoi = a.GetOrGenerateProduct("Magnetic Coil");
-        var pMicCom = a.GetOrGenerateProduct("Microcrystalline Component");
-        var pPlaFil = a.GetOrGenerateProduct("Plane Filter");
-        var pPlaExc = a.GetOrGenerateProduct("Plasma Exciter");
-        var pPla = a.GetOrGenerateProduct("Plastic");
-        var pPri = a.GetOrGenerateProduct("Prism");
-        var pPro = a.GetOrGenerateProduct("Processor");
-        var pProMkI = a.GetOrGenerateProduct("Proliferator Mk.I");
-        var pProMkII = a.GetOrGenerateProduct("Proliferator Mk.II");
-        var pProMkIII = a.GetOrGenerateProduct("Proliferator Mk.III");
-        var pQuaChi = a.GetOrGenerateProduct("Quantum Chip");
-        var pReiThr = a.GetOrGenerateProduct("Reinforced Thruster");
-        var pParBro = a.GetOrGenerateProduct("Particle Broadband");
-        var pParCon = a.GetOrGenerateProduct("Particle Container");
-        var pPho = a.GetOrGenerateProduct("Photon Combiner");
-        var pRefOil = a.GetOrGenerateProduct("Refined Oil");
-        var pSte = a.GetOrGenerateProduct("Steel");
-        var pStoBri = a.GetOrGenerateProduct("Stone Brick");
-        var pStraMat = a.GetOrGenerateProduct("Strange Matter");
-        var pSupMagRin = a.GetOrGenerateProduct("Super-Magnetic Ring");
-        var pTitAll = a.GetOrGenerateProduct("Titanium Alloy");
-        var pTitCry = a.GetOrGenerateProduct("Titanium Crystal");
-        var pTitGla = a.GetOrGenerateProduct("Titanium Glass");
-        var pTitIng = a.GetOrGenerateProduct("Titanium Ingot");
-        var pThr = a.GetOrGenerateProduct("Thruster");
+        var pAnnConSph = e.GetOrGenerateProduct("Annihilation Constraint Sphere");
+        var pAnt = e.GetOrGenerateProduct("Antimatter");
+        var pCarNan = e.GetOrGenerateProduct("Carbon Nanotube");
+        var pCasCry = e.GetOrGenerateProduct("Casimir Crystal");
+        var pCirBoa = e.GetOrGenerateProduct("Circuit Board");
+        var pCriPho = e.GetOrGenerateProduct("Critical Photon");
+        var pCrySil = e.GetOrGenerateProduct("Crystal Silicon");
+        var pCopIng = e.GetOrGenerateProduct("Copper Ingot");
+        var pDia = e.GetOrGenerateProduct("Diamond");
+        var pDysSphCom = e.GetOrGenerateProduct("Dyson Sphere Component");
+        var pEleMot = e.GetOrGenerateProduct("Electric Motor");
+        var pEleTur = e.GetOrGenerateProduct("Electromagnetic Turbine");
+        var pEneGra = e.GetOrGenerateProduct("Energetic Graphite");
+        var pFraMat = e.GetOrGenerateProduct("Frame Material");
+        var pGea = e.GetOrGenerateProduct("Gear");
+        var pGla = e.GetOrGenerateProduct("Glass");
+        var pGra = e.GetOrGenerateProduct("Graphene");
+        var pGraLen = e.GetOrGenerateProduct("Graviton Lens");
+        var pHigPurSil = e.GetOrGenerateProduct("High-Purity Silicon");
+        var pIroIng = e.GetOrGenerateProduct("Iron Ingot");
+        var pMag = e.GetOrGenerateProduct("Magnet");
+        var pMagCoi = e.GetOrGenerateProduct("Magnetic Coil");
+        var pMicCom = e.GetOrGenerateProduct("Microcrystalline Component");
+        var pPlaFil = e.GetOrGenerateProduct("Plane Filter");
+        var pPlaExc = e.GetOrGenerateProduct("Plasma Exciter");
+        var pPla = e.GetOrGenerateProduct("Plastic");
+        var pPri = e.GetOrGenerateProduct("Prism");
+        var pPro = e.GetOrGenerateProduct("Processor");
+        var pProMkI = e.GetOrGenerateProduct("Proliferator Mk.I");
+        var pProMkII = e.GetOrGenerateProduct("Proliferator Mk.II");
+        var pProMkIII = e.GetOrGenerateProduct("Proliferator Mk.III");
+        var pQuaChi = e.GetOrGenerateProduct("Quantum Chip");
+        var pReiThr = e.GetOrGenerateProduct("Reinforced Thruster");
+        var pParBro = e.GetOrGenerateProduct("Particle Broadband");
+        var pParCon = e.GetOrGenerateProduct("Particle Container");
+        var pPho = e.GetOrGenerateProduct("Photon Combiner");
+        var pRefOil = e.GetOrGenerateProduct("Refined Oil");
+        var pSte = e.GetOrGenerateProduct("Steel");
+        var pStoBri = e.GetOrGenerateProduct("Stone Brick");
+        var pStraMat = e.GetOrGenerateProduct("Strange Matter");
+        var pSupMagRin = e.GetOrGenerateProduct("Super-Magnetic Ring");
+        var pTitAll = e.GetOrGenerateProduct("Titanium Alloy");
+        var pTitCry = e.GetOrGenerateProduct("Titanium Crystal");
+        var pTitGla = e.GetOrGenerateProduct("Titanium Glass");
+        var pTitIng = e.GetOrGenerateProduct("Titanium Ingot");
+        var pThr = e.GetOrGenerateProduct("Thruster");
         
         // Consumables
-        var pAntFueRod = a.GetOrGenerateProduct("Antimatter Fuel Rod");
-        var pDeuFueRod = a.GetOrGenerateProduct("Deuteron Fuel Rod");
-        var pFou = a.GetOrGenerateProduct("Foundation");
-        var pHydFueRod = a.GetOrGenerateProduct("Hydrogen Fuel Rod");
-        var pSpaWar = a.GetOrGenerateProduct("Space Warper");
+        var pAntFueRod = e.GetOrGenerateProduct("Antimatter Fuel Rod");
+        var pDeuFueRod = e.GetOrGenerateProduct("Deuteron Fuel Rod");
+        var pFou = e.GetOrGenerateProduct("Foundation");
+        var pHydFueRod = e.GetOrGenerateProduct("Hydrogen Fuel Rod");
+        var pSpaWar = e.GetOrGenerateProduct("Space Warper");
         
         // Science
-        var pEleMat = a.GetOrGenerateProduct("Electromagnetic Matrix");
-        var pEneMat = a.GetOrGenerateProduct("Energy Matrix");
-        var pStruMat = a.GetOrGenerateProduct("Structure Matrix");
-        var pInfMat = a.GetOrGenerateProduct("Information Matrix");
-        var pGraMat = a.GetOrGenerateProduct("Gravity Matrix");
-        var pUniMat = a.GetOrGenerateProduct("Universe Matrix");
+        var pEleMat = e.GetOrGenerateProduct("Electromagnetic Matrix");
+        var pEneMat = e.GetOrGenerateProduct("Energy Matrix");
+        var pStruMat = e.GetOrGenerateProduct("Structure Matrix");
+        var pInfMat = e.GetOrGenerateProduct("Information Matrix");
+        var pGraMat = e.GetOrGenerateProduct("Gravity Matrix");
+        var pUniMat = e.GetOrGenerateProduct("Universe Matrix");
         
         // Building Consumables
-        var pLogDro = a.GetOrGenerateProduct("Logistic Drone");
-        var pLogVes = a.GetOrGenerateProduct("Logistic Vessel");
-        var pSmaCarRoc = a.GetOrGenerateProduct("Small Carrier Rocket");
-        var pSolSai = a.GetOrGenerateProduct("Solar Sail");
+        var pLogDro = e.GetOrGenerateProduct("Logistic Drone");
+        var pLogVes = e.GetOrGenerateProduct("Logistic Vessel");
+        var pSmaCarRoc = e.GetOrGenerateProduct("Small Carrier Rocket");
+        var pSolSai = e.GetOrGenerateProduct("Solar Sail");
         
         // Power
-        var pAcc = a.GetOrGenerateProduct("Accumulator");
-        var pArtSta = a.GetOrGenerateProduct("Artificial Star");
-        var pEneExc = a.GetOrGenerateProduct("Energy Exchanger");
-        var pFulAcc = a.GetOrGenerateProduct("Full Accumulator");
-        var pGeoPowSta = a.GetOrGenerateProduct("Geothermal Power Station");
-        var pMinFusPowPla = a.GetOrGenerateProduct("Mini Fusion Power Plant");
-        var pSatSub = a.GetOrGenerateProduct("Satellite Substation");
-        var pSolPan = a.GetOrGenerateProduct("Solar Panel");
-        var pTesTow = a.GetOrGenerateProduct("Tesla Tower");
-        var pThePowPla = a.GetOrGenerateProduct("Thermal Power Plant");
-        var pWinTur = a.GetOrGenerateProduct("Wind Turbine");
-        var pWirPowTow = a.GetOrGenerateProduct("Wireless Power Tower");
+        var pAcc = e.GetOrGenerateProduct("Accumulator");
+        var pArtSta = e.GetOrGenerateProduct("Artificial Star");
+        var pEneExc = e.GetOrGenerateProduct("Energy Exchanger");
+        var pFulAcc = e.GetOrGenerateProduct("Full Accumulator");
+        var pGeoPowSta = e.GetOrGenerateProduct("Geothermal Power Station");
+        var pMinFusPowPla = e.GetOrGenerateProduct("Mini Fusion Power Plant");
+        var pSatSub = e.GetOrGenerateProduct("Satellite Substation");
+        var pSolPan = e.GetOrGenerateProduct("Solar Panel");
+        var pTesTow = e.GetOrGenerateProduct("Tesla Tower");
+        var pThePowPla = e.GetOrGenerateProduct("Thermal Power Plant");
+        var pWinTur = e.GetOrGenerateProduct("Wind Turbine");
+        var pWirPowTow = e.GetOrGenerateProduct("Wireless Power Tower");
         
         // Mining
-        var pAdvMinMac = a.GetOrGenerateProduct("Advanced Mining Machine");
-        var pMinMac = a.GetOrGenerateProduct("Mining Machine");
-        var pOilExt = a.GetOrGenerateProduct("Oil Extractor");
-        var pOrbCol = a.GetOrGenerateProduct("Orbital Collector");
-        var pWatPum = a.GetOrGenerateProduct("Water Pump");
+        var pAdvMinMac = e.GetOrGenerateProduct("Advanced Mining Machine");
+        var pMinMac = e.GetOrGenerateProduct("Mining Machine");
+        var pOilExt = e.GetOrGenerateProduct("Oil Extractor");
+        var pOrbCol = e.GetOrGenerateProduct("Orbital Collector");
+        var pWatPum = e.GetOrGenerateProduct("Water Pump");
         
         // Logistics
-        var pAutPil = a.GetOrGenerateProduct("Automatic Piler");
-        var pConBel1 = a.GetOrGenerateProduct("Conveyor Belt Mk.I");
-        var pConBel2 = a.GetOrGenerateProduct("Conveyor Belt Mk.II");
-        var pConBel3 = a.GetOrGenerateProduct("Conveyor Belt Mk.III");
-        var pSor1 = a.GetOrGenerateProduct("Sorter Mk.I");
-        var pSor2 = a.GetOrGenerateProduct("Sorter Mk.II");
-        var pSor3 = a.GetOrGenerateProduct("Sorter Mk.III");
-        var pSpl = a.GetOrGenerateProduct("Splitter");
-        var pTraMon = a.GetOrGenerateProduct("Traffic Monitor");
-        var pSto1 = a.GetOrGenerateProduct("Storage Mk.I");
-        var pSto2 = a.GetOrGenerateProduct("Storage Mk.II");
-        var pSto3 = a.GetOrGenerateProduct("Storage Tank");
-        var pPlaLogSta = a.GetOrGenerateProduct("Planetary Logistics Station");
-        var pIntLogSta = a.GetOrGenerateProduct("Interstellar Logistics Station");
-        var pArcSme = a.GetOrGenerateProduct("Arc Smelter");
-        var pPlaSme = a.GetOrGenerateProduct("Plane Smelter");
-        var pAssMac1 = a.GetOrGenerateProduct("Assembling Machine Mk.I");
-        var pAssMac2 = a.GetOrGenerateProduct("Assembling Machine Mk.II");
-        var pAssMac3 = a.GetOrGenerateProduct("Assembling Machine Mk.III");
-        var pSprCoa = a.GetOrGenerateProduct("Spray Coater");
-        var pOilRef = a.GetOrGenerateProduct("Oil Refinery");
-        var pChePla = a.GetOrGenerateProduct("Chemical Plant");
-        var pFra = a.GetOrGenerateProduct("Fractionator");
-        var pMinParCol = a.GetOrGenerateProduct("Miniature Particle Collider");
+        var pAutPil = e.GetOrGenerateProduct("Automatic Piler");
+        var pConBel1 = e.GetOrGenerateProduct("Conveyor Belt Mk.I");
+        var pConBel2 = e.GetOrGenerateProduct("Conveyor Belt Mk.II");
+        var pConBel3 = e.GetOrGenerateProduct("Conveyor Belt Mk.III");
+        var pSor1 = e.GetOrGenerateProduct("Sorter Mk.I");
+        var pSor2 = e.GetOrGenerateProduct("Sorter Mk.II");
+        var pSor3 = e.GetOrGenerateProduct("Sorter Mk.III");
+        var pSpl = e.GetOrGenerateProduct("Splitter");
+        var pTraMon = e.GetOrGenerateProduct("Traffic Monitor");
+        var pSto1 = e.GetOrGenerateProduct("Storage Mk.I");
+        var pSto2 = e.GetOrGenerateProduct("Storage Mk.II");
+        var pSto3 = e.GetOrGenerateProduct("Storage Tank");
+        var pPlaLogSta = e.GetOrGenerateProduct("Planetary Logistics Station");
+        var pIntLogSta = e.GetOrGenerateProduct("Interstellar Logistics Station");
+        var pArcSme = e.GetOrGenerateProduct("Arc Smelter");
+        var pPlaSme = e.GetOrGenerateProduct("Plane Smelter");
+        var pAssMac1 = e.GetOrGenerateProduct("Assembling Machine Mk.I");
+        var pAssMac2 = e.GetOrGenerateProduct("Assembling Machine Mk.II");
+        var pAssMac3 = e.GetOrGenerateProduct("Assembling Machine Mk.III");
+        var pSprCoa = e.GetOrGenerateProduct("Spray Coater");
+        var pOilRef = e.GetOrGenerateProduct("Oil Refinery");
+        var pChePla = e.GetOrGenerateProduct("Chemical Plant");
+        var pFra = e.GetOrGenerateProduct("Fractionator");
+        var pMinParCol = e.GetOrGenerateProduct("Miniature Particle Collider");
         
         // Dyson Sphere
-        var pEMRailEje = a.GetOrGenerateProduct("EM-Rail Ejector");
-        var pMatLab = a.GetOrGenerateProduct("Matrix Lab");
-        var pRayRec = a.GetOrGenerateProduct("Ray Receiver");
-        var pVerLauSil = a.GetOrGenerateProduct("Vertical Launching Silo");
+        var pEMRailEje = e.GetOrGenerateProduct("EM-Rail Ejector");
+        var pMatLab = e.GetOrGenerateProduct("Matrix Lab");
+        var pRayRec = e.GetOrGenerateProduct("Ray Receiver");
+        var pVerLauSil = e.GetOrGenerateProduct("Vertical Launching Silo");
     }
 }

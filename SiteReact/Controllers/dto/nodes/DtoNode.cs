@@ -11,8 +11,8 @@ public class DtoNode
     public string Type { get; set; } = "";
     
     public float Amount { get; set; }
-    public Recipe? Recipe { get; set; }
-    public Product? Product { get; set; }
+    public Guid? Recipe { get; set; }
+    public Guid? Product { get; set; }
     
     public IEnumerable<DtoProductionTarget>? Targets { get; set; }
 

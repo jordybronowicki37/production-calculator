@@ -12,7 +12,7 @@ public class DtoNodeSpawn : DtoNode
         Type = "Spawn";
         
         Amount = node.Amount;
-        Product = node.Product;
+        Product = node.ProductId;
         Targets = node.Targets.Select(t => new DtoProductionTarget(t));
     }
 }

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.calculator;
+using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data.DbContexts;
 using SiteReact.Data.GameDataPresets;
-using SiteReact.Data.Initializers;
 
 namespace SiteReact.Controllers;
 
@@ -27,7 +27,12 @@ public class WorksheetController : ControllerBase
     [HttpGet("")]
     public IActionResult GetAll()
     {
-        return Ok(GetAllWorksheets().Select(w => new DtoWorksheetSmall(w)));
+        var ws = GetAllWorksheets();
+        return Ok(ws.Select(w =>
+        {
+            var e = GetEntityContainer(w.EntityContainerId);
+            return new DtoWorksheetSmall(w, e);
+        }));
     }
 
     [HttpGet("{id:Guid}")]
@@ -36,14 +41,18 @@ public class WorksheetController : ControllerBase
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
         
-        if (w.Nodes.Count != 0) CalculatorLimit.ReCalculateAmounts(w);
-        return Ok(new DtoWorksheet(w));
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        if (w.Nodes.Count != 0) CalculatorLimit.ReCalculateAmounts(w, e);
+        return Ok(new DtoWorksheet(w, e));
     }
 
     [HttpPost("")]
     public IActionResult CreateNew(DtoWorksheetCreate dto)
     {
-        var w = new Worksheet(){Name = dto.Name};
+        var e = new EntityContainer();
+        var w = new Worksheet(e){Name = dto.Name};
 
         switch (dto.DataPreset)
         {
@@ -51,26 +60,24 @@ public class WorksheetController : ControllerBase
             case "none":
                 break;
             case "dysonSphereProgram":
-                DSPData.addData(w);
+                DSPData.addData(e);
                 break;
             case "satisfactoryEarlyAccess":
-                SatisfactoryData.addData(w);
+                SatisfactoryData.addData(e);
                 break;
             case "satisfactoryExperimental":
-                SatisfactoryExperimentalData.addData(w);
+                SatisfactoryExperimentalData.addData(e);
                 break;
             case "satisfactoryFICSMAS":
-                SatisfactoryFicsMasData.addData(w);
+                SatisfactoryFicsMasData.addData(e);
                 break;
             default:
                 return NotFound("Data preset is not found");
         }
-
-        var testw = TestDataInitializer.InitializeSimpleOneWay();
         
-        _context.Worksheets.InsertOne(testw);
+        _context.Worksheets.InsertOne(w);
         
-        return Ok(new DtoWorksheet(testw));
+        return Ok(new DtoWorksheet(w, e));
     }
 
     [HttpPatch("{id:Guid}")]
@@ -79,11 +86,14 @@ public class WorksheetController : ControllerBase
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
         
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
         w.Name = dto.Name;
         
         _context.Worksheets.InsertOne(w);
         
-        return Ok(new DtoWorksheet(w));
+        return Ok(new DtoWorksheet(w, e));
     }
     
     [HttpPost("{id:Guid}/calculate")]
@@ -91,12 +101,15 @@ public class WorksheetController : ControllerBase
     {
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
+
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
         
-        CalculatorLimit.ReCalculateAmounts(w);
+        CalculatorLimit.ReCalculateAmounts(w, e);
         
         _context.Worksheets.InsertOne(w);
         
-        return Ok(new DtoWorksheet(w));
+        return Ok(new DtoWorksheet(w, e));
     }
     
     private IEnumerable<Worksheet> GetAllWorksheets()
@@ -105,9 +118,15 @@ public class WorksheetController : ControllerBase
         return _context.Worksheets.Find(filter).ToList();
     }
     
-    private Worksheet? GetWorksheet(Guid worksheetId)
+    private Worksheet? GetWorksheet(Guid id)
     {
-        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, id);
         return _context.Worksheets.Find(filter).FirstOrDefault();
+    }
+    
+    private EntityContainer? GetEntityContainer(Guid id)
+    {
+        var filter = Builders<EntityContainer>.Filter.Eq(w => w.Id, id);
+        return _context.EntityContainers.Find(filter).FirstOrDefault();
     }
 }

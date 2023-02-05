@@ -32,6 +32,6 @@ public class Product
 
     public override string ToString()
     {
-        return $"Product:{{Name:{Name}}}";
+        return $"ProductId:{{Name:{Name}}}";
     }
 }

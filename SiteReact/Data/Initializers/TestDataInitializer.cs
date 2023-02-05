@@ -1,4 +1,6 @@
-﻿using productionCalculatorLib.components.nodes.nodeTypes;
+﻿using productionCalculatorLib.components.calculator;
+using productionCalculatorLib.components.entityContainer;
+using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Data.DbContexts;
@@ -9,21 +11,25 @@ public static class TestDataInitializer
 {
     public static void InitializeAllData(DocumentContext context)
     {
-        InitializeSimpleOneWay();
-        InitializeDoubleSpawn();
+        InitializeSimpleOneWay(out var w1, out var e1);
+        InitializeDoubleSpawn(out var w2, out var e2);
+        
+        context.EntityContainers.InsertMany(new []{e1, e2});
+        context.Worksheets.InsertMany(new []{w1, w2});
     }
     
-    public static Worksheet InitializeSimpleOneWay()
+    public static void InitializeSimpleOneWay(out Worksheet worksheet, out EntityContainer entityContainer)
     {
-        var worksheet = new Worksheet
+        entityContainer = new EntityContainer();
+        worksheet = new Worksheet(entityContainer)
         {
             Name = "Iron ingot smelting"
         };
 
-        var productIronOre = worksheet.EntityContainer.GetOrGenerateProduct("Iron ore");
-        var productIronIngot = worksheet.EntityContainer.GetOrGenerateProduct("Iron ingot");
+        var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
+        var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
 
-        var recipeIronIngot = worksheet.EntityContainer.GenerateRecipe("Iron ingot");
+        var recipeIronIngot = entityContainer.GenerateRecipe("Iron ingot");
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productIronOre, 30));
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 10));
 
@@ -34,21 +40,22 @@ public static class TestDataInitializer
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
         
-        return worksheet;
+        CalculatorLimit.ReCalculateAmounts(worksheet, entityContainer);
     }
 
-    public static Worksheet InitializeDoubleSpawn()
+    public static void InitializeDoubleSpawn(out Worksheet worksheet, out EntityContainer entityContainer)
     {
-        var worksheet = new Worksheet
+        entityContainer = new EntityContainer();
+        worksheet = new Worksheet(entityContainer)
         {
             Name = "Steel ingot smelting"
         };
 
-        var productIronOre = worksheet.EntityContainer.GetOrGenerateProduct("Iron ore");
-        var productCoal = worksheet.EntityContainer.GetOrGenerateProduct("Coal");
-        var productSteelIngot = worksheet.EntityContainer.GetOrGenerateProduct("Steel ingot");
+        var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
+        var productCoal = entityContainer.GetOrGenerateProduct("Coal");
+        var productSteelIngot = entityContainer.GetOrGenerateProduct("Steel ingot");
         
-        var recipeIronIngot = worksheet.EntityContainer.GenerateRecipe("Steel ingot");
+        var recipeIronIngot = entityContainer.GenerateRecipe("Steel ingot");
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productIronOre, 30));
         recipeIronIngot.InputThroughPuts.Add(new ThroughPut(productCoal, 5));
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productSteelIngot, 10));
@@ -62,6 +69,6 @@ public static class TestDataInitializer
         worksheet.GetConnectionBuilder(node2, node3, productCoal).Build();
         worksheet.GetConnectionBuilder(node3, node4, productSteelIngot).Build();
         
-        return worksheet;
+        CalculatorLimit.ReCalculateAmounts(worksheet, entityContainer);
     }
 }

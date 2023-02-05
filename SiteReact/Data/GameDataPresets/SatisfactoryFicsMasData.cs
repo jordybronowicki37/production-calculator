@@ -1,14 +1,13 @@
-﻿using productionCalculatorLib.components.worksheet;
+﻿using productionCalculatorLib.components.entityContainer;
 
 namespace SiteReact.Data.GameDataPresets;
 
 public static class SatisfactoryFicsMasData
 {
     // ReSharper disable InconsistentNaming
-    public static void addData(Worksheet worksheet)
+    public static void addData(EntityContainer e)
     {
-        SatisfactoryData.addData(worksheet);
-        var e = worksheet.EntityContainer;
+        SatisfactoryData.addData(e);
         
         // Tier 0
         var PCopIng = e.GetOrGenerateProduct("Copper Ingot");

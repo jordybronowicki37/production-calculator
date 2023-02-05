@@ -9,12 +9,10 @@ public class Connection
     public Guid Id { get; init; } = Guid.NewGuid();
     public Guid NodeInId { get; init; }
     public Guid NodeOutId { get; init; }
-    public virtual Product Product { get; set; }
+    public Product Product { get; set; }
     public float Amount { get; set; }
     public virtual ICollection<TargetConnection> Targets { get; private set; } = new List<TargetConnection>();
     
-    public Connection() {}
-
     public Connection(INodeOut nodeIn, INodeIn nodeOut, Product product)
     {
         NodeInId = nodeIn.Id;

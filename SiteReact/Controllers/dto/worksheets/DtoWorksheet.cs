@@ -1,4 +1,4 @@
-﻿using productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.connections;
@@ -20,15 +20,15 @@ public class DtoWorksheet
     public IEnumerable<Product> Products { get; }
     public IEnumerable<Recipe> Recipes { get; }
 
-    public DtoWorksheet(Worksheet worksheet)
+    public DtoWorksheet(Worksheet worksheet, EntityContainer entityContainer)
     {
         Id = worksheet.Id;
         Name = worksheet.Name;
         CalculationSucceeded = worksheet.CalculationSucceeded;
         CalculationError = worksheet.CalculationError;
         Nodes = worksheet.Nodes.Select(DtoNode.GenerateNode);
-        Products = worksheet.EntityContainer.Products;
-        Recipes = worksheet.EntityContainer.Recipes;
+        Products = entityContainer.Products;
+        Recipes = entityContainer.Recipes;
         Connections = worksheet.Connections.Select(c => new DtoConnectionDouble(c));
     }
 }

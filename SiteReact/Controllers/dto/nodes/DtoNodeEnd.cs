@@ -12,7 +12,7 @@ public class DtoNodeEnd : DtoNode
         Type = "End";
         
         Amount = node.Amount;
-        Product = node.Product;
+        Product = node.ProductId;
         Targets = node.Targets.Select(t => new DtoProductionTarget(t));
     }
 }

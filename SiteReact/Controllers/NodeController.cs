@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
@@ -34,6 +35,9 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
         if (!Enum.TryParse(dto.Type, out ENodeTypes type)) return BadRequest("Could not parse type");
         INode node;
         
@@ -41,25 +45,25 @@ public class NodeController : ControllerBase
         {
             case ENodeTypes.Spawn:
             {
-                if (dto.Product == null) return BadRequest("Product field was empty");
-                var product = w.EntityContainer.GetProduct(dto.Product);
-                if (product == null) return NotFound("Product not found");
+                if (dto.Product == null) return BadRequest("ProductId field was empty");
+                var product = e.GetProduct(dto.Product);
+                if (product == null) return NotFound("ProductId not found");
                 node = w.GetNodeBuilder<SpawnNode>().SetProduct(product).Build();
                 break;
             }
             case ENodeTypes.Production:
             {
                 if (dto.Recipe == null) return BadRequest("Recipe field was empty");
-                var recipe = w.EntityContainer.GetRecipe(dto.Recipe);
+                var recipe = e.GetRecipe(dto.Recipe);
                 if (recipe == null) return NotFound("Recipe not found");
                 node = w.GetNodeBuilder<ProductionNode>().SetRecipe(recipe).Build();
                 break;
             }
             case ENodeTypes.End:
             {
-                if (dto.Product == null) return BadRequest("Product field was empty");
-                var product = w.EntityContainer.GetProduct(dto.Product);
-                if (product == null) return NotFound("Product not found");
+                if (dto.Product == null) return BadRequest("ProductId field was empty");
+                var product = e.GetProduct(dto.Product);
+                if (product == null) return NotFound("ProductId not found");
                 node = w.GetNodeBuilder<EndNode>().SetProduct(product).Build();
                 break;
             }
@@ -78,13 +82,17 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
         var node = GetNode(w, nodeId);
         if (node == null) return NotFound("Node is not found");
         if (node is not IHasProduct productNode) return BadRequest("Node does not support products");
 
-        var product = w.EntityContainer.GetProduct(dto.Product);
-        if (product == null) return NotFound("Product not found");
-        productNode.Product = product;
+        var product = e.GetProduct(dto.Product);
+        if (product == null) return NotFound("ProductId not found");
+        
+        productNode.ProductId = product.Id;
 
         // _context.SaveChanges();
         
@@ -97,13 +105,16 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
         var node = GetNode(w, nodeId);
         if (node == null) return NotFound("Node is not found");
         if (node is not IHasRecipe recipeNode) return BadRequest("Node does not support recipes");
         
-        var recipe = w.EntityContainer.GetRecipe(dto.Recipe);
-        if (recipe == null) return NotFound("Product not found");
-        recipeNode.Recipe = recipe;
+        var recipe = e.GetRecipe(dto.Recipe);
+        if (recipe == null) return NotFound("ProductId not found");
+        recipeNode.RecipeId = recipe.Id;
         
         // _context.SaveChanges();
         
@@ -170,6 +181,9 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
         var node1 = GetNode(w, dto.InputNodeId);
         if (node1 == null) return NotFound("Node is not found");
         if (node1 is not INodeOut source) return BadRequest("Source node is not an output");
@@ -178,7 +192,7 @@ public class NodeController : ControllerBase
         if (node2 == null) return NotFound("Node is not found");
         if (node2 is not INodeIn target) return BadRequest("Target node is not an input");
         
-        var product = w.EntityContainer.GetProduct(dto.Product);
+        var product = e.GetProduct(dto.Product);
         if (product == null) return BadRequest();
 
         var connection = w.GetConnectionBuilder(source, target, product).Build();
@@ -204,14 +218,20 @@ public class NodeController : ControllerBase
         return NoContent();
     }
 
-    private Worksheet? GetWorksheet(Guid worksheetId)
+    private EntityContainer? GetEntityContainer(Guid id)
     {
-        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        var filter = Builders<EntityContainer>.Filter.Eq(w => w.Id, id);
+        return _context.EntityContainers.Find(filter).FirstOrDefault();
+    }
+
+    private Worksheet? GetWorksheet(Guid id)
+    {
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, id);
         return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 
-    private ANode? GetNode(Worksheet worksheet, Guid nodeId)
+    private ANode? GetNode(Worksheet worksheet, Guid id)
     {
-        return worksheet.Nodes.FirstOrDefault(n => n.Id == nodeId);
+        return worksheet.Nodes.FirstOrDefault(n => n.Id == id);
     }
 }

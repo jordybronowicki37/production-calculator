@@ -7,7 +7,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 
 public class ProductionNode: ANode, INodeInOut, IHasRecipe
 {
-    public virtual Recipe Recipe { get; set; } = null!;
+    public Guid RecipeId { get; set; }
     public float ProductionAmount { get; set; }
     public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
@@ -15,7 +15,7 @@ public class ProductionNode: ANode, INodeInOut, IHasRecipe
     
     public ProductionNode(Recipe recipe)
     {
-        Recipe = recipe;
+        RecipeId = recipe.Id;
     }
 
     public override void SetExactTarget(float amount) 

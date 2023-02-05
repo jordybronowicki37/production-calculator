@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.recipes;
@@ -28,7 +29,10 @@ public class RecipeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        return Ok(w.EntityContainer.Recipes);
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        return Ok(e.Recipes);
     }
 
     [HttpPost("")]
@@ -37,13 +41,16 @@ public class RecipeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var r = w.EntityContainer.GenerateRecipe(dto.Name);
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        var r = e.GenerateRecipe(dto.Name);
 
         foreach (var inputThroughPut in dto.InputThroughPuts)
-            r.InputThroughPuts.Add(new ThroughPut(w.EntityContainer.GetOrGenerateProduct(inputThroughPut.Product.Name), inputThroughPut.Amount));
+            r.InputThroughPuts.Add(new ThroughPut(e.GetOrGenerateProduct(inputThroughPut.Product.Name), inputThroughPut.Amount));
         
         foreach (var outputThroughPut in dto.OutputThroughPuts)
-            r.OutputThroughPuts.Add(new ThroughPut(w.EntityContainer.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
+            r.OutputThroughPuts.Add(new ThroughPut(e.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
         
         // _context.SaveChanges();
         
@@ -55,19 +62,28 @@ public class RecipeController : ControllerBase
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
+        
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
 
-        var recipe = w.EntityContainer.Recipes.FirstOrDefault(r => r.Id == id);
+        var recipe = e.Recipes.FirstOrDefault(r => r.Id == id);
         if (recipe == null) return NotFound("Recipe is not found");
-        w.EntityContainer.Recipes.Remove(recipe);
+        e.Recipes.Remove(recipe);
         
         // _context.SaveChanges();
         
         return NoContent();
     }
     
-    private Worksheet? GetWorksheet(Guid worksheetId)
+    private EntityContainer? GetEntityContainer(Guid id)
     {
-        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        var filter = Builders<EntityContainer>.Filter.Eq(w => w.Id, id);
+        return _context.EntityContainers.Find(filter).FirstOrDefault();
+    }
+    
+    private Worksheet? GetWorksheet(Guid id)
+    {
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, id);
         return _context.Worksheets.Find(filter).FirstOrDefault();
     }
 }

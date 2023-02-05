@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.products;
 using SiteReact.Data.DbContexts;
@@ -27,7 +28,10 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        return Ok(w.EntityContainer.Products);
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        return Ok(e.Products);
     }
 
     [HttpPost("")]
@@ -36,7 +40,10 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var p = w.EntityContainer.GetOrGenerateProduct(dto.Name);
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        var p = e.GetOrGenerateProduct(dto.Name);
         
         // _context.SaveChanges();
         
@@ -49,8 +56,11 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var p = w.EntityContainer.GetProduct(name);
-        if (p == null) return NotFound("Product is not found");
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        var p = e.GetProduct(name);
+        if (p == null) return NotFound("ProductId is not found");
         p.Name = dto.Name;
         
         // _context.SaveChanges();
@@ -64,15 +74,24 @@ public class ProductController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        w.EntityContainer.RemoveProduct(name);
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        e.RemoveProduct(name);
         
         // _context.SaveChanges();
         
         return NoContent();
     }
     
-    private Worksheet? GetWorksheet(Guid worksheetId)
+    private EntityContainer? GetEntityContainer(Guid id)
     {
-        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, worksheetId);
+        var filter = Builders<EntityContainer>.Filter.Eq(w => w.Id, id);
+        return _context.EntityContainers.Find(filter).FirstOrDefault();
+    }
+    
+    private Worksheet? GetWorksheet(Guid id)
+    {
+        var filter = Builders<Worksheet>.Filter.Eq(w => w.Id, id);
         return _context.Worksheets.Find(filter).FirstOrDefault();    }
 }

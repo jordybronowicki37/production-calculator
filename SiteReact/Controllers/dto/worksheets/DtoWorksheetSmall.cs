@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.nodeTypes;
+﻿using productionCalculatorLib.components.entityContainer;
+using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.throughputs;
 
@@ -15,12 +16,12 @@ public class DtoWorksheetSmall
     public List<DtoThroughPut> InputProducts { get; } = new();
     public List<DtoThroughPut> OutputProducts { get; } = new();
 
-    public DtoWorksheetSmall(Worksheet worksheet)
+    public DtoWorksheetSmall(Worksheet worksheet, EntityContainer entityContainer)
     {
         Id = worksheet.Id;
         Name = worksheet.Name;
-        AmountProducts = worksheet.EntityContainer.Products.Count;
-        AmountRecipes = worksheet.EntityContainer.Recipes.Count;
+        AmountProducts = entityContainer.Products.Count;
+        AmountRecipes = entityContainer.Recipes.Count;
         AmountNodes = worksheet.Nodes.Count;
 
         foreach (var node in worksheet.Nodes)
@@ -28,25 +29,29 @@ public class DtoWorksheetSmall
             switch (node)
             {
                 case SpawnNode spawnNode:
-                    var foundInput = InputProducts.Find(put => put.Product.Name == spawnNode.Product.Name);
+                    var foundInput = InputProducts.Find(put => put.Product.Id == spawnNode.ProductId);
                     if (foundInput != null)
                     {
                         foundInput.Amount += spawnNode.Amount;
                     } 
                     else
                     {
-                        InputProducts.Add(new DtoThroughPut(spawnNode.Product, spawnNode.Amount));
+                        var product = entityContainer.GetProduct(spawnNode.ProductId);
+                        if (product == null) continue;
+                        InputProducts.Add(new DtoThroughPut(product, spawnNode.Amount));
                     }
                     break;
                 case EndNode endNode:
-                    var foundOutput = OutputProducts.Find(put => put.Product.Name == endNode.Product.Name);
+                    var foundOutput = OutputProducts.Find(put => put.Product.Id == endNode.ProductId);
                     if (foundOutput != null)
                     {
                         foundOutput.Amount += endNode.Amount;
                     } 
                     else
                     {
-                        OutputProducts.Add(new DtoThroughPut(endNode.Product, endNode.Amount));
+                        var product = entityContainer.GetProduct(endNode.ProductId);
+                        if (product == null) continue;
+                        OutputProducts.Add(new DtoThroughPut(product, endNode.Amount));
                     }
                     break;
             }

@@ -13,11 +13,14 @@ public class Worksheet
     public string Name { get; set; } = "";
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
-    public virtual EntityContainer EntityContainer { get; private set; } = new();
+    public Guid EntityContainerId { get; init; }
     public virtual ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
     public virtual ICollection<Connection> Connections { get; private set; } = new List<Connection>();
-    
-    public Worksheet() {}
+
+    public Worksheet(EntityContainer entityContainer)
+    {
+        EntityContainerId = entityContainer.Id;
+    }
     
     public void AddNode(ANode node)
     {

@@ -55,12 +55,14 @@ public class NodeBuilder<TNodeType> where TNodeType : ANode, new()
         
         if (newNode is IHasProduct nodeProduct)
         {
-            nodeProduct.Product = _product ?? throw new InvalidOperationException("No product set");
+            if (_product == null) throw new InvalidOperationException("No product set");
+            nodeProduct.ProductId = _product.Id;
         }
         
         if (newNode is IHasRecipe nodeRecipe)
         {
-            nodeRecipe.Recipe = _recipe ?? throw new InvalidOperationException("No recipe set");
+            if (_recipe == null) throw new InvalidOperationException("No recipe set");
+            nodeRecipe.RecipeId = _recipe.Id;
         }
 
         if (_exactAmount != null)

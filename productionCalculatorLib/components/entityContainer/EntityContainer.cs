@@ -25,11 +25,26 @@ public class EntityContainer
         return Products.FirstOrDefault(r => r.Name == name);
     }
     
+    public Product? GetProduct(Guid id)
+    {
+        return Products.FirstOrDefault(r => r.Id == id);
+    }
+    
     public void RemoveProduct(string name)
     {
         var product = Products.FirstOrDefault(p => p.Name == name);
         if (product == null) return;
         Products.Remove(product);
+    }
+    
+    public Recipe? GetRecipe(string name)
+    {
+        return Recipes.FirstOrDefault(r => r.Name == name);
+    }
+    
+    public Recipe? GetRecipe(Guid id)
+    {
+        return Recipes.FirstOrDefault(r => r.Id == id);
     }
 
     public Recipe GenerateRecipe(string name)
@@ -44,10 +59,5 @@ public class EntityContainer
     {
         if (Recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");
         return new RecipeBuilder(this, name);
-    }
-    
-    public Recipe? GetRecipe(string name)
-    {
-        return Recipes.FirstOrDefault(r => r.Name == name);
     }
 }

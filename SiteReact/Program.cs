@@ -52,13 +52,15 @@ else
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<MainContext>();
+    var mainContext = services.GetRequiredService<MainContext>();
+    var documentContext = services.GetRequiredService<DocumentContext>();
 
     if (app.Environment.IsDevelopment())
     {
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-        // TestDataInitializer.InitializeAllData(context);
+        mainContext.Database.EnsureDeleted();
+        mainContext.Database.EnsureCreated();
+        
+        TestDataInitializer.InitializeAllData(documentContext);
     }
 }
 
