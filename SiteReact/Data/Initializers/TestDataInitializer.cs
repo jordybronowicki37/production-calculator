@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.calculator;
+﻿using MongoDB.Driver;
+using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.products;
@@ -14,15 +15,30 @@ public static class TestDataInitializer
         InitializeSimpleOneWay(out var w1, out var e1);
         InitializeDoubleSpawn(out var w2, out var e2);
         
-        context.EntityContainers.InsertMany(new []{e1, e2});
-        context.Worksheets.InsertMany(new []{w1, w2});
+        InsertOrReplace(context, w1, e1);
+        InsertOrReplace(context, w2, e2);
+    }
+
+    private static void InsertOrReplace(DocumentContext c, Worksheet w, EntityContainer e)
+    {
+        var findEFilter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
+        c.EntityContainers.DeleteOne(findEFilter);
+        c.EntityContainers.InsertOne(e);
+        
+        var findWFilter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        c.Worksheets.DeleteOne(findWFilter);
+        c.Worksheets.InsertOne(w);
     }
     
     public static void InitializeSimpleOneWay(out Worksheet worksheet, out EntityContainer entityContainer)
     {
-        entityContainer = new EntityContainer();
+        entityContainer = new EntityContainer()
+        {
+            Id = Guid.Parse("dff3c380-3e78-418c-af70-bbc955140aca")
+        };
         worksheet = new Worksheet(entityContainer)
         {
+            Id = Guid.Parse("9fd8a83b-de70-4124-9dfa-64f350ceb743"),
             Name = "Iron ingot smelting"
         };
 
@@ -45,9 +61,13 @@ public static class TestDataInitializer
 
     public static void InitializeDoubleSpawn(out Worksheet worksheet, out EntityContainer entityContainer)
     {
-        entityContainer = new EntityContainer();
+        entityContainer = new EntityContainer()
+        {
+            Id = Guid.Parse("7671dd58-077d-4922-935b-4ed08782b70c")
+        };
         worksheet = new Worksheet(entityContainer)
         {
+            Id = Guid.Parse("c75b35b8-c2af-486f-bf06-a9ece3de7923"),
             Name = "Steel ingot smelting"
         };
 
