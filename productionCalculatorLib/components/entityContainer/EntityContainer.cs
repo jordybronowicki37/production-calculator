@@ -37,6 +37,13 @@ public class EntityContainer
         Products.Remove(product);
     }
     
+    public void RemoveProduct(Guid id)
+    {
+        var product = Products.FirstOrDefault(p => p.Id == id);
+        if (product == null) return;
+        Products.Remove(product);
+    }
+    
     public Recipe? GetRecipe(string name)
     {
         return Recipes.FirstOrDefault(r => r.Name == name);
@@ -53,6 +60,20 @@ public class EntityContainer
         var r = new Recipe(name);
         Recipes.Add(r);
         return r;
+    }
+
+    public void RemoveRecipe(string name)
+    {
+        var recipe = Recipes.FirstOrDefault(p => p.Name == name);
+        if (recipe == null) return;
+        Recipes.Remove(recipe);
+    }
+    
+    public void RemoveRecipe(Guid id)
+    {
+        var recipe = Recipes.FirstOrDefault(p => p.Id == id);
+        if (recipe == null) return;
+        Recipes.Remove(recipe);
     }
     
     public RecipeBuilder GetRecipeBuilder(string name)
