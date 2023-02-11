@@ -126,7 +126,7 @@ public class NodeController : ControllerBase
         return Ok(DtoNode.GenerateNode(recipeNode));
     }
     
-    [HttpPut("{nodeId:Guid}/Targets")]
+    [HttpPut("{nodeId:Guid}/targets")]
     public IActionResult EditNodeTargets(Guid nodeId, Guid worksheetId, IEnumerable<DtoProductionTarget> dto)
     {
         var w = GetWorksheet(worksheetId);

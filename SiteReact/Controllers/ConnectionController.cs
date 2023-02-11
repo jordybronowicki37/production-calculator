@@ -42,7 +42,7 @@ public class ConnectionController : ControllerBase
         if (node2 is not INodeIn target) return BadRequest("Target node is not an input");
         
         var product = e.GetProduct(dto.Product);
-        if (product == null) return BadRequest();
+        if (product == null) return BadRequest("Product is not found");
 
         var connection = w.GetConnectionBuilder(source, target, product).Build();
 
