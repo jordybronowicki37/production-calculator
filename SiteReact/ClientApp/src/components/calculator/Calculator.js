@@ -3,8 +3,7 @@ import {Component} from "react";
 import {NodeProduction} from "../nodes/NodeProduction";
 import {NodeSpawn} from "../nodes/NodeSpawn";
 import {NodeEnd} from "../nodes/NodeEnd";
-import ReactFlow, {MiniMap, Controls, Background, MarkerType, 
-  ReactFlowProvider} from 'react-flow-renderer';
+import ReactFlow, {Background, Controls, MarkerType, MiniMap, ReactFlowProvider} from 'react-flow-renderer';
 import {ProductManager} from "../products/ProductManager";
 import {RecipeManager} from "../recipes/RecipeManager";
 import Store from "../../dataStore/DataStore";
@@ -34,6 +33,8 @@ export class Calculator extends Component {
       worksheetData: store.worksheet,
       nodes: store.nodes,
       connections: store.connections,
+      products: store.products,
+      recipes: store.recipes,
       
       calculatorStateSuccess:false,
       calculatorStateLoading:true,
@@ -56,12 +57,13 @@ export class Calculator extends Component {
       tempPositionData:null,
     }
     fetchWorksheet(this.state.worksheetId).then(r => {
-      this.setState({worksheetLoading:false});
       if (r.calculationSucceeded) {
         this.setCalculatorState("success");
       } else {
         this.setCalculatorState("warning");
       }
+    }).then(() => {
+      this.setState({worksheetLoading:false});
     }).catch(r => {
       this.setCalculatorState("error");
     });
@@ -73,6 +75,8 @@ export class Calculator extends Component {
         worksheetData: store.worksheet,
         nodes: store.nodes,
         connections: store.connections,
+        products: store.products,
+        recipes: store.recipes,
       })
     });
   }
@@ -81,7 +85,7 @@ export class Calculator extends Component {
     let title = this.state.worksheetData ? this.state.worksheetData.name : "";
     let message = this.state.worksheetData ? this.state.worksheetData.calculationError : "";
     let nodes = this.state.nodes.map(node => {
-      const {body, type} = createNodeBody(node.type, node);
+      const {body, type} = createNodeBody(node.type, node, this.state.products, this.state.recipes);
       let tempPos = this.state.tempPositionData
       let position = node.position;
       if (tempPos !== null && tempPos.id === node.id) position = tempPos.position;
@@ -103,6 +107,8 @@ export class Calculator extends Component {
         target: id2
       };
     });
+    
+    if (this.state.worksheetLoading) return <div></div>
     
     return (
       <div className="calculator">
@@ -276,7 +282,7 @@ export class Calculator extends Component {
       switch (change.type) {
         case "position":
           if (change.dragging) {
-            this.setState({tempPositionData: {position:change.position, id:parseInt(change.id)}})
+            this.setState({tempPositionData: {position:change.position, id:change.id}})
           } else {
             const {position, id} = this.state.tempPositionData;
             Store.dispatch({type:"node/change/position", payload: {position, id}});
@@ -312,14 +318,13 @@ export class Calculator extends Component {
     })
   };
   onConnect = edge => {
-    let store = Store.getState();
-    if (store.products.length === 0) {
+    let {products, nodes} = Store.getState();
+    if (products.length === 0) {
       throwWarningNotification("Cannot connect nodes because no products exist in worksheet");
       return;
     }
-    let state = store.nodes;
-    let source = state.find(n => n.id === parseInt(edge.source));
-    let target = state.find(n => n.id === parseInt(edge.target));
+    let source = nodes.find(n => n.id === edge.source);
+    let target = nodes.find(n => n.id === edge.target);
     let product;
     
     if (source.product != null) {
@@ -331,10 +336,10 @@ export class Calculator extends Component {
     } else if (target.recipe != null && target.recipe.inputThroughPuts.length > 0) {
       product = target.recipe.inputThroughPuts[0];
     } else {
-      product = state.products[0];
+      product = products[0];
     }
     
-    connectionCreate(edge.source, edge.target, product.name)
+    connectionCreate(edge.source, edge.target, product)
   };
   
   onDragStart = (event, nodetype) => {
@@ -459,24 +464,31 @@ export class Calculator extends Component {
   }
 }
 
-function createNodeBody(nodeType, data) {
-  let body, type;
+function createNodeBody(nodeType, data, products, recipes) {
+  let body, type, product, recipe;
   switch (nodeType) {
     case "Spawn":
-      body = <NodeSpawn data={data}/>;
+      product = findById(data.product, products);
+      body = <NodeSpawn node={data} product={product} products={products}/>;
       type = "input";
       break;
     case "Production":
-      body = <NodeProduction data={data}/>;
+      recipe = findById(data.recipe, recipes)
+      body = <NodeProduction node={data} recipe={recipe} products={products} recipes={recipes}/>;
       type = "default";
       break;
     case "End":
-      body = <NodeEnd data={data}/>;
+      product = findById(data.product, products)
+      body = <NodeEnd node={data} product={product} products={products}/>;
       type = "output";
       break;
     default:
-      body = <div></div>;
       type = "default";
+      body = <div/>
   }
   return {body, type};
+}
+
+function findById(id, products) {
+  return products.find(v => v.id === id);
 }

@@ -65,5 +65,5 @@ export const nodeRemove = async function(nodeId) {
     throwErrorNotification(error);
     throw new Error(error);
   }
-  Store.dispatch({type:"node/remove", payload: parseInt(nodeId)});
+  Store.dispatch({type:"node/remove", payload: nodeId});
 }
