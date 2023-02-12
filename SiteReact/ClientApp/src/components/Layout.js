@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Container } from 'reactstrap';
-import { NavMenu } from './NavMenu';
+import React, {Component} from 'react';
+import {Container} from 'reactstrap';
+import {NavMenu} from './NavMenu';
 import {UserNotificationManager} from "./notification/UserNotificationManager";
 import "./Layout.css";
 
@@ -13,7 +13,7 @@ export class Layout extends Component {
         <NavMenu />
         <Container>
           <div className="notification-wrapper">
-            <UserNotificationManager></UserNotificationManager>
+            <UserNotificationManager/>
           </div>
           {this.props.children}
         </Container>

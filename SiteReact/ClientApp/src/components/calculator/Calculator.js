@@ -11,8 +11,9 @@ import {calculate, fetchWorksheet} from "../worksheets/WorksheetAPI";
 import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../nodes/NodeAPI";
 import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
 import {RecipeCreator} from "../recipes/RecipeCreator";
-import {Link} from "react-router-dom";
 import {throwWarningNotification} from "../notification/NotificationThrower";
+import {Popup} from "../Popup";
+import {CalculatorToolbar} from "./CalculatorToolbar";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -36,16 +37,7 @@ export class Calculator extends Component {
       products: store.products,
       recipes: store.recipes,
       
-      calculatorStateSuccess:false,
-      calculatorStateLoading:true,
-      calculatorStateWarning:false,
-      calculatorStateError:false,
-      calculatorStateRefresh:false,
-      
-      dropMenuWorksheetOpen:false,
-      dropMenuProductsOpen:false,
-      dropMenuRecipesOpen:false,
-      dropMenuNodesOpen:false,
+      calculatorState: "loading",
       
       popupProductManagerOpen:false,
       popupRecipeCreatorOpen:false,
@@ -58,17 +50,18 @@ export class Calculator extends Component {
     }
     fetchWorksheet(this.state.worksheetId).then(r => {
       if (r.calculationSucceeded) {
-        this.setCalculatorState("success");
+        this.setState({calculatorState: "success"});
       } else {
-        this.setCalculatorState("warning");
+        this.setState({calculatorState: "warning"});
       }
     }).then(() => {
       this.setState({worksheetLoading:false});
     }).catch(r => {
-      this.setCalculatorState("error");
+      this.setState({calculatorState: "error"});
     });
+    
     this.unsubscribe = Store.subscribe(() => {
-      this.setCalculatorState("refresh");
+      this.setState({calculatorState: "refresh"});
       let store = Store.getState();
       
       this.setState({
@@ -114,72 +107,51 @@ export class Calculator extends Component {
       <div className="calculator">
         <div hidden={!this.state.worksheetLoading} className="loading-screen">
           <div>Loading</div>
-          <div><i className='bx bx-loader-alt bx-spin'></i></div>
+          <div><i className='bx bx-loader-alt bx-spin'/></div>
         </div>
         
-        <div hidden={!this.state.popupProductManagerOpen} className="popup-container" onClick={() => this.setState({popupProductManagerOpen:false})}>
-          <div onClick={e => e.stopPropagation()}>
-            <button type="button" className="popup-close-button" onClick={() => this.setState({popupProductManagerOpen:false})}>
-              <i className='bx bx-x'></i>
-            </button>
-            <ProductManager></ProductManager>
-          </div>
-        </div>
+        <Popup
+          hidden={!this.state.popupProductManagerOpen}
+          onClose={() => this.setState({popupProductManagerOpen:false})}>
+          <ProductManager products={this.state.products}/>
+        </Popup>
         
-        <div hidden={!this.state.popupRecipeCreatorOpen} className="popup-container" onClick={() => this.setState({popupRecipeCreatorOpen:false})}>
-          <div onClick={e => e.stopPropagation()}>
-            <button type="button" className="popup-close-button" onClick={() => this.setState({popupRecipeCreatorOpen:false})}>
-              <i className='bx bx-x'></i>
-            </button>
-            <RecipeCreator></RecipeCreator>
-          </div>
-        </div>
-        <div hidden={!this.state.popupRecipeManagerOpen} className="popup-container" onClick={() => this.setState({popupRecipeManagerOpen:false})}>
-          <div onClick={e => e.stopPropagation()}>
-            <button type="button" className="popup-close-button" onClick={() => this.setState({popupRecipeManagerOpen:false})}>
-              <i className='bx bx-x'></i>
-            </button>
-            <RecipeManager></RecipeManager>
-          </div>
-        </div>
+        <Popup
+          hidden={!this.state.popupRecipeCreatorOpen}
+          onClose={() => this.setState({popupRecipeCreatorOpen:false})}>
+          <RecipeCreator/>
+        </Popup>
         
-        <div hidden={!this.state.popupNodeSpawnPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
-          <div onClick={e => e.stopPropagation()}>
-            <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
-              <i className='bx bx-x'></i>
-            </button>
-            <div>
-              <h3>Spawn node</h3>
-              <div className="user-select-none border border-secondary float-start m-1"><NodeSpawn previewMode/></div>
-              <p>The spawn node inputs products into the calculator. This could for example be a resource mine or some other kind of collector. 
-                Targets can be set on this node to limit the generation of the node.</p>
-            </div>
-          </div>
-        </div>
-        <div hidden={!this.state.popupNodeProductionPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeProductionPreviewOpen:false})}>
-          <div onClick={e => e.stopPropagation()}>
-            <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeProductionPreviewOpen:false})}>
-              <i className='bx bx-x'></i>
-            </button>
-            <div>
-              <h3>Production node</h3>
-              <div className="user-select-none border border-secondary float-start m-1"><NodeProduction previewMode/></div>
-              <p>In the production node a recipe can be set. The recipe is a way to convert one or multiple products into others.</p>
-            </div>
-          </div>
-        </div>
-        <div hidden={!this.state.popupNodeEndPreviewOpen} className="popup-container" onClick={() => this.setState({popupNodeEndPreviewOpen:false})}>
-          <div onClick={e => e.stopPropagation()}>
-            <button type="button" className="popup-close-button" onClick={() => this.setState({popupNodeEndPreviewOpen:false})}>
-              <i className='bx bx-x'></i>
-            </button>
-            <div>
-              <h3>End node</h3>
-              <div className="user-select-none border border-secondary float-start m-1"><NodeEnd previewMode/></div>
-              <p>The end node is the output for products and can be used to set output targets or to see waste products.</p>
-            </div>
-          </div>
-        </div>
+        <Popup
+          hidden={!this.state.popupRecipeManagerOpen}
+          onClose={() => this.setState({popupRecipeManagerOpen:false})}>
+          <RecipeManager/>
+        </Popup>
+        
+        <Popup
+          hidden={!this.state.popupNodeSpawnPreviewOpen}
+          onClose={() => this.setState({popupNodeSpawnPreviewOpen:false})}>
+          <h3>Spawn node</h3>
+          <div className="user-select-none border border-secondary float-start m-1"><NodeSpawn previewMode/></div>
+          <p>The spawn node inputs products into the calculator. This could for example be a resource mine or some other kind of collector.
+            Targets can be set on this node to limit the generation of the node.</p>
+        </Popup>
+        
+        <Popup
+          hidden={!this.state.popupNodeProductionPreviewOpen}
+          onClose={() => this.setState({popupNodeProductionPreviewOpen:false})}>
+          <h3>Production node</h3>
+          <div className="user-select-none border border-secondary float-start m-1"><NodeProduction previewMode/></div>
+          <p>In the production node a recipe can be set. The recipe is a way to convert one or multiple products into others.</p>
+        </Popup>
+        
+        <Popup
+          hidden={!this.state.popupNodeEndPreviewOpen}
+          onClose={() => this.setState({popupNodeEndPreviewOpen:false})}>
+          <h3>End node</h3>
+          <div className="user-select-none border border-secondary float-start m-1"><NodeEnd previewMode/></div>
+          <p>The end node is the output for products and can be used to set output targets or to see waste products.</p>
+        </Popup>
         
         <div className="calculator-screen">
           <div className="top-bar">
@@ -188,61 +160,18 @@ export class Calculator extends Component {
           </div>
           
           <div className="flow-chart-container">
-            <div className="toolbar">
-              <div>
-                <button onClick={() => this.setDropDownState(this.state.dropMenuWorksheetOpen?"none":"worksheet")}
-                       type="button" className={this.state.dropMenuWorksheetOpen?"selected":""}>Worksheet</button>
-                <div className="drop-menu" hidden={!this.state.dropMenuWorksheetOpen}>
-                  <Link to="/worksheets"><button type="button">View all</button></Link>
-                  <button type="button">Change name</button>
-                </div>
-              </div>
-              <div>
-                <button onClick={() => this.setDropDownState(this.state.dropMenuProductsOpen?"none":"products")} 
-                        type="button" className={this.state.dropMenuProductsOpen?"selected":""}>Products</button>
-                <div className="drop-menu" hidden={!this.state.dropMenuProductsOpen}>
-                  <button type="button" onClick={() => this.setState({popupProductManagerOpen:true})}>View products</button>
-                  <button type="button">Add product</button>
-                </div>
-              </div>
-              <div>
-                <button onClick={() => this.setDropDownState(this.state.dropMenuRecipesOpen?"none":"recipes")} 
-                        type="button" className={this.state.dropMenuRecipesOpen?"selected":""}>Recipes</button>
-                <div className="drop-menu" hidden={!this.state.dropMenuRecipesOpen}>
-                  <button type="button" onClick={() => this.setState({popupRecipeManagerOpen:true})}>View recipes</button>
-                  <button type="button" onClick={() => this.setState({popupRecipeCreatorOpen:true})}>Add recipe</button>
-                </div>
-              </div>
-              <div>
-                <button onClick={() => this.setDropDownState(this.state.dropMenuNodesOpen?"none":"nodes")} 
-                        className={this.state.dropMenuNodesOpen?"selected":""}>Nodes</button>
-                <div className="drop-menu" hidden={!this.state.dropMenuNodesOpen}>
-                  <div className="item-with-info">
-                    <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable>Spawn</div>
-                    <i className='bx bx-info-circle icon' onClick={() => this.setState({popupNodeSpawnPreviewOpen:true})}></i>
-                  </div>
-                  <div className="item-with-info">
-                    <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "Production")} draggable>Production</div>
-                    <i className='bx bx-info-circle icon' onClick={() => this.setState({popupNodeProductionPreviewOpen:true})}></i>
-                  </div>
-                  <div className="item-with-info">
-                    <div className="draggable-node-icon flex-grow-1" onDragStart={(event) => this.onDragStart(event, "End")} draggable>End</div>
-                    <i className='bx bx-info-circle icon' onClick={() => this.setState({popupNodeEndPreviewOpen:true})}></i>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CalculatorToolbar calculator={this}/>
             
             <ReactFlowProvider>
               <div className="flow-chart-wrapper flex-grow-1" ref={this.setReactFlowWrapper}>
                 <div className="calculation-states">
                   <div hidden={message===""} className="calculation-states-label">{message}</div>
                   <div className="calculation-states-icon" onClick={() => this.calculateWorksheet()}>
-                    <i hidden={!this.state.calculatorStateSuccess} title="Calculation success" className='bx bx-check'></i>
-                    <i hidden={!this.state.calculatorStateWarning} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
-                    <i hidden={!this.state.calculatorStateError} title="Calculation had error's" className='bx bx-error-circle' style={{color:"#F1B22C"}}></i>
-                    <i hidden={!this.state.calculatorStateLoading} title="Calculating..." className='bx bx-loader-alt bx-spin'></i>
-                    <i hidden={!this.state.calculatorStateRefresh} title="Recalculate" className='bx bx-refresh'></i>
+                    <i hidden={this.state.calculatorState !== "success"} title="Calculation success" className='bx bx-check'></i>
+                    <i hidden={this.state.calculatorState !== "warning"} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
+                    <i hidden={this.state.calculatorState !== "error"} title="Calculation had error's" className='bx bx-error-circle' style={{color:"#F1B22C"}}></i>
+                    <i hidden={this.state.calculatorState !== "loading"} title="Calculating..." className='bx bx-loader-alt bx-spin'></i>
+                    <i hidden={this.state.calculatorState !== "refresh"} title="Recalculate" className='bx bx-refresh'></i>
                   </div>
                 </div>
                 <ReactFlow
@@ -354,7 +283,6 @@ export class Calculator extends Component {
     event.preventDefault();
     const reactFlowBounds = this.state.wrapperInstance.getBoundingClientRect();
     const nodetype = event.dataTransfer.getData('application/reactflow');
-    const store = Store.getState();
 
     // check if the dropped element is valid
     if (typeof nodetype === 'undefined' || !nodetype) return;
@@ -363,6 +291,12 @@ export class Calculator extends Component {
       x: event.clientX - reactFlowBounds.left,
       y: event.clientY - reactFlowBounds.top,
     });
+    
+    this.onAddNode(nodetype, position)
+  };
+  onAddNode(nodetype, position) {
+    const store = Store.getState();
+    if (!position) position = {x:0,y:0};
     
     switch (nodetype) {
       case "Spawn":
@@ -383,80 +317,19 @@ export class Calculator extends Component {
         nodeCreateRecipe(nodetype, position, recipe.name);
         break;
     }
-  };
+  }
   
   calculateWorksheet() {
-    this.setCalculatorState("loading");
+    this.setState({calculatorState: "loading"});
     calculate().then(r => {
       if (r.calculationSucceeded) {
-        this.setCalculatorState("success");
+        this.setState({calculatorState: "success"});
       } else {
-        this.setCalculatorState("warning");
+        this.setState({calculatorState: "warning"});
       }
     }).catch(r => {
-      this.setCalculatorState("error");
+      this.setState({calculatorState: "error"});
     });
-  }
-  
-  setDropDownState(state) {
-    let options = {
-      dropMenuWorksheetOpen:false,
-      dropMenuProductsOpen:false,
-      dropMenuRecipesOpen:false,
-      dropMenuNodesOpen:false,
-    }
-    
-    switch (state) {
-      case "worksheet":
-        options.dropMenuWorksheetOpen = true;
-        break;
-      case "products":
-        options.dropMenuProductsOpen = true;
-        break;
-      case "recipes":
-        options.dropMenuRecipesOpen = true;
-        break;
-      case "nodes":
-        options.dropMenuNodesOpen = true;
-        break;
-      case "none":
-        break;
-      default: return;
-    }
-    
-    this.setState(options);
-  }
-  
-  setCalculatorState(state) {
-    let options = {
-      calculatorStateSuccess:false,
-      calculatorStateLoading:false,
-      calculatorStateWarning:false,
-      calculatorStateError:false,
-      calculatorStateRefresh:false,
-    }
-    
-    switch (state) {
-      case "success":
-        options.calculatorStateSuccess = true;
-        break;
-      case "loading":
-        options.calculatorStateLoading = true;
-        break;
-      case "warning":
-        options.calculatorStateWarning = true;
-        break;
-      case "error":
-        options.calculatorStateError = true;
-        break;
-      case "refresh":
-        options.calculatorStateRefresh = true;
-        break;
-      default:
-        return;
-    }
-    
-    this.setState(options);
   }
   
   componentWillUnmount() {
@@ -484,11 +357,11 @@ function createNodeBody(nodeType, data, products, recipes) {
       break;
     default:
       type = "default";
-      body = <div/>
+      body = <div/>;
   }
   return {body, type};
 }
 
-function findById(id, products) {
-  return products.find(v => v.id === id);
+function findById(id, list) {
+  return list.find(v => v.id === id);
 }
