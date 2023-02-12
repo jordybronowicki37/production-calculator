@@ -1,6 +1,6 @@
 ﻿import "./UserNotificationManager.css";
 import {Component} from "react";
-import Store from "../../dataStore/DataStore";
+import Store from "../../data/DataStore";
 
 export class UserNotificationManager extends Component {
   unsubscribe;

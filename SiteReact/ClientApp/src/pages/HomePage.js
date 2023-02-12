@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 
-export class Home extends Component {
-  static displayName = Home.name;
-
+export class HomePage extends Component {
   render () {
     return (
       <div>

@@ -1,5 +1,5 @@
-﻿import Store from "../../dataStore/DataStore";
-import {throwErrorNotification} from "../notification/NotificationThrower";
+﻿import {throwErrorNotification} from "../components/notification/NotificationThrower";
+import Store from "./DataStore";
 
 export const nodeCreateProduct = async function(type, position, product) {
   return await nodeCreate(position, JSON.stringify({type, product}));

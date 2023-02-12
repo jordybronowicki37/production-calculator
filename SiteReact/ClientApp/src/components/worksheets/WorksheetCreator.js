@@ -1,7 +1,7 @@
-﻿import {Component} from "react";
-import "./WorksheetCreator.css";
+﻿import "./WorksheetCreator.css";
+import {Component} from "react";
 import {Link} from "react-router-dom";
-import {createNewWorksheet} from "./WorksheetAPI";
+import {createNewWorksheet} from "../../data/WorksheetAPI";
 
 export class WorksheetCreator extends Component {
   constructor(props) {

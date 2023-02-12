@@ -1,19 +1,19 @@
 import "./Calculator.css";
 import {Component} from "react";
-import {NodeProduction} from "../nodes/NodeProduction";
-import {NodeSpawn} from "../nodes/NodeSpawn";
-import {NodeEnd} from "../nodes/NodeEnd";
 import ReactFlow, {Background, Controls, MarkerType, MiniMap, ReactFlowProvider} from 'react-flow-renderer';
-import {ProductManager} from "../products/ProductManager";
-import {RecipeManager} from "../recipes/RecipeManager";
-import Store from "../../dataStore/DataStore";
-import {calculate, fetchWorksheet} from "../worksheets/WorksheetAPI";
-import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../nodes/NodeAPI";
-import {connectionCreate, connectionDelete} from "../connections/ConnectionAPI";
-import {RecipeCreator} from "../recipes/RecipeCreator";
 import {throwWarningNotification} from "../notification/NotificationThrower";
-import {Popup} from "../Popup";
+import {Popup} from "../popup/Popup";
 import {CalculatorToolbar} from "./CalculatorToolbar";
+import Store from "../../data/DataStore";
+import {calculate, fetchWorksheet} from "../../data/WorksheetAPI";
+import {ProductManager} from "../entities/products/ProductManager";
+import {RecipeCreator} from "../entities/recipes/RecipeCreator";
+import {RecipeManager} from "../entities/recipes/RecipeManager";
+import {NodeSpawn} from "./nodes/NodeSpawn";
+import {NodeProduction} from "./nodes/NodeProduction";
+import {NodeEnd} from "./nodes/NodeEnd";
+import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/NodeAPI";
+import {connectionCreate, connectionDelete} from "../../data/ConnectionAPI";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -56,7 +56,7 @@ export class Calculator extends Component {
       }
     }).then(() => {
       this.setState({worksheetLoading:false});
-    }).catch(r => {
+    }).catch(() => {
       this.setState({calculatorState: "error"});
     });
     

@@ -1,4 +1,4 @@
-﻿import Store from "../../dataStore/DataStore";
+﻿import Store from "../../data/DataStore";
 
 export const throwInfoNotification = function (message) {
   throwNotification(message, "info")

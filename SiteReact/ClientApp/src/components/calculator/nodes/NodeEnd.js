@@ -1,8 +1,8 @@
 import './Node.css';
 import './NodeEnd.css';
-import {nodeEditProduct} from "./NodeAPI";
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
+import {nodeEditProduct} from "../../../data/NodeAPI";
 
 export function NodeEnd({node, product, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);

@@ -1,6 +1,6 @@
 ﻿import {Component} from "react";
 import "./RecipeManager.css";
-import Store from "../../dataStore/DataStore";
+import Store from "../../../data/DataStore";
 
 export class RecipeManager extends Component {
   unsubscribe;

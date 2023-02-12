@@ -1,8 +1,8 @@
 import './Node.css';
 import './NodeProduction.css';
-import {nodeEditRecipe} from "./NodeAPI";
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
+import {nodeEditRecipe} from "../../../data/NodeAPI";
 
 export function NodeProduction({node, recipe, recipes, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);

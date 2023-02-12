@@ -1,8 +1,8 @@
+import "./Layout.css";
 import React, {Component} from 'react';
 import {Container} from 'reactstrap';
 import {NavMenu} from './NavMenu';
-import {UserNotificationManager} from "./notification/UserNotificationManager";
-import "./Layout.css";
+import {UserNotificationManager} from "../notification/UserNotificationManager";
 
 export class Layout extends Component {
   static displayName = Layout.name;

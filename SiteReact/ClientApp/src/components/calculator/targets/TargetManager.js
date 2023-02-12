@@ -1,6 +1,6 @@
 ﻿import "./TargetManager.css"
 import {useEffect, useState} from "react";
-import {setTargets} from "./TargetAPI";
+import {setTargets} from "../../../data/TargetAPI";
 
 export function TargetManager({nodeId, targets}) {
   const [mode, setMode] = useState("none");

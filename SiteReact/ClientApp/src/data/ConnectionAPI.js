@@ -1,5 +1,5 @@
-﻿import Store from "../../dataStore/DataStore";
-import {throwErrorNotification} from "../notification/NotificationThrower";
+﻿import {throwErrorNotification} from "../components/notification/NotificationThrower";
+import Store from "./DataStore";
 
 export const connectionCreate = async function(nodeInId, nodeOutId, product) {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/connection`, {

@@ -1,5 +1,5 @@
-import Store from "../../dataStore/DataStore";
-import {throwErrorNotification} from "../notification/NotificationThrower";
+import Store from "./DataStore";
+import {throwErrorNotification} from "../components/notification/NotificationThrower";
 
 export const fetchAllProducts = async function() {
   let response = await fetch(`worksheet/${Store.getState().worksheet.id}/product`);

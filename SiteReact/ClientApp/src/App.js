@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
+import './custom.css'
+import React, {Component} from 'react';
 import {WorksheetOverview} from "./components/worksheets/WorksheetOverview";
 import {Calculator} from "./components/calculator/Calculator";
-
-import './custom.css'
+import {Layout} from "./components/layout/Layout";
+import {Route} from "react-router-dom";
+import {HomePage} from "./pages/HomePage";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -13,7 +12,7 @@ export default class App extends Component {
   render () {
     return (
       <Layout>
-        <Route exact path='/' component={Home}/>
+        <Route exact path='/' component={HomePage}/>
         <Route path='/worksheets' component={WorksheetOverview}/>
         <Route path='/calculator/:id' component={Calculator}/>
       </Layout>

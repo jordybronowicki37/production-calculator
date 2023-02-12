@@ -1,6 +1,6 @@
 ﻿import {useMemo, useState} from "react";
 import "./ProductManager.css";
-import {deleteProduct, postNewProduct} from "./ProductAPI";
+import {deleteProduct, postNewProduct} from "../../../data/ProductAPI";
 
 export function ProductManager({products}) {
   const [filter, setFilter] = useState("");
