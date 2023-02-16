@@ -4,6 +4,7 @@ import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditRecipe} from "../../../data/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
+import {NodeDragHandle} from "./NodeDragHandle";
 
 export function NodeProduction({node, recipe, recipes, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -54,6 +55,7 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
     <div className="node node-production">
       <div className="top-container">
         <h3>Production</h3>
+        <NodeDragHandle/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
       </div>
       <div className="content-container">

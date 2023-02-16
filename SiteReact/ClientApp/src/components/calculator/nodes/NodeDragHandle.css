@@ -1,0 +1,13 @@
+﻿.node-drag-handle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 2;
+    cursor: grab;
+    padding: 4px 0 2px 0;
+}
+
+.node-drag-handle * {
+    background: #4449;
+    height: 15%;
+}

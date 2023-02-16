@@ -4,6 +4,7 @@ import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditProduct} from "../../../data/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
+import {NodeDragHandle} from "./NodeDragHandle";
 
 export function NodeEnd({node, product, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -34,6 +35,7 @@ export function NodeEnd({node, product, products, previewMode}) {
     <div className="node node-end">
       <div className="top-container">
         <h3>End</h3>
+        <NodeDragHandle/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
       </div>
       <div className="content-container">

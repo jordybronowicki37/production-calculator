@@ -77,6 +77,7 @@ export class Calculator extends Component {
         type,
         style: this.defaultNodeStyle,
         data: { label: body },
+        dragHandle: ".node-drag-handle",
         position,
       };
     });
