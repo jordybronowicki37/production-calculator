@@ -3,59 +3,44 @@ import './NodeProduction.css';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditRecipe} from "../../../data/NodeAPI";
+import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 
 export function NodeProduction({node, recipe, recipes, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
-  let recipeField, amountField, productInList, productOutList, activeTargets, targetEditor;
+  let recipeField, amountField, productInList, productOutList, targetEditor;
 
   if (previewMode) {
     recipeField = <div className="preview-field">name</div>;
     amountField = <div className="preview-field">0</div>;
     productInList = <div className="node-list">
-      <div>
-        <div className="previewField">name</div>
-        <div className="previewField">0</div>
-      </div>
-    </div>;
-    productOutList = <div className="node-list">
-      <div>
-        <div className="previewField">name</div>
-        <div className="previewField">0</div>
-      </div>
-    </div>;
-    activeTargets = <div></div>;
+        <div>
+          <div className="previewField">name</div>
+          <div className="previewField">0</div>
+        </div>
+      </div>;
+    productOutList = 
+      <div className="node-list">
+        <div>
+          <div className="previewField">name</div>
+          <div className="previewField">0</div>
+        </div>
+      </div>;
     targetEditor = <div></div>;
   } else {
     const {id, targets, amount} = node;
 
-    recipeField = <div>
-      <select value={recipe.name} onChange={e => recipeChanged(id, e.target.value)}>
-        <option value="" disabled hidden></option>
-        {recipes.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
-      </select></div>;
+    recipeField = 
+      <div>
+        <select value={recipe.name} onChange={e => recipeChanged(id, e.target.value)}>
+          <option value="" disabled hidden></option>
+          {recipes.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
+        </select>
+      </div>;
     amountField = <div>{amount}</div>;
     productInList = generateProductList(recipe.inputThroughPuts, products);
     productOutList = generateProductList(recipe.outputThroughPuts, products);
-    let targetIcon;
-    if (targets.length !== 0) {
-      if (targets[0].type === "ExactAmount") {
-        targetIcon = <div>
-          <i className='bx bx-arrow-to-right right-one'></i>
-          <i className='bx bx-arrow-to-left left-one'></i>
-        </div>;
-      } else if (targets[0].type === "MinAmount" || targets[0].type === "MaxAmount") {
-        targetIcon = <div>
-          <i className='bx bx-arrow-to-left right-one'></i>
-          <i className='bx bx-arrow-to-right left-one'></i>
-        </div>;
-      }
-    }
-    activeTargets =
-      <div className="targets" onClick={() => setEditorOpen(true)}>
-        {targetIcon}
-        <i className='bx bx-target-lock'></i>
-      </div>;
+    
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>
         <button type="button" className="popup-close-button" onClick={() => setEditorOpen(false)}>
@@ -69,15 +54,14 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
     <div className="node node-production">
       <div className="top-container">
         <h3>Production</h3>
-        {activeTargets}
+        <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
       </div>
-      <div className="product-table">
-        <div>Recipe:</div>
-        {recipeField}
-        <div>Amount:</div>
-        {amountField}
-
+      <div className="content-container">
         <div className="content-table">
+          <div>Recipe:</div>
+          {recipeField}
+          <div>Amount:</div>
+          {amountField}
           <div>Required in</div>
           <div>Required out</div>
           {productInList}

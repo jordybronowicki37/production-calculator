@@ -1,12 +1,26 @@
+.node-production .content-table * {
+    border-top-color: var(--node-production-primary, black);
+    border-left-color: var(--node-production-primary, black);
+}
+
+.node-production .content-container * {
+    color: var(--node-production-text, initial);
+    background: var(--node-production-secondary, white);
+}
+
+.node-production .top-container {
+    color: var(--node-production-text, initial);
+    background: var(--node-production-primary, black);
+}
+
+.node-production {
+    border: 1px solid var(--node-production-primary);
+}
+
 .node-production .product-table {
     display: grid;
     grid-template-columns: auto auto;
     margin: 0;
-}
-
-.node-production .product-table>:last-child {
-    grid-column-start: 1;
-    grid-column-end: 3;
 }
 
 .node-production .recipe-product {

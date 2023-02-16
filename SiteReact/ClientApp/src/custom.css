@@ -29,3 +29,26 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* Vars */
+:root {
+  --node-spawn-primary: #1199b7;
+  --node-spawn-secondary: #5ebdd8;
+  --node-spawn-text: #111;
+
+  --node-production-primary: #705499;
+  --node-production-secondary: #a09bc2;
+  --node-production-text: #111;
+
+  --node-end-primary: #ea6d30;
+  --node-end-secondary: #ef8f52;
+  --node-end-text: #111;
+
+  /*--node-spawn-primary: #878a5d;*/
+  /*--node-spawn-secondary: #bbbe78;*/
+  /*--node-spawn-text: #111;*/
+
+  /*--node-end-primary: #c0ca61;*/
+  /*--node-end-secondary: #cada72;*/
+  /*--node-end-text: #111;*/
+}

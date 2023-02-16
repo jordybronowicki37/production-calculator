@@ -1,0 +1,27 @@
+﻿.active-target-icon {
+    display: flex;
+    align-content: flex-end;
+    cursor: pointer;
+    height: fit-content;
+    padding: 0 2px;
+    margin: 2px;
+    border-radius: 3px;
+    font-size: x-small;
+    background-color: #bbbbbb;
+}
+
+.active-target-icon:hover {
+    background-color: #a1a1a1;
+}
+
+.active-target-icon>.bx-target-lock {
+    line-height: unset;
+}
+
+.active-target-icon .right-one {
+    transform: translateX(1px);
+}
+
+.active-target-icon .left-one {
+    transform: translateX(-1px);
+}

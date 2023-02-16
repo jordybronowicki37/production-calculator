@@ -1,7 +1,9 @@
-.node {
+﻿.node {
     width: min-content;
     height: min-content;
     position: relative;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .node .top-container {
@@ -14,18 +16,8 @@
     margin: 2px;
 }
 
-.node .top-container>.targets {
-    display: flex;
-    align-content: flex-end;
-    height: fit-content;
-    padding: 0 2px;
-    margin: 2px;
-    border-radius: 3px;
-    font-size: x-small;
-    background-color: #bbbbbb;
-}
-.node .top-container>.targets:hover {
-    background-color: #a1a1a1;
+.node .content-container select {
+    border: none;
 }
 
 .node .content-table {
@@ -53,22 +45,6 @@
 .node .preview-field {
     color: lightgray;
     font-style: italic;
-}
-
-.node .top-container>.targets {
-    cursor: pointer;
-}
-
-.node .top-container>.targets>.bx-target-lock {
-    line-height: unset;
-}
-
-.node .right-one {
-    transform: translateX(1px);
-}
-
-.node .left-one {
-    transform: translateX(-1px);
 }
 
 .node .target-editor-wrapper {

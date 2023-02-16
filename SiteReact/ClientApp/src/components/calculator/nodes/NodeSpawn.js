@@ -3,41 +3,24 @@ import './NodeSpawn.css';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditProduct} from "../../../data/NodeAPI";
+import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 
 export function NodeSpawn({node, product, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
     
   let productField = <div className="preview-field">name</div>;
   let amountField = <div className="preview-field">0</div>
-  let activeTargets = <div></div>;
   let targetEditor = <div></div>;
 
   if (!previewMode) {
     const {id, targets, amount} = node;
     productField =
-      <select value={product.name} onChange={e => productChanged(id, e.target.value)}>
-        {products.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
-      </select>;
-    let targetIcon = <div></div>;
-    if (targets.length !== 0) {
-      if (targets[0].type === "ExactAmount") {
-        targetIcon = <div>
-          <i className='bx bx-arrow-to-right right-one'></i>
-          <i className='bx bx-arrow-to-left left-one'></i>
-        </div>;
-      } else if (targets[0].type === "MinAmount" || targets[0].type === "MaxAmount") {
-        targetIcon = <div>
-          <i className='bx bx-arrow-to-left right-one'></i>
-          <i className='bx bx-arrow-to-right left-one'></i>
-        </div>;
-      }
-    }
-    amountField = <div>{amount}</div>;
-    activeTargets =
-      <div className="targets" onClick={() => setEditorOpen(true)}>
-        {targetIcon}
-        <i className='bx bx-target-lock'></i>
+      <div>
+        <select value={product.name} onChange={e => productChanged(id, e.target.value)}>
+          {products.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
+        </select>
       </div>;
+    amountField = <div>{amount}</div>;
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>
         <button type="button" className="popup-close-button" onClick={() => setEditorOpen(false)}>
@@ -51,13 +34,15 @@ export function NodeSpawn({node, product, products, previewMode}) {
     <div className="node node-spawn">
       <div className="top-container">
         <h3>Spawn</h3>
-        {activeTargets}
+        <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
       </div>
-      <div className="content-table">
-        <div>Product</div>
-        {productField}
-        <div>Amount</div>
-        {amountField}
+      <div className="content-container">
+        <div className="content-table">
+          <div>Product</div>
+          {productField}
+          <div>Amount</div>
+          {amountField}
+        </div>
       </div>
       {targetEditor}
     </div>

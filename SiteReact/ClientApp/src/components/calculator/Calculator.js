@@ -18,7 +18,7 @@ import {CalculationState} from "./CalculationState";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
-  defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial"};
+  defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
   unsubscribe;
   
   constructor(props) {
@@ -160,9 +160,9 @@ export class Calculator extends Component {
                   onInit={this.setReactFlowInstance}
                   onDrop={this.onDrop}
                   defaultEdgeOptions={this.defaultEdgeOptions}>
-                  <MiniMap/>
+                  <MiniMap nodeStrokeColor="#fff" nodeColor="transparent" maskColor="#333" style={{backgroundColor:"#444"}}/>
                   <Controls/>
-                  <Background/>
+                  <Background color="#bbb" style={{backgroundColor:"#444"}}/>
                 </ReactFlow>
               </div>
             </ReactFlowProvider>
