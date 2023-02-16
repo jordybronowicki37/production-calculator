@@ -14,6 +14,7 @@ import {NodeProduction} from "./nodes/NodeProduction";
 import {NodeEnd} from "./nodes/NodeEnd";
 import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/ConnectionAPI";
+import {CalculationState} from "./CalculationState";
 
 export class Calculator extends Component {
   defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
@@ -22,20 +23,16 @@ export class Calculator extends Component {
   
   constructor(props) {
     super(props);
-    
-    let store = Store.getState();
+    const {worksheetId} = props;
+    const {worksheet, nodes, connections, products, recipes} = Store.getState();
     
     this.state = {
       flowInstance: null,
       wrapperInstance: null,
-      worksheetId: props.match.params.id,
+      worksheetId,
       worksheetLoading: true,
       
-      worksheetData: store.worksheet,
-      nodes: store.nodes,
-      connections: store.connections,
-      products: store.products,
-      recipes: store.recipes,
+      worksheet, nodes, connections, products, recipes,
       
       calculatorState: "loading",
       
@@ -48,7 +45,7 @@ export class Calculator extends Component {
       
       tempPositionData:null,
     }
-    fetchWorksheet(this.state.worksheetId).then(r => {
+    fetchWorksheet(worksheetId).then(r => {
       if (r.calculationSucceeded) {
         this.setState({calculatorState: "success"});
       } else {
@@ -62,21 +59,13 @@ export class Calculator extends Component {
     
     this.unsubscribe = Store.subscribe(() => {
       this.setState({calculatorState: "refresh"});
-      let store = Store.getState();
-      
-      this.setState({
-        worksheetData: store.worksheet,
-        nodes: store.nodes,
-        connections: store.connections,
-        products: store.products,
-        recipes: store.recipes,
-      })
+      const {worksheet, nodes, connections, products, recipes} = Store.getState();
+      this.setState({worksheet, nodes, connections, products, recipes});
     });
   }
 
   render() {
-    let title = this.state.worksheetData ? this.state.worksheetData.name : "";
-    let message = this.state.worksheetData ? this.state.worksheetData.calculationError : "";
+    let message = this.state.worksheet ? this.state.worksheet.calculationError : "";
     let nodes = this.state.nodes.map(node => {
       const {body, type} = createNodeBody(node.type, node, this.state.products, this.state.recipes);
       let tempPos = this.state.tempPositionData
@@ -154,26 +143,12 @@ export class Calculator extends Component {
         </Popup>
         
         <div className="calculator-screen">
-          <div className="top-bar">
-            <h1>Calculator</h1>
-            <div>Worksheet: {title}</div>
-          </div>
-          
           <div className="flow-chart-container">
             <CalculatorToolbar calculator={this}/>
             
             <ReactFlowProvider>
               <div className="flow-chart-wrapper flex-grow-1" ref={this.setReactFlowWrapper}>
-                <div className="calculation-states">
-                  <div hidden={message===""} className="calculation-states-label">{message}</div>
-                  <div className="calculation-states-icon" onClick={() => this.calculateWorksheet()}>
-                    <i hidden={this.state.calculatorState !== "success"} title="Calculation success" className='bx bx-check'></i>
-                    <i hidden={this.state.calculatorState !== "warning"} title="Calculation was unsuccessful" className='bx bx-error' style={{color:"#F12C2C"}}></i>
-                    <i hidden={this.state.calculatorState !== "error"} title="Calculation had error's" className='bx bx-error-circle' style={{color:"#F1B22C"}}></i>
-                    <i hidden={this.state.calculatorState !== "loading"} title="Calculating..." className='bx bx-loader-alt bx-spin'></i>
-                    <i hidden={this.state.calculatorState !== "refresh"} title="Recalculate" className='bx bx-refresh'></i>
-                  </div>
-                </div>
+                <CalculationState onClick={() => this.calculateWorksheet()} message={message} state={this.state.calculatorState}/>
                 <ReactFlow
                   className="flow-chart"
                   nodes={nodes}
@@ -191,12 +166,6 @@ export class Calculator extends Component {
                 </ReactFlow>
               </div>
             </ReactFlowProvider>
-          </div>
-
-          <div hidden className="test-nodes">
-            <div onDragStart={(event) => this.onDragStart(event, "Production")} draggable><NodeProduction previewMode/></div>
-            <div onDragStart={(event) => this.onDragStart(event, "Spawn")} draggable><NodeSpawn previewMode/></div>
-            <div onDragStart={(event) => this.onDragStart(event, "End")} draggable><NodeEnd previewMode/></div>
           </div>
         </div>
       </div>
@@ -295,25 +264,25 @@ export class Calculator extends Component {
     this.onAddNode(nodetype, position)
   };
   onAddNode(nodetype, position) {
-    const store = Store.getState();
+    const { products, recipes } = Store.getState();
     if (!position) position = {x:0,y:0};
     
     switch (nodetype) {
       case "Spawn":
       case "End":
-        if (store.products.length === 0) {
+        if (products.length === 0) {
           throwWarningNotification("Cannot create node because no products exist in worksheet");
           return;
         }
-        let product = store.products[0];
+        let product = products[0];
         nodeCreateProduct(nodetype, position, product.name);
         break;
       case "Production":
-        if (store.recipes.length === 0) {
+        if (recipes.length === 0) {
           throwWarningNotification("Cannot create node because no recipes exist in worksheet");
           return;
         }
-        let recipe = store.recipes[0];
+        let recipe = recipes[0];
         nodeCreateRecipe(nodetype, position, recipe.name);
         break;
     }

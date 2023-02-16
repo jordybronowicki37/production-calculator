@@ -1,0 +1,30 @@
+﻿.calculation-states {
+    position: absolute;
+    right: 0;
+    padding: 8px;
+    z-index: 10;
+    display: flex;
+    flex-direction: row;
+}
+
+.calculation-states>* {
+    border: 1px solid black;
+    border-radius: 7px;
+    background-color: white;
+    margin: 2px;
+    overflow: hidden;
+}
+
+.calculation-states-icon {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
+
+.calculation-states-label {
+    font-size: x-small;
+    place-self: center;
+    border-radius: 5px;
+    padding: 1px;
+}
+
