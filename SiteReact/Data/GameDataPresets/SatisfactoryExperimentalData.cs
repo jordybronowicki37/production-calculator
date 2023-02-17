@@ -4,8 +4,7 @@ namespace SiteReact.Data.GameDataPresets;
 
 public static class SatisfactoryExperimentalData
 {
-    // ReSharper disable InconsistentNaming
-    public static void addData(EntityContainer e)
+    public static void AddData(EntityContainer e)
     {
         // Ores
         var PBau = e.GetOrGenerateProduct("Bauxite");

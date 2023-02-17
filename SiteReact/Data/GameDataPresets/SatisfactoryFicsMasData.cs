@@ -4,10 +4,9 @@ namespace SiteReact.Data.GameDataPresets;
 
 public static class SatisfactoryFicsMasData
 {
-    // ReSharper disable InconsistentNaming
-    public static void addData(EntityContainer e)
+    public static void AddData(EntityContainer e)
     {
-        SatisfactoryData.addData(e);
+        SatisfactoryData.AddData(e);
         
         // Tier 0
         var PCopIng = e.GetOrGenerateProduct("Copper Ingot");

@@ -1,12 +1,10 @@
 ﻿using productionCalculatorLib.components.entityContainer;
-using productionCalculatorLib.components.worksheet;
 
 namespace SiteReact.Data.GameDataPresets;
 
 public static class SatisfactoryData
 {
-    // ReSharper disable InconsistentNaming
-    public static void addData(EntityContainer e)
+    public static void AddData(EntityContainer e)
     {
         // Ores
         var PBau = e.GetOrGenerateProduct("Bauxite");

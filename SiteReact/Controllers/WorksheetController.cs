@@ -59,16 +59,16 @@ public class WorksheetController : ControllerBase
             case "none":
                 break;
             case "dysonSphereProgram":
-                DSPData.addData(e);
+                DspData.AddData(e);
                 break;
             case "satisfactoryEarlyAccess":
-                SatisfactoryData.addData(e);
+                SatisfactoryData.AddData(e);
                 break;
             case "satisfactoryExperimental":
-                SatisfactoryExperimentalData.addData(e);
+                SatisfactoryExperimentalData.AddData(e);
                 break;
             case "satisfactoryFICSMAS":
-                SatisfactoryFicsMasData.addData(e);
+                SatisfactoryFicsMasData.AddData(e);
                 break;
             default:
                 return NotFound("Data preset is not found");
