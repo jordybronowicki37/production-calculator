@@ -13,4 +13,4 @@ const connectionReducer = createReducer([], {
   "connection/remove": (state, action) => state.filter(v => v.id !== action.payload),
 });
 
-export default {connectionReducer}
+export {connectionReducer}

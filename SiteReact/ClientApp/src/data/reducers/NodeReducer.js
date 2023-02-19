@@ -39,4 +39,4 @@ const nodeReducer = createReducer([], {
   },
 });
 
-export default {nodeReducer}
+export {nodeReducer}

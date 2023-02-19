@@ -9,4 +9,4 @@ const notificationReducer = createReducer([], {
   },
 });
 
-export default {notificationReducer};
+export {notificationReducer};

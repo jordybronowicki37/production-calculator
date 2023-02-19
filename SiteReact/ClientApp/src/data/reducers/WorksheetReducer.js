@@ -6,4 +6,4 @@ const worksheetReducer = createReducer(null, {
   "worksheet/unset": () => null,
 });
 
-export default {worksheetReducer}
+export {worksheetReducer}

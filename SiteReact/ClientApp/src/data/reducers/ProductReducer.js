@@ -6,4 +6,4 @@ const productReducer = createReducer([], {
   "products/add": (state, action) => [...state, action.payload],
 });
 
-export default {productReducer}
+export {productReducer}

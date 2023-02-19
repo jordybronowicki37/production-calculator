@@ -6,4 +6,4 @@ const recipeReducer = createReducer([], {
   "recipes/add": (state, action) => [...state, action.payload],
 });
 
-export default {recipeReducer}
+export {recipeReducer}
