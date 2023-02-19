@@ -1,6 +1,6 @@
 ﻿using productionCalculatorLib.components.entityContainer;
 
-namespace productionCalculatorLib.components.products;
+namespace productionCalculatorLib.components.entities;
 
 public class RecipeBuilder
 {

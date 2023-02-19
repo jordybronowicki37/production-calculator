@@ -1,4 +1,4 @@
-﻿namespace productionCalculatorLib.components.products;
+﻿namespace productionCalculatorLib.components.entities;
 
 public class ThroughPut
 {

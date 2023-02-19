@@ -1,16 +1,13 @@
-﻿using productionCalculatorLib.components.products;
-using SiteReact.Controllers.dto.products;
-
-namespace SiteReact.Controllers.dto.throughputs;
+﻿namespace SiteReact.Controllers.dto.throughputs;
 
 public class DtoThroughPut
 {
-    public DtoProduct Product { get; set; }
+    public Guid Product { get; set; }
     public float Amount { get; set; }
     
-    public DtoThroughPut(Product product, float amount)
+    public DtoThroughPut(Guid product, float amount)
     {
         Amount = amount;
-        Product = new DtoProduct(product);
+        Product = product;
     }
 }

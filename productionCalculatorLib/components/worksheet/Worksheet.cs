@@ -1,9 +1,8 @@
 ﻿using productionCalculatorLib.components.connections;
-using productionCalculatorLib.components.entityContainer;
+using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.nodes;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
-using productionCalculatorLib.components.products;
 
 namespace productionCalculatorLib.components.worksheet;
 
@@ -13,13 +12,14 @@ public class Worksheet
     public string Name { get; set; } = "";
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
-    public Guid EntityContainerId { get; init; }
-    public virtual ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
-    public virtual ICollection<Connection> Connections { get; private set; } = new List<Connection>();
-
-    public Worksheet(EntityContainer entityContainer)
+    public Guid EntityContainerIdId { get; private set; }
+    public ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
+    public ICollection<Connection> Connections { get; private set; } = new List<Connection>();
+    
+    public Worksheet(string name, Guid entityContainerId)
     {
-        EntityContainerId = entityContainer.Id;
+        Name = name;
+        EntityContainerIdId = entityContainerId;
     }
     
     public void AddNode(ANode node)

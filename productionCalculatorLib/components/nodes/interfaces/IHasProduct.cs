@@ -1,6 +1,4 @@
-﻿using productionCalculatorLib.components.products;
-
-namespace productionCalculatorLib.components.nodes.interfaces;
+﻿namespace productionCalculatorLib.components.nodes.interfaces;
 
 public interface IHasProduct: INode
 {

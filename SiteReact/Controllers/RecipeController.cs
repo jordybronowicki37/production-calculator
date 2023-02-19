@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
+using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.entityContainer;
-using productionCalculatorLib.components.products;
 using SiteReact.Controllers.dto.recipes;
 using SiteReact.Data.DbContexts;
 
@@ -40,10 +40,10 @@ public class RecipeController : ControllerBase
         var r = e.GenerateRecipe(dto.Name);
 
         foreach (var inputThroughPut in dto.InputThroughPuts)
-            r.InputThroughPuts.Add(new ThroughPut(e.GetOrGenerateProduct(inputThroughPut.Product.Name), inputThroughPut.Amount));
+            r.InputThroughPuts.Add(new ThroughPut(e.GetProduct(inputThroughPut.Product), inputThroughPut.Amount));
         
         foreach (var outputThroughPut in dto.OutputThroughPuts)
-            r.OutputThroughPuts.Add(new ThroughPut(e.GetOrGenerateProduct(outputThroughPut.Product.Name), outputThroughPut.Amount));
+            r.OutputThroughPuts.Add(new ThroughPut(e.GetProduct(outputThroughPut.Product), outputThroughPut.Amount));
         
         var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
         var update = Builders<EntityContainer>.Update.Set(f => f.Recipes, e.Recipes);

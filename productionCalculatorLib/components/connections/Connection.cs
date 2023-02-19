@@ -1,5 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.interfaces;
-using productionCalculatorLib.components.products;
+﻿using productionCalculatorLib.components.entities;
+using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.targets;
 
 namespace productionCalculatorLib.components.connections;

@@ -1,8 +1,9 @@
 ﻿using MongoDB.Driver;
 using productionCalculatorLib.components.calculator;
+using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.nodes.nodeTypes;
-using productionCalculatorLib.components.products;
+using productionCalculatorLib.components.project;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Data.DbContexts;
 
@@ -12,14 +13,14 @@ public static class TestDataInitializer
 {
     public static void InitializeAllData(DocumentContext context)
     {
-        InitializeSimpleOneWay(out var w1, out var e1);
-        InitializeDoubleSpawn(out var w2, out var e2);
+        InitializeSimpleOneWay(out var w1, out var e1, out var p1);
+        InitializeDoubleSpawn(out var w2, out var e2, out var p2);
         
-        InsertOrReplace(context, w1, e1);
-        InsertOrReplace(context, w2, e2);
+        InsertOrReplace(context, w1, e1, p1);
+        InsertOrReplace(context, w2, e2, p2);
     }
 
-    private static void InsertOrReplace(DocumentContext c, Worksheet w, EntityContainer e)
+    private static void InsertOrReplace(DocumentContext c, Worksheet w, EntityContainer e, Project p)
     {
         var findEFilter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
         c.EntityContainers.DeleteOne(findEFilter);
@@ -28,18 +29,26 @@ public static class TestDataInitializer
         var findWFilter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
         c.Worksheets.DeleteOne(findWFilter);
         c.Worksheets.InsertOne(w);
+        
+        var findPFilter = Builders<Project>.Filter.Eq(f => f.Id, w.Id);
+        c.Projects.DeleteOne(findPFilter);
+        c.Projects.InsertOne(p);
     }
     
-    public static void InitializeSimpleOneWay(out Worksheet worksheet, out EntityContainer entityContainer)
+    public static void InitializeSimpleOneWay(out Worksheet worksheet, out EntityContainer entityContainer, out Project project)
     {
-        entityContainer = new EntityContainer()
+        entityContainer = new EntityContainer
         {
             Id = Guid.Parse("dff3c380-3e78-418c-af70-bbc955140aca")
         };
-        worksheet = new Worksheet(entityContainer)
+        worksheet = new Worksheet("Iron ingot smelting", entityContainer.Id)
         {
-            Id = Guid.Parse("9fd8a83b-de70-4124-9dfa-64f350ceb743"),
-            Name = "Iron ingot smelting"
+            Id = Guid.Parse("9fd8a83b-de70-4124-9dfa-64f350ceb743")
+        };
+        project = new Project("Simple One Way", entityContainer.Id)
+        {
+            Id = Guid.Parse("046fc966-d62c-4116-b203-27c3d38bdee3"),
+            Worksheets = { worksheet.Id }
         };
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
@@ -59,16 +68,20 @@ public static class TestDataInitializer
         CalculatorLimit.ReCalculateAmounts(worksheet, entityContainer);
     }
 
-    public static void InitializeDoubleSpawn(out Worksheet worksheet, out EntityContainer entityContainer)
+    public static void InitializeDoubleSpawn(out Worksheet worksheet, out EntityContainer entityContainer, out Project project)
     {
-        entityContainer = new EntityContainer()
+        entityContainer = new EntityContainer
         {
             Id = Guid.Parse("7671dd58-077d-4922-935b-4ed08782b70c")
         };
-        worksheet = new Worksheet(entityContainer)
+        worksheet = new Worksheet("Steel ingot smelting", entityContainer.Id)
         {
-            Id = Guid.Parse("c75b35b8-c2af-486f-bf06-a9ece3de7923"),
-            Name = "Steel ingot smelting"
+            Id = Guid.Parse("c75b35b8-c2af-486f-bf06-a9ece3de7923")
+        };
+        project = new Project("Double Spawn", entityContainer.Id)
+        {
+            Id = Guid.Parse("d8488ecf-3c6a-4929-9df1-7cfdcb46cff4"),
+            Worksheets = { worksheet.Id }
         };
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");

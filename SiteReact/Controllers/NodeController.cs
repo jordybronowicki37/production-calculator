@@ -34,7 +34,7 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(w.EntityContainerIdId);
         if (e == null) return NotFound("Entity container is not found");
         
         if (!Enum.TryParse(dto.Type, out ENodeTypes type)) return BadRequest("Could not parse type");
@@ -83,7 +83,7 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(w.EntityContainerIdId);
         if (e == null) return NotFound("Entity container is not found");
         
         var node = GetNode(w, nodeId);
@@ -108,7 +108,7 @@ public class NodeController : ControllerBase
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
         
-        var e = GetEntityContainer(w.EntityContainerId);
+        var e = GetEntityContainer(w.EntityContainerIdId);
         if (e == null) return NotFound("Entity container is not found");
         
         var node = GetNode(w, nodeId);

@@ -1,4 +1,4 @@
-﻿using productionCalculatorLib.components.products;
+﻿using productionCalculatorLib.components.entities;
 
 namespace SiteReact.Controllers.dto.products;
 
@@ -7,8 +7,6 @@ public class DtoProduct
     public Guid Id { get; set; }
     public string Name { get; set; } = "";
     
-    public DtoProduct() {}
-
     public DtoProduct(Product product)
     {
         Id = product.Id;

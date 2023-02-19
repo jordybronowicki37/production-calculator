@@ -1,8 +1,8 @@
 ﻿using productionCalculatorLib.components.connections;
+using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
-using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.targets;
 using productionCalculatorLib.components.worksheet;
 
