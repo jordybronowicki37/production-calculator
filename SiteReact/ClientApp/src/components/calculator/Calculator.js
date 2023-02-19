@@ -5,15 +5,15 @@ import {throwWarningNotification} from "../notification/NotificationThrower";
 import {Popup} from "../popup/Popup";
 import {CalculatorToolbar} from "./CalculatorToolbar";
 import Store from "../../data/DataStore";
-import {calculate, fetchWorksheet} from "../../data/WorksheetAPI";
+import {calculate, fetchWorksheet} from "../../data/api/WorksheetAPI";
 import {ProductManager} from "../entities/products/ProductManager";
 import {RecipeCreator} from "../entities/recipes/RecipeCreator";
 import {RecipeManager} from "../entities/recipes/RecipeManager";
 import {NodeSpawn} from "./nodes/NodeSpawn";
 import {NodeProduction} from "./nodes/NodeProduction";
 import {NodeEnd} from "./nodes/NodeEnd";
-import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/NodeAPI";
-import {connectionCreate, connectionDelete} from "../../data/ConnectionAPI";
+import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/api/NodeAPI";
+import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
 import {CalculationState} from "./CalculationState";
 
 export class Calculator extends Component {

@@ -2,7 +2,7 @@ import './Node.css';
 import './NodeProduction.css';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
-import {nodeEditRecipe} from "../../../data/NodeAPI";
+import {nodeEditRecipe} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./NodeDragHandle";
 

@@ -1,7 +1,7 @@
 ﻿import "./RecipeCreator.css";
 import {Component} from "react";
 import Store from "../../../data/DataStore";
-import {createRecipe} from "../../../data/RecipeAPI";
+import {createRecipe} from "../../../data/api/RecipeAPI";
 
 export class RecipeCreator extends Component {
   unsubscribe;
