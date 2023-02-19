@@ -91,8 +91,6 @@ export class Calculator extends Component {
       };
     });
     
-    if (this.state.worksheetLoading) return <div></div>
-    
     return (
       <div className="calculator">
         <div hidden={!this.state.worksheetLoading} className="loading-screen">

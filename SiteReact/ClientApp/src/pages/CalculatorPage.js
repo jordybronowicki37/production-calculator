@@ -1,10 +1,20 @@
 ﻿import "./CalculatorPage.css";
 import {Calculator} from "../components/calculator/Calculator";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
 
 export function CalculatorPage(props) {
   const worksheetId = props.match.params.id;
   const worksheet = useSelector(state => state.worksheet);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    return () => {
+      dispatch({type:"worksheet/unset"});
+      dispatch({type:"connections/unset"});
+      dispatch({type:"nodes/unset"});
+    }
+  }, []);
   
   return (
     <div>

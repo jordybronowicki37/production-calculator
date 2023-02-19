@@ -62,7 +62,7 @@ export class WorksheetOverview extends Component {
             <button type="button" onClick={() => this.setState({worksheetCreatorOpen:true})}>Create new</button>
           </div>
           <div className="worksheet-item-container">
-            {worksheetListFiltered.map(v => <div key={v.name} className="worksheet-item-wrapper"><WorksheetItem data={v} id={v.id}></WorksheetItem></div>)}
+            {worksheetListFiltered.map(v => <div key={v.id} className="worksheet-item-wrapper"><WorksheetItem data={v} id={v.id}></WorksheetItem></div>)}
           </div>
         </div>
       </div>

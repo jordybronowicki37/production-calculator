@@ -16,10 +16,12 @@ const worksheetsReducer = createReducer([], {
 
 const worksheetReducer = createReducer(null, {
   "worksheet/set": (state, action) => action.payload,
+  "worksheet/unset": () => null,
 });
 
 const nodeReducer = createReducer([], {
   "nodes/set": (state, action) => [...action.payload],
+  "nodes/unset": () => [],
   "nodes/update": (state, action) => {
     return [...action.payload].map((v, i) => {
       v.position = state[i].position;
@@ -57,6 +59,7 @@ const nodeReducer = createReducer([], {
 
 const connectionReducer = createReducer([], {
   "connections/set": (state, action) => [...action.payload],
+  "connections/unset": () => [],
   "connection/set": (state, action) => {
     let index = state.findIndex(v => v.id = action.payload.id);
     state[index] = action.payload;
