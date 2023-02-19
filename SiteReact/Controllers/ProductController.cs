@@ -27,11 +27,11 @@ public class ProductController : ControllerBase
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        return Ok(e.Products);
+        return Ok(e.Products.Select(p => new DtoProduct(p)));
     }
 
     [HttpPost("")]
-    public IActionResult Create(DtoProduct dto, Guid entityContainerId)
+    public IActionResult Create(DtoProductCreate dto, Guid entityContainerId)
     {
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
@@ -42,11 +42,11 @@ public class ProductController : ControllerBase
         var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
         _context.EntityContainers.UpdateOne(filter, update);
         
-        return Ok(p);
+        return Ok(new DtoProduct(p));
     }
     
     [HttpPatch("{productId:Guid}")]
-    public IActionResult Update(Guid productId, Guid entityContainerId, DtoProduct dto)
+    public IActionResult Update(Guid productId, Guid entityContainerId, DtoProductCreate dto)
     {
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
@@ -59,7 +59,7 @@ public class ProductController : ControllerBase
         var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
         _context.EntityContainers.UpdateOne(filter, update);
         
-        return Ok(p);
+        return Ok(new DtoProduct(p));
     }
     
     [HttpDelete("{productId:Guid}")]

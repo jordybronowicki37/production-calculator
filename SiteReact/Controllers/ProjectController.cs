@@ -27,7 +27,7 @@ public class ProjectController : ControllerBase
     [HttpGet("")]
     public IActionResult GetAll()
     {
-        return Ok(GetAllProjects().Select(p => new DtoProject(p)));
+        return Ok(GetAllProjects().Select(p => new DtoProjectSmall(p)));
     }
     
     [HttpGet("{id:Guid}")]
@@ -35,7 +35,11 @@ public class ProjectController : ControllerBase
     {
         var p = GetProject(id);
         if (p == null) return NotFound("Project is not found");
-        return Ok(new DtoProject(p));
+        
+        var e = GetEntityContainer(p.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        return Ok(new DtoProject(p, e));
     }
     
     [HttpPost("")]
@@ -68,7 +72,7 @@ public class ProjectController : ControllerBase
         _context.EntityContainers.InsertOne(e);
         _context.Projects.InsertOne(p);
         
-        return Ok(new DtoProject(p));
+        return Ok(new DtoProject(p, e));
     }
     
     [HttpPost("{id:Guid}")]

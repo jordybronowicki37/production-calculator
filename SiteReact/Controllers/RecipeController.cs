@@ -28,11 +28,11 @@ public class RecipeController : ControllerBase
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        return Ok(e.Recipes);
+        return Ok(e.Recipes.Select(r => new DtoRecipe(r)));
     }
 
     [HttpPost("")]
-    public IActionResult Create(DtoRecipe dto, Guid entityContainerId)
+    public IActionResult Create(DtoRecipeCreate dto, Guid entityContainerId)
     {
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
@@ -49,7 +49,7 @@ public class RecipeController : ControllerBase
         var update = Builders<EntityContainer>.Update.Set(f => f.Recipes, e.Recipes);
         _context.EntityContainers.UpdateOne(filter, update);
         
-        return Ok(r);
+        return Ok(new DtoRecipe(r));
     }
     
     [HttpDelete("{recipeId:Guid}")]
