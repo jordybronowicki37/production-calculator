@@ -30,7 +30,7 @@ public static class TestDataInitializer
         c.Worksheets.DeleteOne(findWFilter);
         c.Worksheets.InsertOne(w);
         
-        var findPFilter = Builders<Project>.Filter.Eq(f => f.Id, w.Id);
+        var findPFilter = Builders<Project>.Filter.Eq(f => f.Id, p.Id);
         c.Projects.DeleteOne(findPFilter);
         c.Projects.InsertOne(p);
     }

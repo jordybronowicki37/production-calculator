@@ -81,7 +81,7 @@ public class ProjectController : ControllerBase
         
         _context.Worksheets.InsertOne(w);
         
-        var filter = Builders<Project>.Filter.Eq(f => f.Id, w.Id);
+        var filter = Builders<Project>.Filter.Eq(f => f.Id, p.Id);
         _context.Projects.ReplaceOne(filter, p);
         
         return Ok(new DtoWorksheet(w));
