@@ -63,7 +63,7 @@ public class WorksheetController : ControllerBase
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
 
-        var e = GetEntityContainer(w.EntityContainerIdId);
+        var e = GetEntityContainer(w.EntityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
         CalculatorLimit.ReCalculateAmounts(w, e);

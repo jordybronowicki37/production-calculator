@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.project;
+using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.projects;
 using SiteReact.Controllers.dto.worksheets;
 using SiteReact.Data.DbContexts;
@@ -38,8 +39,10 @@ public class ProjectController : ControllerBase
         
         var e = GetEntityContainer(p.EntityContainerId);
         if (e == null) return NotFound("Entity container is not found");
+
+        var ws = GetWorksheets(p.Worksheets);
         
-        return Ok(new DtoProject(p, e));
+        return Ok(new DtoProject(p, e, ws));
     }
     
     [HttpPost("")]
@@ -72,7 +75,7 @@ public class ProjectController : ControllerBase
         _context.EntityContainers.InsertOne(e);
         _context.Projects.InsertOne(p);
         
-        return Ok(new DtoProject(p, e));
+        return Ok(new DtoProject(p, e, new List<Worksheet>()));
     }
     
     [HttpPost("{id:Guid}")]
@@ -101,6 +104,12 @@ public class ProjectController : ControllerBase
     {
         var filter = Builders<Project>.Filter.Eq(w => w.Id, id);
         return _context.Projects.Find(filter).FirstOrDefault();
+    }
+    
+    private IEnumerable<Worksheet> GetWorksheets(IEnumerable<Guid> worksheetIds)
+    {
+        var filter = Builders<Worksheet>.Filter.In(w => w.Id, worksheetIds);
+        return _context.Worksheets.Find(filter).ToList();
     }
     
     private EntityContainer? GetEntityContainer(Guid id)

@@ -12,14 +12,14 @@ public class Worksheet
     public string Name { get; set; } = "";
     public bool CalculationSucceeded { get; set; } = true;
     public string CalculationError { get; set; } = "";
-    public Guid EntityContainerIdId { get; private set; }
+    public Guid EntityContainerId { get; private set; }
     public ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
     public ICollection<Connection> Connections { get; private set; } = new List<Connection>();
     
     public Worksheet(string name, Guid entityContainerId)
     {
         Name = name;
-        EntityContainerIdId = entityContainerId;
+        EntityContainerId = entityContainerId;
     }
     
     public void AddNode(ANode node)
