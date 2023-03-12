@@ -5,6 +5,7 @@ namespace productionCalculatorLib.components.nodes.interfaces;
 public interface INode
 {
     Guid Id { get; init; }
+    float Amount { get; set; }
     ICollection<TargetProduction> Targets { get; set; }
     void SetExactTarget(float amount);
     void SetMinMaxTarget(float? minAmount, float? maxAmount);

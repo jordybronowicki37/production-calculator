@@ -11,7 +11,7 @@ public class DtoNodeProduction : DtoNode
         Id = node.Id;
         Type = "Production";
         
-        Amount = node.ProductionAmount;
+        Amount = node.Amount;
         Recipe = node.RecipeId;
         Targets = node.Targets.Select(t => new DtoProductionTarget(t));
     }

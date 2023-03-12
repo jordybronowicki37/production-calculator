@@ -14,43 +14,42 @@ public class CalculatorLimit
     private EntityContainer _entityContainer;
     private int _amountOfTimesCalculated;
     
-    private CalculatorLimit(Worksheet worksheet, EntityContainer entityContainer)
+    public CalculatorLimit(Worksheet worksheet, EntityContainer entityContainer)
     {
         _worksheet = worksheet;
         _entityContainer = entityContainer;
     }
 
-    public static void ReCalculateAmounts(Worksheet worksheet, EntityContainer entityContainer)
+    public void ReCalculateAmounts()
     {
-        var w = new CalculatorLimit(worksheet, entityContainer);
-        if (!w.CheckLimits())
+        if (!CheckLimits())
         {
-            worksheet.CalculationSucceeded = false;
-            worksheet.CalculationError = "Worksheet must have at least 1 'ExactAmount' limit";
+            _worksheet.CalculationSucceeded = false;
+            _worksheet.CalculationError = "Worksheet must have at least 1 'ExactAmount' limit";
             return;
         }
         
-        if (w.CheckResult())
+        if (CheckResult())
         {
-            worksheet.CalculationSucceeded = true;
-            worksheet.CalculationError = "";
+            _worksheet.CalculationSucceeded = true;
+            _worksheet.CalculationError = "";
             return;
         }
         
-        w.ResetAmounts();
-        while (w._amountOfTimesCalculated < worksheet.Nodes.Count*5)
+        ResetAmounts();
+        while (_amountOfTimesCalculated < _worksheet.Nodes.Count*5)
         {
-            w.Calculate();
-            if (w.CheckResult())
+            Calculate();
+            if (CheckResult())
             {
-                worksheet.CalculationSucceeded = true;
-                worksheet.CalculationError = "";
+                _worksheet.CalculationSucceeded = true;
+                _worksheet.CalculationError = "";
                 return;
             }
-            w._amountOfTimesCalculated++;
+            _amountOfTimesCalculated++;
         }
-        worksheet.CalculationSucceeded = false;
-        worksheet.CalculationError = "Calculator could not find stable solution";
+        _worksheet.CalculationSucceeded = false;
+        _worksheet.CalculationError = "Calculator could not find stable solution";
     }
 
     private bool CheckLimits()
@@ -76,9 +75,9 @@ public class CalculatorLimit
             {
                 var exactTarget = recipeNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.ExactAmount);
                 var minTarget = recipeNode.Targets.FirstOrDefault(v => v.Type == TargetProductionTypes.MinAmount);
-                if (exactTarget != null) recipeNode.ProductionAmount = exactTarget.Amount;
-                else if (minTarget != null) recipeNode.ProductionAmount = minTarget.Amount;
-                else recipeNode.ProductionAmount = 0;
+                if (exactTarget != null) recipeNode.Amount = exactTarget.Amount;
+                else if (minTarget != null) recipeNode.Amount = minTarget.Amount;
+                else recipeNode.Amount = 0;
             };
             if (node is INodeIn inNode) foreach (var connection in GetInputConnections(inNode))connection.Amount = 0;
         }
@@ -100,14 +99,14 @@ public class CalculatorLimit
                          let amountRequired = GetInputConnections(productionNode)
                              .Where(c => c.Product.Id.Equals(throughPut.ProductId))
                              .Sum(connection => connection.Amount) 
-                         where CompareFloatingPointNumbers(productionNode.ProductionAmount * throughPut.Amount, amountRequired)
+                         where CompareFloatingPointNumbers(productionNode.Amount * throughPut.Amount, amountRequired)
                          select throughPut).Any()) return false;
                     
                     if ((from throughPut in GetRecipe(productionNode.RecipeId).OutputThroughPuts 
                          let amountProvided = GetOutputConnections(productionNode)
                              .Where(c => c.Product.Id.Equals(throughPut.ProductId))
                              .Sum(connection => connection.Amount) 
-                         where CompareFloatingPointNumbers(productionNode.ProductionAmount * throughPut.Amount, amountProvided)
+                         where CompareFloatingPointNumbers(productionNode.Amount * throughPut.Amount, amountProvided)
                          select throughPut).Any()) return false;
                     break;
                 case EndNode endNode:
@@ -178,9 +177,9 @@ public class CalculatorLimit
                     if (!hasExactTarget)
                     {
                         var newAmount = connectionsFiltered.Sum(v => v.Amount) / inputThroughPut.Amount;
-                        if (productionNode.ProductionAmount < newAmount) productionNode.ProductionAmount = newAmount;
+                        if (productionNode.Amount < newAmount) productionNode.Amount = newAmount;
                     }
-                    DistributeConnections(connectionsFiltered, inputThroughPut.Amount * productionNode.ProductionAmount);
+                    DistributeConnections(connectionsFiltered, inputThroughPut.Amount * productionNode.Amount);
                 }
                 foreach (var outputThroughPut in GetRecipe(productionNode.RecipeId).OutputThroughPuts)
                 {
@@ -189,9 +188,9 @@ public class CalculatorLimit
                     if (!hasExactTarget)
                     {
                         var newAmount = connectionsFiltered.Sum(v => v.Amount) / outputThroughPut.Amount;
-                        if (productionNode.ProductionAmount < newAmount) productionNode.ProductionAmount = newAmount;
+                        if (productionNode.Amount < newAmount) productionNode.Amount = newAmount;
                     }
-                    DistributeConnections(connectionsFiltered, outputThroughPut.Amount*productionNode.ProductionAmount);
+                    DistributeConnections(connectionsFiltered, outputThroughPut.Amount*productionNode.Amount);
                 }
                 break;
             default:
@@ -224,8 +223,8 @@ public class CalculatorLimit
         return connections.Where(connection => connection.Product.Equals(product));
     }
 
-    private static bool CompareFloatingPointNumbers(float num1, float num2)
+    public static bool CompareFloatingPointNumbers(float num1, float num2)
     {
-        return Math.Abs(num1 - num2) > 0.1;
+        return Math.Abs(num1 - num2) < 0.1;
     }
 }

@@ -8,7 +8,6 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 public class ProductionNode: ANode, INodeInOut, IHasRecipe
 {
     public Guid RecipeId { get; set; }
-    public float ProductionAmount { get; set; }
     public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
     public ProductionNode() {}
@@ -22,7 +21,7 @@ public class ProductionNode: ANode, INodeInOut, IHasRecipe
     {
         ClearTargets();
         Targets.Add(new TargetProduction(TargetProductionTypes.ExactAmount, amount));
-        ProductionAmount = amount;
+        Amount = amount;
     }
     
     public override void SetMinMaxTarget(float? minAmount, float? maxAmount) 
@@ -31,12 +30,12 @@ public class ProductionNode: ANode, INodeInOut, IHasRecipe
         if (minAmount != null)
         {
             Targets.Add(new TargetProduction(TargetProductionTypes.MinAmount, (float) minAmount));
-            ProductionAmount = (float) minAmount;
+            Amount = (float) minAmount;
         }
         if (maxAmount != null)
         {
             Targets.Add(new TargetProduction(TargetProductionTypes.MaxAmount, (float) maxAmount));
-            if (ProductionAmount > (float) maxAmount) ProductionAmount = (float) maxAmount;
+            if (Amount > (float) maxAmount) Amount = (float) maxAmount;
         }
     }
     

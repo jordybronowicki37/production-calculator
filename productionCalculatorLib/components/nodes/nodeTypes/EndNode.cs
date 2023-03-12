@@ -8,7 +8,6 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 public class EndNode: ANode, INodeIn, IHasProduct
 {
     public Guid ProductId { get; set; }
-    public float Amount { get; set; }
     public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
     public EndNode() {}

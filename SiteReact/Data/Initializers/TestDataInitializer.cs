@@ -56,12 +56,12 @@ public static class TestDataInitializer
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
         
-        CalculatorLimit.ReCalculateAmounts(worksheet, entityContainer);
+        new CalculatorLimit(worksheet, entityContainer).ReCalculateAmounts();
     }
 
     public static void InitializeDoubleSpawn(out Worksheet worksheet, out EntityContainer entityContainer)
     {
-        entityContainer = new EntityContainer()
+        entityContainer = new EntityContainer
         {
             Id = Guid.Parse("7671dd58-077d-4922-935b-4ed08782b70c")
         };
@@ -89,6 +89,6 @@ public static class TestDataInitializer
         worksheet.GetConnectionBuilder(node2, node3, productCoal).Build();
         worksheet.GetConnectionBuilder(node3, node4, productSteelIngot).Build();
         
-        CalculatorLimit.ReCalculateAmounts(worksheet, entityContainer);
+        new CalculatorLimit(worksheet, entityContainer).ReCalculateAmounts();
     }
 }

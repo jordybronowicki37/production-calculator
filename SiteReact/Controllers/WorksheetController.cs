@@ -107,7 +107,7 @@ public class WorksheetController : ControllerBase
         var e = GetEntityContainer(w.EntityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        CalculatorLimit.ReCalculateAmounts(w, e);
+        new CalculatorLimit(w, e).ReCalculateAmounts();
 
         var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
         _context.Worksheets.ReplaceOne(filter, w);
