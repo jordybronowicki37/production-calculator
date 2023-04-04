@@ -8,6 +8,7 @@ namespace productionCalculatorLib.components.nodes.nodeTypes;
 public class ProductionNode: ANode, INodeInOut, IHasRecipe
 {
     public Guid RecipeId { get; set; }
+    public PowerUp? PowerUp { get; set; }
     public override ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
     public ProductionNode() {}
