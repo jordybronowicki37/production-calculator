@@ -84,13 +84,15 @@ public class LimitCalculatorTest
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
+        
+        var machineSmelter = entityContainer.GenerateMachine("Smelter");
 
-        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot")
+        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot", machineSmelter)
             .AddInput(productIronOre, 30)
             .AddOutput(productIronIngot, 10).Build();
 
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).Build();
         var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).Build();
         
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
@@ -110,15 +112,17 @@ public class LimitCalculatorTest
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productCoal = entityContainer.GetOrGenerateProduct("Coal");
         var productSteelIngot = entityContainer.GetOrGenerateProduct("Steel ingot");
+        
+        var machineSmelter = entityContainer.GenerateMachine("Smelter");
 
-        var recipeIronIngot = entityContainer.GetRecipeBuilder("Steel ingot")
+        var recipeIronIngot = entityContainer.GetRecipeBuilder("Steel ingot", machineSmelter)
             .AddInput(productIronOre, 30)
             .AddInput(productCoal, 5)
             .AddOutput(productSteelIngot, 10).Build();
         
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
         var node2 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productCoal).Build();
-        var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).Build();
+        var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).Build();
         var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productSteelIngot).Build();
         
         worksheet.GetConnectionBuilder(node1, node3, productIronOre).Build();
@@ -140,13 +144,15 @@ public class LimitCalculatorTest
         var productHydrogen = entityContainer.GetOrGenerateProduct("Hydrogen");
         var productOxygen = entityContainer.GetOrGenerateProduct("Oxygen");
         
-        var recipeHydrogen = entityContainer.GetRecipeBuilder("Hydrogen")
+        var machineElectrolyzer = entityContainer.GenerateMachine("Electrolyzer");
+        
+        var recipeHydrogen = entityContainer.GetRecipeBuilder("Hydrogen", machineElectrolyzer)
             .AddInput(productWater, 30)
             .AddOutput(productHydrogen, 20)
             .AddOutput(productOxygen, 10).Build();
         
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productWater).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeHydrogen).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeHydrogen, machineElectrolyzer).Build();
         var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productHydrogen).Build();
         var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productOxygen).Build();
         
@@ -168,18 +174,21 @@ public class LimitCalculatorTest
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
         var productIronRod = entityContainer.GetOrGenerateProduct("Iron rod");
+        
+        var machineSmelter = entityContainer.GenerateMachine("Smelter");
+        var machineConstructor = entityContainer.GenerateMachine("Constructor");
 
-        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot")
+        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot", machineSmelter)
             .AddInput(productIronOre, 30)
             .AddOutput(productIronIngot, 10).Build();
 
-        var recipeIronRod = entityContainer.GetRecipeBuilder("Iron rod")
+        var recipeIronRod = entityContainer.GetRecipeBuilder("Iron rod", machineConstructor)
             .AddInput(productIronIngot, 15)
             .AddOutput(productIronRod, 10).Build();
 
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).Build();
-        var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronRod).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).Build();
+        var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronRod, machineConstructor).Build();
         var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronRod).Build();
         
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
@@ -199,13 +208,15 @@ public class LimitCalculatorTest
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
+        
+        var machineSmelter = entityContainer.GenerateMachine("Smelter");
 
-        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot")
+        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot", machineSmelter)
             .AddInput(productIronOre, 30)
             .AddOutput(productIronIngot, 10).Build();
 
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
-        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).Build();
         var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).Build();
         var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).Build();
         

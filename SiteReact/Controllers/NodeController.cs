@@ -44,7 +44,7 @@ public class NodeController : ControllerBase
         {
             case ENodeTypes.Spawn:
             {
-                if (dto.Product == null) return BadRequest("ProductId field was empty");
+                if (dto.Product == null) return BadRequest("Product field is empty");
                 var product = e.GetProduct(dto.Product);
                 if (product == null) return NotFound("ProductId not found");
                 node = w.GetNodeBuilder<SpawnNode>().SetProduct(product).Build();
@@ -52,15 +52,18 @@ public class NodeController : ControllerBase
             }
             case ENodeTypes.Production:
             {
-                if (dto.Recipe == null) return BadRequest("Recipe field was empty");
+                if (dto.Recipe == null) return BadRequest("Recipe field is empty");
+                if (dto.Machine == null) return BadRequest("Machine field is empty");
                 var recipe = e.GetRecipe(dto.Recipe);
+                var machine = e.GetMachine(dto.Machine);
                 if (recipe == null) return NotFound("Recipe not found");
-                node = w.GetNodeBuilder<ProductionNode>().SetRecipe(recipe).Build();
+                if (machine == null) return NotFound("Machine not found");
+                node = w.GetNodeBuilder<ProductionNode>().SetRecipe(recipe, machine).Build();
                 break;
             }
             case ENodeTypes.End:
             {
-                if (dto.Product == null) return BadRequest("ProductId field was empty");
+                if (dto.Product == null) return BadRequest("Product field is empty");
                 var product = e.GetProduct(dto.Product);
                 if (product == null) return NotFound("ProductId not found");
                 node = w.GetNodeBuilder<EndNode>().SetProduct(product).Build();
