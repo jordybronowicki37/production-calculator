@@ -90,29 +90,29 @@ public class CalculatorLimit
             switch (node)
             {
                 case SpawnNode spawnNode:
-                    if (CompareFloatingPointNumbers(spawnNode.Amount, FilterConnections(GetOutputConnections(spawnNode),
-                                GetProduct(spawnNode.ProductId))
-                            .Sum(connection => connection.Amount))) return false;
+                    var spawnConnections = FilterConnections(GetConnections(Side.Out, spawnNode), spawnNode.ProductId);
+                    var sumSpawnConnections = spawnConnections.Sum(connection => connection.Amount);
+                    if (!CompareFloatingPointNumbers(spawnNode.Amount, sumSpawnConnections)) return false;
                     break;
                 case ProductionNode productionNode:
-                    if ((from throughPut in GetRecipe(productionNode.RecipeId).InputThroughPuts 
-                         let amountRequired = GetInputConnections(productionNode)
-                             .Where(c => c.Product.Id.Equals(throughPut.ProductId))
-                             .Sum(connection => connection.Amount) 
-                         where CompareFloatingPointNumbers(productionNode.Amount * throughPut.Amount, amountRequired)
-                         select throughPut).Any()) return false;
+                    foreach (var throughPut in GetRecipe(productionNode.RecipeId).InputThroughPuts)
+                    {
+                        var prodConnections = FilterConnections(GetConnections(Side.In, productionNode), throughPut.ProductId);
+                        var prodConnectionsSum = prodConnections.Sum(connection => connection.Amount);
+                        if (!CompareFloatingPointNumbers(productionNode.Amount * throughPut.Amount, prodConnectionsSum)) return false;
+                    }
                     
-                    if ((from throughPut in GetRecipe(productionNode.RecipeId).OutputThroughPuts 
-                         let amountProvided = GetOutputConnections(productionNode)
-                             .Where(c => c.Product.Id.Equals(throughPut.ProductId))
-                             .Sum(connection => connection.Amount) 
-                         where CompareFloatingPointNumbers(productionNode.Amount * throughPut.Amount, amountProvided)
-                         select throughPut).Any()) return false;
+                    foreach (var throughPut in GetRecipe(productionNode.RecipeId).OutputThroughPuts)
+                    {
+                        var prodConnections = FilterConnections(GetConnections(Side.Out, productionNode), throughPut.ProductId);
+                        var prodConnectionsSum = prodConnections.Sum(connection => connection.Amount);
+                        if (!CompareFloatingPointNumbers(productionNode.Amount * throughPut.Amount, prodConnectionsSum)) return false;
+                    }
                     break;
                 case EndNode endNode:
-                    if (CompareFloatingPointNumbers(endNode.Amount, FilterConnections(GetInputConnections(endNode), 
-                                GetProduct(endNode.ProductId))
-                            .Sum(connection => connection.Amount))) return false;
+                    var endConnections = FilterConnections(GetConnections(Side.In, endNode), endNode.ProductId);
+                    var sumEndConnections = endConnections.Sum(connection => connection.Amount);
+                    if (!CompareFloatingPointNumbers(endNode.Amount, sumEndConnections)) return false;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(node));
@@ -147,12 +147,12 @@ public class CalculatorLimit
         switch (productNode)
         {
             case SpawnNode spawnNode:
-                connections = FilterConnections(GetOutputConnections(spawnNode), GetProduct(spawnNode.ProductId)).ToList();
+                connections = FilterConnections(GetConnections(Side.Out, spawnNode), spawnNode.ProductId).ToList();
                 if (exactTarget == null) productNode.Amount = connections.Sum(v => v.Amount);
                 else DistributeOutputConnections(connections, productNode.Amount);
                 break;
             case EndNode endNode:
-                connections = FilterConnections(GetInputConnections(endNode), GetProduct(endNode.ProductId)).ToList();
+                connections = FilterConnections(GetConnections(Side.In, endNode), endNode.ProductId).ToList();
                 if (exactTarget == null) productNode.Amount = connections.Sum(v => v.Amount);
                 else DistributeInputConnections(connections, productNode.Amount);
                 break;
@@ -163,14 +163,35 @@ public class CalculatorLimit
 
     private void DistributeInputConnections(IEnumerable<Connection> connections, float amount)
     {
+        // Remove nodes with exact targets
         var connectionsCopy = new List<Connection>(connections).Where(c =>
         {
-            var node = GetNode(c.NodeInId);
-            var exactTarget = GetTarget(node, TargetProductionTypes.ExactAmount);
-            if (exactTarget != null) amount -= node.Amount;
-            return exactTarget == null;
+            var nodeIn = GetNode(c.NodeInId);
+            var nodeOut = GetNode(c.NodeOutId);
+            var exactTargetIn = GetTarget(nodeIn, TargetProductionTypes.ExactAmount);
+            var exactTargetOut = GetTarget(nodeOut, TargetProductionTypes.ExactAmount);
+            
+            // Stop if exact target is not present
+            if (exactTargetIn == null) return true;
+            
+            // Check if two exact nodes are connected
+            if (exactTargetOut != null)
+            {
+                var num1 = GetRealAmount(nodeIn, c.ProductId, Side.Out);
+                var num2 = GetRealAmount(nodeOut, c.ProductId, Side.In);
+                var minAmount = Math.Min(num1, num2);
+                c.Amount = minAmount;
+                amount -= minAmount;
+            }
+            else
+            {
+                amount -= GetRealAmount(nodeIn, c.ProductId, Side.Out);
+            }
+
+            return false;
         }).ToList();
 
+        // Distribute remaining amounts
         foreach (var connection in connectionsCopy)
         {
             var newAmount = amount / connectionsCopy.Count;
@@ -181,14 +202,35 @@ public class CalculatorLimit
 
     private void DistributeOutputConnections(IEnumerable<Connection> connections, float amount)
     {
+        // Remove nodes with exact targets
         var connectionsCopy = new List<Connection>(connections).Where(c =>
         {
-            var node = GetNode(c.NodeOutId);
-            var exactTarget = GetTarget(node, TargetProductionTypes.ExactAmount);
-            if (exactTarget != null) amount -= node.Amount;
-            return exactTarget == null;
+            var nodeIn = GetNode(c.NodeInId);
+            var nodeOut = GetNode(c.NodeOutId);
+            var exactTargetIn = GetTarget(nodeIn, TargetProductionTypes.ExactAmount);
+            var exactTargetOut = GetTarget(nodeOut, TargetProductionTypes.ExactAmount);
+            
+            // Stop if exact target is not present
+            if (exactTargetOut == null) return true;
+            
+            // Check if two exact nodes are connected
+            if (exactTargetIn != null)
+            {
+                var num1 = GetRealAmount(nodeIn, c.ProductId, Side.Out);
+                var num2 = GetRealAmount(nodeOut, c.ProductId, Side.In);
+                var minAmount = Math.Min(num1, num2);
+                c.Amount = minAmount;
+                amount -= minAmount;
+            }
+            else
+            {
+                amount -= GetRealAmount(nodeOut, c.ProductId, Side.In);
+            }
+
+            return false;
         }).ToList();
 
+        // Distribute remaining amounts
         foreach (var connection in connectionsCopy)
         {
             var newAmount = amount / connectionsCopy.Count;
@@ -206,8 +248,8 @@ public class CalculatorLimit
 
                 foreach (var inputThroughPut in GetRecipe(productionNode.RecipeId).InputThroughPuts)
                 {
-                    var connectionsFiltered = FilterConnections(GetInputConnections(productionNode),
-                        GetProduct(inputThroughPut.ProductId)).ToList();
+                    var conn = GetConnections(Side.In, productionNode);
+                    var connectionsFiltered = FilterConnections(conn, inputThroughPut.ProductId);
                     if (!hasExactTarget)
                     {
                         var newAmount = connectionsFiltered.Sum(v => v.Amount) / inputThroughPut.Amount;
@@ -217,8 +259,7 @@ public class CalculatorLimit
                 }
                 foreach (var outputThroughPut in GetRecipe(productionNode.RecipeId).OutputThroughPuts)
                 {
-                    var connectionsFiltered = FilterConnections(GetOutputConnections(productionNode),
-                        GetProduct(outputThroughPut.ProductId)).ToList();
+                    var connectionsFiltered = FilterConnections(GetConnections(Side.Out, productionNode), outputThroughPut.ProductId).ToList();
                     if (!hasExactTarget)
                     {
                         var newAmount = connectionsFiltered.Sum(v => v.Amount) / outputThroughPut.Amount;
@@ -232,14 +273,24 @@ public class CalculatorLimit
         }
     }
 
-    private Product GetProduct(Guid id)
+    private float GetRealAmount(INode node, Guid productId, Side side)
     {
-        return _entityContainer.GetProduct(id);
+        switch (node)
+        {
+            case IHasProduct:
+                return node.Amount;
+            case IHasRecipe recipeNode:
+                var recipe = GetRecipe(recipeNode.RecipeId);
+                var throughPut = GetThroughput(side, recipe, productId);
+                return node.Amount * throughPut.Amount;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(node));
+        }
     }
 
     private Recipe GetRecipe(Guid id)
     {
-        return _entityContainer.GetRecipe(id);
+        return _entityContainer.GetRecipe(id)!;
     }
 
     private INode GetNode(Guid id)
@@ -252,23 +303,29 @@ public class CalculatorLimit
         return node.Targets.FirstOrDefault(v => v.Type == type);
     }
 
-    private IEnumerable<Connection> GetOutputConnections(INodeOut node)
+    private ThroughPut GetThroughput(Side side, Recipe recipe, Guid productId)
     {
-        return _worksheet.Connections.Where(connection => connection.NodeInId == node.Id);
+        return side == Side.In
+            ? recipe.InputThroughPuts.Find(t => t.ProductId == productId)!
+            : recipe.OutputThroughPuts.Find(t => t.ProductId == productId)!;
     }
     
-    private IEnumerable<Connection> GetInputConnections(INodeIn node)
+    private IEnumerable<Connection> GetConnections(Side side, INode node)
     {
-        return _worksheet.Connections.Where(connection => connection.NodeOutId == node.Id);
+        return side == Side.Out
+            ? _worksheet.Connections.Where(connection => connection.NodeInId == node.Id)
+            : _worksheet.Connections.Where(connection => connection.NodeOutId == node.Id);
     }
 
-    private static IEnumerable<Connection> FilterConnections(IEnumerable<Connection> connections, Product product)
+    private static IEnumerable<Connection> FilterConnections(IEnumerable<Connection> connections, Guid productId)
     {
-        return connections.Where(connection => connection.Product.Equals(product));
+        return connections.Where(connection => connection.ProductId.Equals(productId));
     }
 
     public static bool CompareFloatingPointNumbers(float num1, float num2)
     {
         return Math.Abs(num1 - num2) < 0.1;
     }
+    
+    private enum Side { In, Out }
 }

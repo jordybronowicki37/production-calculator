@@ -9,7 +9,7 @@ public class Connection
     public Guid Id { get; init; } = Guid.NewGuid();
     public Guid NodeInId { get; init; }
     public Guid NodeOutId { get; init; }
-    public Product Product { get; set; }
+    public Guid ProductId { get; set; }
     public float Amount { get; set; }
     public virtual ICollection<TargetConnection> Targets { get; private set; } = new List<TargetConnection>();
     
@@ -17,7 +17,7 @@ public class Connection
     {
         NodeInId = nodeIn.Id;
         NodeOutId = nodeOut.Id;
-        Product = product;
+        ProductId = product.Id;
     }
 
     public void AddConnectionTarget(TargetConnection target)
@@ -32,7 +32,7 @@ public class Connection
 
     protected bool Equals(Connection other)
     {
-        return NodeInId.Equals(other.NodeInId) && NodeOutId.Equals(other.NodeOutId) && Product.Equals(other.Product);
+        return NodeInId.Equals(other.NodeInId) && NodeOutId.Equals(other.NodeOutId) && ProductId.Equals(other.ProductId);
     }
 
     public override bool Equals(object? obj)
