@@ -10,9 +10,7 @@ export function CalculatorPage(props) {
   
   useEffect(() => {
     return () => {
-      dispatch({type:"worksheet/unset"});
-      dispatch({type:"connections/unset"});
-      dispatch({type:"nodes/unset"});
+      dispatch({type:"unload_worksheet"});
     }
   }, []);
   

@@ -2,8 +2,8 @@
 
 const connectionReducer = createReducer([], {
   "reset": () => [],
-  "connections/set": (state, action) => [...action.payload],
-  "connections/unset": () => [],
+  "unload_worksheet": () => [],
+  "load_worksheet": (state, action) => action.payload.connections,
   "connection/set": (state, action) => {
     let index = state.findIndex(v => v.id = action.payload.id);
     state[index] = action.payload;

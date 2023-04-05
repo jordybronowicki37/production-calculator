@@ -2,8 +2,11 @@
 
 const worksheetReducer = createReducer(null, {
   "reset": () => null,
-  "worksheet/set": (state, action) => action.payload,
-  "worksheet/unset": () => null,
+  "unload_worksheet": () => null,
+  "load_worksheet": (state, action) => {
+    const {nodes, connections, ...other} = action.payload;
+    return other;
+  },
 });
 
 export {worksheetReducer}

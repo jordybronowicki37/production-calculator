@@ -1,12 +1,13 @@
 import './custom.css'
 import React, {Component} from 'react';
-import {WorksheetOverview} from "./components/worksheets/WorksheetOverview";
 import {Layout} from "./components/layout/Layout";
 import {Route} from "react-router-dom";
 import {HomePage} from "./pages/HomePage";
 import {Provider} from "react-redux";
 import Store from "./data/DataStore";
 import {CalculatorPage} from "./pages/CalculatorPage";
+import {ProjectsPage} from "./pages/ProjectsPage";
+import {ProjectPage} from "./pages/ProjectPage";
 
 export default class App extends Component {
   static displayName = App.name;
@@ -16,7 +17,8 @@ export default class App extends Component {
       <Provider store={Store}>
         <Layout>
           <Route exact path='/' component={HomePage}/>
-          <Route path='/worksheets' component={WorksheetOverview}/>
+          <Route path='/projects' component={ProjectsPage}/>
+          <Route path='/project/:id' component={ProjectPage}/>
           <Route path='/calculator/:id' component={CalculatorPage}/>
         </Layout>
       </Provider>

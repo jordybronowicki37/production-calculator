@@ -5,7 +5,7 @@ export class HomePage extends Component {
   render () {
     return (
       <div>
-        <Redirect to="/calculator"/>
+        <Redirect to="/projects"/>
       </div>
     );
   }

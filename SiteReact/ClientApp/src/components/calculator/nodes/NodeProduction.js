@@ -39,8 +39,8 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
         </select>
       </div>;
     amountField = <div>{amount}</div>;
-    productInList = generateProductList(recipe.inputThroughPuts, products);
-    productOutList = generateProductList(recipe.outputThroughPuts, products);
+    productInList = generateProductList(recipe.inputThroughPuts, products, amount);
+    productOutList = generateProductList(recipe.outputThroughPuts, products, amount);
     
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>
@@ -64,8 +64,8 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
           {recipeField}
           <div>Amount:</div>
           {amountField}
-          <div>Required in</div>
-          <div>Required out</div>
+          <div>In</div>
+          <div>Out</div>
           {productInList}
           {productOutList}
         </div>
@@ -75,15 +75,15 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
   );
 }
 
-function generateProductList(throughputList, productList) {
+function generateProductList(throughputList, productList, productionAmount) {
   return (
     <div className="node-list">
       {throughputList.map((v, i) => {
-        const product = findProduct(productList, v.productId);
+        const product = findProduct(productList, v.product);
         return (
           <div key={i}>
             <div className="recipe-product">{product.name}:</div>
-            <div>{v.amount}</div>
+            <div>{v.amount*productionAmount}</div>
           </div>
         )
       })}

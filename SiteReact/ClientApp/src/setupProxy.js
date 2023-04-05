@@ -9,6 +9,8 @@ const context =  [
   "/recipe",
   "/node",
   "/worksheet",
+  "/project",
+  "/connection",
 ];
 
 module.exports = function(app) {

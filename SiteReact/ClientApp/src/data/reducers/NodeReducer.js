@@ -2,8 +2,8 @@
 
 const nodeReducer = createReducer([], {
   "reset": () => [],
-  "nodes/set": (state, action) => [...action.payload],
-  "nodes/unset": () => [],
+  "unload_worksheet": () => [],
+  "load_worksheet": (state, action) => action.payload.nodes,
   "nodes/update": (state, action) => {
     return [...action.payload].map((v, i) => {
       v.position = state[i].position;

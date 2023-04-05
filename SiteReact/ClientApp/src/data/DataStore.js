@@ -9,10 +9,11 @@ import {projectsReducer} from "./reducers/ProjectsReducer";
 import {projectReducer} from "./reducers/ProjectReducer";
 
 const rootReducer = combineReducers({
+  projects: projectsReducer,
+  project: projectReducer,
+  worksheet: worksheetReducer,
   products: productReducer,
   recipes: recipeReducer,
-  worksheets: worksheetsReducer,
-  worksheet: worksheetReducer,
   nodes: nodeReducer,
   connections: connectionReducer,
   notifications: notificationReducer,
