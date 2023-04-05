@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "productionCalculatorLib", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteReact", "SiteReact\SiteReact.csproj", "{A62CB033-ACCA-4D2D-B6B5-A20A8B60093C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductionCalculator.Core.Test", "ProductionCalculator.Core.Test\ProductionCalculator.Core.Test.csproj", "{15FBEE5B-4BF3-4588-8C0A-DD2CCFAF5B7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{A62CB033-ACCA-4D2D-B6B5-A20A8B60093C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A62CB033-ACCA-4D2D-B6B5-A20A8B60093C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A62CB033-ACCA-4D2D-B6B5-A20A8B60093C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15FBEE5B-4BF3-4588-8C0A-DD2CCFAF5B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15FBEE5B-4BF3-4588-8C0A-DD2CCFAF5B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15FBEE5B-4BF3-4588-8C0A-DD2CCFAF5B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15FBEE5B-4BF3-4588-8C0A-DD2CCFAF5B7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

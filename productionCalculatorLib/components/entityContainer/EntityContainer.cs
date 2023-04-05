@@ -1,4 +1,5 @@
 ﻿using productionCalculatorLib.components.entities;
+using productionCalculatorLib.components.products;
 
 namespace productionCalculatorLib.components.entityContainer;
 
@@ -7,6 +8,7 @@ public class EntityContainer
     public Guid Id { get; init; } = Guid.NewGuid();
     public virtual ICollection<Product> Products { get; private set; } = new List<Product>();
     public virtual ICollection<Recipe> Recipes { get; private set; } = new List<Recipe>();
+    public virtual ICollection<Machine> Machines { get; private set; } = new List<Machine>();
     
     public EntityContainer() {}
 
@@ -54,11 +56,19 @@ public class EntityContainer
         return Recipes.FirstOrDefault(r => r.Id == id);
     }
 
-    public Recipe GenerateRecipe(string name)
+    public Recipe GenerateRecipe(string name, Machine machine1, params Machine[] machines)
     {
         if (Recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");
-        var r = new Recipe(name);
+        var r = new Recipe
+        {
+            Name = name
+        };
         Recipes.Add(r);
+        machines = machines.Append(machine1).ToArray();
+        foreach (var machine in machines)
+        {
+            machine.Recipes.Add(r.Id);
+        }
         return r;
     }
 
@@ -76,9 +86,34 @@ public class EntityContainer
         Recipes.Remove(recipe);
     }
     
-    public RecipeBuilder GetRecipeBuilder(string name)
+    public RecipeBuilder GetRecipeBuilder(string name, Machine machine1, params Machine[] machines)
     {
         if (Recipes.Any(p => p.Name == name)) throw new Exception("Recipe already exists");
-        return new RecipeBuilder(this, name);
+        return new RecipeBuilder(this, name, machine1, machines);
+    }
+
+    public Machine GenerateMachine(string name)
+    {
+        var machine = new Machine
+        {
+            Name = name
+        };
+        Machines.Add(machine);
+        return machine;
+    }
+
+    public Machine? GetMachine(string name)
+    {
+        return Machines.FirstOrDefault(m => m.Name == name);
+    }
+    
+    public Machine? GetMachine(Guid id)
+    {
+        return Machines.FirstOrDefault(m => m.Id == id);
+    }
+    
+    public IEnumerable<Machine> GetMachines(IEnumerable<Guid> ids)
+    {
+        return Machines.Where(m => ids.Contains(m.Id));
     }
 }

@@ -8,7 +8,7 @@ public class DtoConnectionDouble
     public Guid Id { get; }
     public Guid InputNodeId { get; }
     public Guid OutputNodeId { get; }
-    public string Product { get; }
+    public Guid ProductId { get; }
     public float Amount { get; }
     public IEnumerable<DtoConnectionTarget> Targets;
 
@@ -17,7 +17,7 @@ public class DtoConnectionDouble
         Id = connection.Id;
         InputNodeId = connection.NodeInId;
         OutputNodeId = connection.NodeOutId;
-        Product = connection.Product.Name;
+        ProductId = connection.ProductId;
         Amount = connection.Amount;
         Targets = connection.Targets.Select(t => new DtoConnectionTarget(t));
     }

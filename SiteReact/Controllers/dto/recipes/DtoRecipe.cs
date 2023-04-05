@@ -8,8 +8,10 @@ public class DtoRecipe
     public Guid Id { get; set; }
     public string Name { get; set; } = "";
 
-    public IEnumerable<DtoThroughPut> InputThroughPuts { get; set; }
-    public IEnumerable<DtoThroughPut> OutputThroughPuts { get; set; }
+    public IEnumerable<Guid> Machines { get; set; } = null!;
+
+    public IEnumerable<DtoThroughPut> InputThroughPuts { get; set; } = null!;
+    public IEnumerable<DtoThroughPut> OutputThroughPuts { get; set; } = null!;
     
     public DtoRecipe(Recipe recipe)
     {

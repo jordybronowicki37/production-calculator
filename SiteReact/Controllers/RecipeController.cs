@@ -36,8 +36,13 @@ public class RecipeController : ControllerBase
     {
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
+
+        if (!dto.Machines.Any()) return BadRequest("Recipe must contain at least one machine");
+        var machines = e.GetMachines(dto.Machines).ToList();
+        var machine1 = machines[0];
+        machines.RemoveAt(0);
         
-        var r = e.GenerateRecipe(dto.Name);
+        var r = e.GenerateRecipe(dto.Name, machine1, machines.ToArray());
 
         foreach (var inputThroughPut in dto.InputThroughPuts)
             r.InputThroughPuts.Add(new ThroughPut(e.GetProduct(inputThroughPut.Product), inputThroughPut.Amount));

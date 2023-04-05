@@ -1,5 +1,4 @@
 ﻿using productionCalculatorLib.components.nodes.nodeTypes;
-using SiteReact.Controllers.dto.connections;
 using SiteReact.Controllers.dto.targets;
 
 namespace SiteReact.Controllers.dto.nodes;
