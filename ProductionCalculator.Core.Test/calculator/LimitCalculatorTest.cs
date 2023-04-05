@@ -77,10 +77,7 @@ public class LimitCalculatorTest
     private static SetupParams SimpleSetup()
     {
         var entityContainer = new EntityContainer();
-        var worksheet = new Worksheet(entityContainer)
-        {
-            Name = "Iron ingot smelting"
-        };
+        var worksheet = new Worksheet("Iron ingot smelting", entityContainer.Id);
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
@@ -104,10 +101,7 @@ public class LimitCalculatorTest
     private static SetupParams DoubleSpawnSetup()
     {
         var entityContainer = new EntityContainer();
-        var worksheet = new Worksheet(entityContainer)
-        {
-            Name = "Steel ingot smelting"
-        };
+        var worksheet = new Worksheet("Steel ingot smelting", entityContainer.Id);
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productCoal = entityContainer.GetOrGenerateProduct("Coal");
@@ -135,10 +129,7 @@ public class LimitCalculatorTest
     private static SetupParams DoubleEndSetup()
     {
         var entityContainer = new EntityContainer();
-        var worksheet = new Worksheet(entityContainer)
-        {
-            Name = "Oxygen electrolysis"
-        };
+        var worksheet = new Worksheet("Oxygen electrolysis", entityContainer.Id);
 
         var productWater = entityContainer.GetOrGenerateProduct("Water");
         var productHydrogen = entityContainer.GetOrGenerateProduct("Hydrogen");
@@ -166,10 +157,7 @@ public class LimitCalculatorTest
     private static SetupParams DoubleProductionSetup()
     {
         var entityContainer = new EntityContainer();
-        var worksheet = new Worksheet(entityContainer)
-        {
-            Name = "Iron rod construction"
-        };
+        var worksheet = new Worksheet("Iron rod construction", entityContainer.Id);
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
@@ -201,10 +189,7 @@ public class LimitCalculatorTest
     private static SetupParams SimpleOverflowSetup()
     {
         var entityContainer = new EntityContainer();
-        var worksheet = new Worksheet(entityContainer)
-        {
-            Name = "Iron ingot smelting"
-        };
+        var worksheet = new Worksheet("Iron ingot smelting", entityContainer.Id);
 
         var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
         var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
