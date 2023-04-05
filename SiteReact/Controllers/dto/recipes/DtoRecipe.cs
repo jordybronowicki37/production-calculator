@@ -5,13 +5,11 @@ namespace SiteReact.Controllers.dto.recipes;
 
 public class DtoRecipe
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = "";
+    public Guid Id { get; }
+    public string Name { get; }
 
-    public IEnumerable<Guid> Machines { get; set; } = null!;
-
-    public IEnumerable<DtoThroughPut> InputThroughPuts { get; set; } = null!;
-    public IEnumerable<DtoThroughPut> OutputThroughPuts { get; set; } = null!;
+    public IEnumerable<DtoThroughPut> InputThroughPuts { get; }
+    public IEnumerable<DtoThroughPut> OutputThroughPuts { get; }
     
     public DtoRecipe(Recipe recipe)
     {
