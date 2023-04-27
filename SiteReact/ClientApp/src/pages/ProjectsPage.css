@@ -1,25 +1,30 @@
 ﻿.project_item {
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
+    margin: 2rem 2rem;
     border: 1px solid black;
     border-radius: 5px;
     color: white;
     background-color: #444;
     overflow: hidden;
+    box-shadow: 0.4rem 0.8rem 1rem #aaa2;
 }
 
 .project_top {
-    background-color: var(--bs-gray-700);
+    background-color: #333;
     padding: 5px;
 }
 
 .project_link {
     flex-grow: 2;
-    color: white;
+    color: #fff;
     font-size: larger;
     font-weight: bold;
     margin-left: 0.5rem;
+}
+
+.project_link:hover {
+    color: #ccc;
 }
 
 .project_stats {

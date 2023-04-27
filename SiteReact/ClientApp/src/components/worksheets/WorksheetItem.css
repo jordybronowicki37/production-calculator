@@ -9,20 +9,20 @@
 }
 
 .worksheet-item .top-container {
-    display: flex;
-    justify-content: space-between;
     border-bottom: 1px solid black;
     margin-bottom: 0.3rem;
 }
 
 .worksheet-item .title {
+    display: flex;
+    justify-content: space-between;
     white-space: nowrap;
-    color: unset;
+    color: #fff;
     text-decoration: none;
 }
 
-.worksheet-item .open-icon {
-    color: unset;
+.worksheet-item .title:hover {
+    color: #ddd;
 }
 
 .worksheet-item .amounts-container {

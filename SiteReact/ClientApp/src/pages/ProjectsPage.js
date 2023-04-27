@@ -51,19 +51,19 @@ function ProjectStats({project}) {
   return (
     <div className="project_stats">
       <div>
-        <span className="material-icons-round" title="Products">pie_chart</span>
+        <span className="material-symbols-rounded" title="Products">pie_chart</span>
         {project.products.length}
       </div>
       <div>
-        <span className="material-icons-round" title="Recipes">account_tree</span>
+        <span className="material-symbols-rounded" title="Recipes">account_tree</span>
         {project.recipes.length}
       </div>
       <div>
-        <span className="material-icons-round" title="Machines">precision_manufacturing</span>
+        <span className="material-symbols-rounded" title="Machines">precision_manufacturing</span>
         {project.machines.length}
       </div>
       <div>
-        <span className="material-icons-round" title="Worksheets">table_chart</span>
+        <span className="material-symbols-rounded" title="Worksheets">table_chart</span>
         {project.worksheets.length}
       </div>
     </div>

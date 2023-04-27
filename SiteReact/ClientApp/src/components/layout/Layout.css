@@ -4,3 +4,7 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+.layout {
+    background-color: #1e1e21;
+}

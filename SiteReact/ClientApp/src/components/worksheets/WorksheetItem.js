@@ -9,8 +9,10 @@ export function WorksheetItem({worksheet}) {
   return (
     <div className="worksheet-item">
       <div className="top-container">
-        <Link className="title" to={`/calculator/${id}`}>{name}</Link>
-        <Link className="open-icon" to={`/calculator/${id}`}><i className='bx bx-folder-open bx-tada-hover'></i></Link>
+        <Link className="title" title="Open worksheet" to={`/calculator/${id}`}>
+          <div className="text-decoration-underline">{name}</div>
+          <span className="material-symbols-rounded">folder_open</span>
+        </Link>
       </div>
       <div className="amounts-container">
         <div>Nodes:</div>

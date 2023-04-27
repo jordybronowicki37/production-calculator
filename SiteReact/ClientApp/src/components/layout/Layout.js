@@ -1,6 +1,5 @@
 import "./Layout.css";
 import React, {Component} from 'react';
-import {Container} from 'reactstrap';
 import {NavMenu} from './NavMenu';
 import {UserNotificationManager} from "../notification/UserNotificationManager";
 
@@ -9,14 +8,12 @@ export class Layout extends Component {
 
   render () {
     return (
-      <div className="layout">
+      <div className="layout min-vh-100">
         <NavMenu />
-        <Container>
-          <div className="notification-wrapper">
-            <UserNotificationManager/>
-          </div>
-          {this.props.children}
-        </Container>
+        <div className="notification-wrapper">
+          <UserNotificationManager/>
+        </div>
+        {this.props.children}
       </div>
     );
   }

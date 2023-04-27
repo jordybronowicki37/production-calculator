@@ -2,7 +2,6 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    border-radius: 5px 5px 0 0;
     overflow: hidden;
     background-color: var(--bs-gray-700);
     column-gap: 0.3rem;
