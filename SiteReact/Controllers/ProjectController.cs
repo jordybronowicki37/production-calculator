@@ -28,7 +28,12 @@ public class ProjectController : ControllerBase
     [HttpGet("")]
     public IActionResult GetAll()
     {
-        return Ok(GetAllProjects().Select(p => new DtoProjectSmall(p)));
+        return Ok(GetAllProjects().Select(p =>
+        {
+            var ec = GetEntityContainer(p.EntityContainerId);
+            var worksheets = GetWorksheets(p.Worksheets);
+            return new DtoProject(p, ec, worksheets);
+        }));
     }
     
     [HttpGet("{id:Guid}")]

@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.nodeTypes;
+﻿using productionCalculatorLib.components.entityContainer;
+using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.worksheet;
 using SiteReact.Controllers.dto.throughputs;
 
@@ -13,7 +14,7 @@ public class DtoWorksheetSmall
     public List<DtoThroughPut> InputProducts { get; } = new();
     public List<DtoThroughPut> OutputProducts { get; } = new();
 
-    public DtoWorksheetSmall(Worksheet worksheet)
+    public DtoWorksheetSmall(EntityContainer container, Worksheet worksheet)
     {
         Id = worksheet.Id;
         Name = worksheet.Name;
@@ -31,7 +32,7 @@ public class DtoWorksheetSmall
                     } 
                     else
                     {
-                        InputProducts.Add(new DtoThroughPut(spawnNode.ProductId, spawnNode.Amount));
+                        InputProducts.Add(new DtoThroughPut(container.GetProduct(spawnNode.ProductId)!, spawnNode.Amount));
                     }
                     break;
                 case EndNode endNode:
@@ -42,7 +43,7 @@ public class DtoWorksheetSmall
                     } 
                     else
                     {
-                        OutputProducts.Add(new DtoThroughPut(endNode.ProductId, endNode.Amount));
+                        OutputProducts.Add(new DtoThroughPut(container.GetProduct(endNode.ProductId)!, endNode.Amount));
                     }
                     break;
             }

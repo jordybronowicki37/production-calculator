@@ -4,6 +4,7 @@ namespace SiteReact.Controllers.dto.throughputs;
 
 public class DtoThroughPut
 {
+    public string Name { get; set; } = string.Empty;
     public Guid Product { get; set; }
     public float Amount { get; set; }
 
@@ -15,9 +16,10 @@ public class DtoThroughPut
         Product = throughPut.ProductId;
     }
 
-    public DtoThroughPut(Guid product, float amount)
+    public DtoThroughPut(Product product, float amount)
     {
         Amount = amount;
-        Product = product;
+        Product = product.Id;
+        Name = product.Name;
     }
 }

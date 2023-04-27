@@ -23,7 +23,7 @@ public class DtoProject
         Id = project.Id;
         Name = project.Name;
         EntityContainerId = project.EntityContainerId;
-        Worksheets = worksheets.Select(w => new DtoWorksheetSmall(w));
+        Worksheets = worksheets.Select(w => new DtoWorksheetSmall(entityContainer, w));
         Products = entityContainer.Products.Select(p => new DtoProduct(p));
         Recipes = entityContainer.Recipes.Select(r => new DtoRecipe(r));
         Machines = entityContainer.Machines.Select(m => new DtoMachine(m));
