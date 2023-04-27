@@ -5,8 +5,7 @@ import {useSelector} from "react-redux";
 
 export function WorksheetItem({worksheet}) {
   const {id, name, amountNodes, inputProducts, outputProducts} = worksheet;
-  const products = useSelector(state => state.products);
-
+  
   return (
     <div className="worksheet-item">
       <div className="top-container">
@@ -21,20 +20,20 @@ export function WorksheetItem({worksheet}) {
         <div>Inputs</div>
         <div>Outputs</div>
         <ul>
-          {inputProducts.map(t => ThroughputItem(t, findProduct(products, t.product)))}
+          {inputProducts.map(t => ThroughputItem(t))}
         </ul>
         <ul>
-          {outputProducts.map(t => ThroughputItem(t, findProduct(products, t.product)))}
+          {outputProducts.map(t => ThroughputItem(t))}
         </ul>
       </div>
     </div>
   );
 }
 
-function ThroughputItem(throughput, product) {
+function ThroughputItem(throughput) {
   return (
-    <li key={product.id} className="worksheet-item-throughput">
-      <div>{product.name}</div>
+    <li key={throughput.product} className="worksheet-item-throughput">
+      <div>{throughput.name}</div>
       <div>{throughput.amount}</div>
     </li>
   );
