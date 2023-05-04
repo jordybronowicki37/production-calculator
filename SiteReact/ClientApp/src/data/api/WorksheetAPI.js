@@ -1,18 +1,6 @@
 import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const fetchAllWorksheets = async function() {
-  let response = await fetch(`worksheet`);
-  if (!response.ok) {
-    let error = await response.text();
-    throwErrorNotification(error);
-    throw new Error(error);
-  }
-  let json = await response.json();
-  Store.dispatch({type:"worksheets/set", payload:json});
-  return json;
-}
-
 export const fetchWorksheet = async function(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}`);
   if (!response.ok) {
@@ -45,7 +33,7 @@ export const createNewWorksheet = async function(name, dataPreset) {
     throwErrorNotification(error);
     throw new Error(error);
   }
-  fetchAllWorksheets();
+  
   return await response.json();
 }
 
@@ -58,14 +46,7 @@ export const calculate = async function() {
   }
   let json = await response.json();
   
-  Store.dispatch({type:"nodes/update", payload:json.nodes});
-  Store.dispatch({type:"connections/update", payload:json.connections});
-  
-  delete json.products;
-  delete json.recipes;
-  delete json.nodes;
-  delete json.connections;
-  Store.dispatch({type:"worksheet/set", payload:json});
+  Store.dispatch({type:"worksheet/calculate", payload:json});
   
   return json;
 }

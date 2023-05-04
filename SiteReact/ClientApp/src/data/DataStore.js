@@ -3,10 +3,9 @@ import {notificationReducer} from "./reducers/NotificationReducer";
 import {productReducer} from "./reducers/ProductReducer";
 import {recipeReducer} from "./reducers/RecipeReducer";
 import {worksheetReducer} from "./reducers/WorksheetReducer";
-import {nodeReducer} from "./reducers/NodeReducer";
-import {connectionReducer} from "./reducers/ConnectionReducer";
 import {projectsReducer} from "./reducers/ProjectsReducer";
 import {projectReducer} from "./reducers/ProjectReducer";
+import {machinesReducer} from "./reducers/MachinesReducer";
 
 const rootReducer = combineReducers({
   projects: projectsReducer,
@@ -14,8 +13,7 @@ const rootReducer = combineReducers({
   worksheet: worksheetReducer,
   products: productReducer,
   recipes: recipeReducer,
-  nodes: nodeReducer,
-  connections: connectionReducer,
+  machines: machinesReducer,
   notifications: notificationReducer,
 });
 

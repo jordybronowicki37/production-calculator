@@ -24,7 +24,7 @@ export class Calculator extends Component {
   constructor(props) {
     super(props);
     const {worksheetId} = props;
-    const {worksheet, nodes, connections, products, recipes} = Store.getState();
+    const {worksheet, products, recipes} = Store.getState();
     
     this.state = {
       flowInstance: null,
@@ -32,7 +32,9 @@ export class Calculator extends Component {
       worksheetId,
       worksheetLoading: true,
       
-      worksheet, nodes, connections, products, recipes,
+      worksheet, products, recipes,
+      nodes:[],
+      connections:[],
       
       calculatorState: "loading",
       
@@ -59,7 +61,8 @@ export class Calculator extends Component {
     
     this.unsubscribe = Store.subscribe(() => {
       this.setState({calculatorState: "refresh"});
-      const {worksheet, nodes, connections, products, recipes} = Store.getState();
+      const {worksheet, products, recipes} = Store.getState();
+      const {nodes, connections} = worksheet;
       this.setState({worksheet, nodes, connections, products, recipes});
     });
   }
