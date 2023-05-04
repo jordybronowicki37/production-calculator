@@ -1,6 +1,7 @@
 ﻿.worksheet-item {
     border: 1px solid black;
     border-radius: 7px;
+    color: #eee;
     overflow: hidden;
 }
 

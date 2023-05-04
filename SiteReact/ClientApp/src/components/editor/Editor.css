@@ -1,0 +1,46 @@
+.editor {
+    color: #eee;
+}
+
+.editor .tabs {
+    display: flex;
+    width: 100%;
+    color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.editor .tabs>* {
+    background-color: #333;
+    border: none;
+    user-select: none;
+}
+
+.editor .tabs .tab {
+    padding: 0.5rem;
+    margin: 0.3rem;
+    border-radius: 0.3rem;
+}
+
+.editor .tabs .add {
+    height: 2rem;
+    width: 2rem;
+    margin: 0.3rem;
+    padding: 0.2rem;
+    border-radius: 0.3rem;
+    align-self: center;
+    text-align: center;
+}
+
+.editor .tabs>*:hover,
+.editor .tabs .tab.selected {
+    background-color: #444;
+}
+
+.editor .worksheet-selector {
+    padding: 1rem;
+}
+
+.editor .worksheet-selector .worksheet-list>* {
+    width: fit-content;
+    background-color: #333;
+}

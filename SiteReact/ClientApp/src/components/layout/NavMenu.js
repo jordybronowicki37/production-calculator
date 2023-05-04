@@ -36,7 +36,7 @@ export class NavMenu extends Component {
                 <NavLink tag={Link} to="/projects">Projects</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap">
+                <NavLink href="https://github.com//jordybronowicki37/productionCalculator">
                   Github
                   <span className="material-symbols-rounded float-end fs-6">open_in_new</span>
                 </NavLink>
