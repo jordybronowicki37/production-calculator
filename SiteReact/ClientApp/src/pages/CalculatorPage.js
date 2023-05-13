@@ -2,12 +2,17 @@
 import {Calculator} from "../components/calculator/Calculator";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+import {fetchWorksheet} from "../data/api/WorksheetAPI";
 
 export function CalculatorPage(props) {
   const worksheetId = props.match.params.id;
   const dispatch = useDispatch();
+  const {worksheet, products, recipes, machines} = useSelector(state => state);
+  console.log(worksheet)
   
   useEffect(() => {
+    fetchWorksheet(worksheetId);
+    
     return () => {
       dispatch({type:"unload_worksheet"});
     }
@@ -15,7 +20,7 @@ export function CalculatorPage(props) {
   
   return (
     <div>
-      <Calculator worksheetId={worksheetId}/>
+      {worksheet != null && <Calculator worksheetId={worksheetId} worksheet={worksheet} products={products} recipes={recipes}/>}
     </div>
   );
 }
