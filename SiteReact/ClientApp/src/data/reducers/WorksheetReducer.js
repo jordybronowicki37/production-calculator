@@ -15,7 +15,7 @@ const worksheetReducer = createReducer(null, {
   },
   
   "connection/add": (state, action) => {
-    state.connections.push(action);
+    state.connections.push(action.payload);
     return state;
   },
   "connection/remove": (state, action) => {
@@ -37,23 +37,23 @@ const worksheetReducer = createReducer(null, {
     return state;
   },
   "node/change/position": (state, action) => {
-    let node = state.nodes.find(value => value.id === action.payload.id);
-    node.position = action.payload.position;
+    let index = state.nodes.findIndex(value => value.id === action.payload.id);
+    state.nodes[index].position = action.payload.position;
     return state;
   },
   "node/change/product": (state, action) => {
-    let node = state.nodes.find(value => value.id === action.payload.id);
-    node.product = action.payload.product;
+    let index = state.nodes.findIndex(value => value.id === action.payload.id);
+    state.nodes[index].product = action.payload.product;
     return state;
   },
   "node/change/recipe": (state, action) => {
-    let node = state.nodes.find(value => value.id === action.payload.id);
-    node.recipe = action.payload.recipe;
+    let index = state.nodes.findIndex(value => value.id === action.payload.id);
+    state.nodes[index].recipe = action.payload.recipe;
     return state;
   },
   "node/change/targets": (state, action) => {
-    let node = state.nodes.find(value => value.id === action.payload.id);
-    node.targets = action.payload.targets;
+    let index = state.nodes.findIndex(value => value.id === action.payload.id);
+    state.nodes[index].targets = action.payload.targets;
     return state;
   },
 });
