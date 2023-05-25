@@ -1,46 +1,33 @@
 import "./Editor.css";
-import {Component} from "react";
 import {WorksheetItem} from "../worksheets/WorksheetItem";
-import Store from "../../data/DataStore";
+import {Calculator} from "../calculator/Calculator";
+import {fetchWorksheet} from "../../data/api/WorksheetAPI";
+import {useEffect} from "react";
 
-export class Editor extends Component {
-  constructor(props) {
-    super(props);
-    const {project} = props;
-    console.log(project);
-    console.log(Store.getState())
-    this.state = {
-      project: project,
-      tabs: [
-        {
-          name: "calculator"
-        }
-      ],
-    }
-  }
+export function Editor({ project, worksheet, products, recipes, machines }) {
+  useEffect(() => {
+    LoadWorksheet(project.worksheets[0].id)
+  }, []);
   
-  render() {
-    return (
-      <div className="editor">
-        
-        <div className="tabs">
-          <button className="tab selected">calculator</button>
-          <button className="add"><span className="material-symbols-rounded">add</span></button>
-        </div>
-        <div className="tabs_content">
-          <div>
-            
-          </div>
-          <div >
-            <WorksheetSelector project={this.state.project}/>
-          </div>
-        </div>
+  return (
+    <div className="editor">
+      
+      <div className="tabs">
+        <button className="tab selected">calculator</button>
+        <button className="add"><span className="material-symbols-rounded">add</span></button>
       </div>
-    );
-  }
+      <div className="tabs_content">
+        {worksheet != null && <Calculator worksheet={worksheet} products={products} recipes={recipes}/>}
+        
+        {/*<div >*/}
+        {/*  <WorksheetSelectorTab project={this.state.project}/>*/}
+        {/*</div>*/}
+      </div>
+    </div>
+  );
 }
 
-function WorksheetSelector({project}) {
+function WorksheetSelectorTab({project}) {
   return (
     <div className="worksheet-selector">
       <h2>Select a worksheet</h2>
@@ -49,4 +36,8 @@ function WorksheetSelector({project}) {
       </div>
     </div>
   );
+}
+
+async function LoadWorksheet(id) {
+  return await fetchWorksheet(id);
 }

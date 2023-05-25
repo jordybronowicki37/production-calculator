@@ -5,7 +5,7 @@ import {fetchProject} from "../data/api/ProjectsAPI";
 
 export function EditorPage(props) {
   const projectId = props.match.params.id;
-  const project = useSelector(state => state.project);
+  const { project, worksheet, products, recipes, machines } = useSelector(state => state);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
@@ -13,14 +13,14 @@ export function EditorPage(props) {
     fetchProject(projectId).then(() => setLoading(false));
     
     return () => {
-      dispatch({type:"unload_worksheet"});
+      dispatch({type:"unload_project"});
     }
   }, []);
   
   return <>
     {loading
       ? <div>Loading</div>
-      : <Editor project={project}/>
+      : <Editor project={project} worksheet={worksheet} products={products} recipes={recipes} machines={machines}/>
     }
   </>
 }

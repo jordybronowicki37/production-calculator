@@ -20,7 +20,7 @@ export function CalculatorPage(props) {
   
   return (
     <div>
-      {worksheet != null && <Calculator worksheetId={worksheetId} worksheet={worksheet} products={products} recipes={recipes}/>}
+      {worksheet != null && <Calculator worksheet={worksheet} machines={machines} products={products} recipes={recipes}/>}
     </div>
   );
 }
