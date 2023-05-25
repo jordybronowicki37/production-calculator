@@ -1,4 +1,7 @@
 .editor {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
     color: #eee;
 }
 
@@ -34,6 +37,11 @@
 .editor .tabs>*:hover,
 .editor .tabs .tab.selected {
     background-color: #444;
+}
+
+.editor .tabs_content {
+    display: flex;
+    flex-grow: 1;
 }
 
 .editor .worksheet-selector {

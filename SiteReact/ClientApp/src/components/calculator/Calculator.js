@@ -1,5 +1,5 @@
 import "./Calculator.css";
-import {useRef, useState} from "react";
+import {useState} from "react";
 import ReactFlow, {Background, Controls, MarkerType, MiniMap, ReactFlowProvider} from 'react-flow-renderer';
 import {throwWarningNotification} from "../notification/NotificationThrower";
 import Store from "../../data/DataStore";
@@ -32,30 +32,26 @@ export function Calculator({worksheet, products, recipes}){
   
   return (
     <div className="calculator">
-      <div className="calculator-screen">
-        <div className="flow-chart-container">
-          <ReactFlowProvider>
-            <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>
-              <CalculationState onClick={() => calculateWorksheet(setCalculationState)} message={message} state={calculationState}/>
-              <ReactFlow
-                className="flow-chart"
-                nodes={flowNodes}
-                edges={flowEdges}
-                onNodesChange={onNodesChangeWrapper}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnectWrapper}
-                onDragOver={onDragOver}
-                onInit={setReactFlowInstance}
-                onDrop={onDropWrapper}
-                defaultEdgeOptions={defaultEdgeOptions}>
-                <MiniMap nodeStrokeColor="#fff" nodeColor="transparent" maskColor="#333" style={{backgroundColor:"#444"}}/>
-                <Controls/>
-                <Background color="#bbb" style={{backgroundColor:"#444"}}/>
-              </ReactFlow>
-            </div>
-          </ReactFlowProvider>
+      <ReactFlowProvider>
+        <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>
+          <CalculationState onClick={() => calculateWorksheet(setCalculationState)} message={message} state={calculationState}/>
+          <ReactFlow
+            className="flow-chart"
+            nodes={flowNodes}
+            edges={flowEdges}
+            onNodesChange={onNodesChangeWrapper}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnectWrapper}
+            onDragOver={onDragOver}
+            onInit={setReactFlowInstance}
+            onDrop={onDropWrapper}
+            defaultEdgeOptions={defaultEdgeOptions}>
+            <MiniMap nodeStrokeColor="#fff" nodeColor="transparent" maskColor="#333" style={{backgroundColor:"#444"}}/>
+            <Controls/>
+            <Background color="#bbb" style={{backgroundColor:"#444"}}/>
+          </ReactFlow>
         </div>
-      </div>
+      </ReactFlowProvider>
     </div>
   );
 }

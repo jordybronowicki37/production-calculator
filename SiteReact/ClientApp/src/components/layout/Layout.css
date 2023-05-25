@@ -6,5 +6,7 @@
 }
 
 .layout {
+    display: flex;
+    flex-direction: column;
     background-color: #1e1e21;
 }
