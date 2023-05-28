@@ -3,9 +3,13 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
 
-export function WorksheetItem({worksheet}) {
-  const {id, name, amountNodes, inputProducts, outputProducts} = worksheet;
-  
+export function WorksheetItem({worksheet, products}) {
+  const {id, name, nodes, connections} = worksheet;
+  const inputNodes = nodes.filter(n => n.type === "Spawn");
+  const outputNodes = nodes.filter(n => n.type === "End");
+  const inputProducts = generateWorksheetThroughput(inputNodes, products);
+  const outputProducts = generateWorksheetThroughput(outputNodes, products);
+
   return (
     <div className="worksheet-item">
       <div className="top-container">
@@ -16,7 +20,7 @@ export function WorksheetItem({worksheet}) {
       </div>
       <div className="amounts-container">
         <div>Nodes:</div>
-        <div>{amountNodes}</div>
+        <div>{nodes.length}</div>
       </div>
       <div className="input-output-container" hidden={inputProducts.length===0 && outputProducts.length===0}>
         <div>Inputs</div>
@@ -39,6 +43,24 @@ function ThroughputItem(throughput) {
       <div>{throughput.amount}</div>
     </li>
   );
+}
+
+function generateWorksheetThroughput(nodes, products) {
+  const dict = {};
+  for (const node of nodes) {
+    let v = dict[node.product];
+    if (v){
+      v.amount += node.amount;
+      dict[node.product] = v;
+    } else {
+      dict[node.product] = {
+        product: node.product,
+        amount: node.amount,
+        name: findProduct(products, node.product).name
+      }
+    }
+  }
+  return Object.values(dict);
 }
 
 function findProduct(list, id) {

@@ -15,36 +15,33 @@ const defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}
 const defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
 
 export function Calculator({worksheet, products, recipes}){
-  const { connections, nodes, calculationSucceeded, calculationError } = worksheet;
+  const { connections, nodes, calculationSucceeded, calculationError, id } = worksheet;
   
   const [calculationState, setCalculationState] = useState(calculationSucceeded ? "success" : "warning")
   
   const [reactFlowWrapper, setReactFlowWrapper] = useState(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [tempPositionData, setTempPositionData] = useState(null);
-  const onNodesChangeWrapper = (changes) => onNodesChange(changes, tempPositionData, setTempPositionData);
-  const onDropWrapper = (event) => onDrop(event, reactFlowWrapper, reactFlowInstance, products, recipes);
-  const onConnectWrapper = (edge) => onConnect(edge, nodes, products);
   
   let message = calculationError;
-  let flowNodes = generateNodes(nodes, products, recipes, tempPositionData);
+  let flowNodes = generateNodes(id, nodes, products, recipes, tempPositionData);
   let flowEdges = generateEdges(connections)
-  
+  debugger
   return (
     <div className="calculator">
       <ReactFlowProvider>
         <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>
-          <CalculationState onClick={() => calculateWorksheet(setCalculationState)} message={message} state={calculationState}/>
+          <CalculationState onClick={() => calculateWorksheet(id, setCalculationState)} message={message} state={calculationState}/>
           <ReactFlow
             className="flow-chart"
             nodes={flowNodes}
             edges={flowEdges}
-            onNodesChange={onNodesChangeWrapper}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnectWrapper}
+            onNodesChange={(changes) => onNodesChange(id, changes, tempPositionData, setTempPositionData)}
+            onEdgesChange={(changes) => onEdgesChange(id, changes)}
+            onConnect={(edge) => onConnect(id, edge, nodes, products)}
             onDragOver={onDragOver}
             onInit={setReactFlowInstance}
-            onDrop={onDropWrapper}
+            onDrop={(event) => onDrop(event, reactFlowWrapper, reactFlowInstance, id, products, recipes)}
             defaultEdgeOptions={defaultEdgeOptions}>
             <MiniMap nodeStrokeColor="#fff" nodeColor="transparent" maskColor="#333" style={{backgroundColor:"#444"}}/>
             <Controls/>
@@ -56,11 +53,12 @@ export function Calculator({worksheet, products, recipes}){
   );
 }
 
-function generateNodes(nodes, products, recipes, tempPositionData) {
-  return nodes.map(node => {
-    const {body, type} = createNodeBody(node.type, node, products, recipes);
+function generateNodes(worksheetId, nodes, products, recipes, tempPositionData) {
+  return nodes.map((node, i) => {
+    const {body, type} = createNodeBody(worksheetId, node.type, node, products, recipes);
     let position = node.position;
     if (tempPositionData !== null && tempPositionData.id === node.id) position = tempPositionData.position;
+    if (!position) position = {x:0, y:200*i};
 
     return {
       id: node.id.toString(),
@@ -85,9 +83,9 @@ function generateEdges(edges) {
   });
 }
 
-function calculateWorksheet(setState) {
+function calculateWorksheet(worksheetId, setState) {
   setState("loading");
-  calculate().then(r => {
+  calculate(worksheetId).then(r => {
     if (r.calculationSucceeded) {
       setState("success");
     } else {
@@ -98,22 +96,22 @@ function calculateWorksheet(setState) {
   });
 }
 
-function createNodeBody(nodeType, data, products, recipes) {
+function createNodeBody(worksheetId, nodeType, data, products, recipes) {
   let body, type, product, recipe;
   switch (nodeType) {
     case "Spawn":
       product = findById(data.product, products);
-      body = <NodeSpawn node={data} product={product} products={products}/>;
+      body = <NodeSpawn worksheetId={worksheetId} node={data} product={product} products={products}/>;
       type = "input";
       break;
     case "Production":
       recipe = findById(data.recipe, recipes)
-      body = <NodeProduction node={data} recipe={recipe} products={products} recipes={recipes}/>;
+      body = <NodeProduction worksheetId={worksheetId} node={data} recipe={recipe} products={products} recipes={recipes}/>;
       type = "default";
       break;
     case "End":
       product = findById(data.product, products)
-      body = <NodeEnd node={data} product={product} products={products}/>;
+      body = <NodeEnd worksheetId={worksheetId} node={data} product={product} products={products}/>;
       type = "output";
       break;
     default:
@@ -127,19 +125,19 @@ function findById(id, list) {
   return list.find(v => v.id === id);
 }
 
-const onNodesChange = (changes, tempPositionData, setTempPositionData) => {
+const onNodesChange = (worksheetId, changes, tempPositionData, setTempPositionData) => {
   changes.forEach(change => {
     switch (change.type) {
       case "position":
         if (change.dragging) {
           setTempPositionData({position:change.position, id:change.id});
         } else {
-          Store.dispatch({type:"node/change/position", payload: tempPositionData});
+          Store.dispatch({type:"node/change/position", payload: tempPositionData, worksheetId:worksheetId});
           // TODO update end position on back-end
         }
         break;
       case "remove":
-        nodeRemove(change.id);
+        nodeRemove(worksheetId, change.id);
         break;
       case "dimensions":
       case "select":
@@ -152,11 +150,11 @@ const onNodesChange = (changes, tempPositionData, setTempPositionData) => {
   })
 }
 
-function onEdgesChange (changes) {
+function onEdgesChange (worksheetId, changes) {
   changes.forEach(change => {
     switch (change.type) {
       case "remove":
-        connectionDelete(change.id);
+        connectionDelete(worksheetId, change.id);
         break;
       case "select":
       case "add":
@@ -168,7 +166,7 @@ function onEdgesChange (changes) {
   })
 }
 
-function onConnect (edge, nodes, products) {
+function onConnect (worksheetId, edge, nodes, products) {
   if (products.length === 0) {
     throwWarningNotification("Cannot connect nodes because no products exist in worksheet");
     return;
@@ -189,10 +187,10 @@ function onConnect (edge, nodes, products) {
     product = products[0];
   }
 
-  connectionCreate(edge.source, edge.target, product)
+  connectionCreate(worksheetId, edge.source, edge.target, product)
 }
 
-function onDragStart (event, nodetype) {
+export function onDragStart (event, nodetype) {
   event.dataTransfer.setData('application/reactflow', nodetype);
   event.dataTransfer.effectAllowed = 'move';
 }
@@ -202,7 +200,7 @@ function onDragOver (event) {
   event.dataTransfer.dropEffect = 'move';
 }
 
-function onDrop (event, wrapperInstance, flowInstance, products, recipes) {
+function onDrop (event, wrapperInstance, flowInstance, worksheetId, products, recipes) {
   event.preventDefault();
   const reactFlowBounds = wrapperInstance.getBoundingClientRect();
   const nodetype = event.dataTransfer.getData('application/reactflow');
@@ -215,13 +213,13 @@ function onDrop (event, wrapperInstance, flowInstance, products, recipes) {
     y: event.clientY - reactFlowBounds.top,
   });
 
-  onAddNode(nodetype, position, products, recipes)
+  onAddNode(worksheetId, nodetype, position, products, recipes)
 }
 
-function onAddNode (nodetype, position, products, recipes) {
+function onAddNode (worksheetId, nodeType, position, products, recipes) {
   if (!position) position = {x:0,y:0};
 
-  switch (nodetype) {
+  switch (nodeType) {
     case "Spawn":
     case "End":
       if (products.length === 0) {
@@ -229,7 +227,7 @@ function onAddNode (nodetype, position, products, recipes) {
         return;
       }
       let product = products[0];
-      nodeCreateProduct(nodetype, position, product.id);
+      nodeCreateProduct(worksheetId, nodeType, position, product.id);
       break;
     case "Production":
       if (recipes.length === 0) {
@@ -237,7 +235,7 @@ function onAddNode (nodetype, position, products, recipes) {
         return;
       }
       let recipe = recipes[0];
-      nodeCreateRecipe(nodetype, position, recipe.id);
+      nodeCreateRecipe(worksheetId, nodeType, position, recipe.id);
       break;
   }
 }

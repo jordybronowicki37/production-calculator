@@ -23,16 +23,17 @@ export function ProjectsPage() {
 }
 
 function ProjectItem(project) {
-  const {id, name, worksheets} = project;
+  const {id, name, worksheets, products} = project;
   
   return (
     <div key={id} className="project_item">
       <div className="project_top">
         <Link to={`project/${id}`} className="project_link">{name}</Link>
+        <Link to={`editor/${id}`} className="project_link"> > Editor</Link>
         <ProjectStats project={project}/>
       </div>
       <div className="project_worksheets">
-        {worksheets.map(w => <WorksheetItem key={w.id} worksheet={w}/>)}
+        {worksheets.map(w => <WorksheetItem key={w.id} worksheet={w} products={products}/>)}
       </div>
     </div>
   );

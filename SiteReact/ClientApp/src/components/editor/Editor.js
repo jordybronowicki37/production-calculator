@@ -2,12 +2,9 @@ import "./Editor.css";
 import {WorksheetItem} from "../worksheets/WorksheetItem";
 import {Calculator} from "../calculator/Calculator";
 import {fetchWorksheet} from "../../data/api/WorksheetAPI";
-import {useEffect} from "react";
 
-export function Editor({ project, worksheet, products, recipes, machines }) {
-  useEffect(() => {
-    LoadWorksheet(project.worksheets[0].id)
-  }, []);
+export function Editor({ project, worksheets, products, recipes, machines }) {
+  let worksheet = worksheets[0];
   
   return (
     <div className="editor">
@@ -27,12 +24,12 @@ export function Editor({ project, worksheet, products, recipes, machines }) {
   );
 }
 
-function WorksheetSelectorTab({project}) {
+function WorksheetSelectorTab({project, products}) {
   return (
     <div className="worksheet-selector">
       <h2>Select a worksheet</h2>
       <div className="worksheet-list">
-        {project.worksheets.map(v => <WorksheetItem key={v.id} worksheet={v}/>)}
+        {project.worksheets.map(v => <WorksheetItem key={v.id} worksheet={v} products={products}/>)}
       </div>
     </div>
   );

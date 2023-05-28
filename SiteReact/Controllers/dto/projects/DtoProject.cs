@@ -13,7 +13,7 @@ public class DtoProject
     public Guid Id { get; }
     public string Name { get; }
     public Guid EntityContainerId { get; }
-    public IEnumerable<DtoWorksheetSmall> Worksheets { get; }
+    public IEnumerable<DtoWorksheet> Worksheets { get; }
     public IEnumerable<DtoProduct> Products { get; }
     public IEnumerable<DtoRecipe> Recipes { get; }
     public IEnumerable<DtoMachine> Machines { get; }
@@ -23,7 +23,7 @@ public class DtoProject
         Id = project.Id;
         Name = project.Name;
         EntityContainerId = project.EntityContainerId;
-        Worksheets = worksheets.Select(w => new DtoWorksheetSmall(entityContainer, w));
+        Worksheets = worksheets.Select(w => new DtoWorksheet(w));
         Products = entityContainer.Products.Select(p => new DtoProduct(p));
         Recipes = entityContainer.Recipes.Select(r => new DtoRecipe(r));
         Machines = entityContainer.Machines.Select(m => new DtoMachine(m));

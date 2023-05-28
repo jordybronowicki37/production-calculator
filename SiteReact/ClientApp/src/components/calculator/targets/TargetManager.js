@@ -2,7 +2,7 @@
 import {useEffect, useState} from "react";
 import {setTargets} from "../../../data/api/TargetAPI";
 
-export function TargetManager({nodeId, targets}) {
+export function TargetManager({worksheetId, nodeId, targets}) {
   const [mode, setMode] = useState("none");
   const [exactAmount, setExactAmount] = useState(getInitialTargetValue(targets, "ExactAmount"));
   const [minAmount, setMinAmount] = useState(getInitialTargetValue(targets, "MinAmount"));
@@ -17,7 +17,7 @@ export function TargetManager({nodeId, targets}) {
     
     if (checkTargetListCopy(newTargets, targets)) return;
 
-    setTargets(nodeId, newTargets);
+    setTargets(worksheetId, nodeId, newTargets);
   }, [exactAmount, minAmount, maxAmount]);
 
   const logicSetMode = (mode) => {

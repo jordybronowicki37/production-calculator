@@ -6,7 +6,7 @@ import {nodeEditRecipe} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./NodeDragHandle";
 
-export function NodeProduction({node, recipe, recipes, products, previewMode}) {
+export function NodeProduction({worksheetId, node, recipe, recipes, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
   let recipeField, amountField, productInList, productOutList, targetEditor;
@@ -33,7 +33,7 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
 
     recipeField = 
       <div>
-        <select value={recipe.name} onChange={e => recipeChanged(id, e.target.value)}>
+        <select value={recipe.name} onChange={e => recipeChanged(worksheetId, id, e.target.value)}>
           <option value="" disabled hidden></option>
           {recipes.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
         </select>
@@ -47,7 +47,7 @@ export function NodeProduction({node, recipe, recipes, products, previewMode}) {
         <button type="button" className="popup-close-button" onClick={() => setEditorOpen(false)}>
           <i className='bx bx-x'></i>
         </button>
-        <TargetManager nodeId={id} targets={targets}></TargetManager>
+        <TargetManager worksheetId={worksheetId} nodeId={id} targets={targets}></TargetManager>
       </div>
   }
 
@@ -91,8 +91,8 @@ function generateProductList(throughputList, productList, productionAmount) {
   );
 }
 
-function recipeChanged(id, name) {
-  nodeEditRecipe(id, name);
+function recipeChanged(worksheetId, id, name) {
+  nodeEditRecipe(worksheetId, id, name);
 }
 
 function findProduct(products, id) {

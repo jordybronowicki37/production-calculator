@@ -37,8 +37,8 @@ export const createNewWorksheet = async function(name, dataPreset) {
   return await response.json();
 }
 
-export const calculate = async function() {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/calculate`, {method: "post"});
+export const calculate = async function(worksheetId) {
+  let response = await fetch(`worksheet/${worksheetId}/calculate`, {method: "post"});
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
@@ -46,7 +46,7 @@ export const calculate = async function() {
   }
   let json = await response.json();
   
-  Store.dispatch({type:"worksheet/calculate", payload:json});
+  Store.dispatch({type:"worksheet/calculate", payload:json, worksheetId:worksheetId});
   
   return json;
 }

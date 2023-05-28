@@ -6,7 +6,7 @@ import {nodeEditProduct} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./NodeDragHandle";
 
-export function NodeSpawn({node, product, products, previewMode}) {
+export function NodeSpawn({worksheetId, node, product, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
     
   let productField = <div className="preview-field">name</div>;
@@ -17,7 +17,7 @@ export function NodeSpawn({node, product, products, previewMode}) {
     const {id, targets, amount} = node;
     productField =
       <div>
-        <select value={product.name} onChange={e => productChanged(id, e.target.value)}>
+        <select value={product.name} onChange={e => productChanged(worksheetId, id, e.target.value)}>
           {products.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
         </select>
       </div>;
@@ -27,7 +27,7 @@ export function NodeSpawn({node, product, products, previewMode}) {
         <button type="button" className="popup-close-button" onClick={() => setEditorOpen(false)}>
           <i className='bx bx-x'></i>
         </button>
-        <TargetManager nodeId={id} targets={targets}></TargetManager>
+        <TargetManager worksheetId={worksheetId} nodeId={id} targets={targets}></TargetManager>
       </div>
   }
 
@@ -51,6 +51,6 @@ export function NodeSpawn({node, product, products, previewMode}) {
   );
 }
 
-function productChanged(id, name) {
-  nodeEditProduct(id, name);
+function productChanged(worksheetId, id, name) {
+  nodeEditProduct(worksheetId, id, name);
 }

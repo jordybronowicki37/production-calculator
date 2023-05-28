@@ -1,8 +1,8 @@
 import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const fetchAllRecipes = async function() {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/recipe`);
+export const fetchAllRecipes = async function(entityContainerId) {
+  let response = await fetch(`worksheet/${entityContainerId}/recipe`);
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
@@ -12,8 +12,8 @@ export const fetchAllRecipes = async function() {
   Store.dispatch({type:"recipes/set", payload:data});
 }
 
-export const createRecipe = async function(body) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/recipe`, {
+export const createRecipe = async function(entityContainerId, body) {
+  let response = await fetch(`worksheet/${entityContainerId}/recipe`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(body),

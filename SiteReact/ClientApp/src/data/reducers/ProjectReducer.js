@@ -4,7 +4,7 @@ const projectReducer = createReducer(null, {
   "reset": () => null,
   "unload_project": () => null,
   "load_project": (state, action) => {
-    const {products, recipes, machines, ...other} = action.payload;
+    const {products, recipes, machines, worksheets, ...other} = action.payload;
     return other;
   },
 });

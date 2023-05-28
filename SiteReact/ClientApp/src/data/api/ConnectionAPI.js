@@ -1,8 +1,8 @@
 ﻿import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const connectionCreate = async function(nodeInId, nodeOutId, product) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/connection`, {
+export const connectionCreate = async function(worksheetId, nodeInId, nodeOutId, product) {
+  let response = await fetch(`worksheet/${worksheetId}/connection`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
@@ -17,17 +17,17 @@ export const connectionCreate = async function(nodeInId, nodeOutId, product) {
     throw new Error(error);
   }
   let json = await response.json();
-  Store.dispatch({type:"connection/add", payload:json});
+  Store.dispatch({type:"connection/add", payload:json, worksheetId:worksheetId});
   return json;
 }
 
-export const connectionDelete = async function(connectionId) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/connection/${connectionId}`, {method: "delete"});
+export const connectionDelete = async function(worksheetId, connectionId) {
+  let response = await fetch(`worksheet/${worksheetId}/connection/${connectionId}`, {method: "delete"});
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  Store.dispatch({type:"connection/remove", payload:connectionId});
+  Store.dispatch({type:"connection/remove", payload:connectionId, worksheetId:worksheetId});
   return response;
 }

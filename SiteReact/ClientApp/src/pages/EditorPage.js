@@ -5,7 +5,7 @@ import {fetchProject} from "../data/api/ProjectsAPI";
 
 export function EditorPage(props) {
   const projectId = props.match.params.id;
-  const { project, worksheet, products, recipes, machines } = useSelector(state => state);
+  const { project, worksheets, products, recipes, machines } = useSelector(state => state);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +20,7 @@ export function EditorPage(props) {
   return <>
     {loading
       ? <div>Loading</div>
-      : <Editor project={project} worksheet={worksheet} products={products} recipes={recipes} machines={machines}/>
+      : <Editor project={project} worksheets={worksheets} products={products} recipes={recipes} machines={machines}/>
     }
   </>
 }

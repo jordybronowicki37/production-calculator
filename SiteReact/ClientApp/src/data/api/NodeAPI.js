@@ -1,16 +1,16 @@
 ﻿import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const nodeCreateProduct = async function(type, position, product) {
-  return await nodeCreate(position, JSON.stringify({type, product}));
+export const nodeCreateProduct = async function(worksheetId, type, position, product) {
+  return await nodeCreate(worksheetId, position, JSON.stringify({type, product}));
 }
 
-export const nodeCreateRecipe = async function(type, position, recipe) {
-  return await nodeCreate(position, JSON.stringify({type, recipe}));
+export const nodeCreateRecipe = async function(worksheetId, type, position, recipe) {
+  return await nodeCreate(worksheetId, position, JSON.stringify({type, recipe}));
 }
 
-async function nodeCreate(position, body) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node`, {
+async function nodeCreate(worksheetId, position, body) {
+  let response = await fetch(`worksheet/${worksheetId}/node`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body,
@@ -22,12 +22,12 @@ async function nodeCreate(position, body) {
   }
   let json = await response.json();
   json.position = position;
-  Store.dispatch({type:"node/add", payload:json});
+  Store.dispatch({type:"node/add", payload:json, worksheetId:worksheetId});
   return json;
 }
 
-export const nodeEditProduct = async function(nodeId, product) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node/${nodeId}/product`, {
+export const nodeEditProduct = async function(worksheetId, nodeId, product) {
+  let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/product`, {
     method: "put",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({product})
@@ -38,12 +38,12 @@ export const nodeEditProduct = async function(nodeId, product) {
     throw new Error(error);
   }
   let json = await response.json();
-  Store.dispatch({type:"node/change/product", payload: {id:json.id, product:json.product}});
+  Store.dispatch({type:"node/change/product", payload: {id:json.id, product:json.product}, worksheetId:worksheetId});
   return json;
 }
 
-export const nodeEditRecipe = async function(nodeId, recipe) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node/${nodeId}/recipe`, {
+export const nodeEditRecipe = async function(worksheetId, nodeId, recipe) {
+  let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/recipe`, {
     method: "put",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({recipe})
@@ -54,16 +54,16 @@ export const nodeEditRecipe = async function(nodeId, recipe) {
     throw new Error(error);
   }
   let json = await response.json();
-  Store.dispatch({type:"node/change/recipe", payload: {id:json.id, recipe:json.recipe}});
+  Store.dispatch({type:"node/change/recipe", payload: {id:json.id, recipe:json.recipe}, worksheetId:worksheetId});
   return json;
 }
 
-export const nodeRemove = async function(nodeId) {
-  let response = await fetch(`worksheet/${Store.getState().worksheet.id}/node/${nodeId}`, {method: "delete"});
+export const nodeRemove = async function(worksheetId, nodeId) {
+  let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}`, {method: "delete"});
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  Store.dispatch({type:"node/remove", payload: nodeId});
+  Store.dispatch({type:"node/remove", payload: nodeId, worksheetId:worksheetId});
 }
