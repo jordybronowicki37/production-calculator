@@ -1,0 +1,25 @@
+.nodes-selector {
+    display: flex;
+    margin: 1rem;
+    position: absolute;
+    z-index: 1000;
+}
+
+.nodes-selector>* {
+    margin-right: 0.5rem;
+    padding: 0.2rem 0.2rem 0 0.2rem;
+    border-radius: 0.3rem;
+    color: black;
+}
+
+.item-spawn {
+    background-color: var(--node-spawn-secondary);
+}
+
+.item-production {
+    background-color: var(--node-production-secondary);
+}
+
+.item-end {
+    background-color: var(--node-end-secondary);
+}

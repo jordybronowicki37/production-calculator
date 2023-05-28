@@ -10,6 +10,7 @@ import {NodeEnd} from "./nodes/NodeEnd";
 import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/api/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
 import {CalculationState} from "./CalculationState";
+import {NodesSelector} from "./nodes/NodesSelector";
 
 const defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
@@ -29,6 +30,7 @@ export function Calculator({worksheet, products, recipes}){
   debugger
   return (
     <div className="calculator">
+      <NodesSelector/>
       <ReactFlowProvider>
         <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>
           <CalculationState onClick={() => calculateWorksheet(id, setCalculationState)} message={message} state={calculationState}/>
