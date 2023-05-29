@@ -8,6 +8,7 @@
     border-radius: 3px;
     font-size: x-small;
     background-color: #bbbbbb;
+    white-space: nowrap;
 }
 
 .active-target-icon:hover {

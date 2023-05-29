@@ -1,7 +1,5 @@
 import "./WorksheetItem.css";
 import React from 'react';
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
 
 export function WorksheetItem({worksheet, products}) {
   const {id, name, nodes, connections} = worksheet;
@@ -13,10 +11,7 @@ export function WorksheetItem({worksheet, products}) {
   return (
     <div className="worksheet-item">
       <div className="top-container">
-        <Link className="title" title="Open worksheet" to={`/calculator/${id}`}>
-          <div className="text-decoration-underline">{name}</div>
-          <span className="material-symbols-rounded">folder_open</span>
-        </Link>
+        <div className="title">{name}</div>
       </div>
       <div className="amounts-container">
         <div>Nodes:</div>

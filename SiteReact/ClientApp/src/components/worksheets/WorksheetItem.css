@@ -15,15 +15,9 @@
 }
 
 .worksheet-item .title {
-    display: flex;
-    justify-content: space-between;
-    white-space: nowrap;
-    color: #fff;
-    text-decoration: none;
-}
-
-.worksheet-item .title:hover {
-    color: #ddd;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 0.5rem;
 }
 
 .worksheet-item .amounts-container {

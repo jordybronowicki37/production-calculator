@@ -27,7 +27,7 @@ export function Calculator({worksheet, products, recipes}){
   let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, tempPositionData);
   let flowEdges = generateEdges(connections)
-  debugger
+  
   return (
     <div className="calculator">
       <NodesSelector/>

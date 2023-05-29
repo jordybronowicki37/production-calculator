@@ -1,0 +1,4 @@
+.worksheet-selector .worksheet-item {
+    cursor: pointer;
+    user-select: none;
+}
