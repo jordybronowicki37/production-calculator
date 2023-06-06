@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using SiteReact.Data.DbContexts;
 using SiteReact.Data.Initializers;
 
@@ -26,14 +25,6 @@ var mongoConnectionString = Environment.GetEnvironmentVariable("MongoConnectionS
     new ArgumentNullException($"Environment variable not set: MongoConnectionString");
 builder.Services.AddSingleton(new DocumentContext(mongoConnectionString));
 
-builder.Services.AddDbContext<MainContext>(context =>
-{
-    var postgresConnectionString = Environment.GetEnvironmentVariable("PostgreSQLConnectionString") ?? throw 
-        new ArgumentNullException($"Environment variable not set: PostgreSQLConnectionString");
-    context.UseLazyLoadingProxies().UseNpgsql(postgresConnectionString, 
-        o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -52,14 +43,10 @@ else
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var mainContext = services.GetRequiredService<MainContext>();
     var documentContext = services.GetRequiredService<DocumentContext>();
 
     if (app.Environment.IsDevelopment())
     {
-        mainContext.Database.EnsureDeleted();
-        mainContext.Database.EnsureCreated();
-        
         TestDataInitializer.InitializeAllData(documentContext);
     }
 }

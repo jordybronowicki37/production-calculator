@@ -12,18 +12,3 @@ services:
       - "8092:8081"
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
-  pg:
-    image: postgres
-    restart: on-failure
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: on-failure
-    ports:
-      - "8091:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@example.com
-      PGADMIN_DEFAULT_PASSWORD: postgres
