@@ -15,26 +15,25 @@ export const fetchWorksheet = async function(worksheetId) {
     value.position = {x: 200, y: index*150};
     return value;
   });
-  
   Store.dispatch({type:"load_worksheet", payload:json});
-  
   return json;
 }
 
-export const createNewWorksheet = async function(name, dataPreset) {
+export const createNewWorksheet = async function(projectId, name) {
   name = name.trim();
-  let response = await fetch(`worksheet`, {
+  let response = await fetch(`project/${projectId}`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({name, dataPreset})
+    body: JSON.stringify({name})
   });
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  
-  return await response.json();
+  let json = await response.json();
+  Store.dispatch({type:"worksheet/create", payload:json});
+  return json;
 }
 
 export const calculate = async function(worksheetId) {
@@ -45,8 +44,6 @@ export const calculate = async function(worksheetId) {
     throw new Error(error);
   }
   let json = await response.json();
-  
   Store.dispatch({type:"worksheet/calculate", payload:json, worksheetId:worksheetId});
-  
   return json;
 }

@@ -7,6 +7,10 @@ const worksheetsReducer = createReducer([], {
     const { worksheets } = action.payload;
     return worksheets;
   },
+  "worksheet/create": (state, action) => {
+    state.push(action.payload);
+    return state;
+  },
   "worksheet/calculate": (state, action) => {
     const worksheet = findWorksheet(state, action.worksheetId);
     worksheet.connections = action.payload.connections;

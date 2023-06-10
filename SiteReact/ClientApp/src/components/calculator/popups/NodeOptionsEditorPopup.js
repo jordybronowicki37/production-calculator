@@ -41,7 +41,7 @@ function NodeOptionsProductType({worksheetId, options, products}) {
   const filteredProducts = sortedProducts.filter(p => p.name.toLowerCase().includes(productFilter.toLowerCase()));
   
   return <div className={`node-options type-${nodeType.toLowerCase()}`} ref={containerRef}>
-    <div className="header">New {nodeType}-node</div>
+    <div className="header"><h2 className="m-0">New {nodeType}-node</h2></div>
     <div className="p-2">Please select a product</div>
     <div className="entity-selector">
       <input 
@@ -109,7 +109,7 @@ function NodeOptionsRecipeType({worksheetId, products, recipes, machines, option
   if (selectedRecipe !== "") machinesCopy = machinesCopy.filter(r => r.recipes.includes(recipes.find(m => m.id === selectedRecipe).id));
 
   return <div className={`node-options type-${nodeType.toLowerCase()}`} ref={containerRef}>
-    <div className="header">New {nodeType}-node</div>
+    <div className="header"><h2 className="m-0">New {nodeType}-node</h2></div>
     <div className="p-2">Please select a recipe and a machine</div>
     <div className="entity-selectors-container">
       <div>

@@ -27,9 +27,11 @@ export function Editor({ project, worksheets, products, recipes, machines }) {
       <div className="tabs_content">
         {
           selectedTab === -1 ?
-            <SelectorTab 
+            <SelectorTab
+              projectId={project.id}
               worksheets={worksheets} 
-              products={products} 
+              products={products}
+              openedWorksheetIds={tabs.filter(t => t.type === "calculator").map(t => t.id)}
               onAddTab={id => {
                 if (openedWorksheets.includes(id)) {
                   let i = tabs.findIndex(v => v.id === id);
