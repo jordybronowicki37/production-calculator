@@ -42,7 +42,8 @@ export function Editor({ project, worksheets, products, recipes, machines }) {
             <CalculatorTab 
               worksheet={getWorksheet(worksheets, tabs[selectedTab].id)} 
               products={products} 
-              recipes={recipes}/>
+              recipes={recipes}
+              machines={machines}/>
         }
       </div>
     </div>

@@ -13,9 +13,7 @@
     max-height: 80%;
     max-width: 70%;
     background-color: white;
-    border: 1px solid black;
     border-radius: 8px;
-    padding: 0.5rem;
     overflow: hidden auto;
 }
 

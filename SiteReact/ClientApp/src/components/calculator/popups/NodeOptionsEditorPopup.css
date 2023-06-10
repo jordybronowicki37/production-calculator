@@ -1,0 +1,62 @@
+.node-options {
+    background-color: #222;
+}
+
+.node-options>.header {
+    white-space: nowrap;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    font-weight: bold;
+    user-select: none;
+    cursor: auto;
+}
+
+.node-options.type-spawn>.header {
+    background: linear-gradient(120deg, var(--node-spawn-primary), var(--node-spawn-secondary));
+}
+
+.node-options.type-end>.header {
+    background: linear-gradient(120deg, var(--node-end-primary), var(--node-end-secondary));
+}
+
+.node-options.type-production>.header {
+    background: linear-gradient(120deg, var(--node-production-primary), var(--node-production-secondary));
+}
+
+.entity-selectors-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.node-options .entity-selector {
+    max-height: 15rem;
+    overflow: hidden auto;
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
+}
+
+.node-options .entity-selector::-webkit-scrollbar {
+    width: 10px;
+}
+
+.node-options .entity-selector::-webkit-scrollbar-thumb {
+    border-radius: 1rem;
+    background: #444;
+}
+
+.node-options .entity-selector::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+.node-options .selector-item {
+    padding: 0.1rem 1rem;
+    cursor: pointer;
+}
+
+.node-options .selector-item:hover,
+.node-options .selector-item.selected {
+    background: #444;
+}
+
+.node-options .footer>button {
+    margin: 0.5rem;
+}

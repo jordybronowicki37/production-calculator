@@ -11,14 +11,17 @@ import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/api/No
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
 import {CalculationState} from "./CalculationState";
 import {NodesSelector} from "./nodes/NodesSelector";
+import {NodeOptionsEditorPopup} from "./popups/NodeOptionsEditorPopup";
 
 const defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
 
-export function Calculator({worksheet, products, recipes}){
+export function Calculator({worksheet, products, recipes, machines}){
   const { connections, nodes, calculationSucceeded, calculationError, id } = worksheet;
   
-  const [calculationState, setCalculationState] = useState(calculationSucceeded ? "success" : "warning")
+  const [calculationState, setCalculationState] = useState(calculationSucceeded ? "success" : "warning");
+  const [nodeOptionsEditorOpen, setNodeOptionsEditorOpen] = useState(false);
+  const [nodeEditorOptions, setNodeEditorOptions] = useState({mode:"create", nodeType:"End", position:{x:0,y:0}});
   
   const [reactFlowWrapper, setReactFlowWrapper] = useState(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -26,11 +29,26 @@ export function Calculator({worksheet, products, recipes}){
   
   let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, tempPositionData);
-  let flowEdges = generateEdges(connections)
+  let flowEdges = generateEdges(connections);
+
+  const onCreateNewNode = (nodeType) => {
+    setNodeOptionsEditorOpen(true);
+    setNodeEditorOptions({mode:"create", nodeType:nodeType, position:{x:0,y:0}});
+  };
   
   return (
     <div className="calculator">
-      <NodesSelector/>
+      <NodeOptionsEditorPopup 
+        worksheetId={worksheet.id} 
+        products={products} 
+        recipes={recipes} 
+        machines={machines} 
+        options={nodeEditorOptions}
+        hidden={!nodeOptionsEditorOpen} 
+        onClose={() => setNodeOptionsEditorOpen(false)}/>
+      
+      <NodesSelector onCreateNewNode={onCreateNewNode}/>
+      
       <ReactFlowProvider>
         <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>
           <CalculationState onClick={() => calculateWorksheet(id, setCalculationState)} message={message} state={calculationState}/>
@@ -43,7 +61,11 @@ export function Calculator({worksheet, products, recipes}){
             onConnect={(edge) => onConnect(id, edge, nodes, products)}
             onDragOver={onDragOver}
             onInit={setReactFlowInstance}
-            onDrop={(event) => onDrop(event, reactFlowWrapper, reactFlowInstance, id, products, recipes)}
+            onDrop={(event) => {
+              const { position, nodeType } = onDrop(event, reactFlowWrapper, reactFlowInstance);
+              setNodeOptionsEditorOpen(true);
+              setNodeEditorOptions({mode:"create", nodeType, position});
+            }}
             defaultEdgeOptions={defaultEdgeOptions}>
             <MiniMap nodeStrokeColor="#fff" nodeColor="transparent" maskColor="#333" style={{backgroundColor:"#444"}}/>
             <Controls/>
@@ -205,39 +227,15 @@ function onDragOver (event) {
 function onDrop (event, wrapperInstance, flowInstance, worksheetId, products, recipes) {
   event.preventDefault();
   const reactFlowBounds = wrapperInstance.getBoundingClientRect();
-  const nodetype = event.dataTransfer.getData('application/reactflow');
+  const nodeType = event.dataTransfer.getData('application/reactflow');
   
   // check if the dropped element is valid
-  if (typeof nodetype === 'undefined' || !nodetype) return;
+  if (typeof nodeType === 'undefined' || !nodeType) return;
 
   const position = flowInstance.project({
     x: event.clientX - reactFlowBounds.left,
     y: event.clientY - reactFlowBounds.top,
   });
-
-  onAddNode(worksheetId, nodetype, position, products, recipes)
-}
-
-function onAddNode (worksheetId, nodeType, position, products, recipes) {
-  if (!position) position = {x:0,y:0};
-
-  switch (nodeType) {
-    case "Spawn":
-    case "End":
-      if (products.length === 0) {
-        throwWarningNotification("Cannot create node because no products exist in worksheet");
-        return;
-      }
-      let product = products[0];
-      nodeCreateProduct(worksheetId, nodeType, position, product.id);
-      break;
-    case "Production":
-      if (recipes.length === 0) {
-        throwWarningNotification("Cannot create node because no recipes exist in worksheet");
-        return;
-      }
-      let recipe = recipes[0];
-      nodeCreateRecipe(worksheetId, nodeType, position, recipe.id);
-      break;
-  }
+  
+  return {position, nodeType}
 }

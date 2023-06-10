@@ -5,8 +5,8 @@ export const nodeCreateProduct = async function(worksheetId, type, position, pro
   return await nodeCreate(worksheetId, position, JSON.stringify({type, product}));
 }
 
-export const nodeCreateRecipe = async function(worksheetId, type, position, recipe) {
-  return await nodeCreate(worksheetId, position, JSON.stringify({type, recipe}));
+export const nodeCreateRecipe = async function(worksheetId, type, position, recipe, machine) {
+  return await nodeCreate(worksheetId, position, JSON.stringify({type, recipe, machine}));
 }
 
 async function nodeCreate(worksheetId, position, body) {
