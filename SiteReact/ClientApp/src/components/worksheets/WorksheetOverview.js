@@ -1,7 +1,6 @@
 import "./WorksheetOverview.css";
 import React, {useState} from 'react';
 import {WorksheetItem} from "./WorksheetItem";
-import {WorksheetCreator} from "./WorksheetCreator";
 import {Popup} from "../popup/Popup";
 
 export function WorksheetOverview({worksheets}) {
@@ -26,12 +25,6 @@ export function WorksheetOverview({worksheets}) {
 
   return (
     <div className="worksheet-overview">
-      <Popup
-        onClose={() => setCreatorOpen(false)}
-        hidden={!creatorOpen}>
-        <WorksheetCreator/>
-      </Popup>
-
       <div>
         <div className="filter-container">
           <select name="worksheetFilterType" title="Worksheet filter type" value={searchType} onChange={e => setSearchType(e.target.value)}>
