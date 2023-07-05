@@ -32,23 +32,27 @@ input[type="number"] {
 
 /* Vars */
 :root {
-  --node-spawn-primary: #1199b7;
-  --node-spawn-secondary: #5ebdd8;
+  --node-spawn-primary: #ea6d30;
+  --node-spawn-secondary: #ef8f52;
   --node-spawn-text: #111;
 
   --node-production-primary: #705499;
   --node-production-secondary: #a09bc2;
   --node-production-text: #111;
 
-  --node-end-primary: #ea6d30;
-  --node-end-secondary: #ef8f52;
+  --node-end-primary: #1199b7;
+  --node-end-secondary: #5ebdd8;
   --node-end-text: #111;
 
-  /*--node-spawn-primary: #878a5d;*/
-  /*--node-spawn-secondary: #bbbe78;*/
-  /*--node-spawn-text: #111;*/
+  --node-input-primary: #F53C8D;
+  --node-input-secondary: #F78EB8;
+  --node-input-text: #111;
 
-  /*--node-end-primary: #c0ca61;*/
-  /*--node-end-secondary: #cada72;*/
-  /*--node-end-text: #111;*/
+  --node-worksheet-primary: #878a5d;
+  --node-worksheet-secondary: #bbbe78;
+  --node-worksheet-text: #111;
+
+  --node-output-primary: #32F57A;
+  --node-output-secondary: #8AFFB5;
+  --node-output-text: #111;
 }
