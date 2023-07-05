@@ -10,20 +10,35 @@ export function Editor({ project, worksheets, products, recipes, machines }) {
 
   return (
     <div className="editor">
-      <div className="tabs">
-        {
-          tabs.map((t, i) => <button 
-            key={t.id} 
-            className={"tab " + (i === selectedTab && "selected")}
-            onClick={() => setSelectedTab(i)}
-          >{getWorksheet(worksheets, t.id).name}</button>)
-        }
-        <button 
-          className={"add " + (selectedTab === -1 && "selected")} 
+      <div className="tabs-wrapper">
+        <div className="tabs-container">
+          {
+            tabs.map((t, i) => <div key={t.id} className={`editor-tab ${i === selectedTab ? "selected" : ""}`}>
+              <button
+                className={`tab-title`}
+                onClick={() => setSelectedTab(i)}
+              >{getWorksheet(worksheets, t.id).name}</button>
+              <button 
+                title="Close worksheet"
+                className="editor-tab-close"  
+                onClick={() => {
+                  if (i <= selectedTab) setSelectedTab(selectedTab - 1);
+                  setTabs(tabs.filter((_, j) => j !== i));
+              }}>
+                <span className="material-symbols-rounded">close</span>
+              </button>
+            </div>)
+          }
+        </div>
+        <button
+          type="button"
+          title="Open worksheet"
+          className={`editor-tab-add ${selectedTab === -1 ? "selected" : ""}`}
           onClick={() => setSelectedTab(-1)}>
           <span className="material-symbols-rounded">add</span>
         </button>
       </div>
+      
       <div className="tabs_content">
         {
           selectedTab === -1 ?
