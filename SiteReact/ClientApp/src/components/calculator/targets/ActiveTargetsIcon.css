@@ -3,26 +3,22 @@
     align-content: flex-end;
     cursor: pointer;
     height: fit-content;
-    padding: 0 2px;
     margin: 2px;
     border-radius: 3px;
-    font-size: x-small;
-    background-color: #bbbbbb;
-    white-space: nowrap;
+    color: #777;
+    background-color: #bbb;
+}
+
+.active-target-icon>span{
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.active-target-icon.active {
+    color: #D3F1A7;
+    background-color: #4C6B1F;
 }
 
 .active-target-icon:hover {
     background-color: #a1a1a1;
-}
-
-.active-target-icon>.bx-target-lock {
-    line-height: unset;
-}
-
-.active-target-icon .right-one {
-    transform: translateX(1px);
-}
-
-.active-target-icon .left-one {
-    transform: translateX(-1px);
 }
