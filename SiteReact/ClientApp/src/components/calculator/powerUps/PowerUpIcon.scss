@@ -1,0 +1,25 @@
+.power-up-icon {
+  display: flex;
+  align-content: flex-end;
+  cursor: pointer;
+  height: fit-content;
+  margin: 2px;
+  border-radius: 3px;
+  color: #777;
+  background-color: #bbb;
+  overflow: hidden;
+
+  >span{
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  &.active {
+    color: #a7dff8;
+    background-color: #1199b7;
+  }
+
+  &:hover {
+    background-color: #a1a1a1;
+  }
+}

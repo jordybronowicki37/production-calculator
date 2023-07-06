@@ -5,6 +5,7 @@ import {useState} from "react";
 import {nodeEditRecipe} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./NodeDragHandle";
+import {PowerUpIcon} from "../powerUps/PowerUpIcon";
 
 export function NodeProduction({worksheetId, node, recipe, recipes, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -56,6 +57,7 @@ export function NodeProduction({worksheetId, node, recipe, recipes, products, pr
       <div className="top-container">
         <h3>Production</h3>
         <NodeDragHandle/>
+        <PowerUpIcon powerUps={[]} onOpenEditor={() => {}}/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
       </div>
       <div className="content-container">
