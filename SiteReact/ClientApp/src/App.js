@@ -7,7 +7,6 @@ import {Provider} from "react-redux";
 import Store from "./data/DataStore";
 import {CalculatorPage} from "./pages/CalculatorPage";
 import {ProjectsPage} from "./pages/ProjectsPage";
-import {ProjectPage} from "./pages/ProjectPage";
 import {EditorPage} from "./pages/EditorPage";
 
 export default class App extends Component {
@@ -19,7 +18,6 @@ export default class App extends Component {
         <Layout>
           <Route exact path='/' component={HomePage}/>
           <Route path='/projects' component={ProjectsPage}/>
-          <Route path='/project/:id' component={ProjectPage}/>
           <Route path='/calculator/:id' component={CalculatorPage}/>
           <Route path='/editor/:id' component={EditorPage}/>
         </Layout>
