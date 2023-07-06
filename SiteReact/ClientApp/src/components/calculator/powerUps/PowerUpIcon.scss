@@ -3,20 +3,22 @@
   align-content: flex-end;
   cursor: pointer;
   height: fit-content;
+  overflow: hidden;
   margin: 2px;
   border-radius: 3px;
-  color: #777;
   background-color: #bbb;
-  overflow: hidden;
 
-  >span{
+  span{
+    color: #777;
     font-size: 1rem;
     font-weight: 500;
   }
 
   &.active {
-    color: #a7dff8;
     background-color: #1199b7;
+    span {
+      color: #a7dff8;
+    }
   }
 
   &:hover {

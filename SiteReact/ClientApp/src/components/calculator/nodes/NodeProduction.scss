@@ -1,5 +1,9 @@
 .node-production {
     border: 1px solid var(--node-production-primary);
+    
+    * {
+        color: var(--node-production-text, initial);
+    }
 
     .content-table * {
         border-top-color: var(--node-production-primary, black);
@@ -7,12 +11,10 @@
     }
 
     .content-container * {
-        color: var(--node-production-text, initial);
         background: var(--node-production-secondary, white);
     }
 
     .top-container {
-        color: var(--node-production-text, initial);
         background: var(--node-production-primary, black);
     }
 

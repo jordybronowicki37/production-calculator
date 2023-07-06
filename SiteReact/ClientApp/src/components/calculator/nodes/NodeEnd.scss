@@ -1,14 +1,17 @@
 .node-end {
     border: 1px solid var(--node-end-primary);
+    
+    * {
+        color: var(--node-end-text, initial);
+        
+    }
 
     .top-container {
-        color: var(--node-end-text, initial);
         background: var(--node-end-primary, black);
     }
 
     .content-container * {
         background: var(--node-end-secondary, white);
-        color: var(--node-end-text, initial);
     }
 
     .content-table * {
