@@ -1,9 +1,9 @@
 ﻿import {createReducer} from "@reduxjs/toolkit";
 
 const worksheetsReducer = createReducer([], {
-  "reset": () => null,
-  "unload_project": () => null,
-  "load_project": (state, action) => {
+  "reset": () => [],
+  "project/unload": () => [],
+  "project/load": (state, action) => {
     const { worksheets } = action.payload;
     return worksheets;
   },

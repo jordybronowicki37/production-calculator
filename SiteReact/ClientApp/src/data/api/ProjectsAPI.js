@@ -20,5 +20,5 @@ export async function fetchProject(id) {
     throw new Error(error);
   }
   let data = await response.json();
-  Store.dispatch({type:"load_project", payload:data});
+  Store.dispatch({type:"project/load", payload:data});
 }

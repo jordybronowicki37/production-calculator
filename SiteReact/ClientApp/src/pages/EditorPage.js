@@ -13,7 +13,7 @@ export function EditorPage(props) {
     fetchProject(projectId).then(() => setLoading(false));
     
     return () => {
-      dispatch({type:"unload_project"});
+      dispatch({type:"project/unload"});
     }
   }, []);
   
