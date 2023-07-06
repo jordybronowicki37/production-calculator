@@ -1,14 +1,17 @@
 ﻿import "./ProjectsPage.scss";
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {fetchAllProjects} from "../data/api/ProjectsAPI";
 import {Link} from "react-router-dom";
 import {Button, Spinner} from "reactstrap";
 import {WorksheetItem} from "../components/worksheets/WorksheetItem";
+import {Popup} from "../components/popup/Popup";
+import {ProjectCreator} from "../components/project/ProjectCreator";
 
 export function ProjectsPage() {
   const projects = useSelector(state => state.projects);
   const [isLoading, setIsLoading] = useState(true);
+  const [projectCreatorOpen, setProjectCreatorOpen] = useState(false);
   
   useEffect(() => {
     fetchAllProjects().then(() => setIsLoading(false));
@@ -16,10 +19,21 @@ export function ProjectsPage() {
   
   return (
     <div className="project-page">
+      <Popup 
+        onClose={() => setProjectCreatorOpen(false)}
+        hidden={!projectCreatorOpen}>
+        <ProjectCreator onClose={() => setProjectCreatorOpen(false)}/>
+      </Popup>
       <div className="project-header">
         <h1>Your projects</h1>
-        <Button className="project-create-button" color="light" outline>Create a new project</Button>
+        
+        <Button 
+          className="project-create-button" color="light" outline
+          onClick={() => setProjectCreatorOpen(true)}>
+          Create a new project
+        </Button>
       </div>
+      
       {!isLoading && projects.map(p => ProjectItem(p))}
       {!isLoading && projects.length === 0 && <NoProjectYet/>}
       {isLoading && <ProjectsLoading/>}

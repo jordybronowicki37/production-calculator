@@ -1,0 +1,40 @@
+.project-creator {
+  .creator-header {
+    h2 {
+      background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+    }
+  }
+  
+  .creator-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    
+    >div {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    select,
+    input {
+      background-color: transparent;
+      border: 1px solid var(--color-text-light);
+      border-radius: 5px;
+    }
+    
+    optgroup,
+    option {
+      background-color: var(--color-text-dark);
+    }
+    
+    .create-project-button {
+      width: fit-content;
+      margin-right: 0.5rem;
+    }
+  }
+  
+  .project-name-error {
+    color: red;
+  }
+}
