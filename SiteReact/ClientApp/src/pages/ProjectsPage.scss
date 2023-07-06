@@ -1,4 +1,15 @@
-﻿.project_item {
+﻿.project-page .project-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    h1 {
+        color: #eee;
+        margin: 2rem;
+    }
+}
+
+.project-item {
     display: flex;
     flex-direction: column;
     margin: 2rem 2rem;
@@ -10,54 +21,55 @@
     box-shadow: 0.4rem 0.8rem 1rem #aaa2;
 }
 
-.project_top {
+.project-top {
     background-color: #333;
     padding: 5px;
 }
 
-.project_link {
+.project-link {
     flex-grow: 2;
     color: #fff;
     font-size: larger;
     font-weight: bold;
     margin-left: 0.5rem;
+    
+    &:hover {
+        color: #ccc;
+    }
 }
 
-.project_link:hover {
-    color: #ccc;
-}
-
-.project_stats {
+.project-stats {
     display: flex;
     float: right;
     user-select: none;
+
+    span {
+        font-size: 1em;
+        margin-left: 0.5em;
+        transform: translateY(2px);
+    }
 }
 
-.project_stats span {
-    font-size: 1em;
-    margin-left: 0.5em;
-    transform: translateY(2px);
-}
-
-.project_worksheets {
+.project-worksheets {
     display: flex;
     column-gap: 5px;
     padding: 5px;
     overflow: auto;
+
+    >* {
+        min-width: fit-content;
+    }
 }
 
-.project_worksheets>* {
-    min-width: fit-content;
-}
-
-.project_none {
+.projects-loading-page,
+.no-projects-yet-page {
     margin-top: 10em;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.project_create_button {
-    margin-top: 1em;
+.project-create-button {
+    margin: 2rem;
     font-size: small;
 }

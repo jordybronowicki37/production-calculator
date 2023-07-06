@@ -1,23 +1,28 @@
-﻿import "./ProjectsPage.css";
+﻿import "./ProjectsPage.scss";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchAllProjects} from "../data/api/ProjectsAPI";
 import {Link} from "react-router-dom";
-import {Button} from "reactstrap";
+import {Button, Spinner} from "reactstrap";
 import {WorksheetItem} from "../components/worksheets/WorksheetItem";
 
 export function ProjectsPage() {
   const projects = useSelector(state => state.projects);
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    fetchAllProjects();
+    fetchAllProjects().then(() => setIsLoading(false));
   }, []);
   
   return (
-    <div>
-      {projects.map(p => ProjectItem(p))}
-      {projects.length === 0 && <NoProjectYet/>}
+    <div className="project-page">
+      <div className="project-header">
+        <h1>Your projects</h1>
+        <Button className="project-create-button" color="light" outline>Create a new project</Button>
+      </div>
+      {!isLoading && projects.map(p => ProjectItem(p))}
+      {!isLoading && projects.length === 0 && <NoProjectYet/>}
+      {isLoading && <ProjectsLoading/>}
     </div>
   );
 }
@@ -26,31 +31,40 @@ function ProjectItem(project) {
   const {id, name, worksheets, products} = project;
   
   return (
-    <div key={id} className="project_item">
-      <div className="project_top">
-        <Link to={`project/${id}`} className="project_link">{name}</Link>
-        <Link to={`editor/${id}`} className="project_link"> > Editor</Link>
+    <div key={id} className="project-item">
+      <div className="project-top">
+        <Link to={`project/${id}`} className="project-link">{name}</Link>
+        <Link to={`editor/${id}`} className="project-link"> > Editor</Link>
         <ProjectStats project={project}/>
       </div>
-      <div className="project_worksheets">
+      <div className="project-worksheets">
         {worksheets.map(w => <WorksheetItem key={w.id} worksheet={w} products={products}/>)}
       </div>
     </div>
   );
 }
 
+function ProjectsLoading() {
+  return (
+    <div className="projects-loading-page">
+      <Spinner color="light"/>
+      <h2>Loading your projects</h2>
+    </div>
+  );
+}
+
 function NoProjectYet() {
   return (
-    <div className="project_none">
+    <div className="no-projects-yet-page">
       <h2>You don't have any projects yet</h2>
-      <Button className="project_create_button" color="primary" outline>Create a new project</Button>
+      <Button className="project-create-button" color="primary" outline>Create a new project</Button>
     </div>
   );
 }
 
 function ProjectStats({project}) {
   return (
-    <div className="project_stats">
+    <div className="project-stats">
       <div>
         <span className="material-symbols-rounded" title="Products">pie_chart</span>
         {project.products.length}
