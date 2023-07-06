@@ -1,0 +1,35 @@
+.worksheet-creator {
+  >.header {
+    background: linear-gradient(120deg, var(--node-production-primary), var(--node-production-secondary));
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  >.content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.5rem;
+    
+    >div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input {
+      background-color: transparent;
+      border: 1px solid var(--color-text-light);
+      border-radius: 5px;
+    }
+    
+    .error-message {
+      color: red;
+    }
+  }
+  
+  .create-worksheet-button {
+    width: fit-content;
+    margin-right: 0.5rem;
+  }
+}

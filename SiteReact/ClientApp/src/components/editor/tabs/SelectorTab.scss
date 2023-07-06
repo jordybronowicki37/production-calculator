@@ -37,19 +37,3 @@
         padding: 0.3rem 0.8rem;
     }
 }
-
-.worksheet-creator {
-    background-color: #333;
-
-    >.header {
-        padding: 0.5rem 2rem 0.5rem 0.5rem;
-        white-space: nowrap;
-        background: linear-gradient(120deg, var(--node-production-primary), var(--node-production-secondary));
-    }
-
-    >.content {
-        display: flex;
-        padding: 0.3rem;
-        column-gap: 0.3rem;
-    }
-}

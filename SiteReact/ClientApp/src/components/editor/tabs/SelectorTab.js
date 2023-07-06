@@ -1,13 +1,12 @@
 import {WorksheetItem} from "../../worksheets/WorksheetItem";
 import "./SelectorTab.scss";
 import {Button} from "reactstrap";
-import {createNewWorksheet} from "../../../data/api/WorksheetAPI";
 import {Popup} from "../../popup/Popup";
 import {useState} from "react";
+import {WorksheetCreator} from "../../worksheets/WorksheetCreator";
 
 export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}) {
   const [createWorksheetOpen, setCreateWorksheetOpen] = useState(false);
-  const [newWorksheetName, setNewWorksheetName] = useState("");
   
   worksheets = [...worksheets].sort((a,b) => (a.name > b.name) ? 1 : (b.name > a.name) ? -1 : 0);
   
@@ -19,27 +18,17 @@ export function SelectorTab({projectId, worksheets, products, onAddTab, openedWo
       <Popup
         onClose={() => setCreateWorksheetOpen(false)}
         hidden={!createWorksheetOpen}>
-        <div className="worksheet-creator">
-          <div className="header"><h2 className="m-0">New Worksheet</h2></div>
-          <div className="content">
-            <input 
-              value={newWorksheetName}
-              onChange={e => setNewWorksheetName(e.target.value)}
-              placeholder="Worksheet name"
-              className="bg-dark border border-light rounded text-light"/>
-            <Button color="light" outline onClick={() => {
-              createNewWorksheet(projectId, newWorksheetName).then(v => {
-                setCreateWorksheetOpen(false);
-                onAddTab(v.id);
-              })
-            }}>Create</Button>
-          </div>
-        </div>
+        <WorksheetCreator
+          handleResult={v => {
+            onAddTab(v.id);
+            setCreateWorksheetOpen(false);
+          }}
+          projectId={projectId}/>
       </Popup>
       
       {
         worksheets.length === 0 ?
-          <NoWorksheetsYet></NoWorksheetsYet> :
+          <NoWorksheetsYet onClick={() => setCreateWorksheetOpen(true)}/> :
           <>
             <div>
               <div className="worksheet-list-title-container">
@@ -78,10 +67,10 @@ export function SelectorTab({projectId, worksheets, products, onAddTab, openedWo
   );
 }
 
-function NoWorksheetsYet() {
+function NoWorksheetsYet({onClick}) {
   return <div className="no-worksheet-yet">
     <label>You do not have any worksheets yet</label>
-    <Button color="light" outline>Create new worksheet</Button>
+    <Button color="light" outline onClick={onClick}>Create new worksheet</Button>
   </div>
 }
 
