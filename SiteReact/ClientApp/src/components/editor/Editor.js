@@ -39,7 +39,7 @@ export function Editor({ project, worksheets, products, recipes, machines }) {
         </button>
       </div>
       
-      <div className="tabs_content">
+      <div className="tabs-content">
         {
           selectedTab === -1 ?
             <SelectorTab

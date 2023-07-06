@@ -1,11 +1,16 @@
-﻿.project-page .project-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+﻿.project-page {
+    position: relative;
+    flex-grow: 1;
     
-    h1 {
-        color: #eee;
-        margin: 2rem;
+    .project-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h1 {
+            color: #eee;
+            margin: 2rem;
+        }
     }
 }
 

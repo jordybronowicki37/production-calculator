@@ -1,7 +1,8 @@
 .worksheet-selector {
     width: 100%;
     min-height: 100%;
-    padding: 1rem;
+    display: flex;
+    flex-direction: column;
 
     .worksheet-item {
         background-color: #333;
@@ -13,6 +14,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        flex-grow: 1;
     }
 
     .worksheet-list {

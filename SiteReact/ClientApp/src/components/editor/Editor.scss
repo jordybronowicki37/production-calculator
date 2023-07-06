@@ -59,9 +59,10 @@
         }
     }
 
-    .tabs_content {
+    .tabs-content {
         display: flex;
         flex-grow: 1;
+        position: relative;
     }
 
     .tab-title {
