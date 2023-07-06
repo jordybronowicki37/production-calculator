@@ -1,4 +1,4 @@
-﻿import "./ActiveTargetsIcon.css";
+﻿import "./ActiveTargetsIcon.scss";
 
 export function ActiveTargetsIcon({targets, onOpenEditor}) {
   return (

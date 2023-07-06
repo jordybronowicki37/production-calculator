@@ -1,5 +1,5 @@
-import './Node.css';
-import './NodeProduction.css';
+import './Node.scss';
+import './NodeProduction.scss';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditRecipe} from "../../../data/api/NodeAPI";

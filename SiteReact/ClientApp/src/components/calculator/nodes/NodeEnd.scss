@@ -1,0 +1,18 @@
+.node-end {
+    border: 1px solid var(--node-end-primary);
+
+    .top-container {
+        color: var(--node-end-text, initial);
+        background: var(--node-end-primary, black);
+    }
+
+    .content-container * {
+        background: var(--node-end-secondary, white);
+        color: var(--node-end-text, initial);
+    }
+
+    .content-table * {
+        border-top-color: var(--node-end-primary, black);
+        border-left-color: var(--node-end-primary, black);
+    }
+}

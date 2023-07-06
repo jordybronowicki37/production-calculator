@@ -1,4 +1,4 @@
-﻿import "./UserNotificationManager.css";
+﻿import "./UserNotificationManager.scss";
 import {Component} from "react";
 import Store from "../../data/DataStore";
 

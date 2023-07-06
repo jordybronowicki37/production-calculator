@@ -1,0 +1,28 @@
+.node-production {
+    border: 1px solid var(--node-production-primary);
+
+    .content-table * {
+        border-top-color: var(--node-production-primary, black);
+        border-left-color: var(--node-production-primary, black);
+    }
+
+    .content-container * {
+        color: var(--node-production-text, initial);
+        background: var(--node-production-secondary, white);
+    }
+
+    .top-container {
+        color: var(--node-production-text, initial);
+        background: var(--node-production-primary, black);
+    }
+
+    .product-table {
+        display: grid;
+        grid-template-columns: auto auto;
+        margin: 0;
+    }
+
+    .recipe-product {
+        margin-right: 3px;
+    }
+}

@@ -1,0 +1,101 @@
+﻿.target-editor {
+    padding: 0 2px;
+
+    .tabs {
+        display: flex;
+
+        >button {
+            all: unset;
+            border: 1px solid darkgray;
+            font-size: xx-small;
+
+            &:first-child {
+                border-radius: 5px 0 0 5px;
+            }
+
+            &:nth-child(3) {
+                border-radius: 0 5px 5px 0;
+            }
+        }
+
+        >.selected {
+            background-color: #eeeeee;
+        }
+    }
+
+    .right-one {
+        transform: translateX(1px);
+    }
+
+    .left-one {
+        transform: translateX(-1px);
+    }
+
+    .tab-content {
+        padding: 5px;
+    }
+
+    .visualisation {
+        width: 100%;
+        position: relative;
+    }
+
+    .visualisation-line {
+        width: 100%;
+        display: flex;
+        position: absolute;
+
+        >div {
+            flex-grow: 2;
+            transition: border-top-color ease 0.5s;
+        }
+
+        >.blue {
+            border-top: 2px solid deepskyblue;
+        }
+
+        >.gray {
+            border-top: 2px solid gray;
+        }
+    }
+
+    .visualisation-icon {
+        width: 100%;
+        display: flex;
+        position: absolute;
+        justify-content: space-evenly;
+
+        >* {
+            transition: color ease 0.5s;
+            cursor: default;
+        }
+
+        >.gray {
+            color: gray;
+        }
+
+        >.blue {
+            color: deepskyblue;
+        }
+
+        >.red {
+            color: orangered;
+        }
+
+        >.green {
+            color: lawngreen;
+        }
+    }
+
+    .target-values {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 1rem 0;
+    }
+
+    .amount-field {
+        width: 50%;
+        font-size: xx-small;
+    }
+}

@@ -1,6 +1,6 @@
 import {WorksheetItem} from "../../worksheets/WorksheetItem";
-import "./SelectorTab.css";
-import {Button, Input} from "reactstrap";
+import "./SelectorTab.scss";
+import {Button} from "reactstrap";
 import {createNewWorksheet} from "../../../data/api/WorksheetAPI";
 import {Popup} from "../../popup/Popup";
 import {useState} from "react";

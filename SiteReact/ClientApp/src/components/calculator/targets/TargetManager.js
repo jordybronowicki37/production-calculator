@@ -1,4 +1,4 @@
-﻿import "./TargetManager.css"
+﻿import "./TargetManager.scss"
 import {useEffect, useState} from "react";
 import {setTargets} from "../../../data/api/TargetAPI";
 

@@ -1,0 +1,18 @@
+.node-spawn {
+    border: 1px solid var(--node-spawn-primary);
+
+    .content-table>* {
+        border-top-color: var(--node-spawn-primary, black);
+        border-left-color: var(--node-spawn-primary, black);
+    }
+
+    .content-container * {
+        color: var(--node-spawn-text, initial);
+        background: var(--node-spawn-secondary, white);
+    }
+
+    .top-container {
+        color: var(--node-spawn-text, initial);
+        background: var(--node-spawn-primary, black);
+    }
+}

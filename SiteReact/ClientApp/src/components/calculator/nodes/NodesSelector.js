@@ -1,5 +1,5 @@
 import {onDragStart} from "../Calculator";
-import "./NodesSelector.css";
+import "./NodesSelector.scss";
 
 export function NodesSelector({onCreateNewNode}) {
   return (

@@ -7,14 +7,14 @@
     align-items: center;
     justify-content: center;
     background-color: rgba(245, 245, 245, 0.4);
-}
 
-.popup-container>div {
-    max-height: 80%;
-    max-width: 70%;
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden auto;
+    >div {
+        max-height: 80%;
+        max-width: 70%;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden auto;
+    }
 }
 
 .popup-close-button {

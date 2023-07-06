@@ -1,0 +1,21 @@
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .flow-chart-wrapper {
+        position: relative;
+    }
+
+    .loading-screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        background-color: whitesmoke;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}

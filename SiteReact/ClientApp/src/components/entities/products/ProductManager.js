@@ -1,5 +1,5 @@
 ﻿import {useMemo, useState} from "react";
-import "./ProductManager.css";
+import "./ProductManager.scss";
 import {deleteProduct, postNewProduct} from "../../../data/api/ProductAPI";
 
 export function ProductManager({products}) {

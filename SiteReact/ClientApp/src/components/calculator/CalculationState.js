@@ -1,4 +1,4 @@
-﻿import "./CalculationState.css";
+﻿import "./CalculationState.scss";
 
 export function CalculationState({message, state, onClick}) {
   return (

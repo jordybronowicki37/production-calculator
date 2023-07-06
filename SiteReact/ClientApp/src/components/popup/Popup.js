@@ -1,4 +1,4 @@
-﻿import "./Popup.css";
+﻿import "./Popup.scss";
 import {useEffect, useRef} from "react";
 
 export function Popup({hidden, children, onClose}) {

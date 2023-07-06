@@ -1,4 +1,4 @@
-import "./Editor.css";
+import "./Editor.scss";
 import {useState} from "react";
 import {SelectorTab} from "./tabs/SelectorTab";
 import {CalculatorTab} from "./tabs/CalculatorTab";

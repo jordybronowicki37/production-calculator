@@ -1,4 +1,4 @@
-import "./WorksheetItem.css";
+import "./WorksheetItem.scss";
 import React from 'react';
 
 export function WorksheetItem({worksheet, products}) {

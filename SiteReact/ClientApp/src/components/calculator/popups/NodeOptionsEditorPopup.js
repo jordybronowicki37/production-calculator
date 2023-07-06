@@ -1,5 +1,5 @@
 import {Popup} from "../../popup/Popup";
-import "./NodeOptionsEditorPopup.css";
+import "./NodeOptionsEditorPopup.scss";
 import {Button, Spinner} from "reactstrap";
 import {useRef, useState} from "react";
 import {nodeCreateProduct, nodeCreateRecipe} from "../../../data/api/NodeAPI";

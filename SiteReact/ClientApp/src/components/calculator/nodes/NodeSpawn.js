@@ -1,5 +1,5 @@
-import './Node.css';
-import './NodeSpawn.css';
+import './Node.scss';
+import './NodeSpawn.scss';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditProduct} from "../../../data/api/NodeAPI";

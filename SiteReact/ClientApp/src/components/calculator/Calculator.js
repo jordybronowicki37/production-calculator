@@ -1,4 +1,4 @@
-import "./Calculator.css";
+import "./Calculator.scss";
 import {useState} from "react";
 import ReactFlow, {Background, Controls, MarkerType, MiniMap, ReactFlowProvider} from 'react-flow-renderer';
 import {throwWarningNotification} from "../notification/NotificationThrower";
