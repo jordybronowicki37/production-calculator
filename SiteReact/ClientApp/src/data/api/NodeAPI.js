@@ -1,11 +1,11 @@
 ﻿import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const nodeCreateProduct = async function(worksheetId, type, position, product) {
+export async function nodeCreateProduct(worksheetId, type, position, product) {
   return await nodeCreate(worksheetId, position, JSON.stringify({type, product}));
 }
 
-export const nodeCreateRecipe = async function(worksheetId, type, position, recipe, machine) {
+export async function nodeCreateRecipe(worksheetId, type, position, recipe, machine) {
   return await nodeCreate(worksheetId, position, JSON.stringify({type, recipe, machine}));
 }
 
@@ -26,7 +26,7 @@ async function nodeCreate(worksheetId, position, body) {
   return json;
 }
 
-export const nodeEditProduct = async function(worksheetId, nodeId, product) {
+export async function nodeEditProduct(worksheetId, nodeId, product) {
   let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/product`, {
     method: "put",
     headers: {"Content-Type": "application/json"},
@@ -42,7 +42,7 @@ export const nodeEditProduct = async function(worksheetId, nodeId, product) {
   return json;
 }
 
-export const nodeEditRecipe = async function(worksheetId, nodeId, recipe) {
+export async function nodeEditRecipe(worksheetId, nodeId, recipe) {
   let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/recipe`, {
     method: "put",
     headers: {"Content-Type": "application/json"},
@@ -58,7 +58,7 @@ export const nodeEditRecipe = async function(worksheetId, nodeId, recipe) {
   return json;
 }
 
-export const nodeRemove = async function(worksheetId, nodeId) {
+export async function nodeRemove(worksheetId, nodeId) {
   let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}`, {method: "delete"});
   if (!response.ok) {
     let error = await response.text();

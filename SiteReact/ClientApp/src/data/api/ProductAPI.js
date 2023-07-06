@@ -1,7 +1,7 @@
 import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const fetchAllProducts = async function(entityContainerId) {
+export async function fetchAllProducts(entityContainerId) {
   let response = await fetch(`worksheet/${entityContainerId}/product`);
   if (!response.ok) {
     let error = await response.text();
@@ -12,7 +12,7 @@ export const fetchAllProducts = async function(entityContainerId) {
   Store.dispatch({type:"products/set", payload:data});
 }
 
-export const postNewProduct = async function(entityContainerId, productName) {
+export async function postNewProduct(entityContainerId, productName) {
   productName = productName.trim();
   if (productName === "") return;
   let response = await fetch(`worksheet/${entityContainerId}/product`, {
@@ -28,7 +28,7 @@ export const postNewProduct = async function(entityContainerId, productName) {
   await fetchAllProducts();
 }
 
-export const deleteProduct = async function(entityContainerId, productId) {
+export async function deleteProduct(entityContainerId, productId) {
   let response = await fetch(`worksheet/${entityContainerId}/product/${productId}`, {method: "delete"});
   if (!response.ok) {
     let error = await response.text();

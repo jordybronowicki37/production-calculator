@@ -1,7 +1,7 @@
 import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const setTargets = async function(worksheetId, nodeId, targets) {
+export async function setTargets(worksheetId, nodeId, targets) {
   let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/targets`, {
     method: "put",
     headers: {"Content-Type": "application/json"},

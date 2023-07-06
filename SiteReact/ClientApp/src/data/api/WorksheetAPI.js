@@ -1,7 +1,7 @@
 import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const fetchWorksheet = async function(worksheetId) {
+export async function fetchWorksheet(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}`);
   if (!response.ok) {
     let error = await response.text();
@@ -19,7 +19,7 @@ export const fetchWorksheet = async function(worksheetId) {
   return json;
 }
 
-export const createNewWorksheet = async function(projectId, name) {
+export async function createNewWorksheet(projectId, name) {
   name = name.trim();
   let response = await fetch(`project/${projectId}`, {
     method: "post",
@@ -36,7 +36,7 @@ export const createNewWorksheet = async function(projectId, name) {
   return json;
 }
 
-export const calculate = async function(worksheetId) {
+export async function calculate(worksheetId) {
   let response = await fetch(`worksheet/${worksheetId}/calculate`, {method: "post"});
   if (!response.ok) {
     let error = await response.text();

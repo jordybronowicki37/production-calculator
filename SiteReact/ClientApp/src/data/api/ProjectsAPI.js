@@ -1,7 +1,7 @@
 ﻿import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
-export const fetchAllProjects = async function() {
+export async function fetchAllProjects() {
   let response = await fetch(`project`);
   if (!response.ok) {
     let error = await response.text();
@@ -12,7 +12,7 @@ export const fetchAllProjects = async function() {
   Store.dispatch({type:"projects/set", payload:data});
 }
 
-export const fetchProject = async function(id) {
+export async function fetchProject(id) {
   let response = await fetch(`project/${id}`);
   if (!response.ok) {
     let error = await response.text();
