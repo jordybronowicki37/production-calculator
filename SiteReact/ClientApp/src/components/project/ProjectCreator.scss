@@ -2,6 +2,9 @@
   .creator-header {
     h2 {
       background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+      padding: 0.5rem 2rem 0.5rem 0.5rem;
+      white-space: nowrap;
+      cursor: default;
     }
   }
   
@@ -34,7 +37,7 @@
     }
   }
   
-  .project-name-error {
+  .error-message {
     color: red;
   }
 }

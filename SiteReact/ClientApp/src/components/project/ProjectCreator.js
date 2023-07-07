@@ -43,7 +43,7 @@ export function ProjectCreator({onClose}) {
           </select>
         </div>
 
-        {projectNameError && <div className="project-name-error">Project name can not be empty!</div>}
+        {projectNameError && <div className="error-message">Project name can not be empty!</div>}
         
         <span>
           <Button
