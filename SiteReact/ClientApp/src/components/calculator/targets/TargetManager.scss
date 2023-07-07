@@ -1,101 +1,76 @@
 ﻿.target-editor {
-    padding: 0 2px;
+    $--border-radius: 0.2rem;
+    background-color: var(--color-text-dark);
+    height: 100%;
+    width: 100%;
+    
+    .target-editor-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding: 0.5rem;
+    }
+    
+    * {
+        color: var(--color-text-light);
+    }
+    
+    h4 {
+        font-size: 14px;
+    }
 
     .tabs {
         display: flex;
 
-        >button {
+        button {
             all: unset;
+            padding: 0.1rem 0.2rem;
+            flex-grow: 1;
             border: 1px solid darkgray;
-            font-size: xx-small;
+            font-size: 8px;
+            font-weight: bold;
+            text-align: center;
 
             &:first-child {
-                border-radius: 5px 0 0 5px;
+                border-radius: $--border-radius 0 0 $--border-radius;
             }
-
-            &:nth-child(3) {
-                border-radius: 0 5px 5px 0;
+            &:last-child {
+                border-radius: 0 $--border-radius $--border-radius 0;
             }
         }
 
-        >.selected {
-            background-color: #eeeeee;
+        .selected {
+            background-color: #3a3a3a;
         }
-    }
-
-    .right-one {
-        transform: translateX(1px);
-    }
-
-    .left-one {
-        transform: translateX(-1px);
     }
 
     .tab-content {
-        padding: 5px;
-    }
-
-    .visualisation {
-        width: 100%;
-        position: relative;
-    }
-
-    .visualisation-line {
-        width: 100%;
-        display: flex;
-        position: absolute;
-
-        >div {
-            flex-grow: 2;
-            transition: border-top-color ease 0.5s;
-        }
-
-        >.blue {
-            border-top: 2px solid deepskyblue;
-        }
-
-        >.gray {
-            border-top: 2px solid gray;
-        }
-    }
-
-    .visualisation-icon {
-        width: 100%;
-        display: flex;
-        position: absolute;
-        justify-content: space-evenly;
-
-        >* {
-            transition: color ease 0.5s;
-            cursor: default;
-        }
-
-        >.gray {
-            color: gray;
-        }
-
-        >.blue {
-            color: deepskyblue;
-        }
-
-        >.red {
-            color: orangered;
-        }
-
-        >.green {
-            color: lawngreen;
-        }
-    }
-
-    .target-values {
         width: 100%;
         display: flex;
         justify-content: center;
-        margin: 1rem 0;
-    }
+        gap: 0.3rem;
+        
+        span {
+            white-space: nowrap;
+            margin: 0.5rem;
+        }
+        
+        div {
+            width: 48%;
+        }
+        
+        label {
+            white-space: nowrap;
+            font-size: 8px;
+        }
 
-    .amount-field {
-        width: 50%;
-        font-size: xx-small;
+        input {
+            border: 1px solid var(--color-text-light);
+            border-radius: $--border-radius;
+            background-color: transparent;
+            width: 100%;
+            font-size: 10px;
+        }
     }
 }

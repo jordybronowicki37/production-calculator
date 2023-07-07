@@ -1,6 +1,7 @@
 ﻿import "./TargetManager.scss"
 import {useEffect, useState} from "react";
 import {setTargets} from "../../../data/api/TargetAPI";
+import {nanoid} from "@reduxjs/toolkit";
 
 export function TargetManager({worksheetId, nodeId, targets}) {
   const [mode, setMode] = useState("none");
@@ -19,6 +20,10 @@ export function TargetManager({worksheetId, nodeId, targets}) {
 
     setTargets(worksheetId, nodeId, newTargets);
   }, [exactAmount, minAmount, maxAmount]);
+  
+  const exactInputId = nanoid();
+  const minInputId = nanoid();
+  const maxInputId = nanoid();
 
   const logicSetMode = (mode) => {
     switch (mode) {
@@ -39,57 +44,43 @@ export function TargetManager({worksheetId, nodeId, targets}) {
   }
 
   return <div className="target-editor">
-    <div className="tabs">
-      <button type="button" title="No target" onClick={() => logicSetMode("none")} className={`${mode==="none"?"selected":""}`}>
-        <i className='bx bx-x'></i>
-      </button>
-      <button type="button" title="Exact target" onClick={() => logicSetMode("exact")} className={`${mode==="exact"?"selected":""}`}>
-        <i className='bx bx-arrow-to-right right-one'></i>
-        <i className='bx bx-arrow-to-left left-one'></i>
-      </button>
-      <button type="button" title="Min-max target" onClick={() => logicSetMode("min-max")} className={`${mode==="min-max"?"selected":""}`}>
-        <i className='bx bx-arrow-to-left right-one'></i>
-        <i className='bx bx-arrow-to-right left-one'></i>
-      </button>
-    </div>
-    <div hidden={mode!=="none"} className="tab-content">
-      <div className="visualisation">
-        <div className="visualisation-line">
-          <div className="blue"></div>
-        </div>
+    <div className="target-editor-content-wrapper">
+      <div className="tabs">
+        <button type="button" title="No target" onClick={() => logicSetMode("none")} className={`${mode==="none"?"selected":""}`}>
+          None
+        </button>
+        <button type="button" title="Exact target" onClick={() => logicSetMode("exact")} className={`${mode==="exact"?"selected":""}`}>
+          Exact
+        </button>
+        <button type="button" title="Min-max target" onClick={() => logicSetMode("min-max")} className={`${mode==="min-max"?"selected":""}`}>
+          Min-Max
+        </button>
       </div>
-      <div className="target-values">
-        <div>No target set</div>
-      </div>
-    </div>
-    <div hidden={mode!=="exact"} className="tab-content">
-      <div className="visualisation">
-        <div className="visualisation-line">
-          <div className={`${exactAmount>0?"gray":"blue"}`}></div>
-        </div>
-        <div className="visualisation-icon">
-          <i title="Exact" className={`bx bxs-location-plus bx-flip-vertical ${exactAmount>0?"blue":"gray"}`}></i>
-        </div>
-      </div>
-      <div className="target-values">
-        <input type="number" className="amount-field" min="0" step="0.001" onChange={e => {setExactAmount(Number(e.target.value))}} value={exactAmount}/>
-      </div>
-    </div>
-    <div hidden={mode!=="min-max"} className="tab-content">
-      <div className="visualisation">
-        <div className="visualisation-line">
-          <div className={`${minAmount>0?"gray":"blue"}`}></div>
-          <div className="blue"></div>
-          <div className={`${maxAmount>0?"gray":"blue"}`}></div>
-        </div>
-        <div className="visualisation-icon">
-          <i title="Minimum" className={`bx bxs-location-plus bx-flip-vertical ${minAmount>0?"red":"gray"}`}></i>
-          <i title="Maximum" className={`bx bxs-location-plus bx-flip-vertical ${maxAmount>0?"green":"gray"}`}></i>
-        </div>
-      </div>
-      <div className="target-values">
-        <input type="number" className="amount-field" min="0" step="0.001" onChange={e => {setMinAmount(Number(e.target.value))}} value={minAmount}/>
-        <input type="number" className="amount-field" min="0" step="0.001" onChange={e => {setMaxAmount(Number(e.target.value))}} value={maxAmount}/>
+
+      <div className="tab-content">
+        {mode === "none" &&
+          <span>No target set</span>
+        }
+
+        {mode === "exact" &&
+          <div>
+            <label htmlFor={exactInputId}>Exact amount</label>
+            <input id={exactInputId} type="number" className="amount-field" min="0" step="0.001" onChange={e => {setExactAmount(Number(e.target.value))}} value={exactAmount}/>
+          </div>
+        }
+
+        {mode === "min-max" &&
+          <>
+            <div>
+              <label htmlFor={minInputId}>Min amount</label>
+              <input id={minInputId} type="number" className="amount-field" min="0" step="0.001" onChange={e => {setMinAmount(Number(e.target.value))}} value={minAmount}/>
+            </div>
+            <div>
+              <label htmlFor={maxInputId}>Max amount</label>
+              <input id={maxInputId} type="number" className="amount-field" min="0" step="0.001" onChange={e => {setMaxAmount(Number(e.target.value))}} value={maxAmount}/>
+            </div>
+          </>
+        }
       </div>
     </div>
   </div>;

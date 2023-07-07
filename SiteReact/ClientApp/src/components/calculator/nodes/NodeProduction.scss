@@ -4,8 +4,9 @@
     --node-text: var(--node-production-text);
     
     border: 1px solid var(--node-primary);
-    
-    * {
+
+    .top-container h3,
+    .content-container * {
         color: var(--node-text);
     }
 
