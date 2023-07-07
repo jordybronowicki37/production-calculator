@@ -1,7 +1,6 @@
-import {onDragStart} from "../Calculator";
 import "./NodesSelector.scss";
 
-export function NodesSelector({onCreateNewNode}) {
+export function NodesSelector({onCreateNewNode, onDragStart}) {
   return (
     <div className="nodes-selector">
       <div className="item-spawn" title="Spawn-node" draggable

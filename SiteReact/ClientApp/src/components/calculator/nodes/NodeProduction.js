@@ -4,7 +4,7 @@ import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditRecipe} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
-import {NodeDragHandle} from "./NodeDragHandle";
+import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
 
 export function NodeProduction({worksheetId, node, recipe, recipes, products, previewMode}) {

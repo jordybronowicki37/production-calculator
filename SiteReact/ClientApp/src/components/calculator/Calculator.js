@@ -7,11 +7,11 @@ import {calculate} from "../../data/api/WorksheetAPI";
 import {NodeSpawn} from "./nodes/NodeSpawn";
 import {NodeProduction} from "./nodes/NodeProduction";
 import {NodeEnd} from "./nodes/NodeEnd";
-import {nodeCreateProduct, nodeCreateRecipe, nodeRemove} from "../../data/api/NodeAPI";
+import {nodeRemove} from "../../data/api/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
 import {CalculationState} from "./CalculationState";
-import {NodesSelector} from "./nodes/NodesSelector";
-import {NodeOptionsEditorPopup} from "./popups/NodeOptionsEditorPopup";
+import {NodesSelector} from "./nodes/components/NodesSelector";
+import {NodeOptionsEditorPopup} from "./nodes/components/NodeOptionsEditorPopup";
 
 const defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
@@ -47,7 +47,7 @@ export function Calculator({worksheet, products, recipes, machines}){
         hidden={!nodeOptionsEditorOpen} 
         onClose={() => setNodeOptionsEditorOpen(false)}/>
       
-      <NodesSelector onCreateNewNode={onCreateNewNode}/>
+      <NodesSelector onCreateNewNode={onCreateNewNode} onDragStart={onDragStart}/>
       
       <ReactFlowProvider>
         <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>

@@ -1,8 +1,8 @@
-import {Popup} from "../../popup/Popup";
+import {Popup} from "../../../popup/Popup";
 import "./NodeOptionsEditorPopup.scss";
 import {Button, Spinner} from "reactstrap";
 import {useRef, useState} from "react";
-import {nodeCreateProduct, nodeCreateRecipe} from "../../../data/api/NodeAPI";
+import {nodeCreateProduct, nodeCreateRecipe} from "../../../../data/api/NodeAPI";
 
 export function NodeOptionsEditorPopup({worksheetId, products, recipes, machines, hidden, onClose, options}) {
   let editor;

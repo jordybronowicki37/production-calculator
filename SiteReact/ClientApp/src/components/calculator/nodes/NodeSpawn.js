@@ -4,7 +4,7 @@ import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {nodeEditProduct} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
-import {NodeDragHandle} from "./NodeDragHandle";
+import {NodeDragHandle} from "./components/NodeDragHandle";
 
 export function NodeSpawn({worksheetId, node, product, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
