@@ -58,7 +58,7 @@ export function Calculator({worksheet, products, recipes, machines}){
             edges={flowEdges}
             onNodesChange={(changes) => onNodesChange(id, changes, tempPositionData, setTempPositionData)}
             onEdgesChange={(changes) => onEdgesChange(id, changes)}
-            onConnect={(edge) => onConnect(id, edge, nodes, products)}
+            onConnect={(edge) => onConnect(id, edge, nodes, products, recipes)}
             onDragOver={onDragOver}
             onInit={setReactFlowInstance}
             onDrop={(event) => {
@@ -190,7 +190,7 @@ function onEdgesChange (worksheetId, changes) {
   })
 }
 
-function onConnect (worksheetId, edge, nodes, products) {
+function onConnect (worksheetId, edge, nodes, products, recipes) {
   if (products.length === 0) {
     throwWarningNotification("Cannot connect nodes because no products exist in worksheet");
     return;
@@ -203,14 +203,14 @@ function onConnect (worksheetId, edge, nodes, products) {
     product = source.product;
   } else if (target.product != null) {
     product = target.product;
-  } else if (source.recipe != null && source.recipe.outputThroughPuts.length > 0) {
-    product = source.recipe.outputThroughPuts[0];
-  } else if (target.recipe != null && target.recipe.inputThroughPuts.length > 0) {
-    product = target.recipe.inputThroughPuts[0];
+  } else if (source.recipe != null && findRecipe(recipes, source.recipe).outputThroughPuts.length > 0) {
+    product = findRecipe(recipes, source.recipe).outputThroughPuts[0].product;
+  } else if (target.recipe != null && findRecipe(recipes, target.recipe).inputThroughPuts.length > 0) {
+    product = findRecipe(recipes, target.recipe).inputThroughPuts[0].product;
   } else {
     product = products[0];
   }
-
+  
   connectionCreate(worksheetId, edge.source, edge.target, product)
 }
 
@@ -238,4 +238,8 @@ function onDrop (event, wrapperInstance, flowInstance, worksheetId, products, re
   });
   
   return {position, nodeType}
+}
+
+function findRecipe(list, id) {
+  return list.find(v => v.id === id);
 }
