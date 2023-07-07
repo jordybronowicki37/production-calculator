@@ -6,7 +6,7 @@ import {nodeEditProduct} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 
-export function NodeEnd({worksheetId, node, product, products, previewMode}) {
+export function NodeEnd({worksheetId, node, product, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
   let productField = <div className="preview-field">name</div>;
@@ -15,12 +15,7 @@ export function NodeEnd({worksheetId, node, product, products, previewMode}) {
 
   if (!previewMode) {
     const {id, targets, amount} = node;
-    productField =
-      <div>
-        <select value={product.name} onChange={e => productChanged(worksheetId, id, e.target.value)}>
-          {products.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
-        </select>
-      </div>;
+    productField = <div>{product.name}</div>;
     amountField = <div>{amount}</div>;
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>

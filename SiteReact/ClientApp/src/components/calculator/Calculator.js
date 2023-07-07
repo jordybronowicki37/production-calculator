@@ -28,7 +28,7 @@ export function Calculator({worksheet, products, recipes, machines}){
   const [tempPositionData, setTempPositionData] = useState(null);
   
   let message = calculationError;
-  let flowNodes = generateNodes(id, nodes, products, recipes, tempPositionData);
+  let flowNodes = generateNodes(id, nodes, products, recipes, machines, tempPositionData);
   let flowEdges = generateEdges(connections);
 
   const onCreateNewNode = (nodeType) => {
@@ -77,9 +77,9 @@ export function Calculator({worksheet, products, recipes, machines}){
   );
 }
 
-function generateNodes(worksheetId, nodes, products, recipes, tempPositionData) {
+function generateNodes(worksheetId, nodes, products, recipes, machines, tempPositionData) {
   return nodes.map((node, i) => {
-    const {body, type} = createNodeBody(worksheetId, node.type, node, products, recipes);
+    const {body, type} = createNodeBody(worksheetId, node.type, node, products, recipes, machines);
     let position = node.position;
     if (tempPositionData !== null && tempPositionData.id === node.id) position = tempPositionData.position;
     if (!position) position = {x:0, y:200*i};
@@ -120,22 +120,23 @@ function calculateWorksheet(worksheetId, setState) {
   });
 }
 
-function createNodeBody(worksheetId, nodeType, data, products, recipes) {
-  let body, type, product, recipe;
+function createNodeBody(worksheetId, nodeType, data, products, recipes, machines) {
+  let body, type, product, recipe, machine;
   switch (nodeType) {
     case "Spawn":
       product = findById(data.product, products);
-      body = <NodeSpawn worksheetId={worksheetId} node={data} product={product} products={products}/>;
+      body = <NodeSpawn worksheetId={worksheetId} node={data} product={product}/>;
       type = "input";
       break;
     case "Production":
-      recipe = findById(data.recipe, recipes)
-      body = <NodeProduction worksheetId={worksheetId} node={data} recipe={recipe} products={products} recipes={recipes}/>;
+      recipe = findById(data.recipe, recipes);
+      machine = findById(data.machine, machines);
+      body = <NodeProduction worksheetId={worksheetId} node={data} machine={machine} recipe={recipe} products={products}/>;
       type = "default";
       break;
     case "End":
       product = findById(data.product, products)
-      body = <NodeEnd worksheetId={worksheetId} node={data} product={product} products={products}/>;
+      body = <NodeEnd worksheetId={worksheetId} node={data} product={product}/>;
       type = "output";
       break;
     default:
@@ -203,10 +204,10 @@ function onConnect (worksheetId, edge, nodes, products, recipes) {
     product = source.product;
   } else if (target.product != null) {
     product = target.product;
-  } else if (source.recipe != null && findRecipe(recipes, source.recipe).outputThroughPuts.length > 0) {
-    product = findRecipe(recipes, source.recipe).outputThroughPuts[0].product;
-  } else if (target.recipe != null && findRecipe(recipes, target.recipe).inputThroughPuts.length > 0) {
-    product = findRecipe(recipes, target.recipe).inputThroughPuts[0].product;
+  } else if (source.recipe != null && findById(source.recipe, recipes).outputThroughPuts.length > 0) {
+    product = findById(source.recipe, recipes).outputThroughPuts[0].product;
+  } else if (target.recipe != null && findById(target.recipe, recipes).inputThroughPuts.length > 0) {
+    product = findById(target.recipe, recipes).inputThroughPuts[0].product;
   } else {
     product = products[0];
   }
@@ -238,8 +239,4 @@ function onDrop (event, wrapperInstance, flowInstance, worksheetId, products, re
   });
   
   return {position, nodeType}
-}
-
-function findRecipe(list, id) {
-  return list.find(v => v.id === id);
 }

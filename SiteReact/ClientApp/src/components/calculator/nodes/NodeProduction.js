@@ -7,13 +7,14 @@ import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
 
-export function NodeProduction({worksheetId, node, recipe, recipes, products, previewMode}) {
+export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
-  let recipeField, amountField, productInList, productOutList, targetEditor;
+  let machineField, recipeField, amountField, productInList, productOutList, targetEditor;
 
   if (previewMode) {
-    recipeField = <div className="preview-field">name</div>;
+    machineField = <div className="preview-field">machine</div>;
+    recipeField = <div className="preview-field">recipe</div>;
     amountField = <div className="preview-field">0</div>;
     productInList = <div className="node-list">
         <div>
@@ -29,16 +30,13 @@ export function NodeProduction({worksheetId, node, recipe, recipes, products, pr
         </div>
       </div>;
     targetEditor = <div></div>;
-  } else {
+  } 
+  else 
+  {
     const {id, targets, amount} = node;
 
-    recipeField = 
-      <div>
-        <select value={recipe.name} onChange={e => recipeChanged(worksheetId, id, e.target.value)}>
-          <option value="" disabled hidden></option>
-          {recipes.map(v => <option key={v.name} value={v.name}>{v.name}</option>)}
-        </select>
-      </div>;
+    machineField = <div>{machine.name}</div>;
+    recipeField = <div>{recipe.name}</div>;
     amountField = <div>{amount}</div>;
     productInList = generateProductList(recipe.inputThroughPuts, products, amount);
     productOutList = generateProductList(recipe.outputThroughPuts, products, amount);
@@ -62,6 +60,8 @@ export function NodeProduction({worksheetId, node, recipe, recipes, products, pr
       </div>
       <div className="content-container">
         <div className="content-table">
+          <div>Machine:</div>
+          {machineField}
           <div>Recipe:</div>
           {recipeField}
           <div>Amount:</div>

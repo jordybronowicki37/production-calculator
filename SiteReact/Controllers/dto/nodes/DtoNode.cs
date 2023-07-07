@@ -10,6 +10,7 @@ public class DtoNode
     public string Type { get; set; } = "";
     
     public float Amount { get; set; }
+    public Guid? Machine { get; set; }
     public Guid? Recipe { get; set; }
     public Guid? Product { get; set; }
     
