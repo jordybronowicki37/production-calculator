@@ -1,21 +1,24 @@
 .node-end {
-    border: 1px solid var(--node-end-primary);
+    --node-primary: var(--node-end-primary);
+    --node-secondary: var(--node-end-secondary);
+    --node-text: var(--node-end-text);
+    
+    border: 1px solid var(--node-primary);
     
     * {
-        color: var(--node-end-text, initial);
-        
+        color: var(--node-text);
     }
 
     .top-container {
-        background: var(--node-end-primary, black);
+        background: var(--node-primary);
     }
 
     .content-container * {
-        background: var(--node-end-secondary, white);
+        background: var(--node-secondary);
     }
 
     .content-table * {
-        border-top-color: var(--node-end-primary, black);
-        border-left-color: var(--node-end-primary, black);
+        border-top-color: var(--node-primary);
+        border-left-color: var(--node-primary);
     }
 }

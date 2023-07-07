@@ -1,21 +1,25 @@
 .node-production {
-    border: 1px solid var(--node-production-primary);
+    --node-primary: var(--node-production-primary);
+    --node-secondary: var(--node-production-secondary);
+    --node-text: var(--node-production-text);
+    
+    border: 1px solid var(--node-primary);
     
     * {
-        color: var(--node-production-text, initial);
+        color: var(--node-text);
     }
 
     .content-table * {
-        border-top-color: var(--node-production-primary, black);
-        border-left-color: var(--node-production-primary, black);
+        border-top-color: var(--node-primary);
+        border-left-color: var(--node-primary);
     }
 
     .content-container * {
-        background: var(--node-production-secondary, white);
+        background: var(--node-secondary);
     }
 
     .top-container {
-        background: var(--node-production-primary, black);
+        background: var(--node-primary);
     }
 
     .product-table {

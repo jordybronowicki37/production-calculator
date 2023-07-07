@@ -1,23 +1,10 @@
-﻿@mixin dragHandleLooks($color) {
-    background-image: radial-gradient($color 1px, transparent 0);
-    background-size: 0.3rem 0.3rem;
-}
-
-.node-spawn .node-drag-handle {
-    @include dragHandleLooks(var(--node-spawn-secondary));
-}
-
-.node-production .node-drag-handle {
-    @include dragHandleLooks(var(--node-production-secondary));
-}
-
-.node-end .node-drag-handle {
-    @include dragHandleLooks(var(--node-end-secondary));
-}
-
-.node-drag-handle {
+﻿.node-drag-handle {
     min-width: 2rem;
     flex-grow: 2;
     cursor: grab;
     margin: 0.2rem 0.1rem;
+
+    $dots-color: var(--node-secondary);
+    background-image: radial-gradient($dots-color 1px, transparent 0);
+    background-size: 0.3rem 0.3rem;
 }
