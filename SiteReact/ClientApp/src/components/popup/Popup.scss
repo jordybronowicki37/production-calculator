@@ -6,9 +6,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(245, 245, 245, 0.4);
+    background-color: rgba(42, 42, 42, 0.6);
+    backdrop-filter: blur(0.2rem);
 
     >div {
+        position: relative;
         max-height: 80%;
         max-width: 70%;
         background-color: var(--color-text-dark);
@@ -19,5 +21,7 @@
 
 .popup-close-button {
     all: unset;
-    float: right;
+    position: absolute;
+    top: -2px;
+    right: 0;
 }
