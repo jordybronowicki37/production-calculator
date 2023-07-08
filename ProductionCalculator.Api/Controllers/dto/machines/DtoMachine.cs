@@ -1,4 +1,4 @@
-using productionCalculatorLib.components.products;
+using productionCalculatorLib.components.entities;
 
 namespace SiteReact.Controllers.dto.machines;
 

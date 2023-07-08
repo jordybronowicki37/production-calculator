@@ -1,5 +1,4 @@
 ﻿using productionCalculatorLib.components.entityContainer;
-using productionCalculatorLib.components.products;
 
 namespace productionCalculatorLib.components.entities;
 

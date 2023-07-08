@@ -1,4 +1,4 @@
-﻿namespace productionCalculatorLib.components.calculator.exceptions;
+﻿namespace productionCalculatorLib.components.targets.exceptions;
 
 public class LimitRuleError: SystemException
 {

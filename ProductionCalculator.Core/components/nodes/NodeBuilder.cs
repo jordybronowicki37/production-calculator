@@ -1,7 +1,6 @@
 ﻿using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
-using productionCalculatorLib.components.products;
 using productionCalculatorLib.components.worksheet;
 
 namespace productionCalculatorLib.components.nodes;
