@@ -67,7 +67,22 @@ export function Calculator({worksheet, products, recipes, machines}){
               setNodeEditorOptions({mode:"create", nodeType, position});
             }}
             defaultEdgeOptions={defaultEdgeOptions}>
-            <MiniMap nodeStrokeColor="#fff" nodeColor="transparent" maskColor="#333" style={{backgroundColor:"#444"}}/>
+            <MiniMap 
+                nodeStrokeColor={(node) => {
+                  switch (node.nodeType) {
+                      case "Spawn":
+                        return "var(--node-spawn-secondary)";
+                      case "Production":
+                        return "var(--node-production-secondary)";
+                      case "End":
+                        return "var(--node-end-secondary)";
+                    default:
+                      return "#fff";
+                  }
+                }}
+                nodeColor="transparent"
+                maskColor="#333"
+                style={{backgroundColor:"#444"}}/>
             <Controls/>
             <Background color="#bbb" style={{backgroundColor:"#444"}}/>
           </ReactFlow>
