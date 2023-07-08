@@ -26,12 +26,8 @@ public class WorksheetController : ControllerBase
     [HttpGet("")]
     public IActionResult GetAll()
     {
-        // var ws = GetAllWorksheets();
-        // return Ok(ws.Select(w =>
-        // {
-        //     return new DtoWorksheetSmall(w);
-        // }));
-        return Ok();
+        var ws = GetAllWorksheets();
+        return Ok(ws.Select(w => new DtoWorksheet(w)));
     }
 
     [HttpGet("{id:Guid}")]
