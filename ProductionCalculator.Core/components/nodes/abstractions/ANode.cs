@@ -7,6 +7,7 @@ public abstract class ANode: INode
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public float Amount { get; set; }
+    public NodePosition Position { get; set; } = new NodePosition();
     public virtual ICollection<TargetProduction> Targets { get; set; } = new List<TargetProduction>();
     
     public virtual void SetExactTarget(float amount) 

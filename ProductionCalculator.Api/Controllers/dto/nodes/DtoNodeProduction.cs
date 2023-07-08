@@ -10,6 +10,7 @@ public class DtoNodeProduction : DtoNode
     {
         Id = node.Id;
         Type = "Production";
+        Position = node.Position;
         
         Amount = node.Amount;
         Machine = node.MachineId;

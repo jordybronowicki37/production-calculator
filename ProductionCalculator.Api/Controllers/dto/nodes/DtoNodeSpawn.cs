@@ -10,6 +10,7 @@ public class DtoNodeSpawn : DtoNode
     {
         Id = node.Id;
         Type = "Spawn";
+        Position = node.Position;
         
         Amount = node.Amount;
         Product = node.ProductId;

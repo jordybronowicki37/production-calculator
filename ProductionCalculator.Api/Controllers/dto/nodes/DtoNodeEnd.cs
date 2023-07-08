@@ -9,6 +9,7 @@ public class DtoNodeEnd : DtoNode
     {
         Id = node.Id;
         Type = "End";
+        Position = node.Position;
         
         Amount = node.Amount;
         Product = node.ProductId;

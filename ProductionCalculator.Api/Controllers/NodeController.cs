@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
+using productionCalculatorLib.components.nodes;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.enums;
 using productionCalculatorLib.components.nodes.interfaces;
@@ -47,7 +48,7 @@ public class NodeController : ControllerBase
                 if (dto.Product == null) return BadRequest("Product field is empty");
                 var product = e.GetProduct(dto.Product);
                 if (product == null) return NotFound("ProductId not found");
-                node = w.GetNodeBuilder<SpawnNode>().SetProduct(product).Build();
+                node = w.GetNodeBuilder<SpawnNode>().SetPosition(dto.Position).SetProduct(product).Build();
                 break;
             }
             case ENodeTypes.Production:
@@ -58,7 +59,7 @@ public class NodeController : ControllerBase
                 var machine = e.GetMachine(dto.Machine);
                 if (recipe == null) return NotFound("Recipe not found");
                 if (machine == null) return NotFound("Machine not found");
-                node = w.GetNodeBuilder<ProductionNode>().SetRecipe(recipe, machine).Build();
+                node = w.GetNodeBuilder<ProductionNode>().SetPosition(dto.Position).SetRecipe(recipe, machine).Build();
                 break;
             }
             case ENodeTypes.End:
@@ -66,7 +67,7 @@ public class NodeController : ControllerBase
                 if (dto.Product == null) return BadRequest("Product field is empty");
                 var product = e.GetProduct(dto.Product);
                 if (product == null) return NotFound("ProductId not found");
-                node = w.GetNodeBuilder<EndNode>().SetProduct(product).Build();
+                node = w.GetNodeBuilder<EndNode>().SetPosition(dto.Position).SetProduct(product).Build();
                 break;
             }
             default:
@@ -79,7 +80,28 @@ public class NodeController : ControllerBase
 
         return Ok(DtoNode.GenerateNode(node));
     }
-    
+
+    [HttpPut("{nodeId:Guid}/position")]
+    public IActionResult EditNodePosition(Guid nodeId, Guid worksheetId, NodePosition dto)
+    {
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+        
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        
+        var node = GetNode(w, nodeId);
+        if (node == null) return NotFound("Node is not found");
+
+        node.Position = dto;
+        
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
+        _context.Worksheets.UpdateOne(filter, update);
+        
+        return Ok(DtoNode.GenerateNode(node));
+    }
+
     [HttpPut("{nodeId:Guid}/product")]
     public IActionResult EditNodeProduct(Guid nodeId, Guid worksheetId, DtoNodeSetProduct dto)
     {

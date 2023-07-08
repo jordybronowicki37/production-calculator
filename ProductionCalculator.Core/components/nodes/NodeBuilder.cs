@@ -8,6 +8,7 @@ namespace productionCalculatorLib.components.nodes;
 public class NodeBuilder<TNodeType> where TNodeType : ANode, new()
 {
     private readonly Worksheet _worksheet;
+    private NodePosition _position = new NodePosition();
     private Product? _product;
     private Recipe? _recipe;
     private Machine? _machine;
@@ -18,6 +19,12 @@ public class NodeBuilder<TNodeType> where TNodeType : ANode, new()
     public NodeBuilder(Worksheet worksheet)
     {
         _worksheet = worksheet;
+    }
+    
+    public NodeBuilder<TNodeType> SetPosition(NodePosition position)
+    {
+        _position = position;
+        return this;
     }
 
     public NodeBuilder<TNodeType> SetProduct(Product product)
@@ -53,21 +60,33 @@ public class NodeBuilder<TNodeType> where TNodeType : ANode, new()
 
     public TNodeType Build()
     {
-        TNodeType newNode = new();
-        
-        if (newNode is IHasProduct nodeProduct)
+        TNodeType newNode = new()
         {
-            if (_product == null) throw new InvalidOperationException("No product set");
-            nodeProduct.ProductId = _product.Id;
-        }
-        
-        if (newNode is IHasRecipe nodeRecipe)
+            Position = _position
+        };
+
+        switch (newNode)
         {
-            if (_recipe == null) throw new InvalidOperationException("No recipe set");
-            if (_machine == null) throw new InvalidOperationException("No machine set");
-            if (!_machine.Recipes.Contains(_recipe.Id)) throw new InvalidOperationException("Machine does not provide recipe");
-            nodeRecipe.RecipeId = _recipe.Id;
-            nodeRecipe.MachineId = _machine.Id;
+            case IHasProduct when _product == null:
+                throw new InvalidOperationException("No product set");
+            
+            case IHasRecipe when _recipe == null:
+                throw new InvalidOperationException("No recipe set");
+            
+            case IHasRecipe when _machine == null:
+                throw new InvalidOperationException("No machine set");
+            
+            case IHasRecipe when !_machine.Recipes.Contains(_recipe.Id):
+                throw new InvalidOperationException("Machine does not provide recipe");
+            
+            case IHasProduct nodeProduct:
+                nodeProduct.ProductId = _product.Id;
+                break;
+            
+            case IHasRecipe nodeRecipe:
+                nodeRecipe.RecipeId = _recipe.Id;
+                nodeRecipe.MachineId = _machine.Id;
+                break;
         }
 
         if (_exactAmount != null)

@@ -1,4 +1,5 @@
-﻿using productionCalculatorLib.components.nodes.interfaces;
+﻿using productionCalculatorLib.components.nodes;
+using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using SiteReact.Controllers.dto.targets;
 
@@ -8,6 +9,7 @@ public class DtoNode
 {
     public Guid Id { get; set; }
     public string Type { get; set; } = "";
+    public NodePosition Position { get; set; } = new NodePosition();
     
     public float Amount { get; set; }
     public Guid? Machine { get; set; }
