@@ -7,7 +7,7 @@ import {calculate} from "../../data/api/WorksheetAPI";
 import {NodeSpawn} from "./nodes/NodeSpawn";
 import {NodeProduction} from "./nodes/NodeProduction";
 import {NodeEnd} from "./nodes/NodeEnd";
-import {nodeRemove} from "../../data/api/NodeAPI";
+import {nodeEditPosition, nodeRemove} from "../../data/api/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
 import {CalculationState} from "./CalculationState";
 import {NodesSelector} from "./nodes/components/NodesSelector";
@@ -78,15 +78,15 @@ export function Calculator({worksheet, products, recipes, machines}){
 }
 
 function generateNodes(worksheetId, nodes, products, recipes, machines, tempPositionData) {
-  return nodes.map((node, i) => {
+  return nodes.map((node) => {
     const {body, type} = createNodeBody(worksheetId, node.type, node, products, recipes, machines);
     let position = node.position;
     if (tempPositionData !== null && tempPositionData.id === node.id) position = tempPositionData.position;
-    if (!position) position = {x:0, y:200*i};
 
     return {
       id: node.id.toString(),
       type,
+      nodeType: node.type,
       style: defaultNodeStyle,
       data: {label: body},
       dragHandle: ".node-drag-handle",
@@ -158,7 +158,7 @@ const onNodesChange = (worksheetId, changes, tempPositionData, setTempPositionDa
           setTempPositionData({position:change.position, id:change.id});
         } else {
           Store.dispatch({type:"node/change/position", payload: tempPositionData, worksheetId:worksheetId});
-          // TODO update end position on back-end
+          nodeEditPosition(worksheetId, change.id, tempPositionData.position);
         }
         break;
       case "remove":

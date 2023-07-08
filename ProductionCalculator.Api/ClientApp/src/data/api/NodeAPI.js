@@ -2,14 +2,14 @@
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 
 export async function nodeCreateProduct(worksheetId, type, position, product) {
-  return await nodeCreate(worksheetId, position, JSON.stringify({type, product}));
+  return await nodeCreate(worksheetId, JSON.stringify({type, position, product}));
 }
 
 export async function nodeCreateRecipe(worksheetId, type, position, recipe, machine) {
-  return await nodeCreate(worksheetId, position, JSON.stringify({type, recipe, machine}));
+  return await nodeCreate(worksheetId, JSON.stringify({type, position, recipe, machine}));
 }
 
-async function nodeCreate(worksheetId, position, body) {
+async function nodeCreate(worksheetId, body) {
   let response = await fetch(`worksheet/${worksheetId}/node`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
@@ -21,9 +21,22 @@ async function nodeCreate(worksheetId, position, body) {
     throw new Error(error);
   }
   let json = await response.json();
-  json.position = position;
   Store.dispatch({type:"node/add", payload:json, worksheetId:worksheetId});
   return json;
+}
+
+export async function nodeEditPosition(worksheetId, nodeId, position) {
+  let response = await fetch(`worksheet/${worksheetId}/node/${nodeId}/position`, {
+    method: "put",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ x: position.x, y: position.y})
+  });
+  if (!response.ok) {
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
+  }
+  return await response.json();
 }
 
 export async function nodeEditProduct(worksheetId, nodeId, product) {
