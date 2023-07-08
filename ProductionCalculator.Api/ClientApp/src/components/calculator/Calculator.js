@@ -1,5 +1,5 @@
 import "./Calculator.scss";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ReactFlow, {Background, Controls, MarkerType, MiniMap, ReactFlowProvider} from 'react-flow-renderer';
 import {throwWarningNotification} from "../notification/NotificationThrower";
 import Store from "../../data/DataStore";
@@ -35,6 +35,12 @@ export function Calculator({worksheet, products, recipes, machines}){
     setNodeOptionsEditorOpen(true);
     setNodeEditorOptions({mode:"create", nodeType:nodeType, position:{x:0,y:0}});
   };
+  
+  useEffect(() => {
+    if (reactFlowInstance != null) {
+      reactFlowInstance.fitView();
+    }
+  }, [reactFlowInstance]);
   
   return (
     <div className="calculator">
