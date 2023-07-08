@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\productionCalculatorLib\productionCalculatorLib.csproj" />
+      <ProjectReference Include="..\ProductionCalculator.Core\ProductionCalculator.Core.csproj" />
     </ItemGroup>
 
 </Project>
