@@ -2,9 +2,9 @@ import './Node.scss';
 import './NodeEnd.scss';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
-import {nodeEditProduct} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
+import {NodeAmountField} from "./components/NodeAmountField.tsx";
 
 export function NodeEnd({worksheetId, node, product, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -16,7 +16,7 @@ export function NodeEnd({worksheetId, node, product, previewMode}) {
   if (!previewMode) {
     const {id, targets, amount} = node;
     productField = <div>{product.name}</div>;
-    amountField = <div>{amount}</div>;
+    amountField = <NodeAmountField amount={amount}/>;
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>
         <button type="button" className="popup-close-button" onClick={() => setEditorOpen(false)}>
@@ -44,8 +44,4 @@ export function NodeEnd({worksheetId, node, product, previewMode}) {
       {targetEditor}
     </div>
   );
-}
-
-function productChanged(worksheetId, id, name) {
-  nodeEditProduct(worksheetId, id, name);
 }

@@ -2,10 +2,10 @@ import './Node.scss';
 import './NodeProduction.scss';
 import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
-import {nodeEditRecipe} from "../../../data/api/NodeAPI";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
+import {NodeAmountField} from "./components/NodeAmountField.tsx";
 
 export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}) {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -37,7 +37,7 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
 
     machineField = <div>{machine.name}</div>;
     recipeField = <div>{recipe.name}</div>;
-    amountField = <div>{amount}</div>;
+    amountField = <NodeAmountField amount={amount}/>;
     productInList = generateProductList(recipe.inputThroughPuts, products, amount);
     productOutList = generateProductList(recipe.outputThroughPuts, products, amount);
     
@@ -85,16 +85,12 @@ function generateProductList(throughputList, productList, productionAmount) {
         return (
           <div key={i}>
             <div className="recipe-product">{product.name}:</div>
-            <div>{v.amount*productionAmount}</div>
+            <NodeAmountField amount={v.amount*productionAmount}/>
           </div>
         )
       })}
     </div>
   );
-}
-
-function recipeChanged(worksheetId, id, name) {
-  nodeEditRecipe(worksheetId, id, name);
 }
 
 function findProduct(products, id) {
