@@ -43,7 +43,7 @@ export class UserNotificationManager extends Component {
               <div hidden={v.type!=="warning"}><i className='bx bx-error'></i></div>
               <div hidden={v.type!=="error"}><i className='bx bx-error-circle'></i></div>
             </div>
-            <div className="text-wrapper">{v.text}</div>
+            <div className="text-wrapper">{v.message}</div>
           </div>
       })}
     </div>

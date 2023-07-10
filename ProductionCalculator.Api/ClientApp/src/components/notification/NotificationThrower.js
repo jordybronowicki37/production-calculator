@@ -1,4 +1,5 @@
 ﻿import Store from "../../data/DataStore";
+import {NotificationAddAction} from "../../data/reducers/NotificationReducer";
 
 export const throwInfoNotification = function (message) {
   throwNotification(message, "info")
@@ -17,11 +18,5 @@ export const throwErrorNotification = function (message) {
 }
 
 const throwNotification = function (message, type) {
-  Store.dispatch({
-    type:"notification/add",
-    payload:{
-      text:message,
-      type:type,
-    }
-  });
+  Store.dispatch(NotificationAddAction({message, type}));
 }

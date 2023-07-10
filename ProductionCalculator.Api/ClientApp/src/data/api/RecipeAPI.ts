@@ -1,18 +1,21 @@
 import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
+import {RecipeDto} from "./ApiDtoTypes";
+import {RecipesAddAction, RecipesSetAction} from "../reducers/RecipesReducer";
 
-export async function fetchAllRecipes(entityContainerId) {
+export async function fetchAllRecipes(entityContainerId: string): Promise<RecipeDto[]> {
   let response = await fetch(`worksheet/${entityContainerId}/recipe`);
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  let data = await response.json();
-  Store.dispatch({type:"recipes/set", payload:data});
+  let json = await response.json() as RecipeDto[];
+  Store.dispatch(RecipesSetAction(json));
+  return json;
 }
 
-export async function createRecipe(entityContainerId, body) {
+export async function createRecipe(entityContainerId: string, body: object): Promise<RecipeDto> {
   let response = await fetch(`worksheet/${entityContainerId}/recipe`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
@@ -23,7 +26,7 @@ export async function createRecipe(entityContainerId, body) {
     throwErrorNotification(error);
     throw new Error(error);
   }
-  let json = await response.json();
-  Store.dispatch({type:"recipes/add", payload:json});
+  let json = await response.json() as RecipeDto;
+  Store.dispatch(RecipesAddAction(json));
   return json;
 }

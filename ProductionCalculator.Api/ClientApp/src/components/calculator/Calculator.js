@@ -178,7 +178,6 @@ const onNodesChange = (worksheetId, changes, tempPositionData, setTempPositionDa
         if (change.dragging) {
           setTempPositionData({position:change.position, id:change.id});
         } else {
-          Store.dispatch({type:"node/change/position", payload: tempPositionData, worksheetId:worksheetId});
           nodeEditPosition(worksheetId, change.id, tempPositionData.position);
         }
         break;

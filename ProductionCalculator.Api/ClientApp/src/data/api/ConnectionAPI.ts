@@ -1,13 +1,19 @@
 ﻿import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
+import {ConnectionDto} from "./ApiDtoTypes";
+import {ConnectionAddAction, ConnectionRemoveAction} from "../reducers/WorksheetsReducer";
 
-export async function connectionCreate(worksheetId, nodeInId, nodeOutId, product) {
+export async function connectionCreate(
+    worksheetId: string, 
+    inputNodeId: string, 
+    outputNodeId: string, 
+    product: string): Promise<ConnectionDto> {
   let response = await fetch(`worksheet/${worksheetId}/connection`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
-      inputNodeId:nodeInId, 
-      outputNodeId:nodeOutId, 
+      inputNodeId,
+      outputNodeId,
       product,
     })
   });
@@ -17,17 +23,16 @@ export async function connectionCreate(worksheetId, nodeInId, nodeOutId, product
     throw new Error(error);
   }
   let json = await response.json();
-  Store.dispatch({type:"connection/add", payload:json, worksheetId:worksheetId});
+  Store.dispatch(ConnectionAddAction({connection:json, worksheetId:worksheetId}));
   return json;
 }
 
-export async function connectionDelete(worksheetId, connectionId) {
+export async function connectionDelete(worksheetId: string, connectionId: string): Promise<void> {
   let response = await fetch(`worksheet/${worksheetId}/connection/${connectionId}`, {method: "delete"});
   if (!response.ok) {
     let error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  Store.dispatch({type:"connection/remove", payload:connectionId, worksheetId:worksheetId});
-  return response;
+  Store.dispatch(ConnectionRemoveAction({id:connectionId, worksheetId:worksheetId}));
 }

@@ -2,6 +2,7 @@ import {Editor} from "../components/editor/Editor";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchProject} from "../data/api/ProjectsAPI";
+import {ProjectUnloadAction} from "../data/reducers/ProjectReducer";
 
 export function EditorPage(props) {
   const projectId = props.match.params.id;
@@ -13,7 +14,7 @@ export function EditorPage(props) {
     fetchProject(projectId).then(() => setLoading(false));
     
     return () => {
-      dispatch({type:"project/unload"});
+      dispatch(ProjectUnloadAction());
     }
   }, []);
   
