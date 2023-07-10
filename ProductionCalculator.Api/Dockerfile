@@ -5,16 +5,17 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["SiteReact/SiteReact.csproj", "SiteReact/"]
-RUN dotnet restore "SiteReact/SiteReact.csproj"
+COPY ["ProductionCalculator.Api/ProductionCalculator.Api.csproj", "ProductionCalculator.Api/"]
+RUN dotnet restore "ProductionCalculator.Api/ProductionCalculator.Api.csproj"
+
 COPY . .
-WORKDIR "/src/SiteReact"
-RUN dotnet build "SiteReact.csproj" -c Release -o /app/build
+WORKDIR "/src/ProductionCalculator.Api"
+RUN dotnet build "ProductionCalculator.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "SiteReact.csproj" -c Release -o /app/publish
+RUN dotnet publish "ProductionCalculator.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SiteReact.dll"]
+ENTRYPOINT ["dotnet", "ProductionCalculator.Api.dll"]

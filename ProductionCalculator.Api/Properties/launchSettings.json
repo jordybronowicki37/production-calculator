@@ -14,7 +14,6 @@
       "applicationUrl": "https://localhost:7291;http://localhost:5291",
       "environmentVariables": {
         "MongoConnectionString": "mongodb://localhost:27017",
-        "PostgreSQLConnectionString": "Host=localhost:5433;Database=production_calculator;Username=postgres;Password=postgres",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
       }
