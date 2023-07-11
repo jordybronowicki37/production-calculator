@@ -8,8 +8,7 @@ using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.targets;
 using productionCalculatorLib.components.worksheet;
-using SiteReact.Controllers.dto.nodes;
-using SiteReact.Controllers.dto.targets;
+using SiteReact.Controllers.dto;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
@@ -30,7 +29,7 @@ public class NodeController : ControllerBase
     }
     
     [HttpPost("")]
-    public IActionResult AddNode(Guid worksheetId, DtoNodeCreate dto)
+    public IActionResult AddNode(Guid worksheetId, NodeCreateDto nodeCreateDto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -38,36 +37,36 @@ public class NodeController : ControllerBase
         var e = GetEntityContainer(w.EntityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        if (!Enum.TryParse(dto.Type, out ENodeTypes type)) return BadRequest("Could not parse type");
+        if (!Enum.TryParse(nodeCreateDto.Type, out ENodeTypes type)) return BadRequest("Could not parse type");
         INode node;
         
         switch (type)
         {
             case ENodeTypes.Spawn:
             {
-                if (dto.Product == null) return BadRequest("Product field is empty");
-                var product = e.GetProduct(dto.Product);
+                if (nodeCreateDto.Product == null) return BadRequest("Product field is empty");
+                var product = e.GetProduct(nodeCreateDto.Product);
                 if (product == null) return NotFound("ProductId not found");
-                node = w.GetNodeBuilder<SpawnNode>().SetPosition(dto.Position).SetProduct(product).Build();
+                node = w.GetNodeBuilder<SpawnNode>().SetPosition(nodeCreateDto.Position).SetProduct(product).Build();
                 break;
             }
             case ENodeTypes.Production:
             {
-                if (dto.Recipe == null) return BadRequest("Recipe field is empty");
-                if (dto.Machine == null) return BadRequest("Machine field is empty");
-                var recipe = e.GetRecipe(dto.Recipe);
-                var machine = e.GetMachine(dto.Machine);
+                if (nodeCreateDto.Recipe == null) return BadRequest("Recipe field is empty");
+                if (nodeCreateDto.Machine == null) return BadRequest("Machine field is empty");
+                var recipe = e.GetRecipe(nodeCreateDto.Recipe);
+                var machine = e.GetMachine(nodeCreateDto.Machine);
                 if (recipe == null) return NotFound("Recipe not found");
                 if (machine == null) return NotFound("Machine not found");
-                node = w.GetNodeBuilder<ProductionNode>().SetPosition(dto.Position).SetRecipe(recipe, machine).Build();
+                node = w.GetNodeBuilder<ProductionNode>().SetPosition(nodeCreateDto.Position).SetRecipe(recipe, machine).Build();
                 break;
             }
             case ENodeTypes.End:
             {
-                if (dto.Product == null) return BadRequest("Product field is empty");
-                var product = e.GetProduct(dto.Product);
+                if (nodeCreateDto.Product == null) return BadRequest("Product field is empty");
+                var product = e.GetProduct(nodeCreateDto.Product);
                 if (product == null) return NotFound("ProductId not found");
-                node = w.GetNodeBuilder<EndNode>().SetPosition(dto.Position).SetProduct(product).Build();
+                node = w.GetNodeBuilder<EndNode>().SetPosition(nodeCreateDto.Position).SetProduct(product).Build();
                 break;
             }
             default:
@@ -78,7 +77,7 @@ public class NodeController : ControllerBase
         var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
         _context.Worksheets.UpdateOne(filter, update);
 
-        return Ok(DtoNode.GenerateNode(node));
+        return Ok(NodeDto.GenerateNode(node));
     }
 
     [HttpPut("{nodeId:Guid}/position")]
@@ -99,11 +98,11 @@ public class NodeController : ControllerBase
         var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
         _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok(DtoNode.GenerateNode(node));
+        return Ok(NodeDto.GenerateNode(node));
     }
 
     [HttpPut("{nodeId:Guid}/product")]
-    public IActionResult EditNodeProduct(Guid nodeId, Guid worksheetId, DtoNodeSetProduct dto)
+    public IActionResult EditNodeProduct(Guid nodeId, Guid worksheetId, NodeSetProductDto nodeSetProductDto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -115,7 +114,7 @@ public class NodeController : ControllerBase
         if (node == null) return NotFound("Node is not found");
         if (node is not IHasProduct productNode) return BadRequest("Node does not support products");
 
-        var product = e.GetProduct(dto.Product);
+        var product = e.GetProduct(nodeSetProductDto.Product);
         if (product == null) return NotFound("ProductId not found");
         
         productNode.ProductId = product.Id;
@@ -124,11 +123,11 @@ public class NodeController : ControllerBase
         var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
         _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok(DtoNode.GenerateNode(productNode));
+        return Ok(NodeDto.GenerateNode(productNode));
     }
     
     [HttpPut("{nodeId:Guid}/recipe")]
-    public IActionResult EditNodeRecipe(Guid nodeId, Guid worksheetId, DtoNodeSetRecipe dto)
+    public IActionResult EditNodeRecipe(Guid nodeId, Guid worksheetId, NodeSetRecipeDto nodeSetRecipeDto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -140,7 +139,7 @@ public class NodeController : ControllerBase
         if (node == null) return NotFound("Node is not found");
         if (node is not IHasRecipe recipeNode) return BadRequest("Node does not support recipes");
         
-        var recipe = e.GetRecipe(dto.Recipe);
+        var recipe = e.GetRecipe(nodeSetRecipeDto.Recipe);
         if (recipe == null) return NotFound("ProductId not found");
         recipeNode.RecipeId = recipe.Id;
         
@@ -148,11 +147,11 @@ public class NodeController : ControllerBase
         var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
         _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok(DtoNode.GenerateNode(recipeNode));
+        return Ok(NodeDto.GenerateNode(recipeNode));
     }
     
     [HttpPut("{nodeId:Guid}/targets")]
-    public IActionResult EditNodeTargets(Guid nodeId, Guid worksheetId, IEnumerable<DtoProductionTarget> dto)
+    public IActionResult EditNodeTargets(Guid nodeId, Guid worksheetId, IEnumerable<ProductionTargetDto> dto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -188,7 +187,7 @@ public class NodeController : ControllerBase
         var update = Builders<Worksheet>.Update.Set(f => f.Nodes, w.Nodes);
         _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok(DtoNode.GenerateNode(node));
+        return Ok(NodeDto.GenerateNode(node));
     }
     
     [HttpDelete("{nodeId:Guid}")]

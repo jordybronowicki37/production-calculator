@@ -1,6 +1,6 @@
-﻿namespace SiteReact.Controllers.dto.connections;
+﻿namespace SiteReact.Controllers.dto;
 
-public class DtoConnectionCreate
+public class ConnectionCreateDto
 {
     public Guid InputNodeId { get; set; }
     public Guid OutputNodeId { get; set; }

@@ -1,11 +1,10 @@
 ﻿using productionCalculatorLib.components.nodes;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.nodes.nodeTypes;
-using SiteReact.Controllers.dto.targets;
 
-namespace SiteReact.Controllers.dto.nodes;
+namespace SiteReact.Controllers.dto;
 
-public class DtoNode
+public abstract class NodeDto
 {
     public Guid Id { get; set; }
     public string Type { get; set; } = "";
@@ -15,16 +14,16 @@ public class DtoNode
     public Guid? Machine { get; set; }
     public Guid? Recipe { get; set; }
     public Guid? Product { get; set; }
-    
-    public IEnumerable<DtoProductionTarget>? Targets { get; set; }
 
-    public static DtoNode GenerateNode(INode node)
+    public IEnumerable<ProductionTargetDto> Targets { get; set; } = new List<ProductionTargetDto>();
+
+    public static NodeDto GenerateNode(INode node)
     {
         return node switch
         {
-            SpawnNode n => new DtoNodeSpawn(n),
-            ProductionNode n => new DtoNodeProduction(n),
-            EndNode n => new DtoNodeEnd(n),
+            SpawnNode n => new NodeSpawnDto(n),
+            ProductionNode n => new NodeProductionDto(n),
+            EndNode n => new NodeEndDto(n),
             _ => throw new InvalidOperationException()
         };
     }

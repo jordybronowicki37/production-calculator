@@ -1,11 +1,10 @@
 ﻿using productionCalculatorLib.components.nodes.nodeTypes;
-using SiteReact.Controllers.dto.targets;
 
-namespace SiteReact.Controllers.dto.nodes;
+namespace SiteReact.Controllers.dto;
 
-public class DtoNodeEnd : DtoNode
+public class NodeEndDto : NodeDto
 {
-    public DtoNodeEnd(EndNode node)
+    public NodeEndDto(EndNode node)
     {
         Id = node.Id;
         Type = "End";
@@ -13,6 +12,6 @@ public class DtoNodeEnd : DtoNode
         
         Amount = node.Amount;
         Product = node.ProductId;
-        Targets = node.Targets.Select(t => new DtoProductionTarget(t));
+        Targets = node.Targets.Select(t => new ProductionTargetDto(t));
     }
 }

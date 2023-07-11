@@ -1,6 +1,6 @@
-﻿namespace SiteReact.Controllers.dto.projects;
+﻿namespace SiteReact.Controllers.dto;
 
-public class DtoProjectCreate
+public class ProjectCreateDto
 {
     public string Name { get; set; } = "";
     public string DataPreset { get; set; } = "";

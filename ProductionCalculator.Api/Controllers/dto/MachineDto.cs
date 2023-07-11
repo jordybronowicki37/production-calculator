@@ -1,14 +1,14 @@
 using productionCalculatorLib.components.entities;
 
-namespace SiteReact.Controllers.dto.machines;
+namespace SiteReact.Controllers.dto;
 
-public class DtoMachine
+public class MachineDto
 {
     public Guid Id { get; }
     public string Name { get; }
     public IEnumerable<Guid> Recipes { get; }
 
-    public DtoMachine(Machine machine)
+    public MachineDto(Machine machine)
     {
         Id = machine.Id;
         Name = machine.Name;

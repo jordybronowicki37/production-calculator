@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
-using SiteReact.Controllers.dto.products;
+using SiteReact.Controllers.dto;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
@@ -27,39 +27,39 @@ public class ProductController : ControllerBase
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        return Ok(e.Products.Select(p => new DtoProduct(p)));
+        return Ok(e.Products.Select(p => new ProductDto(p)));
     }
 
     [HttpPost("")]
-    public IActionResult Create(DtoProductCreate dto, Guid entityContainerId)
+    public IActionResult Create(ProductCreateDto productCreateDto, Guid entityContainerId)
     {
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        var p = e.GetOrGenerateProduct(dto.Name);
+        var p = e.GetOrGenerateProduct(productCreateDto.Name);
         
         var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
         var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
         _context.EntityContainers.UpdateOne(filter, update);
         
-        return Ok(new DtoProduct(p));
+        return Ok(new ProductDto(p));
     }
     
     [HttpPatch("{productId:Guid}")]
-    public IActionResult Update(Guid productId, Guid entityContainerId, DtoProductCreate dto)
+    public IActionResult Update(Guid productId, Guid entityContainerId, ProductCreateDto productCreateDto)
     {
         var e = GetEntityContainer(entityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
         var p = e.GetProduct(productId);
         if (p == null) return NotFound("ProductId is not found");
-        p.Name = dto.Name;
+        p.Name = productCreateDto.Name;
         
         var filter = Builders<EntityContainer>.Filter.Eq(f => f.Id, e.Id);
         var update = Builders<EntityContainer>.Update.Set(f => f.Products, e.Products);
         _context.EntityContainers.UpdateOne(filter, update);
         
-        return Ok(new DtoProduct(p));
+        return Ok(new ProductDto(p));
     }
     
     [HttpDelete("{productId:Guid}")]

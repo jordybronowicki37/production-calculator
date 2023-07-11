@@ -4,7 +4,7 @@ using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.nodes.abstractions;
 using productionCalculatorLib.components.nodes.interfaces;
 using productionCalculatorLib.components.worksheet;
-using SiteReact.Controllers.dto.connections;
+using SiteReact.Controllers.dto;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
@@ -25,7 +25,7 @@ public class ConnectionController : ControllerBase
     }
 
     [HttpPost("")]
-    public IActionResult AddNode(Guid worksheetId, DtoConnectionCreate dto)
+    public IActionResult AddNode(Guid worksheetId, ConnectionCreateDto connectionCreateDto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -33,15 +33,15 @@ public class ConnectionController : ControllerBase
         var e = GetEntityContainer(w.EntityContainerId);
         if (e == null) return NotFound("Entity container is not found");
         
-        var node1 = GetNode(w, dto.InputNodeId);
+        var node1 = GetNode(w, connectionCreateDto.InputNodeId);
         if (node1 == null) return NotFound("Node is not found");
         if (node1 is not INodeOut source) return BadRequest("Source node is not an output");
         
-        var node2 = GetNode(w, dto.OutputNodeId);
+        var node2 = GetNode(w, connectionCreateDto.OutputNodeId);
         if (node2 == null) return NotFound("Node is not found");
         if (node2 is not INodeIn target) return BadRequest("Target node is not an input");
         
-        var product = e.GetProduct(dto.Product);
+        var product = e.GetProduct(connectionCreateDto.Product);
         if (product == null) return BadRequest("Product is not found");
 
         var connection = w.GetConnectionBuilder(source, target, product).Build();
@@ -50,7 +50,7 @@ public class ConnectionController : ControllerBase
         var update = Builders<Worksheet>.Update.Set(f => f.Connections, w.Connections);
         _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok(new DtoConnectionDouble(connection));
+        return Ok(new ConnectionDto(connection));
     }
 
     [HttpDelete("{connectionId:Guid}")]

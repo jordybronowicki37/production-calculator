@@ -1,13 +1,13 @@
 ﻿using productionCalculatorLib.components.entities;
 
-namespace SiteReact.Controllers.dto.products;
+namespace SiteReact.Controllers.dto;
 
-public class DtoProduct
+public class ProductDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = "";
     
-    public DtoProduct(Product product)
+    public ProductDto(Product product)
     {
         Id = product.Id;
         Name = product.Name;

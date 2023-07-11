@@ -3,8 +3,7 @@ using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.project;
 using productionCalculatorLib.components.worksheet;
-using SiteReact.Controllers.dto.projects;
-using SiteReact.Controllers.dto.worksheets;
+using SiteReact.Controllers.dto;
 using SiteReact.Data.DbContexts;
 using SiteReact.Data.GameDataPresets;
 
@@ -32,7 +31,7 @@ public class ProjectController : ControllerBase
         {
             var ec = GetEntityContainer(p.EntityContainerId);
             var worksheets = GetWorksheets(p.Worksheets);
-            return new DtoProject(p, ec, worksheets);
+            return new ProjectDto(p, ec, worksheets);
         }));
     }
     
@@ -47,16 +46,16 @@ public class ProjectController : ControllerBase
 
         var ws = GetWorksheets(p.Worksheets);
         
-        return Ok(new DtoProject(p, e, ws));
+        return Ok(new ProjectDto(p, e, ws));
     }
     
     [HttpPost("")]
-    public IActionResult CreateNew(DtoProjectCreate dto)
+    public IActionResult CreateNew(ProjectCreateDto projectCreateDto)
     {
         var e = new EntityContainer();
-        var p = new Project(dto.Name, e.Id);
+        var p = new Project(projectCreateDto.Name, e.Id);
 
-        switch (dto.DataPreset)
+        switch (projectCreateDto.DataPreset)
         {
             case "":
             case "none":
@@ -80,23 +79,23 @@ public class ProjectController : ControllerBase
         _context.EntityContainers.InsertOne(e);
         _context.Projects.InsertOne(p);
         
-        return Ok(new DtoProject(p, e, new List<Worksheet>()));
+        return Ok(new ProjectDto(p, e, new List<Worksheet>()));
     }
     
     [HttpPost("{id:Guid}")]
-    public IActionResult CreateNewWorksheet(Guid id, DtoWorksheetCreate dto)
+    public IActionResult CreateNewWorksheet(Guid id, WorksheetCreateDto worksheetCreateDto)
     {
         var p = GetProject(id);
         if (p == null) return NotFound("Project is not found");
 
-        var w = p.CreateWorksheet(dto.Name);
+        var w = p.CreateWorksheet(worksheetCreateDto.Name);
         
         _context.Worksheets.InsertOne(w);
         
         var filter = Builders<Project>.Filter.Eq(f => f.Id, p.Id);
         _context.Projects.ReplaceOne(filter, p);
         
-        return Ok(new DtoWorksheet(w));
+        return Ok(new WorksheetDto(w));
     }
     
     private IEnumerable<Project> GetAllProjects()

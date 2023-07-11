@@ -1,15 +1,15 @@
 ﻿using productionCalculatorLib.components.targets;
 
-namespace SiteReact.Controllers.dto.targets;
+namespace SiteReact.Controllers.dto;
 
-public class DtoConnectionTarget
+public class ProductionTargetDto
 {
     public float Amount { get; set; }
     public string Type { get; set; } = string.Empty;
-    
-    public DtoConnectionTarget() {}
-    
-    public DtoConnectionTarget(TargetConnection target)
+
+    public ProductionTargetDto() {}
+
+    public ProductionTargetDto(TargetProduction target)
     {
         Amount = target.Amount;
         Type = target.Type.ToString();

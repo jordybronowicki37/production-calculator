@@ -1,28 +1,27 @@
 ﻿using productionCalculatorLib.components.connections;
-using SiteReact.Controllers.dto.targets;
 
-namespace SiteReact.Controllers.dto.connections;
+namespace SiteReact.Controllers.dto;
 
-public class DtoConnectionDouble
+public class ConnectionDto
 {
     public Guid Id { get; }
     public Guid InputNodeId { get; }
     public Guid OutputNodeId { get; }
     public Guid ProductId { get; }
     public float Amount { get; }
-    public IEnumerable<DtoConnectionTarget> Targets;
+    public IEnumerable<ConnectionTargetDto> Targets;
 
-    public DtoConnectionDouble(Connection connection)
+    public ConnectionDto(Connection connection)
     {
         Id = connection.Id;
         InputNodeId = connection.NodeInId;
         OutputNodeId = connection.NodeOutId;
         ProductId = connection.ProductId;
         Amount = connection.Amount;
-        Targets = connection.Targets.Select(t => new DtoConnectionTarget(t));
+        Targets = connection.Targets.Select(t => new ConnectionTargetDto(t));
     }
 
-    protected bool Equals(DtoConnectionDouble other)
+    protected bool Equals(ConnectionDto other)
     {
         return InputNodeId == other.InputNodeId && OutputNodeId == other.OutputNodeId;
     }
@@ -32,7 +31,7 @@ public class DtoConnectionDouble
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
         if (obj.GetType() != this.GetType()) return false;
-        return Equals((DtoConnectionDouble) obj);
+        return Equals((ConnectionDto) obj);
     }
 
     public override int GetHashCode()

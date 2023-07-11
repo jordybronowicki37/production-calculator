@@ -1,8 +1,8 @@
 ﻿using productionCalculatorLib.components.nodes;
 
-namespace SiteReact.Controllers.dto.nodes;
+namespace SiteReact.Controllers.dto;
 
-public class DtoNodeCreate
+public class NodeCreateDto
 {
     public string Type { get; set; } = "";
     public NodePosition Position { get; set; } = new NodePosition();

@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.worksheet;
-using SiteReact.Controllers.dto.worksheets;
+using SiteReact.Controllers.dto;
 using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
@@ -27,7 +27,7 @@ public class WorksheetController : ControllerBase
     public IActionResult GetAll()
     {
         var ws = GetAllWorksheets();
-        return Ok(ws.Select(w => new DtoWorksheet(w)));
+        return Ok(ws.Select(w => new WorksheetDto(w)));
     }
 
     [HttpGet("{id:Guid}")]
@@ -36,22 +36,22 @@ public class WorksheetController : ControllerBase
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
         
-        return Ok(new DtoWorksheet(w));
+        return Ok(new WorksheetDto(w));
     }
 
     [HttpPatch("{id:Guid}")]
-    public IActionResult Edit(Guid id, DtoWorksheetCreate dto)
+    public IActionResult Edit(Guid id, WorksheetCreateDto worksheetCreateDto)
     {
         var w = GetWorksheet(id);
         if (w == null) return NotFound("Worksheet is not found");
         
-        w.Name = dto.Name;
+        w.Name = worksheetCreateDto.Name;
         
         var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
         var update = Builders<Worksheet>.Update.Set(f => f.Name, w.Name);
         _context.Worksheets.UpdateOne(filter, update);
         
-        return Ok(new DtoWorksheet(w));
+        return Ok(new WorksheetDto(w));
     }
     
     [HttpPost("{id:Guid}/calculate")]
@@ -68,7 +68,7 @@ public class WorksheetController : ControllerBase
         var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
         _context.Worksheets.ReplaceOne(filter, w);
         
-        return Ok(new DtoWorksheet(w));
+        return Ok(new WorksheetDto(w));
     }
     
     private IEnumerable<Worksheet> GetAllWorksheets()

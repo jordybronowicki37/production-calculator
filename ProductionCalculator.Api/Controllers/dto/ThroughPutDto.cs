@@ -1,22 +1,22 @@
 ﻿using productionCalculatorLib.components.entities;
 
-namespace SiteReact.Controllers.dto.throughputs;
+namespace SiteReact.Controllers.dto;
 
-public class DtoThroughPut
+public class ThroughPutDto
 {
     public string Name { get; set; } = string.Empty;
     public Guid Product { get; set; }
     public float Amount { get; set; }
 
-    public DtoThroughPut() {}
+    public ThroughPutDto() {}
 
-    public DtoThroughPut(ThroughPut throughPut)
+    public ThroughPutDto(ThroughPut throughPut)
     {
         Amount = throughPut.Amount;
         Product = throughPut.ProductId;
     }
 
-    public DtoThroughPut(Product product, float amount)
+    public ThroughPutDto(Product product, float amount)
     {
         Amount = amount;
         Product = product.Id;
