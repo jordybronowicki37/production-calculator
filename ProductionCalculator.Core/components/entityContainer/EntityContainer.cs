@@ -5,6 +5,7 @@ namespace productionCalculatorLib.components.entityContainer;
 public class EntityContainer
 {
     public Guid Id { get; init; } = Guid.NewGuid();
+    public string Name { get; set; } = string.Empty;
     public virtual ICollection<Product> Products { get; private set; } = new List<Product>();
     public virtual ICollection<Recipe> Recipes { get; private set; } = new List<Recipe>();
     public virtual ICollection<Machine> Machines { get; private set; } = new List<Machine>();

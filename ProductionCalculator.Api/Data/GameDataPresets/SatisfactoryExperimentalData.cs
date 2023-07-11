@@ -6,6 +6,8 @@ public static class SatisfactoryExperimentalData
 {
     public static void AddData(EntityContainer e)
     {
+        e.Name = "Satisfactory Experimental";
+        
         // Ores
         var PBau = e.GetOrGenerateProduct("Bauxite");
         var PCatOre = e.GetOrGenerateProduct("Caterium Ore");

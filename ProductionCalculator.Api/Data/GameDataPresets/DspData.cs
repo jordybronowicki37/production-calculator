@@ -6,6 +6,8 @@ public static class DspData
 {
     public static void AddData(EntityContainer e)
     {
+        e.Name = "Dyson Sphere Program";
+        
         // Natural Resources
         var pCoa = e.GetOrGenerateProduct("Coal");
         var pCopOre = e.GetOrGenerateProduct("Copper Ore");

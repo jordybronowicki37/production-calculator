@@ -7,6 +7,7 @@ public static class SatisfactoryFicsMasData
     public static void AddData(EntityContainer e)
     {
         SatisfactoryData.AddData(e);
+        e.Name = "Satisfactory FICSMAS";
         
         // Tier 0
         var PCopIng = e.GetOrGenerateProduct("Copper Ingot");
