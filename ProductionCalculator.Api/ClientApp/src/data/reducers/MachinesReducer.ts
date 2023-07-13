@@ -7,7 +7,7 @@ const machinesReducer = createReducer<Machine[]>([], builder => {
   builder
       .addCase(ResetAction, () => [])
       .addCase(ProjectUnloadAction, () => [])
-      .addCase(ProjectLoadAction, (state, action) => action.payload.machines);
+      .addCase(ProjectLoadAction, (state, action) => action.payload.entityContainer.machines);
 });
 
 export {machinesReducer}

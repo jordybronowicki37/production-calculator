@@ -7,9 +7,11 @@ import {Button, Spinner} from "reactstrap";
 import {WorksheetItem} from "../components/worksheets/WorksheetItem";
 import {Popup} from "../components/popup/Popup";
 import {ProjectCreator} from "../components/project/ProjectCreator";
+import {StoreStates} from "../data/DataStore";
+import {ProjectDto} from "../data/api/ApiDtoTypes";
 
 export function ProjectsPage() {
-  const projects = useSelector(state => state.projects);
+  const projects = useSelector<StoreStates, StoreStates["projects"]>(state => state.projects);
   const [isLoading, setIsLoading] = useState(true);
   const [projectCreatorOpen, setProjectCreatorOpen] = useState(false);
   
@@ -34,25 +36,23 @@ export function ProjectsPage() {
         </Button>
       </div>
       
-      {!isLoading && projects.map(p => ProjectItem(p))}
+      {!isLoading && projects.map(p => <ProjectItem project={p}/>)}
       {!isLoading && projects.length === 0 && <NoProjectYet/>}
       {isLoading && <ProjectsLoading/>}
     </div>
   );
 }
 
-function ProjectItem(project) {
-  const {id, name, worksheets, products} = project;
-  
+function ProjectItem({project}:{project: ProjectDto}) {
+  const {id, name, worksheets, entityContainer} = project;
   return (
     <div key={id} className="project-item">
       <div className="project-top">
-        <Link to={`project/${id}`} className="project-link">{name}</Link>
-        <Link to={`editor/${id}`} className="project-link"> > Editor</Link>
+        <Link to={`editor/${id}`} className="project-link">{name}</Link>
         <ProjectStats project={project}/>
       </div>
       <div className="project-worksheets">
-        {worksheets.map(w => <WorksheetItem key={w.id} worksheet={w} products={products}/>)}
+        {worksheets.map(w => <WorksheetItem key={w.id} worksheet={w} products={entityContainer.products}/>)}
       </div>
     </div>
   );
@@ -76,20 +76,20 @@ function NoProjectYet() {
   );
 }
 
-function ProjectStats({project}) {
+function ProjectStats({project}:{project: ProjectDto}) {
   return (
     <div className="project-stats">
       <div>
         <span className="material-symbols-rounded" title="Products">pie_chart</span>
-        {project.products.length}
+        {project.entityContainer.products.length}
       </div>
       <div>
         <span className="material-symbols-rounded" title="Recipes">account_tree</span>
-        {project.recipes.length}
+        {project.entityContainer.recipes.length}
       </div>
       <div>
         <span className="material-symbols-rounded" title="Machines">precision_manufacturing</span>
-        {project.machines.length}
+        {project.entityContainer.machines.length}
       </div>
       <div>
         <span className="material-symbols-rounded" title="Worksheets">table_chart</span>

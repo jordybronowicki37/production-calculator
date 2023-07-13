@@ -10,6 +10,14 @@ import {
 
 export type ConnectionDto = Connection;
 
+export type EntityContainerDto = {
+    id: string,
+    name: string,
+    recipes: RecipeDto[],
+    products: ProductDto[],
+    machines: MachineDto[],
+}
+
 export type MachineDto = Machine;
 
 export type NodeDto = {
@@ -27,11 +35,8 @@ export type ProductDto = Product;
 
 export type ProjectDto = {
     id: string,
-    entityContainerId: string,
     name: string,
-    machines: MachineDto[],
-    products: ProductDto[],
-    recipes: RecipeDto[],
+    entityContainer: EntityContainerDto,
     worksheets: WorksheetDto[]
 }
 

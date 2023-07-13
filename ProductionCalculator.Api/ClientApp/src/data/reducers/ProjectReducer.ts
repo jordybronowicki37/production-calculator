@@ -11,8 +11,8 @@ const projectReducer = createReducer<Project | null>(null, builder => {
       .addCase(ResetAction, () => null)
       .addCase(ProjectUnloadAction, () => null)
       .addCase(ProjectLoadAction, (state, action) => {
-        const {products, recipes, machines, worksheets, ...other} = action.payload;
-        return other;
+        const {worksheets, entityContainer, ...other} = action.payload;
+        return {...other, entityContainerId: entityContainer.id};
       });
 });
 

@@ -9,7 +9,7 @@ type NotificationCreate = {
 
 type NotificationTypes = ""
 
-type Notification = {
+export type Notification = {
   id: number,
   time: Date,
   type: NotificationTypes,

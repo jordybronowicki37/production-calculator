@@ -6,6 +6,14 @@ export type Connection = {
     outputNodeId: string,
 } 
 
+export type EntityContainer = {
+    id: string,
+    name: string,
+    recipes: Recipe[],
+    products: Product[],
+    machines: Machine[],
+}
+
 export type Machine = {
     id: string,
     name: string,
@@ -37,15 +45,8 @@ export type Product = {
 
 export type Project = {
     id: string,
+    name: string,
     entityContainerId: string,
-    name: string,
-}
-
-export type Recipe = {
-    id: string,
-    name: string,
-    inputThroughPuts: ThroughPut[]
-    outputThroughPuts: ThroughPut[]
 }
 
 export type ProductionTarget = {
@@ -54,6 +55,13 @@ export type ProductionTarget = {
 }
 
 export type ProductionTargetTypes = "ExactAmount" | "MinAmount" | "MaxAmount";
+
+export type Recipe = {
+    id: string,
+    name: string,
+    inputThroughPuts: ThroughPut[]
+    outputThroughPuts: ThroughPut[]
+}
 
 export type ThroughPut = {
     product: string,

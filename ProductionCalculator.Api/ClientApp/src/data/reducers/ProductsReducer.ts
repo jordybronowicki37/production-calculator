@@ -10,7 +10,7 @@ const productsReducer = createReducer<ProductDto[]>([], builder => {
   builder
       .addCase(ResetAction, () => [])
       .addCase(ProjectUnloadAction, () => [])
-      .addCase(ProjectLoadAction, (state, action) => action.payload.products)
+      .addCase(ProjectLoadAction, (state, action) => action.payload.entityContainer.products)
       .addCase(ProductsSetAction, (state, action) => [...action.payload])
       .addCase(ProductsAddAction, (state, action) => [...state, action.payload])
 });
