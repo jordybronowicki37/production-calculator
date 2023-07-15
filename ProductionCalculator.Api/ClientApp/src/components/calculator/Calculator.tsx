@@ -2,14 +2,17 @@ import "./Calculator.scss";
 import {CSSProperties, useEffect, useRef, useState} from "react";
 import ReactFlow, {
   Background,
+  Connection as FlowConnection,
   Controls,
   DefaultEdgeOptions, Edge, EdgeChange,
   MarkerType,
   MiniMap,
+  NodeChange,
   Node as FlowNode,
   ReactFlowInstance,
   ReactFlowProvider
-} from 'react-flow-renderer';
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 import {throwWarningNotification} from "../notification/NotificationThrower";
 import {calculate} from "../../data/api/WorksheetAPI";
 import {NodeSpawn} from "./nodes/NodeSpawn";
@@ -72,6 +75,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
             className="flow-chart"
             nodes={flowNodes}
             edges={flowEdges}
+            edgeTypes={customEdges}
             onNodesChange={(changes) => onNodesChange(id, changes, tempPositionData, setTempPositionData)}
             onEdgesChange={(changes) => onEdgesChange(id, changes)}
             onConnect={(edge) => onConnect(id, edge, nodes, products, recipes)}
@@ -85,6 +89,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
             defaultEdgeOptions={defaultEdgeOptions}>
             <MiniMap 
                 nodeStrokeColor={(node) => {
+                  // @ts-ignore
                   switch (node.nodeType) {
                       case "Spawn":
                         return "var(--node-spawn-secondary)";
@@ -146,7 +151,7 @@ function calculateWorksheet(worksheetId: string, setState: (state: CalculationSt
     } else {
       setState("warning");
     }
-  }).catch(r => {
+  }).catch(() => {
     setState("error");
   });
 }
@@ -224,7 +229,7 @@ function onEdgesChange (worksheetId: string, changes: EdgeChange[]) {
   })
 }
 
-function onConnect (worksheetId: string, edge: Edge, nodes: Node[], products: Product[], recipes: Recipe[]) {
+function onConnect (worksheetId: string, edge: FlowConnection, nodes: Node[], products: Product[], recipes: Recipe[]) {
   if (products.length === 0) {
     throwWarningNotification("Cannot connect nodes because no products exist in worksheet");
     return;
