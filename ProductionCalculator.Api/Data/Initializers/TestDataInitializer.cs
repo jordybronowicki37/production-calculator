@@ -39,7 +39,8 @@ public static class TestDataInitializer
     {
         entityContainer = new EntityContainer
         {
-            Id = Guid.Parse("dff3c380-3e78-418c-af70-bbc955140aca")
+            Id = Guid.Parse("dff3c380-3e78-418c-af70-bbc955140aca"),
+            Name = "Simple Iron Smelting"
         };
         worksheet = new Worksheet("Iron ingot smelting", entityContainer.Id)
         {
@@ -74,7 +75,8 @@ public static class TestDataInitializer
     {
         entityContainer = new EntityContainer
         {
-            Id = Guid.Parse("7671dd58-077d-4922-935b-4ed08782b70c")
+            Id = Guid.Parse("7671dd58-077d-4922-935b-4ed08782b70c"),
+            Name = "Simple Steel Smelting"
         };
         worksheet = new Worksheet("Steel ingot smelting", entityContainer.Id)
         {
