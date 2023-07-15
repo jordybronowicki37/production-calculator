@@ -2,12 +2,12 @@ import "./WorksheetCreator.scss";
 import {Button, Spinner} from "reactstrap";
 import {createNewWorksheet} from "../../data/api/WorksheetAPI";
 import {useState} from "react";
+import {WorksheetDto} from "../../data/api/ApiDtoTypes";
 
-export function WorksheetCreator({handleResult, projectId}) {
-  const [newWorksheetName, setNewWorksheetName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [newWorksheetNameError, setNewWorksheetNameError] = useState(false);
+export function WorksheetCreator({handleResult, projectId}: {handleResult: (value: WorksheetDto) => void, projectId: string}) {
+  const [newWorksheetName, setNewWorksheetName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [newWorksheetNameError, setNewWorksheetNameError] = useState<boolean>(false);
   
   return (
     <div className="worksheet-creator">

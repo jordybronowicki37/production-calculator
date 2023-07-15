@@ -2,10 +2,12 @@ import "./Editor.scss";
 import {useState} from "react";
 import {SelectorTab} from "./tabs/SelectorTab";
 import {CalculatorTab} from "./tabs/CalculatorTab";
+import {Machine, Product, Project, Recipe, Worksheet} from "../../data/DataTypes";
 
-export function Editor({ project, worksheets, products, recipes, machines }) {
-  const [tabs, setTabs] = useState([]);
-  const [selectedTab, setSelectedTab] = useState(-1);
+export function Editor({ project, worksheets, products, recipes, machines }: 
+    { project: Project, worksheets: Worksheet[], products: Product[], recipes: Recipe[], machines: Machine[] }) {
+  const [tabs, setTabs] = useState<EditorTab[]>([]);
+  const [selectedTab, setSelectedTab] = useState<number>(-1);
   const openedWorksheets = tabs.map(t => t.id);
 
   return (
@@ -65,6 +67,13 @@ export function Editor({ project, worksheets, products, recipes, machines }) {
       </div>
     </div>
   );
+}
+
+export type EditorTabTypes = "calculator";
+
+export type EditorTab = {
+    id: string,
+    type: EditorTabTypes,
 }
 
 function getWorksheet(worksheets, id) {

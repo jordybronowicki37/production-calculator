@@ -7,7 +7,7 @@ type NotificationCreate = {
   message: string,
 }
 
-type NotificationTypes = ""
+export type NotificationTypes = "info" | "success" | "warning" | "error";
 
 export type Notification = {
   id: number,

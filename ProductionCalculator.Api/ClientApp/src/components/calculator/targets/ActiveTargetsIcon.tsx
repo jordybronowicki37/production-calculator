@@ -1,6 +1,7 @@
 ﻿import "./ActiveTargetsIcon.scss";
+import {ProductionTarget} from "../../../data/DataTypes";
 
-export function ActiveTargetsIcon({targets, onOpenEditor}) {
+export function ActiveTargetsIcon({targets, onOpenEditor}:{targets: ProductionTarget[], onOpenEditor: () => void}) {
   return (
     <div 
       title="Edit targets"

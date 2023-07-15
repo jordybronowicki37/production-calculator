@@ -1,6 +1,8 @@
 ﻿import "./CalculationState.scss";
 
-export function CalculationState({message, state, onClick}) {
+export type CalculationStateType = "success" | "loading" | "refresh" | "warning" | "error";
+
+export function CalculationState({message, state, onClick}: {message: string, state: CalculationStateType, onClick}) {
   return (
     <div className="calculation-states">
       <div hidden={message===""} className="calculation-states-label">{message}</div>

@@ -4,9 +4,10 @@ import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
-import {NodeAmountField} from "./components/NodeAmountField.tsx";
+import {NodeAmountField} from "./components/NodeAmountField";
+import {Node, Product} from "../../../data/DataTypes";
 
-export function NodeEnd({worksheetId, node, product, previewMode}) {
+export function NodeEnd({worksheetId, node, product, previewMode}: {worksheetId: string, node: Node, product: Product, previewMode: boolean}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
   let productField = <div className="preview-field">name</div>;

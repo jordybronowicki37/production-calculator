@@ -1,5 +1,5 @@
 import {Popup} from "../../popup/Popup";
-import {NodeSpawn} from "../nodes/NodeSpawn";
+import {NodeSpawn} from "./NodeSpawn";
 
 export function NodeSpawnTooltip({hidden, onClose}) {
   return <Popup

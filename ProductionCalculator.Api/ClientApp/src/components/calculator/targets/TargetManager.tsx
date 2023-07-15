@@ -2,15 +2,17 @@
 import {useEffect, useState} from "react";
 import {setTargets} from "../../../data/api/TargetAPI";
 import {nanoid} from "@reduxjs/toolkit";
+import {ProductionTarget, ProductionTargetTypes} from "../../../data/DataTypes";
+import {ProductionTargetCreateDto} from "../../../data/api/ApiDtoTypes";
 
-export function TargetManager({worksheetId, nodeId, targets}) {
-  const [mode, setMode] = useState("none");
-  const [exactAmount, setExactAmount] = useState(getInitialTargetValue(targets, "ExactAmount"));
-  const [minAmount, setMinAmount] = useState(getInitialTargetValue(targets, "MinAmount"));
-  const [maxAmount, setMaxAmount] = useState(getInitialTargetValue(targets, "MaxAmount"));
+export function TargetManager({worksheetId, nodeId, targets}: {worksheetId: string, nodeId: string, targets: ProductionTarget[]}) {
+  const [mode, setMode] = useState<TargetModes>("none");
+  const [exactAmount, setExactAmount] = useState<number>(getInitialTargetValue(targets, "ExactAmount"));
+  const [minAmount, setMinAmount] = useState<number>(getInitialTargetValue(targets, "MinAmount"));
+  const [maxAmount, setMaxAmount] = useState<number>(getInitialTargetValue(targets, "MaxAmount"));
   
   useEffect(() => {
-    let newTargets = [];
+    let newTargets: ProductionTargetCreateDto[] = [];
 
     if (exactAmount > 0) newTargets.push({type:"ExactAmount", amount:exactAmount});
     if (minAmount > 0) newTargets.push({type:"MinAmount", amount:minAmount});
@@ -86,16 +88,18 @@ export function TargetManager({worksheetId, nodeId, targets}) {
   </div>;
 }
 
-function getInitialTargetValue(targets, type) {
+type TargetModes = "none" | "exact" | "min-max";
+
+function getInitialTargetValue(targets: ProductionTarget[], type: ProductionTargetTypes): number {
   const t = targets.find(v => v.type === type);
   return t ? t.amount : 0;
 }
 
-function checkTargetListCopy(newList, oldList) {
+function checkTargetListCopy(newList: ProductionTargetCreateDto[], oldList: ProductionTarget[]): boolean {
   if (newList.length !== oldList.length) return false;
   
-  return newList.every((v, i) => {
-    const v2 = oldList[i];
-    return v.amount === v2.amount && v.type === v2.type;
+  return newList.every((newItem, i) => {
+    const oldItem = oldList[i];
+    return newItem.amount === oldItem.amount && newItem.type === oldItem.type;
   })
 }

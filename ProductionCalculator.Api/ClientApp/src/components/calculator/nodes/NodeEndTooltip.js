@@ -1,5 +1,5 @@
 import {Popup} from "../../popup/Popup";
-import {NodeEnd} from "../nodes/NodeEnd";
+import {NodeEnd} from "./NodeEnd";
 
 export function NodeEndTooltip({hidden, onClose}) {
   return <Popup

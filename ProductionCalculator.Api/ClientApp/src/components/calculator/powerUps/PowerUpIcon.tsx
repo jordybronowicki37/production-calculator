@@ -1,6 +1,6 @@
 import "./PowerUpIcon.scss";
 
-export function PowerUpIcon({powerUps, onOpenEditor}) {
+export function PowerUpIcon({powerUps, onOpenEditor}: {powerUps: [], onOpenEditor: () => void}) {
   return (
     <div
       title="Edit power ups"

@@ -1,10 +1,18 @@
 import {Popup} from "../../../popup/Popup";
 import "./NodeOptionsEditorPopup.scss";
 import {Button, Spinner} from "reactstrap";
-import {useRef, useState} from "react";
+import {MutableRefObject, useRef, useState} from "react";
 import {nodeCreateProduct, nodeCreateRecipe} from "../../../../data/api/NodeAPI";
+import {Machine, NodePosition, NodeTypes, Product, Recipe} from "../../../../data/DataTypes";
 
-export function NodeOptionsEditorPopup({worksheetId, products, recipes, machines, hidden, onClose, options}) {
+export type NodeEditorOptions = {
+  nodeType: NodeTypes,
+  position: NodePosition,
+  mode: "create",
+}
+
+export function NodeOptionsEditorPopup({worksheetId, products, recipes, machines, hidden, onClose, options}: 
+    {worksheetId: string, products: Product[], recipes: Recipe[], machines: Machine[], hidden: boolean, onClose: () => void, options}) {
   let editor;
   
   switch (options.nodeType) {
@@ -13,7 +21,7 @@ export function NodeOptionsEditorPopup({worksheetId, products, recipes, machines
       editor = <NodeOptionsProductType worksheetId={worksheetId} options={options} products={products}/>;
       break;
     case "Production":
-      editor = <NodeOptionsRecipeType worksheetId={worksheetId} options={options} products={products} recipes={recipes} machines={machines}/>;
+      editor = <NodeOptionsRecipeType worksheetId={worksheetId} options={options} recipes={recipes} machines={machines}/>;
       break;
     default:
       editor = <div className="node-options">ERROR</div>;
@@ -28,10 +36,10 @@ export function NodeOptionsEditorPopup({worksheetId, products, recipes, machines
   )
 }
 
-function NodeOptionsProductType({worksheetId, options, products}) {
+function NodeOptionsProductType({worksheetId, options, products}: {worksheetId: string, options: NodeEditorOptions, products: Product[]}) {
   const {nodeType, position} = options;
   
-  const containerRef = useRef();
+  const containerRef: MutableRefObject<HTMLDivElement> = useRef();
   const [productFilter, setProductFilter] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +88,7 @@ function NodeOptionsProductType({worksheetId, options, products}) {
         setIsLoading(true);
         nodeCreateProduct(worksheetId, nodeType, position, selectedProduct).then(() => {
           const closeEvent = new CustomEvent("closePopup", {bubbles: true});
+          // @ts-ignore
           containerRef.current.dispatchEvent(closeEvent);
         });
       }}>Create</Button>
@@ -88,10 +97,11 @@ function NodeOptionsProductType({worksheetId, options, products}) {
   </div>;
 }
 
-function NodeOptionsRecipeType({worksheetId, products, recipes, machines, options}) {
+function NodeOptionsRecipeType({worksheetId, recipes, machines, options}: 
+    {worksheetId: string, recipes: Recipe[], machines: Machine[], options: NodeEditorOptions}) {
   const {nodeType, position} = options;
 
-  const containerRef = useRef();
+  const containerRef: MutableRefObject<HTMLDivElement> = useRef();
   const [isLoading, setIsLoading] = useState(false);
 
   const [errorNoRecipeSelected, setErrorNoRecipeSelected] = useState(false);

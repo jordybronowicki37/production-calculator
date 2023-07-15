@@ -5,9 +5,11 @@ import {useState} from "react";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
-import {NodeAmountField} from "./components/NodeAmountField.tsx";
+import {NodeAmountField} from "./components/NodeAmountField";
+import {Machine, Node, Product, Recipe} from "../../../data/DataTypes";
 
-export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}) {
+export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}: 
+    {worksheetId: string, node: Node, machine: Machine, recipe: Recipe, products: Product[], previewMode: boolean}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
   let machineField, recipeField, amountField, productInList, productOutList, targetEditor;

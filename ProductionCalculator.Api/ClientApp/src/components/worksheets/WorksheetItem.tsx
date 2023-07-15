@@ -1,8 +1,8 @@
 import "./WorksheetItem.scss";
-import React from 'react';
+import {Product, Worksheet, Node} from "../../data/DataTypes";
 
-export function WorksheetItem({worksheet, products}) {
-  const {id, name, nodes, connections} = worksheet;
+export function WorksheetItem({worksheet, products}:{worksheet: Worksheet, products: Product[]}) {
+  const {name, nodes} = worksheet;
   const inputNodes = nodes.filter(n => n.type === "Spawn");
   const outputNodes = nodes.filter(n => n.type === "End");
   const inputProducts = generateWorksheetThroughput(inputNodes, products);
@@ -31,7 +31,7 @@ export function WorksheetItem({worksheet, products}) {
   );
 }
 
-function ThroughputItem(throughput) {
+function ThroughputItem(throughput: ThroughputExpanded) {
   return (
     <li key={throughput.product} className="worksheet-item-throughput">
       <div>{throughput.name}</div>
@@ -40,8 +40,14 @@ function ThroughputItem(throughput) {
   );
 }
 
-function generateWorksheetThroughput(nodes, products) {
-  const dict = {};
+type ThroughputExpanded = {
+  product: string,
+  name: string,
+  amount: number,
+}
+
+function generateWorksheetThroughput(nodes: Node[], products: Product[]): ThroughputExpanded[] {
+  const dict: {[key: string]:ThroughputExpanded} = {};
   for (const node of nodes) {
     let v = dict[node.product];
     if (v){
@@ -58,6 +64,6 @@ function generateWorksheetThroughput(nodes, products) {
   return Object.values(dict);
 }
 
-function findProduct(list, id) {
+function findProduct(list: Product[], id: string): Product {
   return list.find(v => v.id === id);
 }

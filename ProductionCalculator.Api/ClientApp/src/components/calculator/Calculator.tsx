@@ -1,31 +1,41 @@
 import "./Calculator.scss";
-import {useEffect, useState} from "react";
-import ReactFlow, {Background, Controls, MarkerType, MiniMap, ReactFlowProvider} from 'react-flow-renderer';
+import {CSSProperties, useEffect, useRef, useState} from "react";
+import ReactFlow, {
+  Background,
+  Controls,
+  DefaultEdgeOptions, Edge, EdgeChange,
+  MarkerType,
+  MiniMap,
+  Node as FlowNode,
+  ReactFlowInstance,
+  ReactFlowProvider
+} from 'react-flow-renderer';
 import {throwWarningNotification} from "../notification/NotificationThrower";
-import Store from "../../data/DataStore";
 import {calculate} from "../../data/api/WorksheetAPI";
 import {NodeSpawn} from "./nodes/NodeSpawn";
 import {NodeProduction} from "./nodes/NodeProduction";
 import {NodeEnd} from "./nodes/NodeEnd";
 import {nodeEditPosition, nodeRemove} from "../../data/api/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
-import {CalculationState} from "./CalculationState";
+import {CalculationState, CalculationStateType} from "./CalculationState";
 import {NodesSelector} from "./nodes/components/NodesSelector";
-import {NodeOptionsEditorPopup} from "./nodes/components/NodeOptionsEditorPopup";
+import {NodeEditorOptions, NodeOptionsEditorPopup} from "./nodes/components/NodeOptionsEditorPopup";
+import {Connection, Machine, Node, NodePosition, NodeTypes, Product, Recipe, Worksheet} from "../../data/DataTypes";
+import {NodeChange} from "react-flow-renderer/dist/esm/types/changes";
 
-const defaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
-const defaultNodeStyle = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
+const defaultEdgeOptions: DefaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
+const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
 
-export function Calculator({worksheet, products, recipes, machines}){
+export function Calculator({worksheet, products, recipes, machines}: {worksheet: Worksheet, products: Product[], recipes: Recipe[], machines: Machine[]}){
   const { connections, nodes, calculationSucceeded, calculationError, id } = worksheet;
   
-  const [calculationState, setCalculationState] = useState(calculationSucceeded ? "success" : "warning");
-  const [nodeOptionsEditorOpen, setNodeOptionsEditorOpen] = useState(false);
-  const [nodeEditorOptions, setNodeEditorOptions] = useState({mode:"create", nodeType:"End", position:{x:0,y:0}});
+  const [calculationState, setCalculationState] = useState<CalculationStateType>(calculationSucceeded ? "success" : "warning");
+  const [nodeOptionsEditorOpen, setNodeOptionsEditorOpen] = useState<boolean>(false);
+  const [nodeEditorOptions, setNodeEditorOptions] = useState<NodeEditorOptions>({mode:"create", nodeType:"End", position:{x:0,y:0}});
   
-  const [reactFlowWrapper, setReactFlowWrapper] = useState(null);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [tempPositionData, setTempPositionData] = useState(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>();
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [tempPositionData, setTempPositionData] = useState<TempPositionData | null>(null);
   
   let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, machines, tempPositionData);
@@ -56,7 +66,7 @@ export function Calculator({worksheet, products, recipes, machines}){
       <NodesSelector onCreateNewNode={onCreateNewNode} onDragStart={onDragStart}/>
       
       <ReactFlowProvider>
-        <div className="flow-chart-wrapper flex-grow-1" ref={setReactFlowWrapper}>
+        <div className="flow-chart-wrapper flex-grow-1" ref={reactFlowWrapper}>
           <CalculationState onClick={() => calculateWorksheet(id, setCalculationState)} message={message} state={calculationState}/>
           <ReactFlow
             className="flow-chart"
@@ -68,7 +78,7 @@ export function Calculator({worksheet, products, recipes, machines}){
             onDragOver={onDragOver}
             onInit={setReactFlowInstance}
             onDrop={(event) => {
-              const { position, nodeType } = onDrop(event, reactFlowWrapper, reactFlowInstance);
+              const { position, nodeType } = onDrop(event, reactFlowWrapper.current, reactFlowInstance);
               setNodeOptionsEditorOpen(true);
               setNodeEditorOptions({mode:"create", nodeType, position});
             }}
@@ -98,7 +108,7 @@ export function Calculator({worksheet, products, recipes, machines}){
   );
 }
 
-function generateNodes(worksheetId, nodes, products, recipes, machines, tempPositionData) {
+function generateNodes(worksheetId: string, nodes: Node[], products: Product[], recipes: Recipe[], machines: Machine[], tempPositionData: TempPositionData): FlowNode[] {
   return nodes.map((node) => {
     const {body, type} = createNodeBody(worksheetId, node.type, node, products, recipes, machines);
     let position = node.position;
@@ -116,19 +126,19 @@ function generateNodes(worksheetId, nodes, products, recipes, machines, tempPosi
   });
 }
 
-function generateEdges(edges) {
-  return edges.map(edge => {
-    let id1 = edge.inputNodeId.toString();
-    let id2 = edge.outputNodeId.toString();
+function generateEdges(connections: Connection[]): Edge[] {
+  return connections.map(connection => {
+    let id1 = connection.inputNodeId.toString();
+    let id2 = connection.outputNodeId.toString();
     return {
-      id: edge.id,
+      id: connection.id,
       source: id1,
       target: id2
     };
   });
 }
 
-function calculateWorksheet(worksheetId, setState) {
+function calculateWorksheet(worksheetId: string, setState: (state: CalculationStateType) => void): void {
   setState("loading");
   calculate(worksheetId).then(r => {
     if (r.calculationSucceeded) {
@@ -141,23 +151,23 @@ function calculateWorksheet(worksheetId, setState) {
   });
 }
 
-function createNodeBody(worksheetId, nodeType, data, products, recipes, machines) {
+function createNodeBody(worksheetId: string, nodeType: NodeTypes, node: Node, products: Product[], recipes: Recipe[], machines: Machine[]): { body: Element, type: string } {
   let body, type, product, recipe, machine;
   switch (nodeType) {
     case "Spawn":
-      product = findById(data.product, products);
-      body = <NodeSpawn worksheetId={worksheetId} node={data} product={product}/>;
+      product = findById(node.product, products);
+      body = <NodeSpawn worksheetId={worksheetId} node={node} product={product} previewMode={false}/>;
       type = "input";
       break;
     case "Production":
-      recipe = findById(data.recipe, recipes);
-      machine = findById(data.machine, machines);
-      body = <NodeProduction worksheetId={worksheetId} node={data} machine={machine} recipe={recipe} products={products}/>;
+      recipe = findById(node.recipe, recipes);
+      machine = findById(node.machine, machines);
+      body = <NodeProduction worksheetId={worksheetId} node={node} machine={machine} recipe={recipe} products={products} previewMode={false}/>;
       type = "default";
       break;
     case "End":
-      product = findById(data.product, products)
-      body = <NodeEnd worksheetId={worksheetId} node={data} product={product}/>;
+      product = findById(node.product, products)
+      body = <NodeEnd worksheetId={worksheetId} node={node} product={product} previewMode={false}/>;
       type = "output";
       break;
     default:
@@ -167,11 +177,11 @@ function createNodeBody(worksheetId, nodeType, data, products, recipes, machines
   return {body, type};
 }
 
-function findById(id, list) {
+function findById(id: string, list: {id:string, [key: string]: any}[]) {
   return list.find(v => v.id === id);
 }
 
-const onNodesChange = (worksheetId, changes, tempPositionData, setTempPositionData) => {
+const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionData: TempPositionData, setTempPositionData: (value: TempPositionData) => void) => {
   changes.forEach(change => {
     switch (change.type) {
       case "position":
@@ -195,7 +205,7 @@ const onNodesChange = (worksheetId, changes, tempPositionData, setTempPositionDa
   })
 }
 
-function onEdgesChange (worksheetId, changes) {
+function onEdgesChange (worksheetId: string, changes: EdgeChange[]) {
   changes.forEach(change => {
     switch (change.type) {
       case "remove":
@@ -211,7 +221,7 @@ function onEdgesChange (worksheetId, changes) {
   })
 }
 
-function onConnect (worksheetId, edge, nodes, products, recipes) {
+function onConnect (worksheetId: string, edge: Edge, nodes: Node[], products: Product[], recipes: Recipe[]) {
   if (products.length === 0) {
     throwWarningNotification("Cannot connect nodes because no products exist in worksheet");
     return;
@@ -235,8 +245,8 @@ function onConnect (worksheetId, edge, nodes, products, recipes) {
   connectionCreate(worksheetId, edge.source, edge.target, product)
 }
 
-export function onDragStart (event, nodetype) {
-  event.dataTransfer.setData('application/reactflow', nodetype);
+export function onDragStart (event, nodeType: NodeTypes) {
+  event.dataTransfer.setData('application/reactflow', nodeType);
   event.dataTransfer.effectAllowed = 'move';
 }
 
@@ -245,7 +255,7 @@ function onDragOver (event) {
   event.dataTransfer.dropEffect = 'move';
 }
 
-function onDrop (event, wrapperInstance, flowInstance, worksheetId, products, recipes) {
+function onDrop (event, wrapperInstance: HTMLDivElement, flowInstance: ReactFlowInstance): {position: NodePosition, nodeType: NodeTypes} {
   event.preventDefault();
   const reactFlowBounds = wrapperInstance.getBoundingClientRect();
   const nodeType = event.dataTransfer.getData('application/reactflow');
@@ -258,5 +268,10 @@ function onDrop (event, wrapperInstance, flowInstance, worksheetId, products, re
     y: event.clientY - reactFlowBounds.top,
   });
   
-  return {position, nodeType}
+  return {position, nodeType};
+}
+
+type TempPositionData = {
+  id: string,
+  position: NodePosition,
 }

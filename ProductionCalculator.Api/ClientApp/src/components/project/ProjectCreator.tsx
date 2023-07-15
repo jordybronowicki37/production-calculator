@@ -3,11 +3,11 @@ import {Button, Spinner} from "reactstrap";
 import {useState} from "react";
 import {createProject} from "../../data/api/ProjectsAPI";
 
-export function ProjectCreator({onClose}) {
-  const [projectName, setProjectName] = useState("");
-  const [projectType, setProjectType] = useState("");
-  const [projectNameError, setProjectNameError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+export function ProjectCreator({onClose}: {onClose: () => void}) {
+  const [projectName, setProjectName] = useState<string>("");
+  const [projectType, setProjectType] = useState<string>("");
+  const [projectNameError, setProjectNameError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   
   return (
     <div className="project-creator">

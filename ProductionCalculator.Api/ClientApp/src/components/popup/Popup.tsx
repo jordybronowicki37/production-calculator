@@ -1,7 +1,7 @@
 ﻿import "./Popup.scss";
 import {useEffect, useRef} from "react";
 
-export function Popup({hidden, children, onClose}) {
+export function Popup({hidden, children, onClose}: {hidden: boolean, children: JSX.Element[] | JSX.Element, onClose: () => void}) {
   const popupRef = useRef(null);
   
   useEffect(() => {

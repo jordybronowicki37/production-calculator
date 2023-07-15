@@ -4,9 +4,11 @@ import {Button} from "reactstrap";
 import {Popup} from "../../popup/Popup";
 import {useState} from "react";
 import {WorksheetCreator} from "../../worksheets/WorksheetCreator";
+import {Product, Worksheet} from "../../../data/DataTypes";
 
-export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}) {
-  const [createWorksheetOpen, setCreateWorksheetOpen] = useState(false);
+export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}: 
+    {projectId: string, worksheets: Worksheet[], products: Product[], onAddTab: (string) => void, openedWorksheetIds: string[]}) {
+  const [createWorksheetOpen, setCreateWorksheetOpen] = useState<boolean>(false);
   
   worksheets = [...worksheets].sort((a,b) => (a.name > b.name) ? 1 : (b.name > a.name) ? -1 : 0);
   
@@ -67,7 +69,7 @@ export function SelectorTab({projectId, worksheets, products, onAddTab, openedWo
   );
 }
 
-function NoWorksheetsYet({onClick}) {
+function NoWorksheetsYet({onClick}: {onClick: () => void}) {
   return <div className="no-worksheet-yet">
     <label>You do not have any worksheets yet</label>
     <Button color="light" outline onClick={onClick}>Create new worksheet</Button>
