@@ -181,14 +181,17 @@ function findById(id: string, list: {id:string, [key: string]: any}[]) {
   return list.find(v => v.id === id);
 }
 
-const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionData: TempPositionData, setTempPositionData: (value: TempPositionData) => void) => {
+const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionData: TempPositionData | null, setTempPositionData: (value: TempPositionData | null) => void) => {
   changes.forEach(change => {
     switch (change.type) {
       case "position":
         if (change.dragging) {
           setTempPositionData({position:change.position, id:change.id});
         } else {
-          nodeEditPosition(worksheetId, change.id, tempPositionData.position);
+          if(tempPositionData != null) {
+            nodeEditPosition(worksheetId, change.id, tempPositionData.position);
+            setTempPositionData(null);
+          }
         }
         break;
       case "remove":
