@@ -49,20 +49,22 @@ function NodeOptionsProductType({worksheetId, options, products}) {
         placeholder="Filter" 
         value={productFilter} 
         onChange={(e) => setProductFilter(e.target.value)}
-        className="bg-dark border border-light rounded m-1 text-light"/>
-      {
-        filteredProducts.map(p => 
-          <div 
-            key={p.id} 
-            className={`selector-item ${p.id === selectedProduct ? "selected" : ""}`} 
-            onClick={() => {
-              if (isLoading) return;
-              setSelectedProduct(p.id);
-              setErrorNoProductSelected(false);
-            }}>
-            {p.name}
-          </div>)
-      }
+        className="bg-dark border border-light rounded text-light"/>
+      <div className="entity-list">
+        {
+          filteredProducts.map(p =>
+              <div
+                  key={p.id}
+                  className={`selector-item ${p.id === selectedProduct ? "selected" : ""}`}
+                  onClick={() => {
+                    if (isLoading) return;
+                    setSelectedProduct(p.id);
+                    setErrorNoProductSelected(false);
+                  }}>
+                {p.name}
+              </div>)
+        }
+      </div>
     </div>
     <div className="footer">
       <div hidden={!errorNoProductSelected} className="text-danger p-2">
@@ -120,21 +122,23 @@ function NodeOptionsRecipeType({worksheetId, products, recipes, machines, option
             placeholder="Filter"
             value={recipeFilter}
             onChange={(e) => setRecipeFilter(e.target.value)}
-            className="bg-dark border border-light rounded m-1 text-light"/>
-          {
-            recipesCopy.map(r =>
-              <div
-                key={r.id}
-                className={`selector-item ${r.id === selectedRecipe ? "selected" : ""}`}
-                onClick={() => {
-                  if (isLoading) return;
-                  setErrorNoRecipeSelected(false);
-                  if (r.id === selectedRecipe) setSelectedRecipe("");
-                  else setSelectedRecipe(r.id);
-                }}>
-                {r.name}
-              </div>)
-          }
+            className="bg-dark border border-light rounded text-light"/>
+          <div className="entity-list">
+            {
+              recipesCopy.map(r =>
+                  <div
+                      key={r.id}
+                      className={`selector-item ${r.id === selectedRecipe ? "selected" : ""}`}
+                      onClick={() => {
+                        if (isLoading) return;
+                        setErrorNoRecipeSelected(false);
+                        if (r.id === selectedRecipe) setSelectedRecipe("");
+                        else setSelectedRecipe(r.id);
+                      }}>
+                    {r.name}
+                  </div>)
+            }
+          </div>
         </div>
       </div>
       <div>
@@ -145,21 +149,23 @@ function NodeOptionsRecipeType({worksheetId, products, recipes, machines, option
             placeholder="Filter"
             value={machineFilter}
             onChange={(e) => setMachineFilter(e.target.value)}
-            className="bg-dark border border-light rounded m-1 text-light"/>
-          {
-            machinesCopy.map(m =>
-              <div
-                key={m.id}
-                className={`selector-item ${m.id === selectedMachine ? "selected" : ""}`}
-                onClick={() => {
-                  if (isLoading) return;
-                  setErrorNoMachineSelected(false);
-                  if (m.id === selectedMachine) setSelectedMachine("");
-                  else setSelectedMachine(m.id);
-                }}>
-                {m.name}
-              </div>)
-          }
+            className="bg-dark border border-light rounded text-light"/>
+          <div className="entity-list">
+            {
+              machinesCopy.map(m =>
+                  <div
+                      key={m.id}
+                      className={`selector-item ${m.id === selectedMachine ? "selected" : ""}`}
+                      onClick={() => {
+                        if (isLoading) return;
+                        setErrorNoMachineSelected(false);
+                        if (m.id === selectedMachine) setSelectedMachine("");
+                        else setSelectedMachine(m.id);
+                      }}>
+                    {m.name}
+                  </div>)
+            }
+          </div>
         </div>
       </div>
     </div>

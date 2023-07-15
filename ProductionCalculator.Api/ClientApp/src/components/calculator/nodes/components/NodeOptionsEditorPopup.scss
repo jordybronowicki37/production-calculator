@@ -17,20 +17,35 @@
 
 .node-options {
     .entity-selector {
-        max-height: 15rem;
-        overflow: hidden auto;
         border-top: 1px solid #666;
         border-bottom: 1px solid #666;
-
-        &::-webkit-scrollbar {
-            width: 10px;
+        
+        input {
+            width: calc(100% - 1rem);
+            margin: 0.5rem;
         }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 1rem;
-            background: #444;
-        }
-        &::-webkit-scrollbar-thumb:hover {
-            background: #666;
+        
+        .entity-list {
+            height: 15rem;
+            overflow: hidden auto;
+            
+            * {
+                width: 15rem;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            
+            &::-webkit-scrollbar {
+                width: 10px;
+            }
+            &::-webkit-scrollbar-thumb {
+                border-radius: 1rem;
+                background: #444;
+            }
+            &::-webkit-scrollbar-thumb:hover {
+                background: #666;
+            }
         }
     }
 
