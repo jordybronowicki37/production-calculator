@@ -14,56 +14,11 @@
     }
 }
 
-.project-item {
+.project-items-container {
     display: flex;
-    flex-direction: column;
-    margin: 2rem 2rem;
-    border: 1px solid black;
-    border-radius: 5px;
-    color: white;
-    background-color: #444;
-    overflow: hidden;
-    box-shadow: 0.4rem 0.8rem 1rem #aaa2;
-}
-
-.project-top {
-    background-color: #333;
-    padding: 5px;
-}
-
-.project-link {
-    flex-grow: 2;
-    color: #fff;
-    font-size: larger;
-    font-weight: bold;
-    margin-left: 0.5rem;
-    
-    &:hover {
-        color: #ccc;
-    }
-}
-
-.project-stats {
-    display: flex;
-    float: right;
-    user-select: none;
-
-    span {
-        font-size: 1em;
-        margin-left: 0.5em;
-        transform: translateY(2px);
-    }
-}
-
-.project-worksheets {
-    display: flex;
-    column-gap: 5px;
-    padding: 5px;
-    overflow: auto;
-
-    >* {
-        min-width: fit-content;
-    }
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .projects-loading-page,
