@@ -26,6 +26,7 @@ import {NodeEditorOptions, NodeEditor} from "./nodes/components/NodeEditor";
 import {Connection, Machine, Node, NodePosition, NodeTypes, Product, Recipe, Worksheet} from "../../data/DataTypes";
 import {ProductsPreviewEdge} from "./connections/ProductsPreviewEdge";
 import {Popup} from "../popup/Popup";
+import {ConnectionsEditor} from "./connections/ConnectionsEditor";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {type: 'productsPreviewEdge', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
@@ -35,7 +36,9 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   const { connections, nodes, calculationSucceeded, calculationError, id } = worksheet;
   
   const [calculationState, setCalculationState] = useState<CalculationStateType>(calculationSucceeded ? "success" : "warning");
-  const [nodeOptionsEditorOpen, setNodeOptionsEditorOpen] = useState<boolean>(false);
+  const [connectionsEditorOpen, setConnectionsEditorOpen] = useState<boolean>(false);
+  const [connectionsEditorEdgeId, setConnectionsEditorEdgeId] = useState<string>("");
+  const [nodeEditorOpen, setNodeEditorOpen] = useState<boolean>(false);
   const [nodeEditorOptions, setNodeEditorOptions] = useState<NodeEditorOptions>({mode:"create", nodeType:"End", position:{x:0,y:0}});
   
   const reactFlowWrapper = useRef<HTMLDivElement>();
@@ -44,10 +47,13 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   
   let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, machines, tempPositionData);
-  let flowEdges = generateEdges(connections, products);
+  let flowEdges = generateEdges(connections, products, (edgeId) => {
+    setConnectionsEditorEdgeId(edgeId);
+    setConnectionsEditorOpen(true);
+  });
 
   const onCreateNewNode = (nodeType) => {
-    setNodeOptionsEditorOpen(true);
+    setNodeEditorOpen(true);
     setNodeEditorOptions({mode:"create", nodeType:nodeType, position:{x:0,y:0}});
   };
   
@@ -60,8 +66,14 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   return (
     <div className="calculator">
       <Popup 
-          hidden={!nodeOptionsEditorOpen}
-          onClose={() => setNodeOptionsEditorOpen(false)}>
+          hidden={!connectionsEditorOpen} 
+          onClose={() => setConnectionsEditorOpen(false)}>
+        <ConnectionsEditor worksheetId={id} products={products} connections={connections} edgeId={connectionsEditorEdgeId}/>
+      </Popup>
+      
+      <Popup 
+          hidden={!nodeEditorOpen}
+          onClose={() => setNodeEditorOpen(false)}>
         <NodeEditor
             worksheetId={worksheet.id}
             products={products}
@@ -88,7 +100,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
             onInit={setReactFlowInstance}
             onDrop={(event) => {
               const { position, nodeType } = onDrop(event, reactFlowWrapper.current, reactFlowInstance);
-              setNodeOptionsEditorOpen(true);
+              setNodeEditorOpen(true);
               setNodeEditorOptions({mode:"create", nodeType, position});
             }}
             defaultEdgeOptions={defaultEdgeOptions}>
@@ -136,7 +148,7 @@ function generateNodes(worksheetId: string, nodes: Node[], products: Product[], 
   });
 }
 
-function generateEdges(connections: Connection[], products: Product[]): Edge[] {
+function generateEdges(connections: Connection[], products: Product[], onOpenEditor: (edgeId: string) => void): Edge[] {
   let combinedConnections: {[key: string]: Connection[]} = {};
   
   connections.forEach(value => {
@@ -157,7 +169,7 @@ function generateEdges(connections: Connection[], products: Product[]): Edge[] {
       id: key,
       source: id1,
       target: id2,
-      data: { products, connections: value }
+      data: { products, connections: value, onOpenEditor }
     };
   });
 }

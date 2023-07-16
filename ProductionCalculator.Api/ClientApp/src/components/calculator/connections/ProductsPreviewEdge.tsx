@@ -6,10 +6,11 @@ import {RoundedAmountField} from "../../misc/RoundedAmountField";
 export type ProductsPreviewEdgeType = {
     connections: Connection[],
     products: Product[],
+    onOpenEditor: (edgeId: string) => void,
 }
 
 export function ProductsPreviewEdge(props: EdgeProps) {
-    const {sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, style} = props;
+    const {id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, style} = props;
     const [edgePath, labelX, labelY] = getBezierPath({sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition});
     const data: ProductsPreviewEdgeType = props.data;
     
@@ -26,7 +27,7 @@ export function ProductsPreviewEdge(props: EdgeProps) {
                             <RoundedAmountField amount={value.amount}/>
                         </div>)}
                     </div>
-                    <button title="Edit connections">
+                    <button title="Edit connections" onClick={() => data.onOpenEditor(id)}>
                         <span className="material-icons-round">settings_input_composite</span>
                     </button>
                 </div>

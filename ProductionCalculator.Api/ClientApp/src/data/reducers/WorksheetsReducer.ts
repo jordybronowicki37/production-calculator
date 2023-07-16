@@ -9,6 +9,8 @@ export const WorksheetCalculateAction = createAction<WorksheetDto>("worksheet/ca
 
 export const ConnectionAddAction = createAction<ConnectionAddActionProps>("connection/add");
 type ConnectionAddActionProps = { connection: ConnectionDto, worksheetId: string }
+export const ConnectionEditAction = createAction<ConnectionEditActionProps>("connection/edit");
+type ConnectionEditActionProps = { id: string, worksheetId: string, productId: string }
 export const ConnectionRemoveAction = createAction<ConnectionRemoveActionProps>("connection/remove");
 type ConnectionRemoveActionProps = { id: string, worksheetId: string }
 
@@ -37,6 +39,11 @@ const worksheetsReducer = createReducer<Worksheet[]>([], builder => {
       .addCase(ConnectionAddAction, (state, action) => {
         const worksheet = findWorksheet(state, action.payload.worksheetId);
         worksheet.connections.push(action.payload.connection);
+        return state;
+      })
+      .addCase(ConnectionEditAction, (state, action) => {
+        const worksheet = findWorksheet(state, action.payload.worksheetId);
+        worksheet.connections.find(v => v.id === action.payload.id).productId = action.payload.productId;
         return state;
       })
       .addCase(ConnectionRemoveAction, (state, action) => {

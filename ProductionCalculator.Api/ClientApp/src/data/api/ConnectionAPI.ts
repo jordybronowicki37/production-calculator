@@ -1,7 +1,7 @@
 ﻿import Store from "../DataStore";
 import {throwErrorNotification} from "../../components/notification/NotificationThrower";
 import {ConnectionDto} from "./ApiDtoTypes";
-import {ConnectionAddAction, ConnectionRemoveAction} from "../reducers/WorksheetsReducer";
+import {ConnectionAddAction, ConnectionEditAction, ConnectionRemoveAction} from "../reducers/WorksheetsReducer";
 
 export async function connectionCreate(
     worksheetId: string, 
@@ -41,7 +41,7 @@ export async function connectionEdit(worksheetId: string, connectionId: string, 
     throwErrorNotification(error);
     throw new Error(error);
   }
-  Store.dispatch(ConnectionRemoveAction({id:connectionId, worksheetId:worksheetId}));
+  Store.dispatch(ConnectionEditAction({id:connectionId, worksheetId:worksheetId, productId}));
 }
 
 export async function connectionDelete(worksheetId: string, connectionId: string): Promise<void> {

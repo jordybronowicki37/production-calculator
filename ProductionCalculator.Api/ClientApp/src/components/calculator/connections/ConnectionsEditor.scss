@@ -1,0 +1,30 @@
+.connections-editor {
+  
+  .connections-editor-header {
+    background: linear-gradient(120deg, var(--node-spawn-primary), var(--node-spawn-secondary));
+    padding: 0.5rem 1rem;
+    
+    h3 {
+      margin: 0;
+    }
+  }
+  
+  .connections-list {
+    padding: 1rem;
+    
+    .connection-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 0.3rem;
+      
+      select {
+        background-color: transparent;
+      }
+      
+      option {
+        background-color: #333;
+      }
+    }
+  }
+}
