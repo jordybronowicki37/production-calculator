@@ -1,5 +1,4 @@
-import {Popup} from "../../../popup/Popup";
-import "./NodeOptionsEditorPopup.scss";
+import "./NodeEditor.scss";
 import {Button, Spinner} from "reactstrap";
 import {MutableRefObject, useRef, useState} from "react";
 import {nodeCreateProduct, nodeCreateRecipe} from "../../../../data/api/NodeAPI";
@@ -11,32 +10,37 @@ export type NodeEditorOptions = {
   mode: "create",
 }
 
-export function NodeOptionsEditorPopup({worksheetId, products, recipes, machines, hidden, onClose, options}: 
-    {worksheetId: string, products: Product[], recipes: Recipe[], machines: Machine[], hidden: boolean, onClose: () => void, options}) {
-  let editor;
+export type NodeEditorProps = {
+  worksheetId: string, 
+  products: Product[], 
+  recipes: Recipe[], 
+  machines: Machine[], 
+  options: NodeEditorOptions,
+}
+
+export function NodeEditor({worksheetId, products, recipes, machines, options}: NodeEditorProps) {
+  let editor = <div className="node-options">ERROR</div>;
   
   switch (options.nodeType) {
     case "Spawn":
     case "End":
-      editor = <NodeOptionsProductType worksheetId={worksheetId} options={options} products={products}/>;
+      editor = <ProductNodeEditor worksheetId={worksheetId} options={options} products={products}/>;
       break;
     case "Production":
-      editor = <NodeOptionsRecipeType worksheetId={worksheetId} options={options} recipes={recipes} machines={machines}/>;
+      editor = <RecipeNodeEditor worksheetId={worksheetId} options={options} recipes={recipes} machines={machines}/>;
       break;
-    default:
-      editor = <div className="node-options">ERROR</div>;
   }
   
-  return (
-    <Popup
-      hidden={hidden}
-      onClose={onClose}>
-      {editor}
-    </Popup>
-  )
+  return editor;
 }
 
-function NodeOptionsProductType({worksheetId, options, products}: {worksheetId: string, options: NodeEditorOptions, products: Product[]}) {
+type ProductNodeEditorType = {
+  worksheetId: string, 
+  options: NodeEditorOptions, 
+  products: Product[],
+}
+
+function ProductNodeEditor({worksheetId, options, products}: ProductNodeEditorType) {
   const {nodeType, position} = options;
   
   const containerRef: MutableRefObject<HTMLDivElement> = useRef();
@@ -97,8 +101,14 @@ function NodeOptionsProductType({worksheetId, options, products}: {worksheetId: 
   </div>;
 }
 
-function NodeOptionsRecipeType({worksheetId, recipes, machines, options}: 
-    {worksheetId: string, recipes: Recipe[], machines: Machine[], options: NodeEditorOptions}) {
+type RecipeNodeEditorType = {
+  worksheetId: string, 
+  recipes: Recipe[], 
+  machines: Machine[], 
+  options: NodeEditorOptions,
+}
+
+function RecipeNodeEditor({worksheetId, recipes, machines, options}: RecipeNodeEditorType) {
   const {nodeType, position} = options;
 
   const containerRef: MutableRefObject<HTMLDivElement> = useRef();

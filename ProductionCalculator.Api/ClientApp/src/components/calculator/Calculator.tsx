@@ -22,9 +22,10 @@ import {nodeEditPosition, nodeRemove} from "../../data/api/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
 import {CalculationState, CalculationStateType} from "./CalculationState";
 import {NodesSelector} from "./nodes/components/NodesSelector";
-import {NodeEditorOptions, NodeOptionsEditorPopup} from "./nodes/components/NodeOptionsEditorPopup";
+import {NodeEditorOptions, NodeEditor} from "./nodes/components/NodeEditor";
 import {Connection, Machine, Node, NodePosition, NodeTypes, Product, Recipe, Worksheet} from "../../data/DataTypes";
 import {ProductsPreviewEdge} from "./connections/ProductsPreviewEdge";
+import {Popup} from "../popup/Popup";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {type: 'productsPreviewEdge', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
@@ -58,14 +59,17 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   
   return (
     <div className="calculator">
-      <NodeOptionsEditorPopup 
-        worksheetId={worksheet.id} 
-        products={products} 
-        recipes={recipes} 
-        machines={machines} 
-        options={nodeEditorOptions}
-        hidden={!nodeOptionsEditorOpen} 
-        onClose={() => setNodeOptionsEditorOpen(false)}/>
+      <Popup 
+          hidden={!nodeOptionsEditorOpen}
+          onClose={() => setNodeOptionsEditorOpen(false)}>
+        <NodeEditor
+            worksheetId={worksheet.id}
+            products={products}
+            recipes={recipes}
+            machines={machines}
+            options={nodeEditorOptions}
+        />
+      </Popup>
       
       <NodesSelector onCreateNewNode={onCreateNewNode} onDragStart={onDragStart}/>
       
@@ -103,7 +107,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
                   }
                 }}
                 nodeColor="transparent"
-                maskColor="#333"
+                maskColor="#3338"
                 style={{backgroundColor:"#444"}}/>
             <Controls/>
             <Background color="#bbb" style={{backgroundColor:"#444"}}/>
