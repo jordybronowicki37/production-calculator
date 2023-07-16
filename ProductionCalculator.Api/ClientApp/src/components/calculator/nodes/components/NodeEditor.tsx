@@ -3,6 +3,7 @@ import {Button, Spinner} from "reactstrap";
 import {MutableRefObject, useRef, useState} from "react";
 import {nodeCreateProduct, nodeCreateRecipe} from "../../../../data/api/NodeAPI";
 import {Machine, NodePosition, NodeTypes, Product, Recipe} from "../../../../data/DataTypes";
+import {RecipeItem} from "../../../entities/recipes/RecipeItem";
 
 export type NodeEditorOptions = {
   nodeType: NodeTypes,
@@ -27,7 +28,7 @@ export function NodeEditor({worksheetId, products, recipes, machines, options}: 
       editor = <ProductNodeEditor worksheetId={worksheetId} options={options} products={products}/>;
       break;
     case "Production":
-      editor = <RecipeNodeEditor worksheetId={worksheetId} options={options} recipes={recipes} machines={machines}/>;
+      editor = <RecipeNodeEditor worksheetId={worksheetId} options={options} products={products} recipes={recipes} machines={machines}/>;
       break;
   }
   
@@ -104,11 +105,12 @@ function ProductNodeEditor({worksheetId, options, products}: ProductNodeEditorTy
 type RecipeNodeEditorType = {
   worksheetId: string, 
   recipes: Recipe[], 
-  machines: Machine[], 
+  machines: Machine[],
+  products: Product[],
   options: NodeEditorOptions,
 }
 
-function RecipeNodeEditor({worksheetId, recipes, machines, options}: RecipeNodeEditorType) {
+function RecipeNodeEditor({worksheetId, recipes, machines, products, options}: RecipeNodeEditorType) {
   const {nodeType, position} = options;
 
   const containerRef: MutableRefObject<HTMLDivElement> = useRef();
@@ -189,6 +191,7 @@ function RecipeNodeEditor({worksheetId, recipes, machines, options}: RecipeNodeE
         </div>
       </div>
     </div>
+    {RecipePreview(recipes, products, machines, selectedRecipe, selectedMachine)}
     <div className="footer">
       <div hidden={!errorNoRecipeSelected} className="text-danger p-2">
         No recipe selected!
@@ -216,4 +219,29 @@ function RecipeNodeEditor({worksheetId, recipes, machines, options}: RecipeNodeE
       {isLoading && <Spinner color="light" size="sm"/>}
     </div>
   </div>;
+}
+
+function RecipePreview(recipes: Recipe[], products: Product[], machines: Machine[], selectedRecipe: string, selectedMachine: string) {
+  return (
+    <div>
+      {selectedRecipe !== "" &&
+        <div className="recipe-preview">
+          <h3>Recipe preview</h3>
+          <RecipeItem
+              products={products}
+              recipe={findRecipe(recipes, selectedRecipe)}
+              machine={selectedMachine === "" ? undefined : findMachine(machines, selectedMachine)}
+          />
+        </div>
+      }
+    </div>
+  );
+}
+
+function findRecipe(recipes: Recipe[], id: string): Recipe {
+  return recipes.find(v => v.id === id);
+}
+
+function findMachine(machines: Machine[], id: string): Machine {
+  return machines.find(v => v.id === id);
 }
