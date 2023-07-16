@@ -27,6 +27,23 @@ export async function connectionCreate(
   return json;
 }
 
+export async function connectionEdit(worksheetId: string, connectionId: string, productId: string): Promise<void> {
+  let response = await fetch(`worksheet/${worksheetId}/connection/${connectionId}`, 
+      {
+        method: "put",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          productId
+        })
+      });
+  if (!response.ok) {
+    let error = await response.text();
+    throwErrorNotification(error);
+    throw new Error(error);
+  }
+  Store.dispatch(ConnectionRemoveAction({id:connectionId, worksheetId:worksheetId}));
+}
+
 export async function connectionDelete(worksheetId: string, connectionId: string): Promise<void> {
   let response = await fetch(`worksheet/${worksheetId}/connection/${connectionId}`, {method: "delete"});
   if (!response.ok) {

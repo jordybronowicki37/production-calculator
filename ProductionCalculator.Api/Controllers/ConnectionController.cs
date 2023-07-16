@@ -25,7 +25,7 @@ public class ConnectionController : ControllerBase
     }
 
     [HttpPost("")]
-    public IActionResult AddNode(Guid worksheetId, ConnectionCreateDto connectionCreateDto)
+    public IActionResult AddConnection(Guid worksheetId, ConnectionCreateDto connectionCreateDto)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
@@ -53,8 +53,30 @@ public class ConnectionController : ControllerBase
         return Ok(new ConnectionDto(connection));
     }
 
+    [HttpPut("{connectionId:Guid}")]
+    public IActionResult EditConnection(Guid worksheetId, Guid connectionId, ConnectionEditDto connectionEditDto)
+    {
+        var w = GetWorksheet(worksheetId);
+        if (w == null) return NotFound("Worksheet is not found");
+
+        var connection = w.Connections.FirstOrDefault(c => c.Id == connectionId);
+        if (connection == null) return NotFound("Connection is not found");
+
+        var e = GetEntityContainer(w.EntityContainerId);
+        if (e == null) return NotFound("Entity container is not found");
+        if (e.GetProduct(connectionEditDto.ProductId) == null) return NotFound("Product is not found");
+        
+        connection.ProductId = connectionEditDto.ProductId;
+        
+        var filter = Builders<Worksheet>.Filter.Eq(f => f.Id, w.Id);
+        var update = Builders<Worksheet>.Update.Set(f => f.Connections, w.Connections);
+        _context.Worksheets.UpdateOne(filter, update);
+
+        return Ok(new ConnectionDto(connection));
+    }
+
     [HttpDelete("{connectionId:Guid}")]
-    public IActionResult RemoveNode(Guid worksheetId, Guid connectionId)
+    public IActionResult RemoveConnection(Guid worksheetId, Guid connectionId)
     {
         var w = GetWorksheet(worksheetId);
         if (w == null) return NotFound("Worksheet is not found");
