@@ -1,5 +1,6 @@
 import "./WorksheetItem.scss";
 import {Product, Worksheet, Node} from "../../data/DataTypes";
+import {RoundedAmountField} from "../misc/RoundedAmountField";
 
 export function WorksheetItem({worksheet, products}:{worksheet: Worksheet, products: Product[]}) {
   const {name, nodes} = worksheet;
@@ -35,7 +36,7 @@ function ThroughputItem(throughput: ThroughputExpanded) {
   return (
     <li key={throughput.product} className="worksheet-item-throughput">
       <div>{throughput.name}</div>
-      <div>{throughput.amount}</div>
+      <RoundedAmountField amount={throughput.amount}/>
     </li>
   );
 }
