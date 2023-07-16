@@ -6,7 +6,7 @@ import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
 import {RoundedAmountField} from "../../misc/RoundedAmountField";
-import {Machine, Node, Product, Recipe} from "../../../data/DataTypes";
+import {Machine, Node, Product, Recipe, ThroughPut} from "../../../data/DataTypes";
 
 export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}: 
     {worksheetId: string, node: Node, machine: Machine, recipe: Recipe, products: Product[], previewMode: boolean}) {
@@ -18,7 +18,9 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
     machineField = <div className="preview-field">machine</div>;
     recipeField = <div className="preview-field">recipe</div>;
     amountField = <div className="preview-field">0</div>;
-    productInList = <div className="node-list">
+    productInList = 
+      <div className="node-list">
+        <div>Inputs</div>
         <div>
           <div className="previewField">name</div>
           <div className="previewField">0</div>
@@ -26,6 +28,7 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
       </div>;
     productOutList = 
       <div className="node-list">
+        <div>Outputs</div>
         <div>
           <div className="previewField">name</div>
           <div className="previewField">0</div>
@@ -40,8 +43,8 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
     machineField = <div>{machine.name}</div>;
     recipeField = <div>{recipe.name}</div>;
     amountField = <RoundedAmountField amount={amount}/>;
-    productInList = generateProductList(recipe.inputThroughPuts, products, amount);
-    productOutList = generateProductList(recipe.outputThroughPuts, products, amount);
+    productInList = generateProductList("Inputs", recipe.inputThroughPuts, products, amount);
+    productOutList = generateProductList("Outputs", recipe.outputThroughPuts, products, amount);
     
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>
@@ -68,8 +71,6 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
           {recipeField}
           <div>Amount:</div>
           {amountField}
-          <div>In</div>
-          <div>Out</div>
           {productInList}
           {productOutList}
         </div>
@@ -79,9 +80,10 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
   );
 }
 
-function generateProductList(throughputList, productList, productionAmount) {
+function generateProductList(title: string, throughputList: ThroughPut[], productList: Product[], productionAmount: number) {
   return (
     <div className="node-list">
+      <div>{title}</div>
       {throughputList.map((v, i) => {
         const product = findProduct(productList, v.product);
         return (
@@ -95,6 +97,6 @@ function generateProductList(throughputList, productList, productionAmount) {
   );
 }
 
-function findProduct(products, id) {
+function findProduct(products: Product[], id: string): Product {
   return products.find(v => v.id === id);
 }
