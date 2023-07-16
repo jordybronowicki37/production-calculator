@@ -193,9 +193,11 @@ const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionD
         if (change.dragging) {
           setTempPositionData({position:change.position, id:change.id});
         } else {
+          // TODO Fix temp position data warping when promise is not finished yet
           if(tempPositionData != null) {
-            nodeEditPosition(worksheetId, change.id, tempPositionData.position);
-            setTempPositionData(null);
+            nodeEditPosition(worksheetId, change.id, tempPositionData.position).then(() => {
+              setTempPositionData(null);
+            });
           }
         }
         break;
