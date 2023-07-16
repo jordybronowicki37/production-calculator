@@ -1,4 +1,4 @@
-const precision = 3;
+const precision = 2;
 
 type NodeAmountFieldProps = {
     amount: number;
