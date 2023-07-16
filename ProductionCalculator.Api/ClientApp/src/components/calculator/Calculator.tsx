@@ -43,7 +43,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   
   const reactFlowWrapper = useRef<HTMLDivElement>();
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-  const [tempPositionData, setTempPositionData] = useState<TempPositionData | null>(null);
+  const [tempPositionData, setTempPositionData] = useState<TempPositionData[]>([]);
   
   let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, machines, tempPositionData);
@@ -130,11 +130,13 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   );
 }
 
-function generateNodes(worksheetId: string, nodes: Node[], products: Product[], recipes: Recipe[], machines: Machine[], tempPositionData: TempPositionData): FlowNode[] {
+function generateNodes(worksheetId: string, nodes: Node[], products: Product[], recipes: Recipe[], machines: Machine[], tempPositionData: TempPositionData[]): FlowNode[] {
   return nodes.map((node) => {
     const {body, type} = createNodeBody(worksheetId, node.type, node, products, recipes, machines);
     let position = node.position;
-    if (tempPositionData !== null && tempPositionData.id === node.id) position = tempPositionData.position;
+    
+    let relevantTempPositionData = tempPositionData.find(v => v.id === node.id);
+    if (relevantTempPositionData !== undefined) position = relevantTempPositionData.position;
 
     return {
       id: node.id.toString(),
@@ -217,17 +219,31 @@ function findById(id: string, list: {id:string, [key: string]: any}[]) {
   return list.find(v => v.id === id);
 }
 
-const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionData: TempPositionData | null, setTempPositionData: (value: TempPositionData | null) => void) => {
+const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionData: TempPositionData[], setTempPositionData: (value: (v:TempPositionData[]) => TempPositionData[]) => void) => {
   changes.forEach(change => {
     switch (change.type) {
       case "position":
+        // If user starts or is still dragging
         if (change.dragging) {
-          setTempPositionData({position:change.position, id:change.id});
-        } else {
-          // TODO Fix temp position data warping when promise is not finished yet
-          if(tempPositionData != null) {
-            nodeEditPosition(worksheetId, change.id, tempPositionData.position).then(() => {
-              setTempPositionData(null);
+          let relevantTempPositionIndex = tempPositionData.findIndex(v => v.id === change.id);
+          
+          // Detect if the user just started dragging
+          if (relevantTempPositionIndex === -1) {
+            setTempPositionData(actualTempPositions => [...actualTempPositions, {position:change.position, id:change.id}]);
+          } 
+          // Update the temp position if the user is still dragging
+          else {
+            setTempPositionData(actualTempPositions => 
+                actualTempPositions.map((v, i) => 
+                    i === relevantTempPositionIndex ? {...v, position:change.position} : v));
+          }
+        }
+        // Save the position if the user stops dragging
+        else {
+          let relevantTempPositionData = tempPositionData.find(v => v.id === change.id);
+          if (relevantTempPositionData !== undefined) {
+            nodeEditPosition(worksheetId, change.id, relevantTempPositionData.position).then(() => {
+              setTempPositionData(v => v.filter(c => c.id !== relevantTempPositionData.id));
             });
           }
         }
@@ -240,8 +256,9 @@ const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionD
       case "add":
       case "reset":
       default:
-      // console.log(`Non implemented node change: ${change.type}`);
-      // console.log(change);
+        // console.log(`Non implemented node change: ${change.type}`);
+        // console.log(change);
+        break;
     }
   })
 }
@@ -259,8 +276,9 @@ function onEdgesChange (worksheetId: string, changes: EdgeChange[], connections:
       case "add":
       case "reset":
       default:
-      // console.log(`Non implemented edge change: ${change.type}`);
-      // console.log(changes);
+        // console.log(`Non implemented edge change: ${change.type}`);
+        // console.log(changes);
+        break;
     }
   })
 }
