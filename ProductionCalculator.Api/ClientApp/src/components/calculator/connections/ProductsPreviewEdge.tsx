@@ -10,13 +10,23 @@ export type ProductsPreviewEdgeType = {
 }
 
 export function ProductsPreviewEdge(props: EdgeProps) {
-    const {id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, markerEnd, style} = props;
-    const [edgePath, labelX, labelY] = getBezierPath({sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition});
+    const {id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition} = props;
+    let [edgePath, labelX, labelY] = getBezierPath({sourceX, sourceY, sourcePosition, targetX, targetY, targetPosition});
     const data: ProductsPreviewEdgeType = props.data;
+    
+    const nodeInId = id.split(";")[0];
+    const nodeOutId = id.split(";")[1];
+    
+    if (nodeInId === nodeOutId) {
+        const radiusX = 100;
+        const radiusY = (sourceY - targetY) * 0.6;
+        edgePath = `M${sourceX - 5},${sourceY} A${radiusX},${radiusY} 0 1 0 ${targetX + 2},${targetY}`;
+        labelX += radiusX*2
+    }
     
     return (
         <>
-            <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+            <BaseEdge {...props} path={edgePath}/>
             <EdgeLabelRenderer>
                 <div
                     style={{transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,}}
