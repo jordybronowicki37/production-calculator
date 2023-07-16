@@ -4,7 +4,7 @@ import {TargetManager} from "../targets/TargetManager";
 import {useState} from "react";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
-import {NodeAmountField} from "./components/NodeAmountField";
+import {RoundedAmountField} from "../../misc/RoundedAmountField";
 import {Node, Product} from "../../../data/DataTypes";
 
 export function NodeSpawn({worksheetId, node, product, previewMode}: {worksheetId: string, node: Node, product: Product, previewMode: boolean}) {
@@ -17,7 +17,7 @@ export function NodeSpawn({worksheetId, node, product, previewMode}: {worksheetI
   if (!previewMode) {
     const {id, targets, amount} = node;
     productField = <div>{product.name}</div>;
-    amountField = <NodeAmountField amount={amount}/>;
+    amountField = <RoundedAmountField amount={amount}/>;
     targetEditor =
       <div className="target-editor-wrapper" hidden={!editorOpen}>
         <button type="button" className="popup-close-button" onClick={() => setEditorOpen(false)}>

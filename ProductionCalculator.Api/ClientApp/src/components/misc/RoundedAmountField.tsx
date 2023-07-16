@@ -4,6 +4,6 @@ type NodeAmountFieldProps = {
     amount: number;
 }
 
-export function NodeAmountField({amount} : NodeAmountFieldProps) {
+export function RoundedAmountField({amount} : NodeAmountFieldProps) {
     return <div>{+amount.toFixed(precision)}</div>;
 }

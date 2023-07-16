@@ -1,7 +1,7 @@
 import { BaseEdge, EdgeLabelRenderer, EdgeProps, getBezierPath } from 'reactflow';
 import {Connection, Product} from "../../../data/DataTypes";
 import "./ProductsPreviewEdge.scss";
-import {NodeAmountField} from "../nodes/components/NodeAmountField";
+import {RoundedAmountField} from "../../misc/RoundedAmountField";
 
 export type ProductsPreviewEdgeType = {
     connections: Connection[],
@@ -23,7 +23,7 @@ export function ProductsPreviewEdge(props: EdgeProps) {
                     <div className="products-preview">
                         {data.connections.map(value => <div key={value.id}>
                             <div>{findById(value.productId, data.products).name}</div>
-                            <NodeAmountField amount={value.amount}/>
+                            <RoundedAmountField amount={value.amount}/>
                         </div>)}
                     </div>
                     <button title="Edit connections">
