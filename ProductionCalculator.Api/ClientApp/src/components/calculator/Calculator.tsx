@@ -24,10 +24,11 @@ import {CalculationState, CalculationStateType} from "./CalculationState";
 import {NodesSelector} from "./nodes/components/NodesSelector";
 import {NodeEditorOptions, NodeOptionsEditorPopup} from "./nodes/components/NodeOptionsEditorPopup";
 import {Connection, Machine, Node, NodePosition, NodeTypes, Product, Recipe, Worksheet} from "../../data/DataTypes";
-import {NodeChange} from "react-flow-renderer/dist/esm/types/changes";
+import {ProductsPreviewEdge} from "./connections/ProductsPreviewEdge";
 
-const defaultEdgeOptions: DefaultEdgeOptions = {type: 'default', markerEnd: {type: MarkerType.Arrow}, animated: true};
+const defaultEdgeOptions: DefaultEdgeOptions = {type: 'productsPreviewEdge', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
+const customEdges = {productsPreviewEdge: ProductsPreviewEdge}
 
 export function Calculator({worksheet, products, recipes, machines}: {worksheet: Worksheet, products: Product[], recipes: Recipe[], machines: Machine[]}){
   const { connections, nodes, calculationSucceeded, calculationError, id } = worksheet;
@@ -42,7 +43,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   
   let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, machines, tempPositionData);
-  let flowEdges = generateEdges(connections);
+  let flowEdges = generateEdges(connections, products);
 
   const onCreateNewNode = (nodeType) => {
     setNodeOptionsEditorOpen(true);
@@ -77,7 +78,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
             edges={flowEdges}
             edgeTypes={customEdges}
             onNodesChange={(changes) => onNodesChange(id, changes, tempPositionData, setTempPositionData)}
-            onEdgesChange={(changes) => onEdgesChange(id, changes)}
+            onEdgesChange={(changes) => onEdgesChange(id, changes, connections)}
             onConnect={(edge) => onConnect(id, edge, nodes, products, recipes)}
             onDragOver={onDragOver}
             onInit={setReactFlowInstance}
@@ -131,14 +132,28 @@ function generateNodes(worksheetId: string, nodes: Node[], products: Product[], 
   });
 }
 
-function generateEdges(connections: Connection[]): Edge[] {
-  return connections.map(connection => {
-    let id1 = connection.inputNodeId.toString();
-    let id2 = connection.outputNodeId.toString();
+function generateEdges(connections: Connection[], products: Product[]): Edge[] {
+  let combinedConnections: {[key: string]: Connection[]} = {};
+  
+  connections.forEach(value => {
+    const endPointIds = `${value.inputNodeId};${value.outputNodeId}`;
+    const combine = combinedConnections[endPointIds];
+    if (combine) {
+      combine.push(value);
+    } else {
+      combinedConnections[endPointIds] = [value];
+    }
+  });
+  
+  return Object.entries(combinedConnections).map(([key, value]) => {
+    let id1 = key.split(";")[0];
+    let id2 = key.split(";")[1];
+    
     return {
-      id: connection.id,
+      id: key,
       source: id1,
-      target: id2
+      target: id2,
+      data: { products, connections: value }
     };
   });
 }
@@ -215,11 +230,14 @@ const onNodesChange = (worksheetId: string, changes: NodeChange[], tempPositionD
   })
 }
 
-function onEdgesChange (worksheetId: string, changes: EdgeChange[]) {
+function onEdgesChange (worksheetId: string, changes: EdgeChange[], connections: Connection[]) {
   changes.forEach(change => {
     switch (change.type) {
       case "remove":
-        connectionDelete(worksheetId, change.id);
+        const nodeInId = change.id.split(";")[0];
+        const nodeOutId = change.id.split(";")[1];
+        const connectionsToRemove = connections.filter(c => c.inputNodeId === nodeInId && c.outputNodeId === nodeOutId);
+        connectionsToRemove.forEach(c => connectionDelete(worksheetId, c.id));
         break;
       case "select":
       case "add":

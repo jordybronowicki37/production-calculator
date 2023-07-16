@@ -1,0 +1,34 @@
+.products-preview-edge-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: absolute;
+  pointer-events: all;
+  background-color: #333;
+  padding: 0.1rem 0.1rem 0.1rem 0.3rem;
+  border-radius: 0.2rem;
+  outline: 1px solid #777;
+  outline-offset: -2px;
+  
+  .products-preview {
+    display: flex;
+    flex-direction: column;
+    
+    >div {
+      display: flex;
+      flex-direction: row;
+      font-size: 12px;
+      gap: 0.3rem;
+    }
+  }
+  
+  >button {
+    border: none;
+    font-size: 10px;
+    background-color: transparent;
+    
+    >span {
+      font-size: 10px;
+    }
+  }
+}
