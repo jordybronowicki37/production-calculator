@@ -20,7 +20,11 @@ export function TargetManager({worksheetId, nodeId, targets}: {worksheetId: stri
     
     if (checkTargetListCopy(newTargets, targets)) return;
 
-    setTargets(worksheetId, nodeId, newTargets);
+    const timerId = setTimeout(() => {
+      setTargets(worksheetId, nodeId, newTargets);
+    }, 1000);
+    
+    return () => clearTimeout(timerId);
   }, [exactAmount, minAmount, maxAmount]);
   
   const exactInputId = nanoid();
