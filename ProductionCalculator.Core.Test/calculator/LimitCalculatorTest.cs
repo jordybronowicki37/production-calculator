@@ -11,7 +11,7 @@ namespace ProductionCalculator.Core.Test.calculator;
 
 public class LimitCalculatorTest
 {
-    private ITestOutputHelper _logger;
+    private readonly ITestOutputHelper _logger;
     
     public LimitCalculatorTest(ITestOutputHelper logger)
     {
@@ -61,11 +61,11 @@ public class LimitCalculatorTest
             new object[] {"DoubleProductionSetup 4", SetTarget(DoubleProductionSetup(), 3, 20), new float[] {90, 3, 2, 20}},
             new object[] {"SimpleOverflowSetup 1", SetTarget(SetTarget(SimpleOverflowSetup(), 1, 3), 2, 20), new float[] {90, 3, 20, 10}},
             new object[] {"SimpleOverflowSetup 2", SetTarget(SetTarget(SimpleOverflowSetup(), 1, 3), 3, 10), new float[] {90, 3, 20, 10}},
+            new object[] {"SplitAndMergeSetup 1", SetTarget(SplitAndMergeSetup(), 0, 30), new float[] {30, 1, 1, 2, 4, 4}},
         };
     }
     #endregion TestData
     
-    #region Setups
     public record SetupParams(Worksheet Worksheet, EntityContainer EntityContainer);
 
     private static SetupParams SetTarget(SetupParams setup, int nodeNr, float target)
@@ -74,6 +74,7 @@ public class LimitCalculatorTest
         return setup;
     }
 
+    #region Setups
     private static SetupParams SimpleSetup()
     {
         var entityContainer = new EntityContainer();
@@ -208,6 +209,52 @@ public class LimitCalculatorTest
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
         worksheet.GetConnectionBuilder(node2, node4, productIronIngot).Build();
+
+        return new SetupParams(worksheet, entityContainer);
+    }
+    
+    private static SetupParams SplitAndMergeSetup()
+    {
+        var entityContainer = new EntityContainer();
+        var worksheet = new Worksheet("Iron ingot smelting", entityContainer.Id);
+
+        var productIronOre = entityContainer.GetOrGenerateProduct("Iron ore");
+        var productIronIngot = entityContainer.GetOrGenerateProduct("Iron ingot");
+        var productIronBar = entityContainer.GetOrGenerateProduct("Iron bar");
+        var productIronSheet = entityContainer.GetOrGenerateProduct("Iron sheet");
+        var productIronChair = entityContainer.GetOrGenerateProduct("Iron chair");
+        
+        var machineSmelter = entityContainer.GenerateMachine("Smelter");
+        var machineConstructor = entityContainer.GenerateMachine("Constructor");
+        var machineAssembler = entityContainer.GenerateMachine("Assembler");
+
+        var recipeIronIngot = entityContainer.GetRecipeBuilder("Iron ingot", machineSmelter)
+            .AddInput(productIronOre, 30)
+            .AddOutput(productIronIngot, 10).Build();
+        var recipeIronBar = entityContainer.GetRecipeBuilder("Iron bar", machineConstructor)
+            .AddInput(productIronIngot, 5)
+            .AddOutput(productIronBar, 10).Build();
+        var recipeIronSheet = entityContainer.GetRecipeBuilder("Iron sheet", machineConstructor)
+            .AddInput(productIronIngot, 2.5f)
+            .AddOutput(productIronSheet, 2.5f).Build();
+        var recipeIronChair = entityContainer.GetRecipeBuilder("Iron chair", machineAssembler)
+            .AddInput(productIronBar, 2.5f)
+            .AddInput(productIronSheet, 1.25f)
+            .AddOutput(productIronChair, 1).Build();
+
+        var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
+        var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).Build();
+        var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronBar, machineConstructor).Build();
+        var node4 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronSheet, machineConstructor).Build();
+        var node5 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronChair, machineAssembler).Build();
+        var node6 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronChair).Build();
+        
+        worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
+        worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
+        worksheet.GetConnectionBuilder(node2, node4, productIronIngot).Build();
+        worksheet.GetConnectionBuilder(node3, node5, productIronBar).Build();
+        worksheet.GetConnectionBuilder(node4, node5, productIronSheet).Build();
+        worksheet.GetConnectionBuilder(node5, node6, productIronChair).Build();
 
         return new SetupParams(worksheet, entityContainer);
     }
