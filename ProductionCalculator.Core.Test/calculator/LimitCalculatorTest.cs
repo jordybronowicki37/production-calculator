@@ -36,7 +36,7 @@ public class LimitCalculatorTest
             Assert.True(CalculatorLimit.CompareFloatingPointNumbers(answers[i], nodes.ElementAt(i).Amount));
         }
         Assert.True(setup.Worksheet.CalculationSucceeded);
-        Assert.Empty(setup.Worksheet.CalculationError);
+        Assert.Empty(setup.Worksheet.Alerts);
     }
 
     #region TestData

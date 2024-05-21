@@ -11,13 +11,20 @@ public class Connection
     public Guid NodeOutId { get; init; }
     public Guid ProductId { get; set; }
     public float Amount { get; set; }
-    public virtual ICollection<TargetConnection> Targets { get; private set; } = new List<TargetConnection>();
+    public virtual ICollection<TargetConnection> Targets { get; protected set; } = new List<TargetConnection>();
     
     public Connection(INodeOut nodeIn, INodeIn nodeOut, Product product)
     {
         NodeInId = nodeIn.Id;
         NodeOutId = nodeOut.Id;
         ProductId = product.Id;
+    }
+    
+    public Connection(Guid nodeInId, Guid nodeOutId, Guid productId)
+    {
+        NodeInId = nodeInId;
+        NodeOutId = nodeOutId;
+        ProductId = productId;
     }
 
     public void AddConnectionTarget(TargetConnection target)

@@ -9,9 +9,10 @@ namespace productionCalculatorLib.components.worksheet;
 public class Worksheet
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public string Name { get; set; } = "";
+    public string Name { get; set; }
     public bool CalculationSucceeded { get; set; } = true;
-    public string CalculationError { get; set; } = "";
+    public ICollection<WorksheetAlert> Alerts { get; set; } = new List<WorksheetAlert>();
+    
     public Guid EntityContainerId { get; private set; }
     public ICollection<ANode> Nodes { get; private set; } = new List<ANode>();
     public ICollection<Connection> Connections { get; private set; } = new List<Connection>();
