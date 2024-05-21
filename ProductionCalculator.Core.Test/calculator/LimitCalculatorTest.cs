@@ -28,12 +28,12 @@ public class LimitCalculatorTest
         var nodes = setup.Worksheet.Nodes;
         
         // Act
-        new CalculatorLimit(setup.Worksheet, setup.EntityContainer).ReCalculateAmounts();
+        new Calculator(setup.Worksheet, setup.EntityContainer).ReCalculateAmounts();
         
         // Assert
         for (var i = 0; i < answers.Length; i++)
         {
-            Assert.True(CalculatorLimit.CompareFloatingPointNumbers(answers[i], nodes.ElementAt(i).Amount));
+            Assert.True(Calculator.CompareFloatingPointNumbers(answers[i], nodes.ElementAt(i).Amount));
         }
         Assert.True(setup.Worksheet.CalculationSucceeded);
         Assert.Empty(setup.Worksheet.Alerts);

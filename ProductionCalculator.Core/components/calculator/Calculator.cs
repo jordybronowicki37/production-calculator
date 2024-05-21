@@ -7,14 +7,14 @@ using productionCalculatorLib.components.worksheet;
 
 namespace productionCalculatorLib.components.calculator;
 
-public class CalculatorLimit
+public class Calculator
 {
     private readonly Worksheet _worksheet;
     private int _amountOfTimesCalculated;
     private ICollection<INode> _linkedNodes;
     private ICollection<LinkedConnection> _linkedConnections;
     
-    public CalculatorLimit(Worksheet worksheet, EntityContainer entityContainer)
+    public Calculator(Worksheet worksheet, EntityContainer entityContainer)
     {
         _worksheet = worksheet;
         var linked = WorksheetLinker.LinkWorksheet(_worksheet, entityContainer);
