@@ -6,8 +6,15 @@ import {useState} from "react";
 import {WorksheetCreator} from "../../worksheets/WorksheetCreator";
 import {Product, Worksheet} from "../../../data/DataTypes";
 
-export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}: 
-    {projectId: string, worksheets: Worksheet[], products: Product[], onAddTab: (string) => void, openedWorksheetIds: string[]}) {
+export type SelectorTabProps = {
+  projectId: string,
+  worksheets: Worksheet[],
+  products: Product[],
+  onAddTab: (id: string) => void,
+  openedWorksheetIds: string[],
+}
+
+export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}: SelectorTabProps) {
   const [createWorksheetOpen, setCreateWorksheetOpen] = useState<boolean>(false);
   
   worksheets = [...worksheets].sort((a,b) => (a.name > b.name) ? 1 : (b.name > a.name) ? -1 : 0);

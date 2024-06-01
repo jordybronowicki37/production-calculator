@@ -31,7 +31,7 @@ export function TargetManager({worksheetId, nodeId, targets}: {worksheetId: stri
   const minInputId = nanoid();
   const maxInputId = nanoid();
 
-  const logicSetMode = (mode) => {
+  const logicSetMode = (mode: TargetModes) => {
     switch (mode) {
       case "none":
         setExactAmount(0);

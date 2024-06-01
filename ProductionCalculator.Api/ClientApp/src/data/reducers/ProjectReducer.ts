@@ -10,7 +10,7 @@ const projectReducer = createReducer<Project | null>(null, builder => {
   builder
       .addCase(ResetAction, () => null)
       .addCase(ProjectUnloadAction, () => null)
-      .addCase(ProjectLoadAction, (state, action) => {
+      .addCase(ProjectLoadAction, (_, action) => {
         const {worksheets, entityContainer, ...other} = action.payload;
         return {...other, entityContainerId: entityContainer.id};
       });

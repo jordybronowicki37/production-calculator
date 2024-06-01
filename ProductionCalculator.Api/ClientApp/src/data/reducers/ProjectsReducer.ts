@@ -8,7 +8,7 @@ export const ProjectsAddAction = createAction<ProjectDto>("projects/add");
 const projectsReducer = createReducer<ProjectDto[]>([], builder => {
   builder
       .addCase(ResetAction, () => [])
-      .addCase(ProjectsSetAction, (state, action) => [...action.payload])
+      .addCase(ProjectsSetAction, (_, action) => [...action.payload])
       .addCase(ProjectsAddAction, (state, action) => [...state, action.payload])
 });
 

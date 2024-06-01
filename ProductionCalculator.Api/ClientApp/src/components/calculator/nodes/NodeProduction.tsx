@@ -1,7 +1,7 @@
 import './Node.scss';
 import './NodeProduction.scss';
 import {TargetManager} from "../targets/TargetManager";
-import {useState} from "react";
+import {ReactNode, useState} from "react";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
@@ -12,7 +12,7 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
     {worksheetId: string, node: Node, machine: Machine, recipe: Recipe, products: Product[], previewMode: boolean}) {
   const [editorOpen, setEditorOpen] = useState(false);
 
-  let machineField, recipeField, amountField, productInList, productOutList, targetEditor;
+  let machineField: ReactNode, recipeField: ReactNode, amountField: ReactNode, productInList: ReactNode, productOutList: ReactNode, targetEditor: ReactNode;
 
   if (previewMode) {
     machineField = <div className="preview-field">machine</div>;

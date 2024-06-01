@@ -1,5 +1,5 @@
 import "./Calculator.scss";
-import {CSSProperties, useEffect, useRef, useState} from "react";
+import {CSSProperties, ReactNode, useEffect, useRef, useState} from "react";
 import ReactFlow, {
   Background,
   Connection as FlowConnection,
@@ -30,6 +30,7 @@ import {ProductsPreviewEdge} from "./connections/ProductsPreviewEdge";
 import {Popup} from "../popup/Popup";
 import {ConnectionsEditor} from "./connections/ConnectionsEditor";
 import {WorksheetDto} from "../../data/api/ApiDtoTypes";
+import * as React from "react";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {type: 'productsPreviewEdge', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
@@ -181,8 +182,8 @@ function calculateWorksheet(worksheetId: string): Promise<WorksheetDto> {
   return calculate(worksheetId);
 }
 
-function createNodeBody(worksheetId: string, nodeType: NodeTypes, node: Node, products: Product[], recipes: Recipe[], machines: Machine[]): { body: Element, type: string } {
-  let body, type, product, recipe, machine;
+function createNodeBody(worksheetId: string, nodeType: NodeTypes, node: Node, products: Product[], recipes: Recipe[], machines: Machine[]): { body: ReactNode, type: string } {
+  let body: ReactNode, type: string, product: Product, recipe: Recipe, machine: Machine;
   switch (nodeType) {
     case "Spawn":
       product = findById(node.product, products);
@@ -207,7 +208,7 @@ function createNodeBody(worksheetId: string, nodeType: NodeTypes, node: Node, pr
   return {body, type};
 }
 
-function findById(id: string, list: {id:string, [key: string]: any}[]) {
+function findById<T extends {id:string}>(id: string, list: T[]): T {
   return list.find(v => v.id === id);
 }
 
@@ -282,7 +283,7 @@ function onConnect (worksheetId: string, edge: FlowConnection, nodes: Node[], pr
   }
   let source = nodes.find(n => n.id === edge.source);
   let target = nodes.find(n => n.id === edge.target);
-  let product;
+  let product: string;
   
   if (source.product != null) {
     product = source.product;
@@ -293,7 +294,7 @@ function onConnect (worksheetId: string, edge: FlowConnection, nodes: Node[], pr
   } else if (target.recipe != null && findById(target.recipe, recipes).inputThroughPuts.length > 0) {
     product = findById(target.recipe, recipes).inputThroughPuts[0].product;
   } else {
-    product = products[0];
+    product = products[0].id;
   }
   
   connectionCreate(worksheetId, edge.source, edge.target, product)

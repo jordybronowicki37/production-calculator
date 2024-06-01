@@ -25,7 +25,7 @@ const worksheetsReducer = createReducer<Worksheet[]>([], builder => {
   builder
       .addCase(ResetAction, () => [])
       .addCase(ProjectUnloadAction, () => [])
-      .addCase(ProjectLoadAction, (_state, action) => action.payload.worksheets)
+      .addCase(ProjectLoadAction, (_, action) => action.payload.worksheets)
       .addCase(WorksheetCreateAction, (state, action) => [...state, action.payload])
       .addCase(WorksheetCalculateAction, (state, action) => {
         const worksheet = findWorksheet(state, action.payload.id);

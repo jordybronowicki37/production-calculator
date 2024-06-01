@@ -76,6 +76,6 @@ export type EditorTab = {
     type: EditorTabTypes,
 }
 
-function getWorksheet(worksheets, id) {
+function getWorksheet(worksheets: Worksheet[], id: string): Worksheet {
   return worksheets.find(w => w.id === id);
 }

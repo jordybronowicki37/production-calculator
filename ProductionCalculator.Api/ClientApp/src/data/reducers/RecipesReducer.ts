@@ -10,8 +10,8 @@ const recipesReducer = createReducer<RecipeDto[]>([], builder => {
   builder
       .addCase(ResetAction, () => [])
       .addCase(ProjectUnloadAction, () => [])
-      .addCase(ProjectLoadAction, (state, action) => action.payload.entityContainer.recipes)
-      .addCase(RecipesSetAction, (state, action) => [...action.payload])
+      .addCase(ProjectLoadAction, (_, action) => action.payload.entityContainer.recipes)
+      .addCase(RecipesSetAction, (_, action) => [...action.payload])
       .addCase(RecipesAddAction, (state, action) => [...state, action.payload]);
 });
 
