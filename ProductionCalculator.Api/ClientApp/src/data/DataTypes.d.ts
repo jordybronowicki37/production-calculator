@@ -1,3 +1,19 @@
+export type Alert = {
+    id: string,
+    message: string,
+    level: AlertLevel,
+    nodeId?: string,
+    connectionId?: string,
+    productId?: string,
+}
+
+export enum AlertLevel {
+    Unknown = "Unknown",
+    Info = "Info",
+    Warning = "Warning",
+    Error = "Error",
+} 
+
 export type Connection = {
     id: string,
     amount: number,
@@ -71,8 +87,7 @@ export type ThroughPut = {
 export type Worksheet = {
     id: string,
     name: string,
-    calculationError: string,
-    calculationSucceeded: boolean,
+    alerts: Alert[],
     connections: Connection[],
     nodes: Node[]
 }

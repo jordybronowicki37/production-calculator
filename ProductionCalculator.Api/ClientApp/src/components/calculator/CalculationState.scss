@@ -1,9 +1,10 @@
-﻿.calculation-states {
+﻿.calculation-state {
     position: absolute;
     right: 0;
     padding: 8px;
     z-index: 10;
     display: flex;
+    align-items: flex-start;
     flex-direction: row;
     color: whitesmoke;
 
@@ -14,18 +15,31 @@
         margin: 2px;
         overflow: hidden;
     }
-}
+    
+    .calculation-info {
+        display: flex;
+        user-select: none;
+        height: 1.5rem;
+        
+        >div {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            padding: 0 3px;
 
-.calculation-states-icon {
-    width: 24px;
-    height: 24px;
-    text-align: center;
-}
+            &[hidden]:not(:last-child) {
+                border-right: 1px solid whitesmoke;
+            }
+        }
+    }
 
-.calculation-states-label {
-    font-size: x-small;
-    place-self: center;
-    border-radius: 5px;
-    padding: 1px;
-}
+    .recalculate-icon-wrapper {
+        width: 35px;
+        height: 35px;
+        text-align: center;
 
+        i {
+            font-size: 35px;
+        }
+    }
+}

@@ -1,5 +1,5 @@
 ﻿import {createAction, createReducer} from "@reduxjs/toolkit";
-import {Worksheet} from "../DataTypes";
+import {Worksheet, Node} from "../DataTypes";
 import {ResetAction} from "./GlobalActions";
 import {ProjectLoadAction, ProjectUnloadAction} from "./ProjectReducer";
 import {ConnectionDto, NodeDto, WorksheetDto} from "../api/ApiDtoTypes";
@@ -25,10 +25,11 @@ const worksheetsReducer = createReducer<Worksheet[]>([], builder => {
   builder
       .addCase(ResetAction, () => [])
       .addCase(ProjectUnloadAction, () => [])
-      .addCase(ProjectLoadAction, (state, action) => action.payload.worksheets)
+      .addCase(ProjectLoadAction, (_state, action) => action.payload.worksheets)
       .addCase(WorksheetCreateAction, (state, action) => [...state, action.payload])
       .addCase(WorksheetCalculateAction, (state, action) => {
         const worksheet = findWorksheet(state, action.payload.id);
+        worksheet.alerts = action.payload.alerts;
         worksheet.connections = action.payload.connections;
         worksheet.nodes = [...action.payload.nodes].map((v, i) => {
           v.position = worksheet.nodes[i].position;
@@ -69,15 +70,15 @@ const worksheetsReducer = createReducer<Worksheet[]>([], builder => {
       })
 });
 
-function findNodeIndex(nodes, id) {
+function findNodeIndex(nodes: Node[], id: string) {
   return nodes.findIndex(value => value.id === id);
 }
 
-function findWorksheet(state, id) {
+function findWorksheet(state: Worksheet[], id: string): Worksheet {
   return state.find(w => w.id === id);
 }
 
-function findWorksheetIndex(state, id) {
+function findWorksheetIndex(state: Worksheet[], id: string) {
   return state.findIndex(w => w.id === id);
 }
 

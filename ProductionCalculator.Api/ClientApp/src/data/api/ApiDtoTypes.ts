@@ -1,4 +1,5 @@
 import {
+    Alert,
     Connection,
     Machine,
     NodePosition,
@@ -59,8 +60,7 @@ export type ThroughPutDto = ThroughPut;
 export type WorksheetDto = {
     id: string,
     name: string,
-    calculationError: string,
-    calculationSucceeded: boolean,
+    alerts: Alert[],
     connections: ConnectionDto[],
     nodes: NodeDto[]
 }

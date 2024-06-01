@@ -4,11 +4,13 @@ import ReactFlow, {
   Background,
   Connection as FlowConnection,
   Controls,
-  DefaultEdgeOptions, Edge, EdgeChange,
+  DefaultEdgeOptions,
+  Edge,
+  EdgeChange,
   MarkerType,
   MiniMap,
-  NodeChange,
   Node as FlowNode,
+  NodeChange,
   ReactFlowInstance,
   ReactFlowProvider
 } from 'reactflow';
@@ -20,22 +22,22 @@ import {NodeProduction} from "./nodes/NodeProduction";
 import {NodeEnd} from "./nodes/NodeEnd";
 import {nodeEditPosition, nodeRemove} from "../../data/api/NodeAPI";
 import {connectionCreate, connectionDelete} from "../../data/api/ConnectionAPI";
-import {CalculationState, CalculationStateType} from "./CalculationState";
+import {CalculationState} from "./CalculationState";
 import {NodesSelector} from "./nodes/components/NodesSelector";
-import {NodeEditorOptions, NodeEditor} from "./nodes/components/NodeEditor";
+import {NodeEditor, NodeEditorOptions} from "./nodes/components/NodeEditor";
 import {Connection, Machine, Node, NodePosition, NodeTypes, Product, Recipe, Worksheet} from "../../data/DataTypes";
 import {ProductsPreviewEdge} from "./connections/ProductsPreviewEdge";
 import {Popup} from "../popup/Popup";
 import {ConnectionsEditor} from "./connections/ConnectionsEditor";
+import {WorksheetDto} from "../../data/api/ApiDtoTypes";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {type: 'productsPreviewEdge', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
 const customEdges = {productsPreviewEdge: ProductsPreviewEdge}
 
 export function Calculator({worksheet, products, recipes, machines}: {worksheet: Worksheet, products: Product[], recipes: Recipe[], machines: Machine[]}){
-  const { connections, nodes, calculationSucceeded, calculationError, id } = worksheet;
+  const { connections, nodes, alerts, id } = worksheet;
   
-  const [calculationState, setCalculationState] = useState<CalculationStateType>(calculationSucceeded ? "success" : "warning");
   const [connectionsEditorOpen, setConnectionsEditorOpen] = useState<boolean>(false);
   const [connectionsEditorEdgeId, setConnectionsEditorEdgeId] = useState<string>("");
   const [nodeEditorOpen, setNodeEditorOpen] = useState<boolean>(false);
@@ -45,14 +47,13 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [tempPositionData, setTempPositionData] = useState<TempPositionData[]>([]);
   
-  let message = calculationError;
   let flowNodes = generateNodes(id, nodes, products, recipes, machines, tempPositionData);
   let flowEdges = generateEdges(connections, products, (edgeId) => {
     setConnectionsEditorEdgeId(edgeId);
     setConnectionsEditorOpen(true);
   });
 
-  const onCreateNewNode = (nodeType) => {
+  const onCreateNewNode = (nodeType: NodeTypes) => {
     setNodeEditorOpen(true);
     setNodeEditorOptions({mode:"create", nodeType:nodeType, position:{x:0,y:0}});
   };
@@ -87,7 +88,7 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
       
       <ReactFlowProvider>
         <div className="flow-chart-wrapper flex-grow-1" ref={reactFlowWrapper}>
-          <CalculationState onClick={() => calculateWorksheet(id, setCalculationState)} message={message} state={calculationState}/>
+          <CalculationState onClick={() => calculateWorksheet(id)} alerts={alerts}/>
           <ReactFlow
             className="flow-chart"
             nodes={flowNodes}
@@ -176,17 +177,8 @@ function generateEdges(connections: Connection[], products: Product[], onOpenEdi
   });
 }
 
-function calculateWorksheet(worksheetId: string, setState: (state: CalculationStateType) => void): void {
-  setState("loading");
-  calculate(worksheetId).then(r => {
-    if (r.calculationSucceeded) {
-      setState("success");
-    } else {
-      setState("warning");
-    }
-  }).catch(() => {
-    setState("error");
-  });
+function calculateWorksheet(worksheetId: string): Promise<WorksheetDto> {
+  return calculate(worksheetId);
 }
 
 function createNodeBody(worksheetId: string, nodeType: NodeTypes, node: Node, products: Product[], recipes: Recipe[], machines: Machine[]): { body: Element, type: string } {
