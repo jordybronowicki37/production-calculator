@@ -5,8 +5,9 @@ namespace SiteReact.Controllers.dto;
 public class AlertDto
 {
     public Guid Id { get; }
+    public string Name { get; }
     public string Message { get; }
-    public WorksheetAlertLevel Level { get; }
+    public string Level { get; }
     public Guid? NodeId { get; }
     public Guid? ConnectionId { get; }
     public Guid? ProductId { get; }
@@ -14,8 +15,9 @@ public class AlertDto
     public AlertDto(WorksheetAlert alert)
     {
         Id = alert.Id;
-        Message = alert.Message;
-        Level = alert.Level;
+        Name = Enum.GetName(alert.AlertType) ?? string.Empty;
+        Message = alert.AlertType.GetMessage();
+        Level = Enum.GetName(alert.AlertType.GetLevel()) ?? string.Empty;
         NodeId = alert.NodeId;
         ConnectionId = alert.ConnectionId;
         ProductId = alert.ProductId;

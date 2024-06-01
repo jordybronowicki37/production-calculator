@@ -3,15 +3,13 @@
 public class WorksheetAlert
 {
     public Guid Id { get; init; } = Guid.NewGuid();
-    public string Message { get; set; }
-    public WorksheetAlertLevel Level { get; set; }
-    public Guid? NodeId { get; set; }
-    public Guid? ConnectionId { get; set; }
-    public Guid? ProductId { get; set; }
+    public WorksheetAlertType AlertType { get; init; }
+    public Guid? NodeId { get; init; }
+    public Guid? ConnectionId { get; init; }
+    public Guid? ProductId { get; init; }
     
     public WorksheetAlert(WorksheetAlertType alertType)
     {
-        Message = alertType.GetMessage();
-        Level = alertType.GetLevel();
+        AlertType = alertType;
     }
 }
