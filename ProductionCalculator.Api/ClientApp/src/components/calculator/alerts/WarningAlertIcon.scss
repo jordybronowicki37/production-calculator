@@ -1,0 +1,41 @@
+.warning-alert-icon {
+  display: flex;
+  cursor: pointer;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 2px;
+  padding: 0.05rem;
+  border-radius: 3px;
+  position: relative;
+  background-color: #ca521a;
+
+  i {
+    color: #F1B22C;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background-color: #ca521abb;
+  }
+
+  div {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 60%;
+    top: -10%;
+    background-color: #F1B22C;
+    border-radius: 20px;
+    overflow: hidden;
+
+    p {
+      font-size: 8px;
+      transform: translateY(-2px);
+      color: #ca521a;
+      font-weight: bold;
+    }
+  }
+}

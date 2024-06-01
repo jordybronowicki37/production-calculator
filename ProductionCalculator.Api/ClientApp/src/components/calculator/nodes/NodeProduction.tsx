@@ -6,11 +6,25 @@ import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {PowerUpIcon} from "../powerUps/PowerUpIcon";
 import {RoundedAmountField} from "../../misc/RoundedAmountField";
-import {Machine, Node, Product, Recipe, ThroughPut} from "../../../data/DataTypes";
+import {Machine, Node, Product, Recipe, ThroughPut, Worksheet} from "../../../data/DataTypes";
+import {useSelector} from "react-redux";
+import {StoreStates} from "../../../data/DataStore";
+import {WarningAlertIcon} from "../alerts/WarningAlertIcon";
+import {ErrorAlertIcon} from "../alerts/ErrorAlertIcon";
 
-export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}: 
-    {worksheetId: string, node: Node, machine: Machine, recipe: Recipe, products: Product[], previewMode: boolean}) {
+export type NodeProductionProps = {
+  worksheetId: string, 
+  node: Node, 
+  machine: Machine, 
+  recipe: Recipe, 
+  products: Product[], 
+  previewMode: boolean
+}
+
+export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}: NodeProductionProps) {
   const [editorOpen, setEditorOpen] = useState(false);
+  const worksheets = useSelector<StoreStates, Worksheet[]>(state => state.worksheets);
+  const alerts = worksheets.find(w => w.id === worksheetId)!.alerts.filter(a => a.nodeId === node.id);
 
   let machineField: ReactNode, recipeField: ReactNode, amountField: ReactNode, productInList: ReactNode, productOutList: ReactNode, targetEditor: ReactNode;
 
@@ -62,6 +76,8 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
         <NodeDragHandle/>
         <PowerUpIcon powerUps={[]} onOpenEditor={() => {}}/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
+        <WarningAlertIcon alerts={alerts} onOpenEditor={() => {}} />
+        <ErrorAlertIcon alerts={alerts} onOpenEditor={() => {}} />
       </div>
       <div className="content-container">
         <div className="content-table">

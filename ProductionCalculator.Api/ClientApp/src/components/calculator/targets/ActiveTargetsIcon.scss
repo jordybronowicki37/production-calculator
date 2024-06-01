@@ -1,9 +1,8 @@
 ﻿.active-target-icon {
     display: flex;
-    align-content: flex-end;
     cursor: pointer;
+    height: -moz-fit-content;
     height: fit-content;
-    overflow: hidden;
     margin: 2px;
     border-radius: 3px;
     background-color: #bbb;
@@ -19,9 +18,12 @@
         span {
             color: #D3F1A7;
         }
+        &:hover {
+            background-color: #5b8025bb;
+        }
     }
     
     &:hover {
-        background-color: #a1a1a1;
+        background-color: #bbbb;
     }
 }

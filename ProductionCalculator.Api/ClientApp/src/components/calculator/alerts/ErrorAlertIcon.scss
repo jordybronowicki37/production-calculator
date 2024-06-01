@@ -1,0 +1,41 @@
+.error-alert-icon {
+  display: flex;
+  cursor: pointer;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: 2px;
+  padding: 0.05rem;
+  border-radius: 3px;
+  position: relative;
+  background-color: #bf2323;
+
+  i {
+    color: #f4abab;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &:hover {
+    background-color: #F12C2CBB;
+  }
+  
+  div {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 60%;
+    top: -10%;
+    background-color: #f4abab;
+    border-radius: 20px;
+    overflow: hidden;
+    
+    p {
+      font-size: 8px;
+      transform: translateY(-2px);
+      color: #bf2323;
+      font-weight: bold;
+    }
+  }
+}
