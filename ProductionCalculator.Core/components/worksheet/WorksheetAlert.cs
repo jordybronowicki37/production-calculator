@@ -6,6 +6,8 @@ public class WorksheetAlert
     public string Message { get; set; }
     public WorksheetAlertLevel Level { get; set; }
     public Guid? NodeId { get; set; }
+    public Guid? ConnectionId { get; set; }
+    public Guid? ProductId { get; set; }
     
     public WorksheetAlert(WorksheetAlertType alertType)
     {

@@ -7,9 +7,7 @@ public class WorksheetDto
     public Guid Id { get; }
     public string Name { get; }
     
-    public bool CalculationSucceeded { get; }
-    public IEnumerable<WorksheetAlert> Alerts { get; }
-    
+    public IEnumerable<AlertDto> Alerts { get; }
     public IEnumerable<NodeDto> Nodes { get; }
     public IEnumerable<ConnectionDto> Connections { get; }
 
@@ -17,8 +15,7 @@ public class WorksheetDto
     {
         Id = worksheet.Id;
         Name = worksheet.Name;
-        CalculationSucceeded = worksheet.CalculationSucceeded;
-        Alerts = worksheet.Alerts;
+        Alerts = worksheet.Alerts.Select(a => new AlertDto(a));
         Nodes = worksheet.Nodes.Select(NodeDto.GenerateNode);
         Connections = worksheet.Connections.Select(c => new ConnectionDto(c));
     }

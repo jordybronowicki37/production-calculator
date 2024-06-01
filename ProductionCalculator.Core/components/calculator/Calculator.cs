@@ -44,37 +44,28 @@ public class Calculator
         // Check if worksheet is empty
         if (_worksheet.Nodes.Count == 0)
         {
-            _worksheet.CalculationSucceeded = false;
             _worksheet.Alerts.Add(new WorksheetAlert(WorksheetAlertType.WorksheetEmpty));
             return;
         }
         
+        CalculatorNodeChecker.CheckNodeConnectionForAlerts(_linkedNodes, _worksheet.Alerts);
+        
         // Check if target is missing
         if (!CheckForExactLimit())
         {
-            _worksheet.CalculationSucceeded = false;
             _worksheet.Alerts.Add(new WorksheetAlert(WorksheetAlertType.WorksheetTargetMissing));
             return;
         }
-        
-        if (CheckResult())
-        {
-            _worksheet.CalculationSucceeded = true;
-            return;
-        }
+
+        if (CheckResult()) return;
         
         ResetAmounts();
         while (_amountOfTimesCalculated < _worksheet.Nodes.Count*5)
         {
             CalculateStep();
-            if (CheckResult())
-            {
-                _worksheet.CalculationSucceeded = true;
-                return;
-            }
+            if (CheckResult()) return;
             _amountOfTimesCalculated++;
         }
-        _worksheet.CalculationSucceeded = false;
         _worksheet.Alerts.Add(new WorksheetAlert(WorksheetAlertType.CalculationOverflow));
     }
 

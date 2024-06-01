@@ -9,11 +9,11 @@ using Xunit.Abstractions;
 
 namespace ProductionCalculator.Core.Test.calculator;
 
-public class LimitCalculatorTest
+public class CalculatorTest
 {
     private readonly ITestOutputHelper _logger;
     
-    public LimitCalculatorTest(ITestOutputHelper logger)
+    public CalculatorTest(ITestOutputHelper logger)
     {
         _logger = logger;
     }
@@ -35,7 +35,6 @@ public class LimitCalculatorTest
         {
             Assert.True(Calculator.CompareFloatingPointNumbers(answers[i], nodes.ElementAt(i).Amount));
         }
-        Assert.True(setup.Worksheet.CalculationSucceeded);
         Assert.Empty(setup.Worksheet.Alerts);
     }
 

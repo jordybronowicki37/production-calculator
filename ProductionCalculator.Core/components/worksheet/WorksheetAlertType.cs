@@ -11,6 +11,12 @@ public enum WorksheetAlertType
     [WorksheetAlertType("The node is missing an output", WorksheetAlertLevel.Warning)]
     NodeMissingOutput,
     
+    [WorksheetAlertType("The connection product does not match the node input", WorksheetAlertLevel.Warning)]
+    ConnectionInvalidInput,
+    
+    [WorksheetAlertType("The connection product does not match the node output", WorksheetAlertLevel.Warning)]
+    ConnectionInvalidOutput,
+    
     [WorksheetAlertType("The worksheet is empty, try adding some nodes", WorksheetAlertLevel.Information)]
     WorksheetEmpty,
     

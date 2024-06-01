@@ -10,7 +10,6 @@ public class Worksheet
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public string Name { get; set; }
-    public bool CalculationSucceeded { get; set; } = true;
     public ICollection<WorksheetAlert> Alerts { get; set; } = new List<WorksheetAlert>();
     
     public Guid EntityContainerId { get; private set; }
