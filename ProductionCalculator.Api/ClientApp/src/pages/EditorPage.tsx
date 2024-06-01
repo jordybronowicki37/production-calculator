@@ -7,8 +7,11 @@ import {StoreStates} from "../data/DataStore";
 
 export function EditorPage(props) {
   const projectId: string = props.match.params.id;
-  const { project, worksheets, products, recipes, machines } = 
-      useSelector<StoreStates, StoreStates>(state => state);
+  const project = useSelector<StoreStates, StoreStates["project"]>(state => state.project);
+  const worksheets = useSelector<StoreStates, StoreStates["worksheets"]>(state => state.worksheets);
+  const products = useSelector<StoreStates, StoreStates["products"]>(state => state.products);
+  const recipes = useSelector<StoreStates, StoreStates["recipes"]>(state => state.recipes);
+  const machines = useSelector<StoreStates, StoreStates["machines"]>(state => state.machines);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(true);
 
