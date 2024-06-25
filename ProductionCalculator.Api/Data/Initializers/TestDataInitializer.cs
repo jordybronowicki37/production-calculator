@@ -2,6 +2,7 @@
 using productionCalculatorLib.components.calculator;
 using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.entityContainer;
+using productionCalculatorLib.components.nodes;
 using productionCalculatorLib.components.nodes.nodeTypes;
 using productionCalculatorLib.components.project;
 using productionCalculatorLib.components.worksheet;
@@ -62,8 +63,11 @@ public static class TestDataInitializer
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productIronIngot, 10));
 
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
+        node1.Position = new NodePosition() {X=0, Y=-200};
         var node2 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).Build();
+        node2.Position = new NodePosition() {X=0, Y=0};
         var node3 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productIronIngot).SetExactTarget(20).Build();
+        node3.Position = new NodePosition() {X=0, Y=200};
         
         worksheet.GetConnectionBuilder(node1, node2, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productIronIngot).Build();
@@ -100,9 +104,13 @@ public static class TestDataInitializer
         recipeIronIngot.OutputThroughPuts.Add(new ThroughPut(productSteelIngot, 10));
         
         var node1 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productIronOre).Build();
+        node1.Position = new NodePosition() {X=-100, Y=-130};
         var node2 = worksheet.GetNodeBuilder<SpawnNode>().SetProduct(productCoal).Build();
+        node2.Position = new NodePosition() {X=100, Y=-130};
         var node3 = worksheet.GetNodeBuilder<ProductionNode>().SetRecipe(recipeIronIngot, machineSmelter).SetExactTarget(2).Build();
+        node3.Position = new NodePosition() {X=0, Y=0};
         var node4 = worksheet.GetNodeBuilder<EndNode>().SetProduct(productSteelIngot).Build();
+        node4.Position = new NodePosition() {X=0, Y=200};
         
         worksheet.GetConnectionBuilder(node1, node3, productIronOre).Build();
         worksheet.GetConnectionBuilder(node2, node3, productCoal).Build();
