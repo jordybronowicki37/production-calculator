@@ -1,10 +1,12 @@
 ﻿version: "3.9"
+
 services:
   mongodb:
     image: mongo
     restart: on-failure
     ports:
       - "27017:27017"
+  
   mongo-express:
     image: mongo-express
     restart: on-failure
@@ -12,3 +14,28 @@ services:
       - "8092:8081"
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+  
+  mysql:
+    restart: on-failure
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: prodcal
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: on-failure
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:
