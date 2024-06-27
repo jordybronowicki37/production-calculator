@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.project;
@@ -9,6 +10,7 @@ using SiteReact.Data.GameDataPresets;
 
 namespace SiteReact.Controllers;
 
+[Authorize(Roles = "Admin,User")]
 [ApiController]
 [Route("[controller]")]
 public class ProjectController : ControllerBase

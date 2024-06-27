@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SiteReact.Controllers.dto;
 using SiteReact.Security;
 
 namespace SiteReact.Controllers;
 
+// [AllowAnonymous]
 [ApiController]
 [Route("api/[controller]")]
 public class AccountController : ControllerBase
@@ -50,6 +52,7 @@ public class AccountController : ControllerBase
         return Ok(new { message = "User logged in successfully" });
     }
 
+    [Authorize]
     [HttpPost("Logout")]
     public async Task<IActionResult> Logout()
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
 using productionCalculatorLib.components.nodes;
@@ -13,6 +14,7 @@ using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
+[Authorize(Roles = "Admin,User")]
 [ApiController]
 [Route("worksheet/{worksheetId:Guid}/[controller]")]
 public class NodeController : ControllerBase

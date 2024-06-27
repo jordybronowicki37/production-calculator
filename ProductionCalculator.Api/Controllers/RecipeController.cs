@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entities;
 using productionCalculatorLib.components.entityContainer;
@@ -7,6 +8,7 @@ using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
+[Authorize(Roles = "Admin,User")]
 [ApiController]
 [Route("worksheet/{entityContainerId:Guid}/[controller]")]
 public class RecipeController : ControllerBase

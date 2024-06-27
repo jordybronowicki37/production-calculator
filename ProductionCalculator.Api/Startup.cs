@@ -54,6 +54,13 @@ public class Startup: StartupBase
         webapp.UseStaticFiles();
         webapp.UseRouting();
         webapp.UseCors(AllowEverythingPolicyName);
+        webapp.UseAuthentication();
+        webapp.UseAuthorization();
+        
+        webapp.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
 
         webapp.MapControllerRoute(
             name: "default",

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using productionCalculatorLib.components.entityContainer;
 using SiteReact.Controllers.dto;
@@ -6,6 +7,7 @@ using SiteReact.Data.DbContexts;
 
 namespace SiteReact.Controllers;
 
+[Authorize(Roles = "Admin,User")]
 [ApiController]
 [Route("entityContainer/{entityContainerId:Guid}/[controller]")]
 public class ProductController : ControllerBase
