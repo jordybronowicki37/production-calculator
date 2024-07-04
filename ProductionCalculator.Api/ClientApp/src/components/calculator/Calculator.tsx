@@ -1,5 +1,6 @@
 import "./Calculator.scss";
-import {CSSProperties, ReactNode, useEffect, useRef, useState} from "react";
+import * as React from "react";
+import {CSSProperties, DragEvent, ReactNode, useEffect, useRef, useState} from "react";
 import ReactFlow, {
   Background,
   Connection as FlowConnection,
@@ -30,7 +31,6 @@ import {ProductsPreviewEdge} from "./connections/ProductsPreviewEdge";
 import {Popup} from "../popup/Popup";
 import {ConnectionsEditor} from "./connections/ConnectionsEditor";
 import {WorksheetDto} from "../../data/api/ApiDtoTypes";
-import * as React from "react";
 
 const defaultEdgeOptions: DefaultEdgeOptions = {type: 'productsPreviewEdge', markerEnd: {type: MarkerType.Arrow}, animated: true};
 const defaultNodeStyle: CSSProperties = {width:"min-content", padding:0, textAlign:"initial", border: "none", borderRadius: "5px", backgroundColor: "transparent"};
@@ -95,19 +95,20 @@ export function Calculator({worksheet, products, recipes, machines}: {worksheet:
             nodes={flowNodes}
             edges={flowEdges}
             edgeTypes={customEdges}
-            onNodesChange={(changes) => onNodesChange(id, changes, tempPositionData, setTempPositionData)}
-            onEdgesChange={(changes) => onEdgesChange(id, changes, connections)}
-            onConnect={(edge) => onConnect(id, edge, nodes, products, recipes)}
+            onNodesChange={(changes: NodeChange[]) => onNodesChange(id, changes, tempPositionData, setTempPositionData)}
+            onEdgesChange={(changes: EdgeChange[]) => onEdgesChange(id, changes, connections)}
+            onConnect={(edge: FlowConnection) => onConnect(id, edge, nodes, products, recipes)}
             onDragOver={onDragOver}
             onInit={setReactFlowInstance}
-            onDrop={(event) => {
+            onDrop={(event: DragEvent) => {
               const { position, nodeType } = onDrop(event, reactFlowWrapper.current, reactFlowInstance);
               setNodeEditorOpen(true);
               setNodeEditorOptions({mode:"create", nodeType, position});
             }}
             defaultEdgeOptions={defaultEdgeOptions}>
             <MiniMap 
-                nodeStrokeColor={(node) => {
+                nodeStrokeColor={(node: FlowNode) => {
+                  console.log(node)
                   // @ts-ignore
                   switch (node.nodeType) {
                       case "Spawn":
@@ -297,23 +298,23 @@ function onConnect (worksheetId: string, edge: FlowConnection, nodes: Node[], pr
     product = products[0].id;
   }
   
-  connectionCreate(worksheetId, edge.source, edge.target, product)
+  connectionCreate(worksheetId, edge.source, edge.target, product);
 }
 
-export function onDragStart (event, nodeType: NodeTypes) {
+export function onDragStart (event: DragEvent, nodeType: NodeTypes) {
   event.dataTransfer.setData('application/reactflow', nodeType);
   event.dataTransfer.effectAllowed = 'move';
 }
 
-function onDragOver (event) {
+function onDragOver (event: DragEvent) {
   event.preventDefault();
   event.dataTransfer.dropEffect = 'move';
 }
 
-function onDrop (event, wrapperInstance: HTMLDivElement, flowInstance: ReactFlowInstance): {position: NodePosition, nodeType: NodeTypes} {
+function onDrop (event: DragEvent, wrapperInstance: HTMLDivElement, flowInstance: ReactFlowInstance): {position: NodePosition, nodeType: NodeTypes} {
   event.preventDefault();
   const reactFlowBounds = wrapperInstance.getBoundingClientRect();
-  const nodeType = event.dataTransfer.getData('application/reactflow');
+  const nodeType = event.dataTransfer.getData('application/reactflow') as NodeTypes;
   
   // check if the dropped element is valid
   if (typeof nodeType === 'undefined' || !nodeType) return;
