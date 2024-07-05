@@ -84,6 +84,18 @@ export type ThroughPut = {
     amount: number,
 }
 
+export type User = {
+    userId: string,
+    userName: string,
+}
+
+export type CurrentUser = {
+    userId: string,
+    userName: string,
+    email: string,
+    authToken: string
+}
+
 export type Worksheet = {
     id: string,
     name: string,

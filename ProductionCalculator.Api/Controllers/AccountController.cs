@@ -8,7 +8,7 @@ namespace SiteReact.Controllers;
 
 // [AllowAnonymous]
 [ApiController]
-[Route("api/[controller]")]
+[Route("account")]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;

@@ -6,10 +6,12 @@ import {worksheetsReducer} from "./reducers/WorksheetsReducer";
 import {projectsReducer} from "./reducers/ProjectsReducer";
 import {projectReducer} from "./reducers/ProjectReducer";
 import {machinesReducer} from "./reducers/MachinesReducer";
-import {Machine, Product, Project, Recipe, Worksheet} from "./DataTypes";
+import {CurrentUser, Machine, Product, Project, Recipe, Worksheet} from "./DataTypes";
 import {ProjectDto} from "./api/ApiDtoTypes";
+import {authReducer} from "./reducers/AuthorizationReducer";
 
 export type StoreStates = {
+  auth: CurrentUser | null,
   machines: Machine[],
   notifications: Notification[]
   products: Product[],
@@ -20,6 +22,7 @@ export type StoreStates = {
 }
 
 const rootReducer = combineReducers({
+  auth: authReducer,
   machines: machinesReducer,
   notifications: notificationReducer,
   products: productsReducer,
