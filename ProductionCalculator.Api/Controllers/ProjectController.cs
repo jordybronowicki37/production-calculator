@@ -12,7 +12,7 @@ namespace SiteReact.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("[controller]")]
+[Route("project")]
 public class ProjectController : ControllerBase
 {
     private readonly ILogger<ProjectController> _logger;

@@ -11,7 +11,7 @@ namespace SiteReact.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("[controller]")]
+[Route("worksheet")]
 public class WorksheetController : ControllerBase
 {
     private readonly ILogger<WorksheetController> _logger;
