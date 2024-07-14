@@ -47,6 +47,3 @@ Recipe production can be boosted by using a more efficient machine. This mechani
 
 ## Power-ups
 Power-ups allow production-nodes to be more efficient in executing recipes. This is an additional boost besides the machine’s efficiency. A power-up can be used to indicate that a specific machine had received an upgrade.
-
-# Roadmap
-To view all the planned features please see the [Trello board](https://trello.com/b/WxAPVdhK/prodcal-roadmap).
