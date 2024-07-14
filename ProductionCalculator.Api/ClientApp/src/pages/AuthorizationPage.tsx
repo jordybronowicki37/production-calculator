@@ -1,7 +1,7 @@
-﻿import "./AuthorizationPage.scss";
+import "./AuthorizationPage.scss";
 import * as React from "react";
 import {CSSProperties, FormEvent, memo, useEffect, useState} from "react";
-import {login, register} from "../data/api/AuthorizationAPI";
+import {useLogin, useRegister} from "../data/api/AuthorizationAPI";
 import {useHistory} from "react-router-dom";
 import ReactFlow, {
   Background,
@@ -66,14 +66,17 @@ type AuthCardSharedTypes = {
 
 function LoginCard({switchCard}: AuthCardSharedTypes) {
   const history = useHistory<History>();
+  const {loginUser} = useLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function handleLoginUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    login(email, password).then(() => {
-      history.push("/projects");
-    });
+    loginUser({email, password})
+      .then(() => {
+        history.push("/projects");
+      })
+      .catch(() => undefined);
   }
 
   const nodes: Node<any, string>[] = [
@@ -161,6 +164,7 @@ function LoginCard({switchCard}: AuthCardSharedTypes) {
 
 function RegisterCard({switchCard}: AuthCardSharedTypes) {
   const history = useHistory<History>();
+  const {registerUser} = useRegister();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -168,9 +172,11 @@ function RegisterCard({switchCard}: AuthCardSharedTypes) {
 
   function handleRegisterUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    register(username, email, password).then(() => {
-      history.push("/projects");
-    });
+    registerUser({username, email, password, password2})
+      .then(() => {
+        history.push("/projects");
+      })
+      .catch(() => undefined);
   }
 
   const nodes: Node<any, string>[] = [
@@ -305,7 +311,7 @@ function RegisterCard({switchCard}: AuthCardSharedTypes) {
   );
 }
 
-function AuthFlowChart({initialNodes, initialEdges}: {initialNodes: Node[], initialEdges: Edge[]}) {
+function AuthFlowChart({initialNodes, initialEdges}: { initialNodes: Node[], initialEdges: Edge[] }) {
   const [nodes, setNodes] = useState(initialNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 

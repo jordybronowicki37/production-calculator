@@ -1,8 +1,9 @@
-﻿// axiosConfig.ts
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosHeaders, AxiosInstance} from 'axios';
+import Store from "../DataStore";
 
 function getToken(): string | null {
-  return localStorage.getItem('userToken');
+  const auth = Store.getState().auth;
+  return auth ? auth.authToken : null;
 }
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -11,10 +12,14 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    if (config.headers) {
-      if (config.headers.noAuth) {
-        delete config.headers.noAuth;
-      }
+    console.log(config)
+    if (!config.headers) {
+      config.headers = new AxiosHeaders();
+    }
+    if (config.headers.noAuth) {
+      delete config.headers.noAuth;
+    }
+    else {
       const token = getToken();
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
