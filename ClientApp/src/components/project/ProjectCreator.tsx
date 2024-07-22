@@ -1,14 +1,14 @@
 import "./ProjectCreator.scss";
 import {Button, Spinner} from "reactstrap";
-import {useState} from "react";
+import React, {useState} from "react";
 import {createProject} from "../../data/api/ProjectsAPI";
 
-export function ProjectCreator({onClose}: {onClose: () => void}) {
+export function ProjectCreator({onClose}: { onClose: () => void }): React.JSX.Element {
   const [projectName, setProjectName] = useState<string>("");
   const [projectType, setProjectType] = useState<string>("");
   const [projectNameError, setProjectNameError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   return (
     <div className="project-creator">
       <div className="creator-header">
@@ -18,19 +18,19 @@ export function ProjectCreator({onClose}: {onClose: () => void}) {
         <div>
           <label htmlFor="new-project-name">Name</label>
           <input id="new-project-name" type="text" value={projectName}
-            onChange={(e) => {
-              setProjectNameError(false);
-              setProjectName(e.target.value);
-            }
-          }/>
+                 onChange={(e) => {
+                   setProjectNameError(false);
+                   setProjectName(e.target.value);
+                 }
+                 }/>
         </div>
-        
+
         <div>
           <label htmlFor="new-project-type">Type preset</label>
           <select id="new-project-type"
-            onChange={(e) => {
-              setProjectType(e.target.value);
-            }}
+                  onChange={(e) => {
+                    setProjectType(e.target.value);
+                  }}
           >
             <option value="">None</option>
             <option value="dysonSphereProgram">Dyson Sphere Program</option>
@@ -44,7 +44,7 @@ export function ProjectCreator({onClose}: {onClose: () => void}) {
         </div>
 
         {projectNameError && <div className="error-message">Project name can not be empty!</div>}
-        
+
         <span>
           <Button
             type="submit" outline

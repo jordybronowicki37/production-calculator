@@ -1,7 +1,13 @@
 ﻿import "./ActiveTargetsIcon.scss";
 import {ProductionTarget} from "../../../data/DataTypes";
+import React from "react";
 
-export function ActiveTargetsIcon({targets, onOpenEditor}:{targets: ProductionTarget[], onOpenEditor: () => void}) {
+export type ActiveTargetsIconProps = {
+  targets: ProductionTarget[], 
+  onOpenEditor: () => void,
+}
+
+export function ActiveTargetsIcon({targets, onOpenEditor}: ActiveTargetsIconProps): React.JSX.Element {
   return (
     <div 
       title="Edit targets"

@@ -7,8 +7,9 @@ import Store from "./data/DataStore";
 import {ProjectsPage} from "./pages/ProjectsPage";
 import {EditorPage} from "./pages/EditorPage";
 import {AuthorizationPage} from "./pages/AuthorizationPage";
+import React from "react";
 
-export function App() {
+export function App(): React.JSX.Element {
   return (
     <Provider store={Store}>
       <Layout>

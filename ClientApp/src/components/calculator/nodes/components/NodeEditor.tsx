@@ -1,9 +1,10 @@
 import "./NodeEditor.scss";
 import {Button, Spinner} from "reactstrap";
-import {MutableRefObject, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {nodeCreateProduct, nodeCreateRecipe} from "../../../../data/api/NodeAPI";
 import {Machine, NodePosition, NodeTypes, Product, Recipe} from "../../../../data/DataTypes";
 import {RecipeItem} from "../../../entities/recipes/RecipeItem";
+import React from "react";
 
 export type NodeEditorOptions = {
   nodeType: NodeTypes,
@@ -19,7 +20,7 @@ export type NodeEditorProps = {
   options: NodeEditorOptions,
 }
 
-export function NodeEditor({worksheetId, products, recipes, machines, options}: NodeEditorProps) {
+export function NodeEditor({worksheetId, products, recipes, machines, options}: NodeEditorProps): React.JSX.Element {
   let editor = <div className="node-options">ERROR</div>;
   
   switch (options.nodeType) {
@@ -44,7 +45,7 @@ type ProductNodeEditorType = {
 function ProductNodeEditor({worksheetId, options, products}: ProductNodeEditorType) {
   const {nodeType, position} = options;
   
-  const containerRef: MutableRefObject<HTMLDivElement> = useRef();
+  const containerRef = useRef<HTMLDivElement>(null);
   const [productFilter, setProductFilter] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -93,7 +94,7 @@ function ProductNodeEditor({worksheetId, options, products}: ProductNodeEditorTy
         setIsLoading(true);
         nodeCreateProduct(worksheetId, nodeType, position, selectedProduct).then(() => {
           const closeEvent = new CustomEvent("closePopup", {bubbles: true});
-          // @ts-ignore
+          if (!containerRef.current) return;
           containerRef.current.dispatchEvent(closeEvent);
         });
       }}>Create</Button>
@@ -110,10 +111,10 @@ type RecipeNodeEditorType = {
   options: NodeEditorOptions,
 }
 
-function RecipeNodeEditor({worksheetId, recipes, machines, products, options}: RecipeNodeEditorType) {
+function RecipeNodeEditor({worksheetId, recipes, machines, products, options}: RecipeNodeEditorType): React.JSX.Element {
   const {nodeType, position} = options;
 
-  const containerRef: MutableRefObject<HTMLDivElement> = useRef();
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [errorNoRecipeSelected, setErrorNoRecipeSelected] = useState(false);
@@ -126,11 +127,19 @@ function RecipeNodeEditor({worksheetId, recipes, machines, products, options}: R
   
   let recipesCopy = [...recipes].sort((a,b) => (a.name > b.name) ? 1 : (b.name > a.name) ? -1 : 0);
   recipesCopy = recipesCopy.filter(r => r.name.toLowerCase().includes(recipeFilter.toLowerCase()));
-  if (selectedMachine !== "") recipesCopy = recipesCopy.filter(r => machines.find(m => m.id === selectedMachine).recipes.includes(r.id));
+  if (selectedMachine !== "") recipesCopy = recipesCopy.filter(r => {
+    const machine = machines.find(m => m.id === selectedMachine);
+    if (!machine) return false;
+    return machine.recipes.includes(r.id);
+  });
   
   let machinesCopy = [...machines].sort((a,b) => (a.name > b.name) ? 1 : (b.name > a.name) ? -1 : 0);
   machinesCopy = machinesCopy.filter(m => m.name.toLowerCase().includes(machineFilter.toLowerCase()));
-  if (selectedRecipe !== "") machinesCopy = machinesCopy.filter(r => r.recipes.includes(recipes.find(m => m.id === selectedRecipe).id));
+  if (selectedRecipe !== "") machinesCopy = machinesCopy.filter(r => {
+    const recipe = recipes.find(m => m.id === selectedRecipe);
+    if (!recipe) return false;
+    r.recipes.includes(recipe.id);
+  });
 
   return <div className={`node-options type-${nodeType.toLowerCase()}`} ref={containerRef}>
     <div className="header"><h2 className="m-0">New {nodeType}-node</h2></div>
@@ -213,6 +222,7 @@ function RecipeNodeEditor({worksheetId, recipes, machines, products, options}: R
         setIsLoading(true);
         nodeCreateRecipe(worksheetId, nodeType, position, selectedRecipe, selectedMachine).then(() => {
           const closeEvent = new CustomEvent("closePopup", {bubbles: true});
+          if (!containerRef.current) return;
           containerRef.current.dispatchEvent(closeEvent);
         });
       }}>Create</Button>
@@ -221,27 +231,26 @@ function RecipeNodeEditor({worksheetId, recipes, machines, products, options}: R
   </div>;
 }
 
-function RecipePreview(recipes: Recipe[], products: Product[], machines: Machine[], selectedRecipe: string, selectedMachine: string) {
+function RecipePreview(recipes: Recipe[], products: Product[], machines: Machine[], selectedRecipe: string, selectedMachine: string): React.JSX.Element {
+  if (selectedRecipe !== "") return <></>;
+  const recipe = findRecipe(recipes, selectedRecipe);
+  if (!recipe) return <></>;
   return (
-    <div>
-      {selectedRecipe !== "" &&
-        <div className="recipe-preview">
-          <h3>Recipe preview</h3>
-          <RecipeItem
-              products={products}
-              recipe={findRecipe(recipes, selectedRecipe)}
-              machine={selectedMachine === "" ? undefined : findMachine(machines, selectedMachine)}
-          />
-        </div>
-      }
+    <div className="recipe-preview">
+      <h3>Recipe preview</h3>
+      <RecipeItem
+          products={products}
+          recipe={recipe}
+          machine={selectedMachine === "" ? undefined : findMachine(machines, selectedMachine)}
+      />
     </div>
   );
 }
 
-function findRecipe(recipes: Recipe[], id: string): Recipe {
+function findRecipe(recipes: Recipe[], id: string): Recipe | undefined {
   return recipes.find(v => v.id === id);
 }
 
-function findMachine(machines: Machine[], id: string): Machine {
+function findMachine(machines: Machine[], id: string): Machine | undefined {
   return machines.find(v => v.id === id);
 }

@@ -13,7 +13,7 @@ import ReactFlow, {
   MiniMap,
   Node,
   NodeChange,
-  NodePositionChange,
+  NodePositionChange, NodeProps, NodeTypes,
   Position,
   ReactFlowInstance,
   ReactFlowProvider
@@ -38,15 +38,14 @@ const defaultNodeOptions = {
   sourcePosition: Position.Right,
   targetPosition: Position.Left,
 }
-// @ts-ignore
-const NoEdgeConnectionsType = memo(({data}) => {
+const NoEdgeConnectionsType: React.ComponentType<NodeProps> = memo(({data}) => {
   return <>{data.label}</>;
 });
-const nodeTypes = {
+const nodeTypes: NodeTypes = {
   none: NoEdgeConnectionsType,
 };
 
-export function AuthorizationPage() {
+export function AuthorizationPage(): React.JSX.Element {
   const [isLoggingIn, setIsLoggingIn] = useState(true);
 
   return <div className="auth-page">
@@ -64,7 +63,7 @@ type AuthCardSharedTypes = {
   switchCard: () => void
 }
 
-function LoginCard({switchCard}: AuthCardSharedTypes) {
+function LoginCard({switchCard}: AuthCardSharedTypes): React.JSX.Element {
   const history = useHistory<History>();
   const {loginUser} = useLogin();
   const [email, setEmail] = useState("");
@@ -79,7 +78,7 @@ function LoginCard({switchCard}: AuthCardSharedTypes) {
       .catch(() => undefined);
   }
 
-  const nodes: Node<any, string>[] = [
+  const nodes: Node<{label: React.JSX.Element}, string>[] = [
     {
       id: "0",
       type: "none",
@@ -162,7 +161,7 @@ function LoginCard({switchCard}: AuthCardSharedTypes) {
   )
 }
 
-function RegisterCard({switchCard}: AuthCardSharedTypes) {
+function RegisterCard({switchCard}: AuthCardSharedTypes): React.JSX.Element {
   const history = useHistory<History>();
   const {registerUser} = useRegister();
   const [username, setUsername] = useState("");
@@ -179,7 +178,7 @@ function RegisterCard({switchCard}: AuthCardSharedTypes) {
       .catch(() => undefined);
   }
 
-  const nodes: Node<any, string>[] = [
+  const nodes: Node<{label: React.JSX.Element}, string>[] = [
     {
       id: "0",
       type: "none",
@@ -311,7 +310,7 @@ function RegisterCard({switchCard}: AuthCardSharedTypes) {
   );
 }
 
-function AuthFlowChart({initialNodes, initialEdges}: { initialNodes: Node[], initialEdges: Edge[] }) {
+function AuthFlowChart({initialNodes, initialEdges}: { initialNodes: Node[], initialEdges: Edge[] }): React.JSX.Element {
   const [nodes, setNodes] = useState(initialNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
@@ -331,8 +330,9 @@ function AuthFlowChart({initialNodes, initialEdges}: { initialNodes: Node[], ini
         for (const change of changes) {
           if (change.type !== "position") return;
           const positionChange = change as NodePositionChange;
-          if (!positionChange.dragging) return;
+          if (!positionChange.dragging || !positionChange.position) return;
           const node = nodes.find(v => v.id === positionChange.id);
+          if (!node) return;
           node.position = positionChange.position;
           node.positionAbsolute = positionChange.positionAbsolute;
           setNodes([...nodes]);
@@ -359,7 +359,7 @@ type TextInputNodeProps = {
   updateValue: (value: string) => void,
 }
 
-function TextInputNode(props: TextInputNodeProps) {
+function TextInputNode(props: TextInputNodeProps): React.JSX.Element {
   const {name, displayName, placeholder, inputType, updateValue} = props;
   const [currentValue, setCurrentValue] = useState("");
 
@@ -377,19 +377,19 @@ function TextInputNode(props: TextInputNodeProps) {
   )
 }
 
-function TitleNode({title}: { title: string }) {
+function TitleNode({title}: { title: string }): React.JSX.Element {
   return <h2 className="title-node auth-page-custom-node">{title}</h2>
 }
 
-function TextNode({text}: { text: string }) {
+function TextNode({text}: { text: string }): React.JSX.Element {
   return <p className="text-node auth-page-custom-node">{text}</p>
 }
 
-function SwitchScreenNode({text, onSwitch}: { text: string, onSwitch: () => void }) {
+function SwitchScreenNode({text, onSwitch}: { text: string, onSwitch: () => void }): React.JSX.Element {
   return <button className="switch-node auth-page-custom-node" onClick={onSwitch} type="button">{text}</button>
 }
 
-function AccountNode() {
+function AccountNode(): React.JSX.Element {
   return (
     <div className="account-node auth-page-custom-node">
       <header>
@@ -401,7 +401,7 @@ function AccountNode() {
   );
 }
 
-function LoginButtonNode() {
+function LoginButtonNode(): React.JSX.Element {
   return (
     <>
       <Handle
@@ -425,7 +425,7 @@ function LoginButtonNode() {
   )
 }
 
-function RegisterButtonNode() {
+function RegisterButtonNode(): React.JSX.Element {
   return (
     <>
       <Handle

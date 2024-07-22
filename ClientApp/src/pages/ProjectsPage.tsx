@@ -1,5 +1,5 @@
 ﻿import "./ProjectsPage.scss";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {fetchAllProjects} from "../data/api/ProjectsAPI";
 import {Button, Spinner} from "reactstrap";
@@ -9,32 +9,32 @@ import {StoreStates} from "../data/DataStore";
 import {ProjectItem} from "../components/project/ProjectItem";
 import {ProjectDto} from "../data/api/ApiDtoTypes";
 
-export function ProjectsPage() {
+export function ProjectsPage(): React.JSX.Element {
   const projects = useSelector<StoreStates, StoreStates["projects"]>(state => state.projects);
   const [isLoading, setIsLoading] = useState(true);
   const [projectCreatorOpen, setProjectCreatorOpen] = useState(false);
-  
+
   useEffect(() => {
     fetchAllProjects().then(() => setIsLoading(false));
   }, []);
-  
+
   return (
     <div className="project-page">
-      <Popup 
+      <Popup
         onClose={() => setProjectCreatorOpen(false)}
         hidden={!projectCreatorOpen}>
         <ProjectCreator onClose={() => setProjectCreatorOpen(false)}/>
       </Popup>
       <div className="project-header">
         <h1>Your projects</h1>
-        
-        <Button 
+
+        <Button
           className="project-create-button" color="light" outline
           onClick={() => setProjectCreatorOpen(true)}>
           Create a new project
         </Button>
       </div>
-      
+
       {!isLoading && <ProjectItems projects={projects}/>}
       {!isLoading && projects.length === 0 && <NoProjectYet/>}
       {isLoading && <ProjectsLoading/>}
@@ -43,9 +43,9 @@ export function ProjectsPage() {
 }
 
 function ProjectItems({projects}: { projects: ProjectDto[] }) {
-    return <div className="project-items-container">
-        {projects.map(p => <ProjectItem key={p.id} project={p}/>)}
-    </div>
+  return <div className="project-items-container">
+    {projects.map(p => <ProjectItem key={p.id} project={p}/>)}
+  </div>
 }
 
 function ProjectsLoading() {

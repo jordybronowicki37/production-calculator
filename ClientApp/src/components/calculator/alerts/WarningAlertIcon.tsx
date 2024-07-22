@@ -1,7 +1,13 @@
 import "./WarningAlertIcon.scss";
-import {Alert, AlertLevel} from "../../../data/DataTypes.d.ts";
+import {Alert, AlertLevel} from "../../../data/DataTypes";
+import React from "react";
 
-export function WarningAlertIcon({alerts, onOpenEditor}: {alerts: Alert[], onOpenEditor: () => void}) {
+export type WarningAlertIconProps = {
+  alerts: Alert[],
+  onOpenEditor?: () => void,
+}
+
+export function WarningAlertIcon({alerts, onOpenEditor}: WarningAlertIconProps): React.JSX.Element {
   alerts = alerts.filter(a => a.level === AlertLevel.Warning);
   
   return (

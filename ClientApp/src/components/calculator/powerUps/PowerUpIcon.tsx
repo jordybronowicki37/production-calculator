@@ -1,6 +1,12 @@
 import "./PowerUpIcon.scss";
+import React from "react";
 
-export function PowerUpIcon({powerUps, onOpenEditor}: {powerUps: [], onOpenEditor: () => void}) {
+export type PowerUpIconProps = {
+  powerUps: [], 
+  onOpenEditor?: () => void,
+}
+
+export function PowerUpIcon({powerUps, onOpenEditor}: PowerUpIconProps): React.JSX.Element {
   return (
     <div
       title="Edit power ups"

@@ -8,7 +8,7 @@ export async function connectionCreate(
     inputNodeId: string, 
     outputNodeId: string, 
     product: string): Promise<ConnectionDto> {
-  let response = await fetch(`worksheet/${worksheetId}/connection`, {
+  const response = await fetch(`api/worksheet/${worksheetId}/connection`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
@@ -18,17 +18,17 @@ export async function connectionCreate(
     })
   });
   if (!response.ok) {
-    let error = await response.text();
+    const error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  let json = await response.json();
+  const json = await response.json();
   Store.dispatch(ConnectionAddAction({connection:json, worksheetId:worksheetId}));
   return json;
 }
 
 export async function connectionEdit(worksheetId: string, connectionId: string, productId: string): Promise<void> {
-  let response = await fetch(`worksheet/${worksheetId}/connection/${connectionId}`, 
+  const response = await fetch(`api/worksheet/${worksheetId}/connection/${connectionId}`,
       {
         method: "put",
         headers: {"Content-Type": "application/json"},
@@ -37,7 +37,7 @@ export async function connectionEdit(worksheetId: string, connectionId: string, 
         })
       });
   if (!response.ok) {
-    let error = await response.text();
+    const error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
@@ -45,9 +45,9 @@ export async function connectionEdit(worksheetId: string, connectionId: string, 
 }
 
 export async function connectionDelete(worksheetId: string, connectionId: string): Promise<void> {
-  let response = await fetch(`worksheet/${worksheetId}/connection/${connectionId}`, {method: "delete"});
+  const response = await fetch(`api/worksheet/${worksheetId}/connection/${connectionId}`, {method: "delete"});
   if (!response.ok) {
-    let error = await response.text();
+    const error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }

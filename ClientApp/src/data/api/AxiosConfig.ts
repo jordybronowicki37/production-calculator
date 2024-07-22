@@ -7,7 +7,7 @@ function getToken(): string | null {
 }
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'https://localhost:44496',
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 axiosInstance.interceptors.request.use(

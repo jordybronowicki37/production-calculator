@@ -4,29 +4,29 @@ import {RecipeDto} from "./ApiDtoTypes";
 import {RecipesAddAction, RecipesSetAction} from "../reducers/RecipesReducer";
 
 export async function fetchAllRecipes(entityContainerId: string): Promise<RecipeDto[]> {
-  let response = await fetch(`worksheet/${entityContainerId}/recipe`);
+  const response = await fetch(`api/worksheet/${entityContainerId}/recipe`);
   if (!response.ok) {
-    let error = await response.text();
+    const error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  let json = await response.json() as RecipeDto[];
+  const json = await response.json() as RecipeDto[];
   Store.dispatch(RecipesSetAction(json));
   return json;
 }
 
-export async function createRecipe(entityContainerId: string, body: object): Promise<RecipeDto> {
-  let response = await fetch(`worksheet/${entityContainerId}/recipe`, {
+export async function createRecipe(entityContainerId: string, body: Record<string, unknown>): Promise<RecipeDto> {
+  const response = await fetch(`api/worksheet/${entityContainerId}/recipe`, {
     method: "post",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(body),
   });
   if (!response.ok) {
-    let error = await response.text();
+    const error = await response.text();
     throwErrorNotification(error);
     throw new Error(error);
   }
-  let json = await response.json() as RecipeDto;
+  const json = await response.json() as RecipeDto;
   Store.dispatch(RecipesAddAction(json));
   return json;
 }

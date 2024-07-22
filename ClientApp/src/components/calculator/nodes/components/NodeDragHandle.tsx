@@ -1,5 +1,6 @@
 ﻿import "./NodeDragHandle.scss";
+import React from "react";
 
-export function NodeDragHandle() {
-  return <div className="node-drag-handle"></div>
+export function NodeDragHandle(): React.JSX.Element {
+  return <div className="node-drag-handle"/>
 }

@@ -4,7 +4,12 @@ import {createNewWorksheet} from "../../data/api/WorksheetAPI";
 import {useState} from "react";
 import {WorksheetDto} from "../../data/api/ApiDtoTypes";
 
-export function WorksheetCreator({handleResult, projectId}: {handleResult: (value: WorksheetDto) => void, projectId: string}) {
+export type WorksheetCreatorProps = {
+  handleResult: (value: WorksheetDto) => void, 
+  projectId: string,
+}
+
+export function WorksheetCreator({handleResult, projectId}: WorksheetCreatorProps): React.JSX.Element {
   const [newWorksheetName, setNewWorksheetName] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newWorksheetNameError, setNewWorksheetNameError] = useState<boolean>(false);

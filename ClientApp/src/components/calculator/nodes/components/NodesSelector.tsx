@@ -1,8 +1,14 @@
 import "./NodesSelector.scss";
 import {NodeTypes} from "../../../../data/DataTypes";
 import {DragEvent} from "react";
+import React from "react";
 
-export function NodesSelector({onCreateNewNode, onDragStart}: {onCreateNewNode: (type: NodeTypes) => void, onDragStart: (event: DragEvent<HTMLDivElement>, type: NodeTypes) => void}) {
+export type NodesSelectorProps = {
+  onCreateNewNode: (type: NodeTypes) => void, 
+  onDragStart: (event: DragEvent<HTMLDivElement>, type: NodeTypes) => void
+}
+
+export function NodesSelector({onCreateNewNode, onDragStart}: NodesSelectorProps): React.JSX.Element {
   return (
     <div className="nodes-selector">
       <div className="item-spawn" title="Spawn-node" draggable

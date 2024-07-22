@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import {StoreStates} from "../../../data/DataStore";
 import {WarningAlertIcon} from "../alerts/WarningAlertIcon";
 import {ErrorAlertIcon} from "../alerts/ErrorAlertIcon";
+import React from "react";
 
 export type NodeSpawnProps = {
   worksheetId: string, 
@@ -18,10 +19,12 @@ export type NodeSpawnProps = {
   previewMode: boolean
 }
 
-export function NodeSpawn({worksheetId, node, product, previewMode}: NodeSpawnProps) {
+export function NodeSpawn({worksheetId, node, product, previewMode}: NodeSpawnProps): React.JSX.Element {
   const [editorOpen, setEditorOpen] = useState(false);
   const worksheets = useSelector<StoreStates, Worksheet[]>(state => state.worksheets);
-  const alerts = worksheets.find(w => w.id === worksheetId)!.alerts.filter(a => a.nodeId === node.id);
+  const worksheet = worksheets.find(w => w.id === worksheetId);
+  if (worksheet == undefined) return <div>Error: Worksheet not found</div>
+  const alerts = worksheet.alerts.filter(a => a.nodeId === node.id);
     
   let productField = <div className="preview-field">name</div>;
   let amountField = <div className="preview-field">0</div>
@@ -46,8 +49,8 @@ export function NodeSpawn({worksheetId, node, product, previewMode}: NodeSpawnPr
         <h3>Spawn</h3>
         <NodeDragHandle/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
-        <WarningAlertIcon alerts={alerts} onOpenEditor={() => {}} />
-        <ErrorAlertIcon alerts={alerts} onOpenEditor={() => {}} />
+        <WarningAlertIcon alerts={alerts} />
+        <ErrorAlertIcon alerts={alerts} />
       </div>
       <div className="content-container">
         <div className="content-table">

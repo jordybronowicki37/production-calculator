@@ -11,6 +11,7 @@ import {useSelector} from "react-redux";
 import {StoreStates} from "../../../data/DataStore";
 import {WarningAlertIcon} from "../alerts/WarningAlertIcon";
 import {ErrorAlertIcon} from "../alerts/ErrorAlertIcon";
+import React from "react";
 
 export type NodeProductionProps = {
   worksheetId: string, 
@@ -21,10 +22,12 @@ export type NodeProductionProps = {
   previewMode: boolean
 }
 
-export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}: NodeProductionProps) {
+export function NodeProduction({worksheetId, node, machine, recipe, products, previewMode}: NodeProductionProps): React.JSX.Element {
   const [editorOpen, setEditorOpen] = useState(false);
   const worksheets = useSelector<StoreStates, Worksheet[]>(state => state.worksheets);
-  const alerts = worksheets.find(w => w.id === worksheetId)!.alerts.filter(a => a.nodeId === node.id);
+  const worksheet = worksheets.find(w => w.id === worksheetId);
+  if (worksheet == undefined) return <div>Error: Worksheet not found</div>
+  const alerts = worksheet.alerts.filter(a => a.nodeId === node.id);
 
   let machineField: ReactNode, recipeField: ReactNode, amountField: ReactNode, productInList: ReactNode, productOutList: ReactNode, targetEditor: ReactNode;
 
@@ -74,10 +77,10 @@ export function NodeProduction({worksheetId, node, machine, recipe, products, pr
       <div className="top-container">
         <h3>Production</h3>
         <NodeDragHandle/>
-        <PowerUpIcon powerUps={[]} onOpenEditor={() => {}}/>
+        <PowerUpIcon powerUps={[]}/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
-        <WarningAlertIcon alerts={alerts} onOpenEditor={() => {}} />
-        <ErrorAlertIcon alerts={alerts} onOpenEditor={() => {}} />
+        <WarningAlertIcon alerts={alerts} />
+        <ErrorAlertIcon alerts={alerts} />
       </div>
       <div className="content-container">
         <div className="content-table">
@@ -104,7 +107,7 @@ function generateProductList(title: string, throughputList: ThroughPut[], produc
         const product = findProduct(productList, v.product);
         return (
           <div key={i}>
-            <div className="recipe-product">{product.name}:</div>
+            <div className="recipe-product">{product != undefined ? product.name : "Unknown product"}:</div>
             <RoundedAmountField amount={v.amount*productionAmount}/>
           </div>
         )
@@ -113,6 +116,6 @@ function generateProductList(title: string, throughputList: ThroughPut[], produc
   );
 }
 
-function findProduct(products: Product[], id: string): Product {
+function findProduct(products: Product[], id: string): Product | undefined {
   return products.find(v => v.id === id);
 }

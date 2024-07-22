@@ -5,11 +5,12 @@ import {useState} from "react";
 import {ActiveTargetsIcon} from "../targets/ActiveTargetsIcon";
 import {NodeDragHandle} from "./components/NodeDragHandle";
 import {RoundedAmountField} from "../../misc/RoundedAmountField";
-import {Alert, Node, Product, Worksheet} from "../../../data/DataTypes";
+import {Node, Product, Worksheet} from "../../../data/DataTypes";
 import {WarningAlertIcon} from "../alerts/WarningAlertIcon";
 import {ErrorAlertIcon} from "../alerts/ErrorAlertIcon";
 import {useSelector} from "react-redux";
 import {StoreStates} from "../../../data/DataStore";
+import React from "react";
 
 export type NodeEndProps = {
   worksheetId: string, 
@@ -18,10 +19,12 @@ export type NodeEndProps = {
   previewMode: boolean
 }
 
-export function NodeEnd({worksheetId, node, product, previewMode}: NodeEndProps) {
+export function NodeEnd({worksheetId, node, product, previewMode}: NodeEndProps): React.JSX.Element {
   const [editorOpen, setEditorOpen] = useState(false);
   const worksheets = useSelector<StoreStates, Worksheet[]>(state => state.worksheets);
-  const alerts = worksheets.find(w => w.id === worksheetId)!.alerts.filter(a => a.nodeId === node.id);
+  const worksheet = worksheets.find(w => w.id === worksheetId);
+  if (worksheet == undefined) return <div>Error: Worksheet not found</div>
+  const alerts = worksheet.alerts.filter(a => a.nodeId === node.id);
 
   let productField = <div className="preview-field">name</div>;
   let amountField = <div className="preview-field">0</div>
@@ -46,8 +49,8 @@ export function NodeEnd({worksheetId, node, product, previewMode}: NodeEndProps)
         <h3>End</h3>
         <NodeDragHandle/>
         <ActiveTargetsIcon targets={node?node.targets:[]} onOpenEditor={() => setEditorOpen(true)}/>
-        <WarningAlertIcon alerts={alerts} onOpenEditor={() => {}} />
-        <ErrorAlertIcon alerts={alerts} onOpenEditor={() => {}} />
+        <WarningAlertIcon alerts={alerts} />
+        <ErrorAlertIcon alerts={alerts} />
       </div>
       <div className="content-container">
         <div className="content-table">

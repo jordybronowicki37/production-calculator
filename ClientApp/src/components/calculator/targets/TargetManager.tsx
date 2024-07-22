@@ -4,15 +4,22 @@ import {setTargets} from "../../../data/api/TargetAPI";
 import {nanoid} from "@reduxjs/toolkit";
 import {ProductionTarget, ProductionTargetTypes} from "../../../data/DataTypes";
 import {ProductionTargetCreateDto} from "../../../data/api/ApiDtoTypes";
+import React from "react";
 
-export function TargetManager({worksheetId, nodeId, targets}: {worksheetId: string, nodeId: string, targets: ProductionTarget[]}) {
+export type TargetManagerProps = {
+  worksheetId: string, 
+  nodeId: string, 
+  targets: ProductionTarget[],
+}
+
+export function TargetManager({worksheetId, nodeId, targets}: TargetManagerProps): React.JSX.Element {
   const [mode, setMode] = useState<TargetModes>("none");
   const [exactAmount, setExactAmount] = useState<number>(getInitialTargetValue(targets, "ExactAmount"));
   const [minAmount, setMinAmount] = useState<number>(getInitialTargetValue(targets, "MinAmount"));
   const [maxAmount, setMaxAmount] = useState<number>(getInitialTargetValue(targets, "MaxAmount"));
   
   useEffect(() => {
-    let newTargets: ProductionTargetCreateDto[] = [];
+    const newTargets: ProductionTargetCreateDto[] = [];
 
     if (exactAmount > 0) newTargets.push({type:"ExactAmount", amount:exactAmount});
     if (minAmount > 0) newTargets.push({type:"MinAmount", amount:minAmount});
@@ -25,7 +32,7 @@ export function TargetManager({worksheetId, nodeId, targets}: {worksheetId: stri
     }, 1000);
     
     return () => clearTimeout(timerId);
-  }, [exactAmount, minAmount, maxAmount]);
+  }, [exactAmount, minAmount, maxAmount, nodeId, targets, worksheetId]);
   
   const exactInputId = nanoid();
   const minInputId = nanoid();

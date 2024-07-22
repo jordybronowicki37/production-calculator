@@ -4,7 +4,7 @@ import {CurrentUser} from "../DataTypes";
 import {useRef} from "react";
 import {AxiosResponse} from "axios";
 import axiosInstance from "./AxiosConfig";
-import {useSendRequestBase} from "./RequestHooksBase";
+import {UseApiRequestBaseType, useSendRequestBase} from "./RequestHooksBase";
 
 export type LoginParams = {
   email: string,
@@ -17,15 +17,20 @@ export type LoginResponse = {
   email: string,
 }
 
-export function useLogin() {
+export type UseLoginType<RequestParams, ResponseType> = UseApiRequestBaseType<ResponseType> & {
+  loginUser: (params: RequestParams) => Promise<RegisterResponse>,
+  abortController: AbortController
+}
+
+export function useLogin(): UseLoginType<LoginParams, LoginResponse> {
   const abortController = useRef(new AbortController());
   const loginUser = (params: LoginParams) => {
-    return axiosInstance.post<LoginResponse>('account/login', params, {
+    return axiosInstance.post<LoginResponse>('api/account/login', params, {
       signal: abortController.current.signal,
       headers: {noAuth: true}
     });
   }
-  const handleLoginResponse = (response: AxiosResponse<LoginResponse, any>) => {
+  const handleLoginResponse = (response: AxiosResponse<LoginResponse>) => {
     const authToken = response.headers["authorization"];
     const currentUser: CurrentUser = {...response.data, authToken};
     Store.dispatch(LoginAction(currentUser));
@@ -52,15 +57,20 @@ export type RegisterResponse = {
   email: string,
 }
 
-export function useRegister() {
+export type UseRegisterType<RequestParams, ResponseType> = UseApiRequestBaseType<ResponseType> & {
+  registerUser: (params: RequestParams) => Promise<RegisterResponse>,
+  abortController: AbortController
+}
+
+export function useRegister(): UseRegisterType<RegisterParams, RegisterResponse> {
   const abortController = useRef(new AbortController());
   const registerUser = (params: RegisterParams) => {
-    return axiosInstance.post<RegisterResponse>('account/register', params, {
+    return axiosInstance.post<RegisterResponse>('api/account/register', params, {
       signal: abortController.current.signal,
       headers: {noAuth: true}
     });
   }
-  const handleRegisterResponse = (response: AxiosResponse<RegisterResponse, any>) => {
+  const handleRegisterResponse = (response: AxiosResponse<RegisterResponse>) => {
     const authToken = response.headers["authorization"];
     const currentUser: CurrentUser = {...response.data, authToken};
     Store.dispatch(LoginAction(currentUser));
@@ -74,21 +84,27 @@ export function useRegister() {
   return {data, error, loading, registerUser: triggerRequest, abortController: abortController.current};
 }
 
-export function useLogout() {
+export type UseLogoutType<ResponseType> = UseApiRequestBaseType<ResponseType> & {
+  logoutUser: () => Promise<ResponseType>,
+  abortController: AbortController
+}
+
+export function useLogout(): UseLogoutType<string> {
   const abortController = useRef(new AbortController());
   const logoutUser = () => {
-    return axiosInstance.post('account/logout', undefined, {
+    return axiosInstance.post('api/account/logout', undefined, {
       signal: abortController.current.signal,
     });
   }
   const handleLogoutResponse = () => {
     Store.dispatch(LogoutAction());
   }
-  const {data, error, loading, triggerRequest} = useSendRequestBase<any, any>({
+  const {data, error, loading, triggerRequest} = useSendRequestBase<null, string>({
     abortController: abortController.current,
     action: logoutUser,
     handleResponse: handleLogoutResponse
   });
+  const wrappedTriggerRequest: () => Promise<string> = () => triggerRequest(null);
 
-  return {data, error, loading, logoutUser: triggerRequest, abortController: abortController.current};
+  return {data, error, loading, logoutUser: wrappedTriggerRequest, abortController: abortController.current};
 }

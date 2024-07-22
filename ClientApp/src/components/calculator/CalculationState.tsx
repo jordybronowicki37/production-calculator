@@ -1,14 +1,14 @@
 ﻿import "./CalculationState.scss";
 import {useEffect, useState} from "react";
-// @ts-ignore idk why the import requires a .d.ts
-import {AlertLevel, Alert} from "../../data/DataTypes.d.ts";
+import {AlertLevel, Alert} from "../../data/DataTypes";
+import React from "react";
 
-export type CalculationStateProps = {
+export type CalculationStateProps<D> = {
   alerts: Alert[],
-  onClick: () => Promise<any>,
+  onClick: () => Promise<D>,
 }
 
-export function CalculationState({alerts, onClick}: CalculationStateProps) {
+export function CalculationState<D>({alerts, onClick}: CalculationStateProps<D>): React.JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [amountOfWarnings, setAmountOfWarnings] = useState(0);

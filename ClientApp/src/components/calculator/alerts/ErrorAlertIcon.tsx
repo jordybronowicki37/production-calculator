@@ -1,7 +1,13 @@
 import "./ErrorAlertIcon.scss";
-import {Alert, AlertLevel} from "../../../data/DataTypes.d.ts";
+import {Alert, AlertLevel} from "../../../data/DataTypes";
+import React from "react";
 
-export function ErrorAlertIcon({alerts, onOpenEditor}: { alerts: Alert[], onOpenEditor: () => void }) {
+export type ErrorAlertIconProps = {
+  alerts: Alert[], 
+  onOpenEditor?: () => void,
+}
+
+export function ErrorAlertIcon({alerts, onOpenEditor}: ErrorAlertIconProps): React.JSX.Element {
   alerts = alerts.filter(a => a.level === AlertLevel.Error);
 
   return (

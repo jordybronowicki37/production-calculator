@@ -5,6 +5,7 @@ import {Popup} from "../../popup/Popup";
 import {useState} from "react";
 import {WorksheetCreator} from "../../worksheets/WorksheetCreator";
 import {Product, Worksheet} from "../../../data/DataTypes";
+import React from "react";
 
 export type SelectorTabProps = {
   projectId: string,
@@ -14,7 +15,7 @@ export type SelectorTabProps = {
   openedWorksheetIds: string[],
 }
 
-export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}: SelectorTabProps) {
+export function SelectorTab({projectId, worksheets, products, onAddTab, openedWorksheetIds}: SelectorTabProps): React.JSX.Element {
   const [createWorksheetOpen, setCreateWorksheetOpen] = useState<boolean>(false);
   
   worksheets = [...worksheets].sort((a,b) => (a.name > b.name) ? 1 : (b.name > a.name) ? -1 : 0);
