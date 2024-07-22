@@ -9,7 +9,7 @@ using ProductionCalculator.Api.Data.DbContexts;
 using ProductionCalculator.Api.Data.Initializers;
 using ProductionCalculator.Api.Security;
 
-namespace SiteReact;
+namespace ProductionCalculator.Api;
 
 public class Startup: StartupBase
 {
