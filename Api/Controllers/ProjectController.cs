@@ -12,7 +12,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("project")]
+[Route("api/project")]
 public class ProjectController : ControllerBase
 {
     private readonly ILogger<ProjectController> _logger;

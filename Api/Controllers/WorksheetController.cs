@@ -11,7 +11,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("worksheet")]
+[Route("api/worksheet")]
 public class WorksheetController : ControllerBase
 {
     private readonly ILogger<WorksheetController> _logger;

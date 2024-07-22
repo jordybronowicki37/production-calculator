@@ -9,7 +9,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("entityContainer/{entityContainerId:Guid}/[controller]")]
+[Route("api/entityContainer/{entityContainerId:Guid}/[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly ILogger<ProductController> _logger;

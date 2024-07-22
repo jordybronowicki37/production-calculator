@@ -8,7 +8,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 // [AllowAnonymous]
 [ApiController]
-[Route("account")]
+[Route("api/account")]
 public class AccountController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;

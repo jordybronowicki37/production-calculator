@@ -10,7 +10,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("worksheet/{entityContainerId:Guid}/[controller]")]
+[Route("api/worksheet/{entityContainerId:Guid}/[controller]")]
 public class RecipeController : ControllerBase
 {
     private readonly ILogger<RecipeController> _logger;

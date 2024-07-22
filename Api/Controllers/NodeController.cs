@@ -16,7 +16,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("worksheet/{worksheetId:Guid}/[controller]")]
+[Route("api/worksheet/{worksheetId:Guid}/[controller]")]
 public class NodeController : ControllerBase
 {
     private readonly ILogger<NodeController> _logger;

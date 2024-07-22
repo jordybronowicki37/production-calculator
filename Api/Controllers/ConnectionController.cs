@@ -12,7 +12,7 @@ namespace ProductionCalculator.Api.Controllers;
 
 [Authorize(Roles = "Admin,User")]
 [ApiController]
-[Route("worksheet/{worksheetId:Guid}/[controller]")]
+[Route("api/worksheet/{worksheetId:Guid}/[controller]")]
 public class ConnectionController : ControllerBase
 {
     private readonly ILogger<ConnectionController> _logger;
