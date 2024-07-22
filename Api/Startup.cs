@@ -51,22 +51,14 @@ public class Startup: StartupBase
         }
 
         webapp.UseHttpsRedirection();
-        webapp.UseStaticFiles();
         webapp.UseRouting();
         webapp.UseCors(AllowEverythingPolicyName);
         webapp.UseAuthentication();
         webapp.UseAuthorization();
-        
-        webapp.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
 
         webapp.MapControllerRoute(
             name: "default",
             pattern: "{controller}/{action=Index}/{id?}");
-
-        webapp.MapFallbackToFile("index.html");
     }
 
     public override void ConfigureServices(IServiceCollection services)
